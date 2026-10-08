@@ -41,6 +41,12 @@ alias grep='grep --color=auto'
 alias v='nvim'
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate -20'
-alias ta='arena-dev'                      # Pi Arena tmux session
-alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined'   # plan's default C flags
-alias qa='qemu-aarch64'                   # run ARM64 binaries on the desktop
+alias ta='arena-dev'                                           # Pi Arena tmux session
+alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # plan's default C flags
+alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
+
+[ -f "/home/sh0ds/.ghcup/env" ] && . "/home/sh0ds/.ghcup/env" # ghcup-env
+# System info on new terminals, but not in every tmux pane or nvim terminal
+if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
+  fastfetch
+fi

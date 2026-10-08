@@ -9,21 +9,22 @@
 #   6 pi      ssh to rasberry-pizian
 set -euo pipefail
 
+# Opened from SUPER+A the terminal closes on exit, hiding any error: wait for Enter.
+trap 'echo "arena-dev failed (line $LINENO). Press Enter to close."; read -r' ERR
+
 repo=${ARENA_REPO:-$HOME/code/pi-arena}
 session=arena
 
-if ! [ -d "$repo" ]; then
-  echo "arena-dev: $repo does not exist yet (install guide, step D8)" >&2
-  exit 1
-fi
+command -v tmux >/dev/null || { echo "arena-dev: tmux is not installed (sudo pacman -S tmux)"; false; }
+
+# Before step D8 the repo doesn't exist yet: create the folders so the session still opens.
+mkdir -p "$repo"/{engine,server,ai,db,ops}
 
 if ! tmux has-session -t "$session" 2>/dev/null; then
   tmux new-session -d -s "$session" -n edit -c "$repo"
   tmux send-keys -t "$session:edit" "nvim ." Enter
   for part in engine server ai db; do
-    dir=$repo/$part
-    [ -d "$dir" ] || dir=$repo
-    tmux new-window -t "$session" -n "$part" -c "$dir"
+    tmux new-window -t "$session" -n "$part" -c "$repo/$part"
   done
   tmux new-window -t "$session" -n pi -c "$repo"
   tmux send-keys -t "$session:pi" "ssh pi" Enter
