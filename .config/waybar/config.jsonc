@@ -49,20 +49,10 @@
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous"
   },
-  "cava": {
-    "bars": 12,
-    "bar_delimiter": 0,
-    "hide_on_silence": true,
-    "format-icons": [
-      "▁",
-      "▂",
-      "▃",
-      "▄",
-      "▅",
-      "▆",
-      "▇",
-      "█"
-    ]
+  "custom/cava": {
+    "exec": "~/.local/bin/waybar-cava",
+    "format": "{}",
+    "tooltip": false
   },
   // Is rasberry-pizian reachable? Green when it answers a ping, red when not.
   "custom/pi": {

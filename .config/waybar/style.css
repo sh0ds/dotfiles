@@ -34,7 +34,7 @@ window#waybar {
 
 window#waybar { background: transparent; }
 
-#workspaces, #window, #clock, #mpris, #cava, #custom-pi,
+#workspaces, #window, #clock, #mpris, #custom-cava, #custom-pi,
 #cpu, #memory, #pulseaudio, #network, #battery, #tray {
   background: #1e1e2e;
   border: 1px solid #313244;
@@ -43,5 +43,5 @@ window#waybar { background: transparent; }
   margin: 0 3px;
 }
 #mpris { color: #a6e3a1; }
-#cava  { color: #cba6f7; }
+#custom-cava  { color: #cba6f7; }
 #workspaces button.active { color: #1e1e2e; background: #cba6f7; border-radius: 10px; }
