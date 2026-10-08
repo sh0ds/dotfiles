@@ -9,14 +9,13 @@ export EDITOR=nvim
 export VISUAL=nvim
 export MANPAGER="nvim +Man!"
 
+[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 # History: big, shared between tmux panes, no duplicates
 HISTSIZE=50000
 HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend checkwinsize globstar
 PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
-
-[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
 # Prompt: directory, git branch, red exit code when the last command failed
 if [ -r /usr/share/git/completion/git-prompt.sh ]; then
@@ -35,8 +34,9 @@ __prompt() {
 PROMPT_COMMAND="__prompt; $PROMPT_COMMAND"
 
 # Aliases
-alias ls='ls --color=auto'
-alias ll='ls -lah'
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -la --icons --group-directories-first --git'
+alias lt='eza --tree --level=2 --icons --git-ignore'
 alias grep='grep --color=auto'
 alias v='nvim'
 alias gs='git status -sb'
