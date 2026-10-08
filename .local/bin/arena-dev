@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# arena-dev: open (or reattach to) the Pi Arena tmux session.
+# One window per part of the plan, each starting in its directory.
+#   1 edit    nvim at the repo root
+#   2 engine  Haskell (cabal repl / stack ghci)
+#   3 server  Erlang (rebar3 shell)
+#   4 ai      C and ARM64 asm (make, qemu-aarch64, gdb)
+#   5 db      sqlite3
+#   6 pi      ssh to rasberry-pizian
+set -euo pipefail
+
+repo=${ARENA_REPO:-$HOME/code/pi-arena}
+session=arena
+
+if ! [ -d "$repo" ]; then
+  echo "arena-dev: $repo does not exist yet (install guide, step D8)" >&2
+  exit 1
+fi
+
+if ! tmux has-session -t "$session" 2>/dev/null; then
+  tmux new-session -d -s "$session" -n edit -c "$repo"
+  tmux send-keys -t "$session:edit" "nvim ." Enter
+  for part in engine server ai db; do
+    dir=$repo/$part
+    [ -d "$dir" ] || dir=$repo
+    tmux new-window -t "$session" -n "$part" -c "$dir"
+  done
+  tmux new-window -t "$session" -n pi -c "$repo"
+  tmux send-keys -t "$session:pi" "ssh pi" Enter
+  tmux select-window -t "$session:edit"
+fi
+
+if [ -n "${TMUX:-}" ]; then
+  tmux switch-client -t "$session"
+else
+  tmux attach-session -t "$session"
+fi

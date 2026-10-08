@@ -1,0 +1,56 @@
+// ~/.config/waybar/config.jsonc
+{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "margin-top": 6,
+  "margin-left": 8,
+  "margin-right": 8,
+  "spacing": 4,
+
+  "modules-left": ["hyprland/workspaces", "hyprland/window"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/pi", "cpu", "memory", "pulseaudio", "network", "battery", "tray"],
+
+  "hyprland/workspaces": {
+    "format": "{id}",
+    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
+  },
+  "hyprland/window": {
+    "max-length": 60,
+    "separate-outputs": true
+  },
+  "clock": {
+    "format": "{:%a %d %b  %H:%M}",
+    "tooltip-format": "<tt>{calendar}</tt>"
+  },
+
+  // Is rasberry-pizian reachable? Green when it answers a ping, red when not.
+  "custom/pi": {
+    "exec": "~/.local/bin/pi-status",
+    "return-type": "json",
+    "interval": 30,
+    "on-click": "kitty -e ssh pi"
+  },
+
+  "cpu": { "format": "cpu {usage}%", "interval": 5 },
+  "memory": { "format": "mem {percentage}%", "interval": 10 },
+  "pulseaudio": {
+    "format": "vol {volume}%",
+    "format-muted": "muted",
+    "on-click": "pavucontrol"
+  },
+  "network": {
+    "format-wifi": "{essid} {signalStrength}%",
+    "format-ethernet": "eth {ipaddr}",
+    "format-disconnected": "offline",
+    "tooltip-format": "{ifname} {ipaddr}/{cidr}",
+    "on-click": "kitty -e nmtui"
+  },
+  "battery": {
+    "format": "bat {capacity}%",
+    "states": { "warning": 25, "critical": 10 }
+  },
+  "tray": { "spacing": 8 }
+}
