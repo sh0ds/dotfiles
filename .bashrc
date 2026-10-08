@@ -50,3 +50,4 @@ alias qa='qemu-aarch64'                                        # run ARM64 binar
 if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
   fastfetch
 fi
+eval "$(starship init bash)"
