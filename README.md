@@ -1,6 +1,6 @@
 # dotfiles
 
-Hyprland 0.55+ (Lua config), kitty, tmux, Neovim 0.12, waybar, mako, fuzzel, hyprlock, hypridle. Catppuccin Mocha throughout. Made for the Pi Arena desktop; the full walkthrough is `arch-hyprland-install-guide.md` in the project.
+Hyprland 0.55+ (Lua config), kitty, tmux, Neovim 0.12, waybar, mako, fuzzel, hyprlock, hypridle. Catppuccin Mocha throughout. 
 
 ```bash
 git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
