@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# waybar-cava: live audio bars for waybar's custom/cava module.
+# Arch's waybar is built without the native cava module, so this runs cava
+# with raw ASCII output and turns each frame (0-7 per bar) into ▁▂▃▄▅▆▇█.
+set -euo pipefail
+
+bars=(▁ ▂ ▃ ▄ ▅ ▆ ▇ █)
+dict="s/;//g"
+for i in "${!bars[@]}"; do
+  dict+=";s/$i/${bars[$i]}/g"
+done
+
+conf=$(mktemp -t waybar-cava.XXXXXX)
+trap 'rm -f "$conf"' EXIT
+
+cat >"$conf" <<EOF
+[general]
+bars = 12
+framerate = 30
+sleep_timer = 5
+
+[input]
+method = pipewire
+
+[output]
+method = raw
+raw_target = /dev/stdout
+data_format = ascii
+ascii_max_range = 7
+EOF
+
+cava -p "$conf" | sed -u "$dict"

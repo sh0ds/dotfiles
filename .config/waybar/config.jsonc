@@ -14,7 +14,7 @@
   "modules-center": [
     "clock",
     "mpris",
-    "cava"
+    "custom/cava"
   ],
   "modules-right": [
     "custom/pi",
