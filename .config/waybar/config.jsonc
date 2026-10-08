@@ -7,11 +7,24 @@
   "margin-left": 8,
   "margin-right": 8,
   "spacing": 4,
-
-  "modules-left": ["hyprland/workspaces", "hyprland/window"],
-  "modules-center": ["clock"],
-  "modules-right": ["custom/pi", "cpu", "memory", "pulseaudio", "network", "battery", "tray"],
-
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "clock",
+    "mpris",
+    "cava"
+  ],
+  "modules-right": [
+    "custom/pi",
+    "cpu",
+    "memory",
+    "pulseaudio",
+    "network",
+    "battery",
+    "tray"
+  ],
   "hyprland/workspaces": {
     "format": "{id}",
     "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
@@ -25,7 +38,32 @@
     "format": "{:%a %d %b  %H:%M}",
     "tooltip-format": "<tt>{calendar}</tt>"
   },
-
+  "mpris": {
+    "format": "{status_icon} {dynamic}",
+    "dynamic-len": 40,
+    "status-icons": {
+      "playing": "▶",
+      "paused": "⏸"
+    },
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
+  },
+  "cava": {
+    "bars": 12,
+    "bar_delimiter": 0,
+    "hide_on_silence": true,
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█"
+    ]
+  },
   // Is rasberry-pizian reachable? Green when it answers a ping, red when not.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
@@ -33,9 +71,14 @@
     "interval": 30,
     "on-click": "kitty -e ssh pi"
   },
-
-  "cpu": { "format": "cpu {usage}%", "interval": 5 },
-  "memory": { "format": "mem {percentage}%", "interval": 10 },
+  "cpu": {
+    "format": "cpu {usage}%",
+    "interval": 5
+  },
+  "memory": {
+    "format": "mem {percentage}%",
+    "interval": 10
+  },
   "pulseaudio": {
     "format": "vol {volume}%",
     "format-muted": "muted",
@@ -50,7 +93,12 @@
   },
   "battery": {
     "format": "bat {capacity}%",
-    "states": { "warning": 25, "critical": 10 }
+    "states": {
+      "warning": 25,
+      "critical": 10
+    }
   },
-  "tray": { "spacing": 8 }
+  "tray": {
+    "spacing": 8
+  }
 }
