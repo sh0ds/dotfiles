@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# quicknote: drop-down nvim on ~/notes/inbox.md (SUPER+O). Same shape and
+# slide as the drop-down terminal; SUPER+O again hides it, unsaved text stays.
+# Each new session starts a dated heading at the end of the file.
+set -euo pipefail
+inbox="$HOME/notes/inbox.md"
+if ! hyprctl clients -j | jq -e 'any(.[]; .class == "quicknote")' >/dev/null; then
+  mkdir -p "${inbox%/*}"
+  printf '\n## %s\n\n' "$(date '+%Y-%m-%d %H:%M')" >>"$inbox"
+  kitty --class quicknote -e nvim + -c 'startinsert' "$inbox" & disown
+  for _ in $(seq 20); do
+    hyprctl clients -j | jq -e 'any(.[]; .class == "quicknote")' >/dev/null && break
+    sleep 0.1
+  done
+fi
+hyprctl dispatch 'hl.dsp.workspace.toggle_special("notes")'

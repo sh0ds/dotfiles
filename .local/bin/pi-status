@@ -2,7 +2,7 @@
 # pi-status: waybar module. Prints JSON saying whether the Pi answers a ping.
 pi=${PI_HOST:-192.168.178.36}
 if ping -c 1 -W 1 "$pi" >/dev/null 2>&1; then
-  printf '{"text":"pi up","class":"up","tooltip":"%s reachable"}\n' "$pi"
+  printf '{"text":"  up","class":"up","tooltip":"%s reachable"}\n' "$pi"
 else
-  printf '{"text":"pi down","class":"down","tooltip":"%s not answering"}\n' "$pi"
+  printf '{"text":"  down","class":"down","tooltip":"%s not answering"}\n' "$pi"
 fi

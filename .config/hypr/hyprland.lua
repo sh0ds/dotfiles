@@ -10,7 +10,7 @@
 -- `hyprctl monitors` lists names, e.g. "DP-1". One catch-all is enough to start.
 hl.monitor({
 	output = "",
-	mode = "preferred",
+	mode = "highrr",
 	position = "auto",
 	scale = "auto",
 })
@@ -30,14 +30,14 @@ local lock = "pidof hyprlock || hyprlock"
 
 hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
-	hl.exec_cmd("mako")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	hl.exec_cmd("wl-paste --watch cliphist store")
-	-- Wallpaper: put an image at ~/Pictures/wall.png, or keep the solid colour.
-	hl.exec_cmd(
-		"if [ -f ~/Pictures/wall.png ]; then swaybg -m fill -i ~/Pictures/wall.png; else swaybg -c '#1e1e2e'; fi"
-	)
+	hl.exec_cmd("swaync")
+	hl.exec_cmd("swayosd-server")
+	hl.exec_cmd("awww-daemon")
+	hl.exec_cmd("sleep 1 && awww img ~/Pictures/wall.png --transition-type fade")
+	hl.exec_cmd("firefoxpwa site launch 01M4E9WM9PSN126GWCCEG49J4C") -- your command from step 1
 end)
 
 -------------------------------
@@ -205,12 +205,11 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Media and brightness keys (work on the lock screen too)
 local media = { locked = true, repeating = true }
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), media)
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), media)
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), media)
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), media)
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), media)
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), media)
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("swayosd-client --output-volume raise"), media)
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("swayosd-client --output-volume lower"), media)
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"), media)
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("swayosd-client --brightness raise"), media)
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"), media)
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
@@ -238,3 +237,5 @@ hl.window_rule({
 	match = { class = "^(org.pulseaudio.pavucontrol|nm-connection-editor|blueman-manager)$" },
 	float = true,
 })
+
+pcall(require, "rice")

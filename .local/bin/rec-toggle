@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# rec-toggle: start/stop recording a screen region to ~/Videos (SUPER+SHIFT+R).
+# waybar's custom/rec pill shows a red REC while wf-recorder runs.
+if pkill -INT -x wf-recorder; then
+  # shellcheck disable=SC2012  # our own rec-DATE.mp4 names, newest first
+  notify-send "Recording saved" "$(ls -t ~/Videos/rec-*.mp4 | head -n1)"
+  exit 0
+fi
+mkdir -p ~/Videos
+geom=$(slurp) || exit 0          # Esc while selecting cancels
+wf-recorder -g "$geom" -f ~/Videos/rec-"$(date +%Y%m%d-%H%M%S)".mp4 >/dev/null 2>&1 & disown

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# live-status: red "LIVE" pill in waybar while the screen is being shared,
+# and do-not-disturb on swaync for the duration, so private notifications
+# never pop up on stream. Listens to Hyprland's screencastv2 event
+# ("screencastv2>>1,<type>,<name>" on start, 0 on stop; Hyprland 0.56).
+# A one-frame capture (a grim screenshot) also fires start/stop, so a share
+# only counts once it has lasted 2 seconds.
+set -uo pipefail
+
+sock="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
+active=0 live=0 name="" dnd_before=""
+
+show() {
+  if (( live )); then
+    jq -cn --arg n "$name" '{text: "󰐌 LIVE", tooltip: "Sharing: \($n)", class: "live"}'
+  else
+    echo '{"text": "", "class": "idle"}'
+  fi
+}
+
+go_live() {
+  live=1
+  dnd_before=$(swaync-client -D 2>/dev/null || echo false)
+  swaync-client -dn >/dev/null 2>&1 || true
+  show
+}
+
+go_idle() {
+  live=0
+  [[ $dnd_before == false ]] && { swaync-client -df >/dev/null 2>&1 || true; }
+  show
+}
+
+show
+while :; do
+  if (( active > 0 && !live )); then
+    IFS= read -r -t 2 line; rc=$?
+    if (( rc > 128 )); then go_live; continue; fi   # still sharing after 2 s
+  else
+    IFS= read -r line; rc=$?
+  fi
+  (( rc == 0 )) || exit 1   # socket closed: waybar restarts the module
+  [[ $line == screencastv2'>>'* ]] || continue
+  data=${line#*>>}
+  state=${data%%,*}; rest=${data#*,}
+  if [[ $state == 1 ]]; then
+    active=$((active + 1)); name=${rest#*,}
+  else
+    (( active > 0 )) && active=$((active - 1))
+    (( active == 0 && live )) && go_idle
+  fi
+done < <(socat -u "UNIX-CONNECT:$sock" -)

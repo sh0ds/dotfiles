@@ -2,58 +2,84 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 30,
-  "margin-top": 6,
-  "margin-left": 8,
-  "margin-right": 8,
-  "spacing": 4,
-  "modules-left": [
-    "hyprland/workspaces",
-    "hyprland/window"
-  ],
-  "modules-center": [
-    "clock",
-    "mpris",
-    "custom/cava"
-  ],
-  "modules-right": [
-    "custom/pi",
-    "cpu",
-    "memory",
-    "pulseaudio",
-    "network",
-    "battery",
-    "tray"
-  ],
+  "height": 32,
+  "margin-top": 8,
+  "margin-left": 10,      // same as Hyprland gaps_out: pills line up with window edges
+  "margin-right": 10,
+  "spacing": 0,          // islands space themselves (style.css margins)
+
+  // Three islands, nothing more: workspaces and music on the left, the clock in
+  // the middle (LIVE and REC appear next to it only while active), and one
+  // status pill on the right. CPU and RAM hide behind the Pi icon until hovered.
+  "modules-left": ["hyprland/workspaces", "mpris", "custom/cava"],
+  "modules-center": ["custom/live", "custom/rec", "clock"],
+  "modules-right": ["tray", "group/sys", "group/status"],
+
+  // Dots instead of numbers. The active workspace is a mauve pill that
+  // stretches smoothly to its new place (transition in style.css); ones with
+  // windows are rings, empty ones faint dots.
   "hyprland/workspaces": {
-    "format": "{id}",
+    "format": "{icon}",
+    "format-icons": { "active": "", "persistent": "", "default": "", "empty": "" },
+    "persistent-workspaces": { "*": 5 },   // 1-5 always visible, even when empty
     "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
   },
-  "hyprland/window": {
-    "max-length": 60,
-    "separate-outputs": true
+
+  // Hover the Pi icon and CPU and RAM slide out next to it.
+  "group/sys": {
+    "orientation": "inherit",
+    "drawer": { "transition-duration": 300, "children-class": "sys-child", "transition-left-to-right": false },
+    "modules": ["custom/pi", "cpu", "memory"]
   },
+  // Volume, network, bell and power share one pill.
+  "group/status": {
+    "orientation": "inherit",
+    "modules": ["pulseaudio", "network", "custom/notification", "custom/power"]
+  },
+
   "clock": {
-    "format": "{:%a %d %b  %H:%M}",
-    "tooltip-format": "<tt>{calendar}</tt>"
-  },
-  "mpris": {
-    "format": "{status_icon} {dynamic}",
-    "dynamic-len": 40,
-    "status-icons": {
-      "playing": "▶",
-      "paused": "⏸"
+    "format": "  {:%a %d %b  %H:%M}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    // Hover: Catppuccin month calendar with week numbers. Scroll changes month,
+    // right-click switches to the whole year.
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "left",
+      "first-day-of-week": 1,
+      "on-scroll": 1,
+      "format": {
+        "months":   "<span color='#cba6f7'><b>{}</b></span>",
+        "days":     "<span color='#cdd6f4'>{}</span>",
+        "weeks":    "<span color='#6c7086'>W{}</span>",
+        "weekdays": "<span color='#89b4fa'><b>{}</b></span>",
+        "today":    "<span color='#f38ba8'><b><u>{}</u></b></span>"
+      }
     },
-    "on-click": "playerctl play-pause",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous"
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
   },
-  "custom/cava": {
-    "exec": "~/.local/bin/waybar-cava",
-    "format": "{}",
-    "tooltip": false
+
+  // Bell with unread count from swaync; click opens the notification centre.
+  "custom/notification": {
+    "exec": "swaync-client -swb",
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "<span foreground='#f38ba8'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
+      "dnd-none": ""
+    },
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true
   },
+
   // Is rasberry-pizian reachable? Green when it answers a ping, red when not.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
@@ -61,34 +87,59 @@
     "interval": 30,
     "on-click": "kitty -e ssh pi"
   },
-  "cpu": {
-    "format": "cpu {usage}%",
-    "interval": 5
-  },
-  "memory": {
-    "format": "mem {percentage}%",
-    "interval": 10
-  },
+
+  "cpu": { "format": "  {usage}%", "interval": 5 },
+  "memory": { "format": "󰍛  {percentage}%", "interval": 10 },
+  // Icons only; hover for the numbers. The volume keys show the swayosd popup.
   "pulseaudio": {
-    "format": "vol {volume}%",
-    "format-muted": "muted",
-    "on-click": "pavucontrol"
+    "format": "{icon}",
+    "format-muted": "",
+    "format-icons": { "default": ["", "", ""] },
+    "tooltip-format": "Volume {volume}%",
+    "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   "network": {
-    "format-wifi": "{essid} {signalStrength}%",
-    "format-ethernet": "eth {ipaddr}",
-    "format-disconnected": "offline",
+    "format-wifi": "",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "󰌙",
     "tooltip-format": "{ifname} {ipaddr}/{cidr}",
     "on-click": "kitty -e nmtui"
   },
-  "battery": {
-    "format": "bat {capacity}%",
-    "states": {
-      "warning": 25,
-      "critical": 10
-    }
+  "tray": { "spacing": 8 },
+
+  // Now playing (SoundCloud app, Firefox, mpv). Fixed length so the pills don't slide.
+  "mpris": {
+    "format": "{status_icon} {dynamic}",
+    "dynamic-len": 30,
+    "status-icons": { "playing": "▶", "paused": "⏸" },
+    "on-click": "playerctl play-pause",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous"
   },
-  "tray": {
-    "spacing": 8
+  // Live audio bars from ~/.local/bin/waybar-cava (Arch's waybar has no cava module).
+  "custom/cava": {
+    "exec": "~/.local/bin/waybar-cava",
+    "format": "{}",
+    "tooltip": false
+  },
+  // Red LIVE pill while the screen is shared (Discord, OBS, Firefox); also
+  // turns on do-not-disturb for the duration. Hidden otherwise.
+  "custom/live": {
+    "exec": "~/.local/bin/live-status",
+    "return-type": "json",
+    "restart-interval": 5
+  },
+  // Red REC pill while rec-toggle (SUPER+SHIFT+R) is recording; hidden otherwise.
+  "custom/rec": {
+    "exec": "~/.local/bin/rec-status",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "~/.local/bin/rec-toggle"
+  },
+  "custom/power": {
+    "format": "⏻",
+    "on-click": "wlogout -b 4",
+    "tooltip": false
   }
 }

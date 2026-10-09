@@ -1,0 +1,37 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+  "positionX": "right",
+  "positionY": "top",
+  "control-center-margin-top": 10,
+  "control-center-margin-bottom": 10,
+  "control-center-margin-right": 10,
+  "control-center-width": 400,
+  "notification-window-width": 380,
+  "timeout": 6,
+  "transition-time": 250,
+  "timeout-low": 3,
+  "timeout-critical": 0,
+  "fit-to-screen": true,
+  "relative-timestamps": true,
+  "hide-on-clear": true,
+  "widgets": ["title", "dnd", "buttons-grid", "mpris", "volume", "notifications"],
+  "widget-config": {
+    "title": { "text": "Notifications", "clear-all-button": true, "button-text": "Clear all" },
+    "dnd": { "text": "Do not disturb" },
+    "mpris": { "image-size": 64 },
+    "volume": { "label": "", "show-per-app": false },
+    "buttons-grid": {
+      "buttons-per-row": 4,
+      "actions": [
+        { "label": "", "command": "sh -c 'nmcli radio wifi | grep -q enabled && nmcli radio wifi off || nmcli radio wifi on'", "type": "toggle", "update-command": "sh -c 'nmcli radio wifi | grep -q enabled && echo true || echo false'" },
+        { "label": "", "command": "nightlight", "type": "toggle", "update-command": "sh -c 'pgrep -x hyprsunset >/dev/null && echo true || echo false'" },
+        { "label": "", "command": "sh -c 'swaync-client -cp; sleep 0.4; grim -g \"$(slurp)\" - | satty --filename - --copy-command wl-copy'" },
+        { "label": "", "command": "sh -c 'swaync-client -cp; rec-toggle'" },
+        { "label": "", "command": "sh -c 'swaync-client -cp; calc'" },
+        { "label": "", "command": "sh -c 'swaync-client -cp; dropterm'" },
+        { "label": "", "command": "sh -c 'swaync-client -cp; loginctl lock-session'" },
+        { "label": "", "command": "sh -c 'swaync-client -cp; wlogout -b 4'" }
+      ]
+    }
+  }
+}

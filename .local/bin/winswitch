@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# winswitch: ALT+Tab for Hyprland. Lists every open window in fuzzel,
+# most recently used first, and focuses the one you pick.
+set -euo pipefail
+
+clients=$(hyprctl clients -j | jq -c '[.[] | select(.mapped and .workspace.id > 0)] | sort_by(.focusHistoryID)')
+labels=$(jq -r '.[] | "\(.workspace.name)  \(.class): \(.title[0:60])"' <<<"$clients")
+[ -n "$labels" ] || exit 0
+
+# Line 2 is preselected, so ALT+Tab then Enter flips to the previous window.
+idx=$(fuzzel --dmenu --index --prompt 'window ' --select-index 1 --lines 10 --width 60 <<<"$labels") || exit 0
+[[ $idx =~ ^[0-9]+$ ]] || exit 0
+addr=$(jq -r ".[$idx].address" <<<"$clients")
+hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })" >/dev/null

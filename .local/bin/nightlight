@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# nightlight: toggle warm screen colours (hyprsunset at 4000 K).
+if pkill -x hyprsunset; then
+  notify-send "Night light off"
+else
+  hyprsunset -t 4000 >/dev/null 2>&1 & disown
+  notify-send "Night light on" "4000 K"
+fi

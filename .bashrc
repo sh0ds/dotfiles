@@ -50,4 +50,5 @@ alias qa='qemu-aarch64'                                        # run ARM64 binar
 if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
   fastfetch
 fi
-eval "$(starship init bash)"
+eval "$(starship init bash)"eval "$(fzf --bash)" # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
+eval "$(zoxide init bash)"                       # z arena jumps to ~/code/pi-arena; zi picks from a list

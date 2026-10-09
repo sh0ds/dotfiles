@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# rec-status: waybar custom/rec. Prints a red REC pill while wf-recorder runs.
+if pgrep -x wf-recorder >/dev/null; then
+  printf '{"text": "● REC", "class": "rec", "tooltip": "Click or SUPER+SHIFT+R to stop"}\n'
+else
+  printf '{"text": "", "class": "idle"}\n'
+fi

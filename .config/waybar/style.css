@@ -1,4 +1,6 @@
-/* ~/.config/waybar/style.css  (Catppuccin Mocha) */
+/* ~/.config/waybar/style.css  (Catppuccin Mocha, three floating islands)
+   The bar itself is transparent. Each island is a see-through rounded pill, so
+   Hyprland's layer blur (rice.lua, "frosted-layers") frosts the wallpaper behind. */
 * {
   font-family: "JetBrainsMono Nerd Font", monospace;
   font-size: 13px;
@@ -6,42 +8,89 @@
 }
 
 window#waybar {
-  background: rgba(30, 30, 46, 0.85);
+  background: transparent;
   color: #cdd6f4;
-  border: 2px solid #45475a;
-  border-radius: 10px;
 }
 
-#workspaces button {
-  color: #6c7086;
-  padding: 0 8px;
-  border-radius: 8px;
-}
-#workspaces button.active { color: #1e1e2e; background: #89b4fa; }
-#workspaces button.urgent { color: #1e1e2e; background: #f38ba8; }
-#workspaces button:hover  { background: #313244; box-shadow: none; }
+tooltip { background: rgba(30, 30, 46, 0.95); border: 1px solid #45475a; border-radius: 10px; }
+tooltip label { color: #cdd6f4; }
 
-#window, #clock, #cpu, #memory, #pulseaudio, #network, #battery, #tray, #custom-pi {
-  padding: 0 10px;
-}
-
-#clock { color: #b4befe; font-weight: bold; }
-#custom-pi.up   { color: #a6e3a1; }
-#custom-pi.down { color: #f38ba8; }
-#pulseaudio.muted, #network.disconnected { color: #6c7086; }
-#battery.warning  { color: #fab387; }
-#battery.critical { color: #f38ba8; }
-
-window#waybar { background: transparent; }
-
-#workspaces, #window, #clock, #mpris, #custom-cava, #custom-pi,
-#cpu, #memory, #pulseaudio, #network, #battery, #tray {
-  background: #1e1e2e;
+/* ---- Islands ---- */
+#workspaces, #clock, #tray, #sys, #status, #custom-live, #custom-rec {
+  background: rgba(30, 30, 46, 0.8);
   border: 1px solid #313244;
   border-radius: 12px;
-  padding: 0 12px;
-  margin: 0 3px;
+  padding: 0 10px;
+  margin: 0 5px;   /* 10 px between islands, the same as between windows */
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
-#mpris { color: #a6e3a1; }
-#custom-cava  { color: #cba6f7; }
-#workspaces button.active { color: #1e1e2e; background: #cba6f7; border-radius: 10px; }
+#clock:hover, #sys:hover, #status:hover, #tray:hover { background: rgba(49, 50, 68, 0.85); }
+
+/* Music island: track and cava bars share one pill */
+#mpris {
+  background: rgba(30, 30, 46, 0.8);
+  border: 1px solid #313244;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  padding: 0 8px 0 12px;
+  margin-left: 5px;
+  color: #a6e3a1;
+  min-width: 250px;            /* fixed width: the cava bars stop sliding */
+}
+#mpris { transition: color 0.4s ease; }
+#mpris.paused { color: #6c7086; }
+#custom-cava {
+  background: rgba(30, 30, 46, 0.8);
+  border: 1px solid #313244;
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  padding: 0 12px 0 0;
+  margin-right: 5px;
+  color: #cba6f7;
+}
+
+/* ---- Workspaces: dots ---- */
+#workspaces { padding: 0 4px; }
+#workspaces button {
+  color: #6c7086; padding: 0 4px; margin: 6px 1px; min-width: 10px;
+  border-radius: 8px; background: transparent;
+  /* Material 3 decelerate curve, same as Hyprland's md3 in rice.lua */
+  transition: all 0.35s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+/* Active workspace: the same blue-to-mauve gradient as the focused window's border */
+#workspaces button.active {
+  min-width: 26px; color: #1e1e2e;
+  background: #cba6f7;
+  background-image: linear-gradient(90deg, #89b4fa, #cba6f7);
+}
+#workspaces button.empty  { color: #45475a; }
+#workspaces button.urgent { color: #f38ba8; }
+#workspaces button:hover  { background: #313244; box-shadow: none; }
+
+/* ---- Clock ---- */
+#clock { color: #b4befe; font-weight: bold; padding: 0 14px; }
+
+/* ---- Right: Pi drawer and the status pill ---- */
+#custom-pi, #cpu, #memory, #pulseaudio, #network, #custom-notification, #custom-power {
+  padding: 0 7px;
+  background: transparent;
+}
+#custom-pi.up   { color: #a6e3a1; }
+#custom-pi.down { color: #f38ba8; }
+#cpu, #memory   { color: #a6adc8; }
+#pulseaudio     { color: #89b4fa; }
+#pulseaudio.muted, #network.disconnected { color: #6c7086; }
+#network        { color: #94e2d5; }
+#custom-notification { color: #f9e2af; }
+#custom-power   { color: #f38ba8; }
+#pulseaudio, #network, #custom-notification, #custom-power { transition: color 0.2s ease; }
+#custom-power:hover, #custom-notification:hover, #pulseaudio:hover { color: #cdd6f4; }
+
+/* ---- Only while active ---- */
+/* REC pill (rec-status) */
+#custom-rec.rec  { color: #f38ba8; border-color: #f38ba8; font-weight: bold; }
+#custom-rec.idle { padding: 0; margin: 0; border: none; background: transparent; }
+/* LIVE pill (live-status): red and slowly pulsing while sharing the screen */
+@keyframes live-pulse { from { border-color: #f38ba8; } to { border-color: #45475a; } }
+#custom-live.live { color: #f38ba8; font-weight: bold; animation: live-pulse 1.2s ease-in-out infinite alternate; }
+#custom-live.idle { padding: 0; margin: 0; border: none; background: transparent; }

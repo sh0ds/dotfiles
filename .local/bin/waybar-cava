@@ -16,7 +16,7 @@ trap 'rm -f "$conf"' EXIT
 cat >"$conf" <<EOF
 [general]
 bars = 12
-framerate = 30
+framerate = 60
 sleep_timer = 5
 
 [input]
@@ -27,6 +27,11 @@ method = raw
 raw_target = /dev/stdout
 data_format = ascii
 ascii_max_range = 7
+
+[smoothing]
+; Monstercat smoothing: neighbouring bars flow into each other instead of jittering
+monstercat = 1
+noise_reduction = 77
 EOF
 
 cava -p "$conf" | sed -u "$dict"

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# wall-next: random wallpaper from ~/Pictures/walls, grown out from the mouse (awww).
+# Bound to SUPER+W in ~/.config/hypr/rice.lua.
+set -euo pipefail
+
+dir=${WALL_DIR:-$HOME/Pictures/walls}
+img=$(find "$dir" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) | shuf -n1)
+[ -n "$img" ] || { notify-send "wall-next" "No images in $dir"; exit 1; }
+
+# hyprctl gives "x, y" from the top; awww counts y from the bottom, hence --invert-y.
+pos=$(hyprctl cursorpos | tr -d ' ')
+awww img "$img" --transition-type grow --transition-pos "$pos" --invert-y \
+  --transition-duration 1.2 --transition-fps 60
+
+# Keep ~/Pictures/wall.png pointing at the current image (hyprlock, SDDM, fallback).
+ln -sf "$img" "$HOME/Pictures/wall.png"

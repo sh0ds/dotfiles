@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# ocr: drag a box around any text on screen (SUPER+SHIFT+T) and it lands in
+# the clipboard as text. Good for error messages in videos, screenshots, PDFs
+# and Discord streams. Needs tesseract with the English and German data.
+set -euo pipefail
+region=$(slurp) || exit 0
+text=$(grim -g "$region" - | tesseract stdin stdout -l eng+deu 2>/dev/null)
+text=$(printf '%s' "$text" | sed -e 's/[[:space:]]*$//' -e '/./,$!d')   # trim
+if [ -z "$text" ]; then
+  notify-send -u low "OCR" "No text found"
+  exit 1
+fi
+printf '%s' "$text" | wl-copy
+notify-send -u low "Copied text" "$(printf '%s' "$text" | head -c 120)"

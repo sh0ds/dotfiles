@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# docs: search the docs you use for Pi Arena from anywhere (SUPER+D).
+# Type a prefix and a query:
+#   h foldr        Hoogle (Haskell functions, by name or by type: h [a] -> Int)
+#   p aeson        Hackage packages
+#   w hyprland     Arch Wiki
+#   m printf       man page in kitty (C library and commands)
+#   anything else  web search (DuckDuckGo)
+set -euo pipefail
+q=$(fuzzel --dmenu --prompt-only 'docs ' --placeholder 'h foldr · p aeson · w hyprland · m printf' --width 50) || exit 0
+[ -n "$q" ] || exit 0
+enc() { jq -rn --arg s "$1" '$s|@uri'; }
+rest=${q#* }
+case "$q" in
+  "h "*) xdg-open "https://hoogle.haskell.org/?hoogle=$(enc "$rest")" ;;
+  "p "*) xdg-open "https://hackage.haskell.org/packages/search?terms=$(enc "$rest")" ;;
+  "w "*) xdg-open "https://wiki.archlinux.org/index.php?search=$(enc "$rest")" ;;
+  "m "*) kitty --class docs-man -e man "$rest" & disown ;;
+  *)     xdg-open "https://duckduckgo.com/?q=$(enc "$q")" ;;
+esac

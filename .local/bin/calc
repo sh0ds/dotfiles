@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# calc: calculator in fuzzel (SUPER+C). Type "2^10", "15% of 89", "300 EUR to USD",
+# "5 GiB to MB". Enter shows the result; pick it again to copy it.
+# Uses qalc from libqalculate.
+last=""
+while :; do
+  expr=$(printf '%s\n' "$last" | fuzzel --dmenu --prompt "= " --lines 1 --width 40) || exit 0
+  [ -n "$expr" ] || exit 0
+  if [ "$expr" = "$last" ]; then
+    printf '%s' "${last##*= }" | wl-copy
+    notify-send "Copied" "${last##*= }"
+    exit 0
+  fi
+  last="$expr = $(qalc -t "$expr" 2>/dev/null)"
+done

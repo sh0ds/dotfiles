@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# np-art: path to the current track's cover for hyprlock's image widget.
+# File covers are used directly; web covers (SoundCloud) are downloaded once.
+cache=${XDG_CACHE_HOME:-$HOME/.cache}/np-art
+mkdir -p "$cache"
+url=$(playerctl metadata mpris:artUrl 2>/dev/null) || url=""
+case $url in
+  file://*) printf '%s\n' "${url#file://}" ;;
+  http*)
+    f=$cache/$(printf '%s' "$url" | md5sum | cut -c1-16).jpg
+    [ -s "$f" ] || curl -sf --max-time 5 -o "$f" "$url" || exit 0
+    printf '%s\n' "$f" ;;
+  *) printf '%s\n' "$HOME/Pictures/wall.png" ;;
+esac

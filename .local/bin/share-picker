@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# share-picker: fast screen-share picker for xdg-desktop-portal-hyprland.
+# Replaces hyprland-share-picker (the Qt window that got stuck with Vesktop).
+# xdph runs this when an app asks to share (see ~/.config/hypr/xdph.conf) and
+# reads one line back. Formats taken from xdph v1.4.1 (Arch's version):
+#   [SELECTION]r/screen:<output>
+#   [SELECTION]r/window:<handle>
+#   [SELECTION]r/region:<output>@<x>,<y>,<w>,<h>   (x,y relative to the output)
+# "1080p box" is the sharpest option for Discord: Vesktop always encodes 16:9
+# (width = height * 16/9), so a box of 1920x1080 real pixels around the
+# focused window goes out pixel for pixel at the 1080p setting, with no
+# scaling blur on text.
+# The "r" flag lets the app keep a restore token, so it can reconnect later.
+# Enter on the first line shares the focused monitor; Escape cancels the share.
+set -euo pipefail
+
+mons=$(hyprctl monitors -j)
+focused=$(jq -r '.[] | select(.focused) | .name' <<<"$mons")
+
+# One menu line per choice, tab-separated: visible label, then the selection.
+menu=$(
+  printf '󰍹  Screen  %s (focused)\tscreen:%s\n' "$focused" "$focused"
+  jq -r --arg f "$focused" '.[] | select(.name != $f) | "󰍹  Screen  \(.name)\tscreen:\(.name)"' <<<"$mons"
+  printf '󰹑  1080p box  around the focused window (sharpest)\tbox\n'
+  printf '󰩭  Region  drag a box\tregion\n'
+  # XDPH_WINDOW_SHARING_LIST: <handle>[HC>]<class>[HT>]<title>[HE>]<address>[HA>] ...
+  list=${XDPH_WINDOW_SHARING_LIST:-}
+  while [[ $list == *'[HA>]'* ]]; do
+    entry=${list%%'[HA>]'*}; list=${list#*'[HA>]'}
+    handle=${entry%%'[HC>]'*}; rest=${entry#*'[HC>]'}
+    class=${rest%%'[HT>]'*};   rest=${rest#*'[HT>]'}
+    title=${rest%%'[HE>]'*}
+    [[ $class == dropterm || -z $handle ]] && continue
+    printf '  Window  %s: %.60s\twindow:%s\n' "$class" "$title" "$handle"
+  done
+)
+
+choice=$(cut -f1 <<<"$menu" | fuzzel --dmenu --index --prompt 'share ' --placeholder 'Enter shares the focused screen' --lines 10 --width 60) || exit 1
+[[ $choice =~ ^[0-9]+$ ]] || exit 1
+sel=$(sed -n "$((choice + 1))p" <<<"$menu" | cut -f2)
+
+if [[ $sel == box ]]; then
+  # 1920x1080 real pixels (fewer logical pixels on a scaled monitor) centred
+  # on the active window, shrunk (still 16:9) on a smaller monitor and pushed
+  # back inside the screen edges.
+  sel=$(jq -r --argjson w "$(hyprctl activewindow -j)" '
+    .[] | select(.focused) as $m
+    | ($m.width / $m.scale) as $mw | ($m.height / $m.scale) as $mh
+    | ([1 / $m.scale, $mw / 1920, $mh / 1080] | min) as $f
+    | (1920 * $f | floor) as $bw | (1080 * $f | floor) as $bh
+    | (($w.at[0] // $m.x) + (($w.size[0] // $mw) / 2) - $m.x - $bw / 2) as $cx
+    | (($w.at[1] // $m.y) + (($w.size[1] // $mh) / 2) - $m.y - $bh / 2) as $cy
+    | "region:\($m.name)@\([0, ([$cx, $mw - $bw] | min)] | max | floor),\([0, ([$cy, $mh - $bh] | min)] | max | floor),\($bw),\($bh)"
+  ' <<<"$mons")
+elif [[ $sel == region ]]; then
+  read -r out x y w h < <(slurp -f '%o %x %y %w %h') || exit 1
+  read -r mx my < <(jq -r --arg o "$out" '.[] | select(.name == $o) | "\(.x) \(.y)"' <<<"$mons")
+  sel="region:$out@$((x - mx)),$((y - my)),$w,$h"
+fi
+
+printf '[SELECTION]r/%s\n' "$sel"

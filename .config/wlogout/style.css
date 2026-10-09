@@ -1,0 +1,35 @@
+/* Catppuccin Mocha, mauve accent. Based on github.com/catppuccin/wlogout (MIT),
+   rounded to the rice grid: 12 px corners, 10 px gaps. */
+
+* {
+  background-image: none;
+  box-shadow: none;
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+window {
+  background-color: rgba(17, 17, 27, 0.55);   /* crust; Hyprland blurs behind it */
+}
+
+button {
+  margin: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(203, 166, 247, 0.25);
+  color: #cdd6f4;
+  background-color: rgba(24, 24, 37, 0.85);   /* mantle */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 22%;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+button:focus, button:active, button:hover {
+  background-color: rgba(49, 50, 68, 0.95);   /* surface0 */
+  border-color: #cba6f7;
+  outline-style: none;
+}
+
+#lock     { background-image: url("/home/sh0ds/.config/wlogout/icons/lock.svg"); }
+#suspend  { background-image: url("/home/sh0ds/.config/wlogout/icons/suspend.svg"); }
+#reboot   { background-image: url("/home/sh0ds/.config/wlogout/icons/reboot.svg"); }
+#shutdown { background-image: url("/home/sh0ds/.config/wlogout/icons/shutdown.svg"); }
