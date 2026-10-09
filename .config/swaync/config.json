@@ -12,6 +12,7 @@
   "timeout-low": 3,
   "timeout-critical": 0,
   "fit-to-screen": true,
+  "layer-shell-cover-screen": false,
   "relative-timestamps": true,
   "hide-on-clear": true,
   "widgets": ["title", "dnd", "buttons-grid", "mpris", "volume", "notifications"],

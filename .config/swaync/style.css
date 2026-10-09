@@ -1,0 +1,107 @@
+/* swaync look: Catppuccin Mocha (mocha.css) plus motion.
+   Every movement uses the same Material 3 curve as Hyprland's md3 in rice.lua,
+   so the panel moves like the rest of the desktop. */
+@import url("mocha.css");
+
+* {
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+/* ---- Opening: the widgets rise into place one after another ---- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.control-center .widget-title,
+.control-center .widget-dnd,
+.control-center .widget-buttons-grid,
+.control-center .widget-mpris,
+.control-center .widget-volume,
+.control-center .widget-notifications {
+  animation: rise 380ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+}
+.control-center .widget-dnd           { animation-delay: 30ms; }
+.control-center .widget-buttons-grid  { animation-delay: 60ms; }
+.control-center .widget-mpris         { animation-delay: 90ms; }
+.control-center .widget-volume        { animation-delay: 120ms; }
+.control-center .widget-notifications { animation-delay: 150ms; }
+
+/* ---- Quick-settings tiles ---- */
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  min-height: 56px;
+  margin: 4px;
+  border-radius: 12px;
+  background-color: #313244;            /* surface0 */
+  color: #cdd6f4;
+  box-shadow: 0 0 0 1px rgba(203, 166, 247, 0);
+  transition: background-color 220ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              color 220ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              box-shadow 260ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              transform 260ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+/* Hover: the tile lifts a little and picks up a faint mauve edge */
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+  background-color: #45475a;            /* surface1 */
+  box-shadow: 0 0 0 1px rgba(203, 166, 247, 0.45), 0 6px 14px rgba(17, 17, 27, 0.5);
+  transform: translateY(-2px);
+}
+/* Press: it gives way under the click */
+.widget-buttons-grid > flowbox > flowboxchild > button:active {
+  transform: scale(0.94);
+  transition-duration: 80ms;
+}
+/* Toggles that are on (Wi-Fi, night light) fill with mauve */
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
+  background-color: #cba6f7;            /* mauve */
+  color: #11111b;                       /* crust */
+}
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked:hover {
+  background-color: #b4befe;            /* lavender */
+}
+
+/* ---- Title "Clear all" and the do-not-disturb switch ---- */
+.control-center .widget-title button {
+  transition: background-color 220ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              transform 220ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.control-center .widget-title button:active { transform: scale(0.94); }
+.widget-dnd > switch {
+  transition: background-color 260ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.widget-dnd > switch:checked { background-color: #cba6f7; }
+
+/* ---- Media controls: buttons swell slightly on hover ---- */
+.widget-mpris button {
+  transition: background-color 200ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              transform 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.widget-mpris button:hover  { transform: scale(1.12); }
+.widget-mpris button:active { transform: scale(0.92); transition-duration: 80ms; }
+
+/* ---- Volume: the knob grows while you hover or drag ---- */
+.widget-volume trough slider {
+  transition: transform 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.widget-volume trough slider:hover,
+.widget-volume trough slider:active { transform: scale(1.25); }
+
+/* ---- Notifications in the panel ---- */
+.control-center .notification-background .notification {
+  transition: background-color 220ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              transform 220ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.control-center .notification-background:hover .notification {
+  transform: translateX(-3px);
+}
+/* The close cross turns a quarter as you reach for it */
+.notification-background .close-button {
+  transition: background-color 200ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              transform 250ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.notification-background .close-button:hover { transform: rotate(90deg); }
+
+.widget-buttons-grid > flowbox > flowboxchild > button label {
+  font-family: "JetBrainsMono Nerd Font Propo";
+  margin: 0;
+  padding: 0;
+}

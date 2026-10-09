@@ -1,0 +1,53 @@
+/* swayosd: volume and brightness popup in Catppuccin Mocha.
+   Same frosted pill as the waybar islands; the bar fills blue to mauve
+   like the window border. Class names from SwayOSD's own style.scss. */
+window#osd {
+  border-radius: 999px;
+  border: 1px solid rgba(203, 166, 247, 0.35);   /* mauve edge */
+  background: rgba(30, 30, 46, 0.85);            /* base */
+}
+
+window#osd #container {
+  margin: 14px 20px;
+}
+
+window#osd image,
+window#osd label {
+  color: #cdd6f4;                                /* text */
+}
+
+window#osd progressbar:disabled,
+window#osd image:disabled {
+  opacity: 0.45;                                 /* muted */
+}
+
+window#osd progressbar,
+window#osd segmentedprogress {
+  min-height: 8px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+}
+
+window#osd trough,
+window#osd segment {
+  min-height: inherit;
+  border-radius: inherit;
+  border: none;
+  background: #45475a;                           /* surface1 */
+}
+
+window#osd progress,
+window#osd segment.active {
+  min-height: inherit;
+  border-radius: inherit;
+  border: none;
+  background-image: linear-gradient(to right, #89b4fa, #cba6f7);
+}
+
+window#osd segment {
+  margin-left: 8px;
+}
+window#osd segment:first-child {
+  margin-left: 0;
+}
