@@ -55,6 +55,7 @@ Apps:
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **Audacity** for recording audio. It opens on workspace 4 and keeps the screen awake while it's open.
 - **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
+- **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. It gets GameMode too, and the screen stays awake while it has focus.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
 
 Keeping Arch healthy:
@@ -77,6 +78,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
+- `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`waybar-cava`, `gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
 
 ## Screenshots
@@ -107,8 +109,8 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity firefox \
-  adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector
-yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin
+  adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk
+yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher
 ```
 
 ### Installing
@@ -156,6 +158,7 @@ And change a few things to your liking:
   ```
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
+- For OSRS, open Bolt with `SUPER+R`, log in with your Jagex account and pick RuneLite as the client. In RuneLite, turn on the GPU plugin for smoother frames and a longer draw distance.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
@@ -185,6 +188,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+A` | Audacity |
 | `SUPER+SHIFT+P` | Proton Pass |
+| `SUPER+R` | Old School RuneScape |
 | `SUPER+A` | My tmux dev session |
 | `ALT+Tab` | Switch windows |
 | `SUPER+C` | Calculator |

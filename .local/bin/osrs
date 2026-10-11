@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# osrs: Old School RuneScape on SUPER+R. Focuses RuneLite if it's already
+# running, otherwise opens Bolt, which handles the Jagex account login and
+# starts RuneLite for you.
+addr=$(hyprctl clients -j | jq -r '[.[] | select(.class | test("runelite"; "i"))][0].address // empty')
+if [ -n "$addr" ]; then
+  exec hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })"
+fi
+# The AUR and Flathub builds of Bolt name things differently, so try both.
+# Plain RuneLite is the fallback for old non-Jagex accounts.
+for c in bolt-launcher bolt; do
+  command -v "$c" >/dev/null && exec "$c"
+done
+flatpak info com.adamcake.Bolt >/dev/null 2>&1 && exec flatpak run com.adamcake.Bolt
+command -v runelite >/dev/null && exec runelite
+notify-send "osrs" "Install bolt-launcher first (yay -S bolt-launcher)"

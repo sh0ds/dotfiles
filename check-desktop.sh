@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime java; do
   check "$c" command -v "$c"
 done
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt
@@ -60,6 +60,7 @@ check "paccache timer" systemctl is-enabled paccache.timer
 check "fstrim timer" systemctl is-enabled fstrim.timer
 check "reflector timer" systemctl is-enabled reflector.timer
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
+check "Bolt launcher (OSRS)" sh -c 'command -v bolt-launcher || command -v bolt || flatpak info com.adamcake.Bolt'
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "pipewire running" systemctl --user is-active pipewire

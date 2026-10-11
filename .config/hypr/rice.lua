@@ -281,13 +281,24 @@ hl.window_rule({
     immediate    = true,
     idle_inhibit = "fullscreen",
 })
+-- Old School RuneScape: RuneLite, started from the Bolt launcher (SUPER+R).
+-- It's Java, so the class is its package name. The screen stays awake while
+-- it has focus, since half of OSRS is standing still clicking every minute.
+hl.window_rule({
+    name         = "runelite",
+    match        = { class = "(?i)runelite" },
+    content      = "game",
+    idle_inhibit = "focus",
+})
+
 -- GameMode for every game, no Steam launch options needed: when a game's
 -- window opens, gamemoded switches it on for that process, and it switches
 -- off by itself when the game quits. Each process is only asked once, since
 -- asking twice would toggle it back off (launchers open several windows).
 local gamemode_pids = {}
 hl.on("window.open", function(w)
-    if not (w and w.class and w.class:match("^steam_app_%d+$")) then return end
+    local c = w and w.class and w.class:lower() or ""
+    if not (c:match("^steam_app_%d+$") or c:find("runelite", 1, true)) then return end
     local pid = w.pid
     if not pid or pid <= 0 or gamemode_pids[pid] then return end
     gamemode_pids[pid] = true
@@ -358,6 +369,8 @@ hl.bind("CTRL + SHIFT + Escape",    hl.dsp.exec_cmd("sysmon"))
 hl.bind(mod .. " + period",         hl.dsp.exec_cmd("emoji"))
 -- Proton Pass. Pressing it again while it's open brings the window back.
 hl.bind(mod .. " + SHIFT + P",      hl.dsp.exec_cmd("proton-pass"))
+-- Old School RuneScape: jumps to RuneLite if it's open, else starts Bolt
+hl.bind(mod .. " + R",              hl.dsp.exec_cmd("osrs"))
 -- Unmount every USB stick so it is safe to pull out
 hl.bind(mod .. " + SHIFT + U",      hl.dsp.exec_cmd("udiskie-umount -ad && notify-send -a USB \"Safe to unplug\""))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs

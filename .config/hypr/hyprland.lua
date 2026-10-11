@@ -49,6 +49,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Mocha (~/.config/qt6ct)
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+hl.env("_JAVA_AWT_WM_NONREPARENTING", "1") -- Java apps (RuneLite) draw grey without it on tiling WMs
 
 -- NVIDIA only. Delete these two lines on AMD or Intel.
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
