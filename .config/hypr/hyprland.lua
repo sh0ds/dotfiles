@@ -173,7 +173,6 @@ hl.bind(mod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mod .. " + M", hl.dsp.window.fullscreen({ mode = "maximized" }))
 hl.bind(mod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mod .. " + T", hl.dsp.layout("togglesplit"))
-hl.bind(mod .. " + SHIFT + E", hl.dsp.exit())
 
 -- Focus, move, resize with vim keys (arrows work too)
 local dirs = { H = "left", J = "down", K = "up", L = "right", left = "left", down = "down", up = "up", right = "right" }

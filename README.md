@@ -211,8 +211,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+T` | Flip the split between two windows |
 | `SUPER+G` / `SUPER+Tab` | Group windows into tabs / next tab |
 | `SUPER+Escape` | Lock |
-| `SUPER+SHIFT+Escape` | Power menu |
-| `SUPER+SHIFT+E` | Log out of Hyprland |
+| `SUPER+SHIFT+Escape` | Power menu (lock, log out, suspend, reboot, shut down) |
 
 Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there. The media and volume keys work too, even on the lock screen.
 
