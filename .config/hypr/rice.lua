@@ -286,18 +286,30 @@ hl.window_rule({
 -- squeezed into a tile next to whatever is open. It's Java, so the class is
 -- its package name (net-runelite-client-RuneLite). The screen stays awake
 -- while it has focus, since half of OSRS is standing still clicking once a minute.
+-- Only the main window (titled "RuneLite" or "RuneLite - <name>") is moved:
+-- Java opens every tooltip and menu as its own window with the same class,
+-- and sending those to workspace 6 made hovering anything jump workspaces.
 hl.window_rule({
     name         = "runelite",
-    match        = { class = "(?i).*runelite.*" },   -- rules must match the whole class
+    match        = { class = "(?i).*runelite.*", title = "RuneLite.*" },   -- rules must match the whole string
     workspace    = "6",
     content      = "game",
     idle_inhibit = "focus",
 })
+-- RuneLite's tooltips and menus have no title: they stay where they pop up
+-- and never take focus, so they don't pull the game out from under the mouse.
+-- Dialogs with a title (colour pickers etc.) still behave normally.
+hl.window_rule({
+    name     = "runelite-popups",
+    match    = { class = "(?i).*runelite.*", title = "^$" },
+    float    = true,
+    no_focus = true,
+})
 -- Bolt (the login launcher) floats in the middle of workspace 6 too, so
--- RuneLite opens right where you clicked Play.
+-- RuneLite opens right where you clicked Play. Same main-window-only idea.
 hl.window_rule({
     name      = "bolt",
-    match     = { class = "(?i).*bolt.*" },
+    match     = { class = "(?i).*bolt.*", title = "negative:^$" },
     workspace = "6",
     float     = true,
     size      = { "(monitor_w*0.5)", "(monitor_h*0.6)" },
