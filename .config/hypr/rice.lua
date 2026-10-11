@@ -282,23 +282,38 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 -- Old School RuneScape: RuneLite, started from the Bolt launcher (SUPER+R).
--- It's Java, so the class is its package name. The screen stays awake while
--- it has focus, since half of OSRS is standing still clicking every minute.
+-- It gets workspace 6 to itself, so it fills the screen instead of being
+-- squeezed into a tile next to whatever is open. It's Java, so the class is
+-- its package name (net-runelite-client-RuneLite). The screen stays awake
+-- while it has focus, since half of OSRS is standing still clicking once a minute.
 hl.window_rule({
     name         = "runelite",
     match        = { class = "(?i)runelite" },
+    workspace    = "6",
     content      = "game",
     idle_inhibit = "focus",
+})
+-- Bolt (the login launcher) floats in the middle of workspace 6 too, so
+-- RuneLite opens right where you clicked Play.
+hl.window_rule({
+    name      = "bolt",
+    match     = { class = "(?i)bolt" },
+    workspace = "6",
+    float     = true,
+    size      = { "(monitor_w*0.5)", "(monitor_h*0.6)" },
+    center    = true,
 })
 
 -- GameMode for every game, no Steam launch options needed: when a game's
 -- window opens, gamemoded switches it on for that process, and it switches
 -- off by itself when the game quits. Each process is only asked once, since
 -- asking twice would toggle it back off (launchers open several windows).
+-- OSRS is left out on purpose: it barely uses the PC, and GameMode's
+-- do-not-disturb would hide RuneLite's idle notifications ("you stopped
+-- fishing"), which are the whole point of playing it on a second screen.
 local gamemode_pids = {}
 hl.on("window.open", function(w)
-    local c = w and w.class and w.class:lower() or ""
-    if not (c:match("^steam_app_%d+$") or c:find("runelite", 1, true)) then return end
+    if not (w and w.class and w.class:match("^steam_app_%d+$")) then return end
     local pid = w.pid
     if not pid or pid <= 0 or gamemode_pids[pid] then return end
     gamemode_pids[pid] = true
