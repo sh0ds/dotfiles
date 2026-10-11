@@ -18,7 +18,7 @@ waybar with three parts:
 
 - **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
 - **Middle:** the clock (hover for a calendar), plus a red LIVE or REC pill when I'm sharing or recording my screen
-- **Right:** tray, a "stats" pill (hover for CPU, temperature, RAM, GPU and disk), and one pill with my Raspberry Pi (green when it is online), volume, network, notifications and a power button
+- **Right:** tray, a "stats" pill (hover for CPU load and temperature, RAM, GPU load and disk), and one pill with my Raspberry Pi (green when it is online), volume, network, notifications and a power button
 
 ### Everything else
 
@@ -29,7 +29,7 @@ waybar with three parts:
 - **wlogout** is the power menu (lock, suspend, reboot, shutdown).
 - **awww** for wallpapers. `SUPER+W` picks a random one from `~/Pictures/walls`.
 - **kitty + tmux** for the terminal. kitty has a cursor trail and sends a notification when a command that took longer than 15 seconds finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`, `|` and `-` split panes, `h j k l` move between them and `Alt+1-5` jumps to a window.
-- **Neovim** with LazyVim.
+- **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
 - **fastfetch** with a custom "sh0ds" logo.
 - **bash** with [starship](https://starship.rs) as the prompt, eza instead of ls, fzf on `Ctrl+R` for history and zoxide (`z`) to jump to folders. New terminals greet you with fastfetch.

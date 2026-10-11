@@ -10,7 +10,7 @@ backup="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
 cd "$src"
 find . -type f \
-  ! -path './.git/*' ! -name 'install-dotfiles.sh' ! -name 'check-desktop.sh' ! -name 'README.md' ! -name 'LICENSE' ! -name '.gitignore' ! -path './screenshots/*' \
+  ! -path './.git/*' ! -name 'install-dotfiles.sh' ! -name 'check-desktop.sh' ! -name 'README.md' ! -name 'LICENSE' ! -name '.gitignore' ! -path './screenshots/*' ! -path './docs/*' \
   -printf '%P\n' | sort | while IFS= read -r rel; do
   target="$HOME/$rel"
   if [ -L "$target" ] && [ "$(readlink "$target")" = "$src/$rel" ]; then
