@@ -269,12 +269,19 @@ hl.window_rule({
 ---- TOOLS AND KEYS ----
 ------------------------
 
+-- USB sticks mount themselves when plugged in (udiskie, ~/.config/udiskie)
+hl.on("hyprland.start", function()
+    hl.exec_cmd("udiskie")
+end)
+
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)
 hl.bind(mod .. " + Z",              hl.dsp.exec_cmd("dropterm"))
 -- WhatsApp (nchat) on SUPER+I, same idea
 hl.bind(mod .. " + I",              hl.dsp.exec_cmd("chat"))
 -- Music player (rmpc) on SUPER+U, same idea
 hl.bind(mod .. " + U",              hl.dsp.exec_cmd("music"))
+-- Unmount every USB stick so it is safe to pull out
+hl.bind(mod .. " + SHIFT + U",      hl.dsp.exec_cmd("udiskie-umount -ad && notify-send -a USB \"Safe to unplug\""))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs
 hl.bind(mod .. " + G",              hl.dsp.group.toggle())
 hl.bind(mod .. " + Tab",            hl.dsp.group.next())

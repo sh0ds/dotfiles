@@ -1,0 +1,8 @@
+# ~/.config/udiskie/config.yml: USB sticks and drives mount on their own when
+# plugged in (to /run/media/$USER/<name>). The notification's "Browse" button
+# opens a terminal in that folder. SUPER+SHIFT+U unmounts everything again.
+program_options:
+  automount: true
+  notify: true
+  tray: false
+  file_manager: kitty --directory

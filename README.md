@@ -34,6 +34,7 @@ waybar with three parts:
 - **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
 - **mpd + rmpc** for my own music. mpd plays everything in `~/Music` in the background, rmpc is the player for it with album covers, playlists and search. `SUPER+U` slides it down like the other pop-ups. Thanks to mpd-mpris the bar, the media keys and the lock screen pick it up just like SoundCloud. Press `?` in rmpc for all its keys.
+- **udiskie** mounts USB sticks as soon as you plug them in and sends a notification. Click Browse to open a terminal in it. `SUPER+SHIFT+U` unmounts them all, so it's safe to pull them out.
 - **Audacity** for recording and editing audio. `SUPER+SHIFT+A` opens it on workspace 4, and while it's open the screen won't lock or suspend, so long recordings don't get cut off.
 - **fastfetch** with a custom "sh0ds" logo.
 - **bash** with [starship](https://starship.rs) as the prompt, eza instead of ls, fzf on `Ctrl+R` for history and zoxide (`z`) to jump to folders. New terminals greet you with fastfetch.
@@ -84,7 +85,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
   libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
-  audacity pipewire-alsa mpd rmpc mpd-mpris starship eza fzf zoxide ttf-jetbrains-mono-nerd
+  audacity pipewire-alsa mpd rmpc mpd-mpris udiskie starship eza fzf zoxide ttf-jetbrains-mono-nerd
 yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 
@@ -138,6 +139,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+S` | Show or hide SoundCloud (the scratchpad) |
 | `SUPER+I` | Show or hide WhatsApp |
 | `SUPER+U` | Show or hide the music player |
+| `SUPER+SHIFT+U` | Unmount USB sticks |
 | `SUPER+SHIFT+S` | Send a window to the scratchpad |
 | `SUPER+Space` | Launcher |
 | `ALT+Tab` | Switch windows |
