@@ -1,0 +1,10 @@
+// ~/.config/rmpc/config.ron: everything not set here keeps rmpc's defaults.
+// Press ? inside rmpc for every key.
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    address: "127.0.0.1:6600",
+    theme: "mocha",
+    volume_step: 5,
+)

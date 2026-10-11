@@ -1,0 +1,37 @@
+// Catppuccin Mocha for rmpc. Only colours and icons, the layout is rmpc's own
+// (album art left, queue right).
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    text_color: "#cdd6f4",
+    preview_label_style: (fg: "#f9e2af"),
+    preview_metadata_group_style: (fg: "#cba6f7", modifiers: "Bold"),
+    highlighted_item_style: (fg: "#cba6f7", modifiers: "Bold"),
+    current_item_style: (fg: "#11111b", bg: "#89b4fa", modifiers: "Bold"),
+    borders_style: (fg: "#45475a"),
+    highlight_border_style: (fg: "#89b4fa"),
+    symbols: (
+        song: "󰎈",
+        dir: "",
+        playlist: "󰲸",
+        marker: "",
+        ellipsis: "…",
+    ),
+    progress_bar: (
+        symbols: ["━", "━", "●", "━", "━"],
+        track_style: (fg: "#313244"),
+        elapsed_style: (fg: "#cba6f7"),
+        thumb_style: (fg: "#cba6f7"),
+    ),
+    scrollbar: (
+        symbols: ["│", "█", "▲", "▼"],
+        track_style: (fg: "#313244"),
+        ends_style: (fg: "#45475a"),
+        thumb_style: (fg: "#89b4fa"),
+    ),
+    tab_bar: (
+        active_style: (fg: "#11111b", bg: "#cba6f7", modifiers: "Bold"),
+        inactive_style: (fg: "#a6adc8"),
+    ),
+)

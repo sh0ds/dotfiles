@@ -202,6 +202,8 @@ end
 dropdown("soundcloud-scratch", { class = "^FFPWA-", title = ".*SoundCloud.*" }, "scratch", "0.92")
 -- WhatsApp: nchat in a kitty (SUPER+I, ~/.local/bin/chat)
 dropdown("chat",      { class = "^chat$" },      "chat")
+-- Music: rmpc in a kitty (SUPER+U, ~/.local/bin/music)
+dropdown("music",     { class = "^music$" },     "music")
 -- Drop-down terminal (SUPER+Z, ~/.local/bin/dropterm)
 dropdown("dropterm",  { class = "^dropterm$" },  "term")
 -- Quick note: nvim on ~/notes/inbox.md (SUPER+O, ~/.local/bin/quicknote)
@@ -271,6 +273,8 @@ hl.window_rule({
 hl.bind(mod .. " + Z",              hl.dsp.exec_cmd("dropterm"))
 -- WhatsApp (nchat) on SUPER+I, same idea
 hl.bind(mod .. " + I",              hl.dsp.exec_cmd("chat"))
+-- Music player (rmpc) on SUPER+U, same idea
+hl.bind(mod .. " + U",              hl.dsp.exec_cmd("music"))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs
 hl.bind(mod .. " + G",              hl.dsp.group.toggle())
 hl.bind(mod .. " + Tab",            hl.dsp.group.next())

@@ -12,7 +12,7 @@ The configs I use on my desktop. It runs Hyprland 0.56 with the new Lua config. 
 
 ### Look
 
-Only the focused window gets the blue-to-mauve border and a soft glow, the rest are slightly dimmed. If there's just one window on a workspace it fills the whole screen without gaps. Windows open with a small pop and settle into place, and every pop-up (drop-down terminal, SoundCloud, WhatsApp, notes) slides down from the top of the screen. Bars, menus and notifications sit on frosted glass.
+Only the focused window gets the blue-to-mauve border and a soft glow, the rest are slightly dimmed. If there's just one window on a workspace it fills the whole screen without gaps. Windows open with a small pop and settle into place, and every pop-up (drop-down terminal, SoundCloud, WhatsApp, music, notes) slides down from the top of the screen. Bars, menus and notifications sit on frosted glass.
 
 ### Bar
 
@@ -33,6 +33,7 @@ waybar with three parts:
 - **kitty + tmux** for the terminal. kitty has a cursor trail and sends a notification when a command that took longer than 15 seconds finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`, `|` and `-` split panes, `h j k l` move between them and `Alt+1-5` jumps to a window.
 - **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
+- **mpd + rmpc** for my own music. mpd plays everything in `~/Music` in the background, rmpc is the player for it with album covers, playlists and search. `SUPER+U` slides it down like the other pop-ups. Thanks to mpd-mpris the bar, the media keys and the lock screen pick it up just like SoundCloud. Press `?` in rmpc for all its keys.
 - **Audacity** for recording and editing audio. `SUPER+SHIFT+A` opens it on workspace 4, and while it's open the screen won't lock or suspend, so long recordings don't get cut off.
 - **fastfetch** with a custom "sh0ds" logo.
 - **bash** with [starship](https://starship.rs) as the prompt, eza instead of ls, fzf on `Ctrl+R` for history and zoxide (`z`) to jump to folders. New terminals greet you with fastfetch.
@@ -45,7 +46,7 @@ SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips1
 
 Small scripts in `.local/bin` I wrote for things I kept needing:
 
-- `dropterm`, `quicknote` and `chat`: drop-down terminal, notes (`~/notes/inbox.md`) and WhatsApp. All three use `scratch`, which starts the window the first time and slides it in and out after that
+- `dropterm`, `quicknote`, `chat` and `music`: drop-down terminal, notes (`~/notes/inbox.md`), WhatsApp and the music player. All four use `scratch`, which starts the window the first time and slides it in and out after that
 - `chat-notify`: turns new WhatsApp messages into notifications; click one and WhatsApp slides in
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -83,7 +84,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
   libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
-  audacity pipewire-alsa starship eza fzf zoxide ttf-jetbrains-mono-nerd
+  audacity pipewire-alsa mpd rmpc mpd-mpris starship eza fzf zoxide ttf-jetbrains-mono-nerd
 yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 
@@ -106,6 +107,12 @@ Then change a few things to fit your setup:
   f=~/.config/nchat/ui.conf
   sed -i '/^desktop_notify_\(enabled\|connectivity\|command\)=/d' "$f"
   printf '%s\n' 'desktop_notify_enabled=1' 'desktop_notify_connectivity=0' "desktop_notify_command=chat-notify '%1' '%2'" >> "$f"
+  ```
+- For music, put your files in `~/Music` and start mpd once. It picks up new files on its own after that:
+
+  ```
+  mkdir -p ~/Music ~/.local/share/mpd/playlists
+  systemctl --user enable --now mpd.service mpd-mpris.service
   ```
 - In Audacity, set the theme to Dark in the preferences (there's no Catppuccin theme for it) and pick `pipewire` or `default` as the recording device. To record what's playing on your PC, like SoundCloud, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.
@@ -130,6 +137,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+B` | Firefox |
 | `SUPER+S` | Show or hide SoundCloud (the scratchpad) |
 | `SUPER+I` | Show or hide WhatsApp |
+| `SUPER+U` | Show or hide the music player |
 | `SUPER+SHIFT+S` | Send a window to the scratchpad |
 | `SUPER+Space` | Launcher |
 | `ALT+Tab` | Switch windows |
