@@ -2,7 +2,8 @@
 # osrs: Old School RuneScape on SUPER+R. Focuses RuneLite if it's already
 # running, otherwise opens Bolt, which handles the Jagex account login and
 # starts RuneLite for you.
-addr=$(hyprctl clients -j | jq -r '[.[] | select(.class | test("runelite"; "i"))][0].address // empty')
+# Its tooltips are windows of the same class, so match the main window's title.
+addr=$(hyprctl clients -j | jq -r '[.[] | select((.class | test("runelite"; "i")) and (.title | startswith("RuneLite")))][0].address // empty')
 if [ -n "$addr" ]; then
   exec hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })"
 fi
