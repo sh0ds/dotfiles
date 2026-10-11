@@ -46,16 +46,19 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates; do
   check "$c" command -v "$c"
 done
+check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt
+check "emoji font" sh -c 'fc-list | grep -qi "Noto Color Emoji"'
+check "snapshots (snapper or timeshift)" sh -c 'command -v snapper || command -v timeshift'
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "pipewire running" systemctl --user is-active pipewire
 check "NetworkManager running" systemctl is-active NetworkManager
 
 section "Terminal workflow"
-for c in tmux starship eza fzf zoxide fastfetch sl; do
+for c in tmux starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
   check "$c" command -v "$c"
 done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server

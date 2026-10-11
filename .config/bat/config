@@ -1,0 +1,5 @@
+# ~/.config/bat/config. The theme lives in themes/; after installing run
+# `bat cache --build` once so bat finds it.
+--theme="Catppuccin Mocha"
+--style=numbers,changes,header
+--italic-text=always

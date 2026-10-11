@@ -1,0 +1,20 @@
+# ~/.config/tealdeer/config.toml: `tldr tar` and friends. The pages
+# download on first use and refresh themselves once a month.
+[display]
+compact = false
+use_pager = false
+
+[style.command_name]
+foreground = "magenta"
+bold = true
+
+[style.example_code]
+foreground = "cyan"
+
+[style.example_variable]
+foreground = "yellow"
+underline = true
+
+[updates]
+auto_update = true
+auto_update_interval_hours = 720

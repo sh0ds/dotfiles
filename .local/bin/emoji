@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# emoji: pick an emoji in fuzzel (SUPER+period). It's typed into the focused
+# window and copied to the clipboard too, for apps where typing doesn't land.
+# The list is the Unicode one from the unicode-emoji package, without the
+# skin tone variants so search stays short.
+set -euo pipefail
+list=/usr/share/unicode/emoji/emoji-test.txt
+[ -r "$list" ] || { notify-send "emoji" "Install unicode-emoji first"; exit 1; }
+pick=$(awk -F'# ' '/; fully-qualified/ && $2 !~ /skin tone/ {
+         split($2, f, " "); name = $2; sub(/^[^ ]+ E[0-9.]+ /, "", name)
+         print f[1] "  " name }' "$list" |
+       fuzzel --dmenu --prompt 'emoji ' --lines 12 --width 40) || exit 0
+e=${pick%%  *}
+wl-copy -n -- "$e"
+command -v wtype >/dev/null && wtype -- "$e"

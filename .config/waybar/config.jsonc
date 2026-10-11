@@ -27,13 +27,13 @@
   },
 
   // This PC's stats: shows "stats", hover and CPU, temperature, RAM, GPU and
-  // disk slide out next to it.
+  // disk slide out next to it. Click any of them for btop.
   "group/sys": {
     "orientation": "inherit",
     "drawer": { "transition-duration": 300, "children-class": "sys-child", "transition-left-to-right": false },
     "modules": ["custom/stats", "cpu", "temperature", "memory", "custom/gpu", "disk"]
   },
-  "custom/stats": { "format": "stats", "tooltip": false },
+  "custom/stats": { "format": "stats", "tooltip": false, "on-click": "~/.local/bin/sysmon" },
   // Pi, volume, network, bell and power share one pill, icons only.
   "group/status": {
     "orientation": "inherit",
@@ -90,22 +90,24 @@
     "on-click": "kitty -e ssh pi"
   },
 
-  "cpu": { "format": "  {usage}%", "interval": 5 },
-  "memory": { "format": "󰍛  {percentage}%", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB" },
+  "cpu": { "format": "  {usage}%", "interval": 5, "on-click": "~/.local/bin/sysmon" },
+  "memory": { "format": "󰍛  {percentage}%", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB", "on-click": "~/.local/bin/sysmon" },
   // CPU package temperature. coretemp is Intel's sensor; on AMD use k10temp.
   "temperature": {
     "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
     "input-filename": "temp1_input",
     "critical-threshold": 85,
     "format": "  {temperatureC}°",
-    "interval": 5
+    "interval": 5,
+    "on-click": "~/.local/bin/sysmon"
   },
   "custom/gpu": {
     "exec": "~/.local/bin/gpu-status",
     "return-type": "json",
-    "interval": 5
+    "interval": 5,
+    "on-click": "~/.local/bin/sysmon"
   },
-  "disk": { "path": "/", "format": "  {percentage_used}%", "interval": 60, "tooltip-format": "{used} of {total} used on /" },
+  "disk": { "path": "/", "format": "  {percentage_used}%", "interval": 60, "tooltip-format": "{used} of {total} used on /", "on-click": "~/.local/bin/sysmon" },
   // Icons only; hover for the numbers. The volume keys show the swayosd popup.
   "pulseaudio": {
     "format": "{icon}",

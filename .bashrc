@@ -29,6 +29,19 @@ alias gl='git log --oneline --graph --decorate -20'
 alias ta='arena-dev'                                           # Pi Arena tmux session
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
+alias lg='lazygit'                                              # git TUI (SPACE g g in Neovim)
+alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
+
+# y: yazi, and when you quit it the shell stays in the folder you were in
+y() {
+  local tmp cwd
+  tmp=$(mktemp -t yazi-cwd.XXXXXX)
+  command yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd <"$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && { builtin cd -- "$cwd" || :; }
+  rm -f -- "$tmp"
+}
 
 please() {
   local c

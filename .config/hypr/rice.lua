@@ -135,7 +135,7 @@ hl.animation({ leaf = "fadePopupsIn",  enabled = true, speed = 2,   bezier = "md
 -- Workspaces slide 15% and cross-fade. Kept short (0.35 s): you switch
 -- workspaces hundreds of times a day.
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 3.5, bezier = "md3", style = "slidefade 15%" })
--- Every scratchpad (SoundCloud, chat, music, drop-down terminal, quick note) slides all the way
+-- Every scratchpad (SoundCloud, chat, music, btop, drop-down terminal, quick note) slides all the way
 -- down from the top edge, the same way.
 -- Plain "slidevert" picks the direction itself (SoundCloud came up from the
 -- bottom), so pin it: in from the top edge, out back up through the top.
@@ -182,15 +182,16 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- Every drop-down window (SoundCloud, WhatsApp, music, terminal, notes) floats in the
--- same frame: 62% wide, 45% high, centred under the bar, each in its own
--- scratchpad so they slide in and out one at a time.
-local function dropdown(name, match, scratchpad, opacity)
+-- Every drop-down window (SoundCloud, WhatsApp, music, terminal, notes, btop)
+-- floats in the same frame: 62% wide, 45% high (btop gets more height),
+-- centred under the bar, each in its own scratchpad so they slide in and out
+-- one at a time.
+local function dropdown(name, match, scratchpad, opacity, height)
     hl.window_rule({
         name      = name,
         match     = match,
         float     = true,
-        size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
+        size      = { "(monitor_w*0.62)", "(monitor_h*" .. (height or 0.45) .. ")" },
         move      = { "(monitor_w*0.19)", 52 },
         opacity   = opacity,
         workspace = "special:" .. scratchpad .. " silent",
@@ -227,6 +228,17 @@ hl.window_rule({
     match  = { class = "^nmtui$" },
     float  = true,
     size   = { "(monitor_w*0.4)", "(monitor_h*0.55)" },
+    center = true,
+})
+-- System monitor: btop (CTRL+SHIFT+Escape or click "stats", ~/.local/bin/sysmon).
+-- Taller than the others, btop needs the rows.
+dropdown("sysmon",    { class = "^sysmon$" },    "sysmon", nil, 0.7)
+-- "Update" in the update notification: pacman -Syu floating in the middle
+hl.window_rule({
+    name   = "update",
+    match  = { class = "^update$" },
+    float  = true,
+    size   = { "(monitor_w*0.5)", "(monitor_h*0.5)" },
     center = true,
 })
 -- Drop-down terminal (SUPER+Z, ~/.local/bin/dropterm)
@@ -298,9 +310,11 @@ hl.window_rule({
 -- playerctld tracks which player was used last, so the media keys, the bar
 -- and the lock screen follow rmpc or SoundCloud, whichever is playing,
 -- instead of always grabbing the first one.
+-- update-check sends a notification when Arch updates pile up.
 hl.on("hyprland.start", function()
     hl.exec_cmd("udiskie")
     hl.exec_cmd("playerctld daemon")
+    hl.exec_cmd("update-check --watch")
 end)
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)
@@ -309,6 +323,12 @@ hl.bind(mod .. " + Z",              hl.dsp.exec_cmd("dropterm"))
 hl.bind(mod .. " + I",              hl.dsp.exec_cmd("chat"))
 -- Music player (rmpc) on SUPER+U, same idea
 hl.bind(mod .. " + U",              hl.dsp.exec_cmd("music"))
+-- Files: yazi in a kitty (SUPER+E)
+hl.bind(mod .. " + E",              hl.dsp.exec_cmd("kitty -e yazi"))
+-- Task manager: btop slides down, same key as on Windows
+hl.bind("CTRL + SHIFT + Escape",    hl.dsp.exec_cmd("sysmon"))
+-- Emoji picker in fuzzel, types the one you pick
+hl.bind(mod .. " + period",         hl.dsp.exec_cmd("emoji"))
 -- Unmount every USB stick so it is safe to pull out
 hl.bind(mod .. " + SHIFT + U",      hl.dsp.exec_cmd("udiskie-umount -ad && notify-send -a USB \"Safe to unplug\""))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs

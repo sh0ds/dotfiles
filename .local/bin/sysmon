@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# sysmon: show/hide btop as a drop-down (CTRL+SHIFT+Escape, or click the
+# "stats" pill in the bar).
+# btop rewrites btop.conf with every option on exit, so it isn't in the repo.
+# Instead the few settings that matter are set here before it starts.
+set -euo pipefail
+conf=${XDG_CONFIG_HOME:-$HOME/.config}/btop/btop.conf
+mkdir -p "${conf%/*}"
+[ -e "$conf" ] || : >"$conf"
+set_opt() {
+  if grep -q "^$1 *=" "$conf"; then
+    sed -i "s|^$1 *=.*|$1 = $2|" "$conf"
+  else
+    printf '%s = %s\n' "$1" "$2" >>"$conf"
+  fi
+}
+set_opt color_theme '"catppuccin_mocha"'
+set_opt theme_background false   # let kitty's glass show through
+set_opt vim_keys true            # h j k l in the process list
+exec scratch sysmon sysmon kitty --class sysmon -e btop

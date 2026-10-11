@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# update-check: a notification when Arch updates pile up, nothing in the bar.
+# Started by rice.lua: checks 5 minutes after login, then every 6 hours.
+# Click "Update" for a terminal running pacman -Syu (snap-pac snapshots first).
+# UPDATE_THRESHOLD sets how many updates count as "piling up" (default 20).
+set -uo pipefail
+threshold=${UPDATE_THRESHOLD:-20}
+
+check() {
+  local list n reboot=""
+  list=$(checkupdates 2>/dev/null) || return 0   # 2 = no updates, 1 = offline
+  n=$(grep -c . <<<"$list")
+  (( n >= threshold )) || return 0
+  grep -qE '^(linux|nvidia|nvidia-open|mesa|systemd) ' <<<"$list" && reboot=" Reboot afterwards."
+  # shellcheck disable=SC2016  # $1 and $2 are expanded by the inner bash
+  setsid -f bash -c '
+    action=$(notify-send -a Updates --action=update=Update "$1 updates waiting" "$2")
+    [ "$action" = update ] && kitty --class update -e bash -c "sudo pacman -Syu; read -rsn1 -p \"Done. Press any key.\""
+  ' _ "$n" "Arch has $n new packages.$reboot" >/dev/null 2>&1 </dev/null
+}
+
+if [ "${1:-}" = --watch ]; then
+  sleep 300
+  while :; do check; sleep 6h; done
+else
+  check
+fi
