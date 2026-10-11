@@ -101,7 +101,7 @@ bash ~/code/dotfiles/install-dotfiles.sh
 Then change a few things to fit your setup:
 
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf`.
-- For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line).
+- For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line). Put the same ID in the `soundcloud` line in `rice.lua`, that's how it knows which window to slide in.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
   ```

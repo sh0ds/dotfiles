@@ -199,12 +199,16 @@ end
 
 -- SoundCloud app (PWAsForFirefox), SUPER+S. Firefox isn't see-through on its
 -- own, so it gets the same glass as kitty here.
-dropdown("soundcloud-scratch", { class = "^FFPWA-", title = ".*SoundCloud.*" }, "scratch", "0.92")
--- Firefox sets its title late and resizes itself after opening, so the rule
--- above can miss. Snap SoundCloud back into the drop-down frame whenever it
+-- Matched by the app's ID, not the page title: the title changes with every
+-- page and track (and SoundCloud's home page even spells it "Soundcloud").
+-- Use your own ID from `firefoxpwa profile list` (same one as in hyprland.lua).
+local soundcloud = "FFPWA-01M4E9WM9PSN126GWCCEG49J4C"
+dropdown("soundcloud-scratch", { class = "^" .. soundcloud .. "$" }, "scratch", "0.92")
+-- Firefox resizes itself right after opening, so the size above can get lost.
+-- Snap SoundCloud back into the drop-down frame whenever it
 -- opens or its title changes (every new track).
 local function snap_soundcloud(w)
-    if not (w and w.floating and w.class:find("^FFPWA%-") and w.title:find("SoundCloud")) then return end
+    if not (w and w.floating and w.class == soundcloud) then return end
     local m = w.monitor
     if not m then return end
     local mw, mh = m.width / m.scale, m.height / m.scale
