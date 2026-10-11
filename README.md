@@ -19,8 +19,8 @@ Only the focused window gets the blue-to-mauve border and a soft glow, the rest 
 waybar with three parts:
 
 - **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
-- **Middle:** the clock (hover for a calendar), plus a red LIVE or REC pill when I'm sharing or recording my screen
-- **Right:** tray, a "stats" pill (hover for CPU load and temperature, RAM, GPU load and disk), and one pill with my Raspberry Pi (green when it is online), volume, network, notifications and a power button
+- **Middle:** the clock (hover for a calendar), plus a red LIVE pill when I'm sharing my screen and REC when I'm recording
+- **Right:** tray, a "stats" pill (hover for CPU load and temperature, RAM, GPU load and disk), and one pill for my Raspberry Pi (green when it's online), volume, network, notifications and a power button
 
 ### Everything else
 
@@ -52,8 +52,8 @@ Small scripts in `.local/bin` I wrote for things I kept needing:
 - `ocr`: drag a box around any text on screen and it's copied to your clipboard
 - `rec-toggle`: record a part of the screen to `~/Videos`
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
-- `live-status`: turns on do-not-disturb while I share my screen, so nothing private pops up on stream
-- `wall-next`, `nightlight`, `waybar-cava`, `gpu-status`, `np-title`, `np-art`: wallpapers, warm screen colours, the audio bars, the GPU stat and the now-playing info for the lock screen
+- `live-status`: turns on do-not-disturb while I share or record my screen, so nothing private pops up on stream
+- `wall-next`, `nightlight`, `waybar-cava`, `gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`: wallpapers, warm screen colours, and the small helpers behind the bar and the lock screen
 
 Each script has a short comment at the top explaining what it does.
 
@@ -81,7 +81,8 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
-  libqalculate tesseract tesseract-data-eng starship eza fzf zoxide ttf-jetbrains-mono-nerd
+  libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
+  starship eza fzf zoxide ttf-jetbrains-mono-nerd
 yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 
@@ -146,6 +147,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+Q` | Close window |
 | `SUPER+F` / `SUPER+M` | Fullscreen / maximise |
 | `SUPER+V` | Float and center a window |
+| `SUPER+T` | Flip the split between two windows |
 | `SUPER+X` | Center a floating window |
 | `SUPER+G` / `SUPER+Tab` | Group windows into tabs / next tab |
 | `SUPER+A` | Open my tmux dev session |
@@ -157,7 +159,7 @@ Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move 
 
 ## Help
 
-This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If a keybind for one of the scripts does nothing, run the install script again: new scripts only get linked into `~/.local/bin` when it runs. If the screen-share picker doesn't show up, restart the portal:
+This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If a keybind for one of the scripts does nothing, run the install script again: new scripts only get linked into `~/.local/bin` when it runs. If WhatsApp notifications don't show up, make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits. If the screen-share picker doesn't show up, restart the portal:
 
 ```
 systemctl --user restart xdg-desktop-portal-hyprland
