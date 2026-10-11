@@ -63,7 +63,7 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel). "Use resou
 
 ## Help
 
-- **Window size**: RuneLite opens on the workspace you're on, in its own column, with the game at 1280x720 in the middle of it. `SUPER+P` makes it fill the whole tile instead, `SUPER+CTRL+H/L` resizes the column. Narrower than about 1050px and the plugin panel gets cut off.
+- **Window size**: RuneLite opens on the workspace you're on, in its own 1300px column, and fills it. `SUPER+CTRL+H/L` resizes the column. Narrower than about 1050px and the plugin panel gets cut off.
 - **Black bars or a tiny game**: the layout isn't on Resizable, see step 5.
 - **Plugin list is short**: you're still on the default profile, see step 4.3.
 - **Brown interface**: step 6, or run `runelite-skin` again if `~/.local/share/runelite-mocha` is missing.

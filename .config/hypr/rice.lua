@@ -282,17 +282,14 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 -- Old School RuneScape: RuneLite, started from the Bolt launcher (SUPER+R).
--- It tiles like any other window, but pseudotiled: the tile can be any shape,
--- and the game sits in the middle of it at 1280x720 (smaller tiles shrink it,
--- keeping 16:9). SUPER+P switches pseudotiling off if you want it to fill.
+-- It tiles like any other window and fills its tile (Resizable mode just
+-- shows more of the world in a taller tile).
 -- It's Java, so the class is its package name (net-runelite-client-RuneLite).
 -- The screen stays awake while it has focus, since half of OSRS is standing
 -- still clicking once a minute.
 hl.window_rule({
     name         = "runelite",
     match        = { class = "(?i).*runelite.*", title = "RuneLite.*" },   -- rules must match the whole string
-    pseudo       = true,
-    size         = { 1280, 720 },   -- on a tiled window this is the pseudotile size
     content      = "game",
     idle_inhibit = "focus",
     no_dim       = true,    -- stays bright on the side while you work, so you see when you stop fishing
@@ -313,7 +310,7 @@ hl.window_rule({
 --    their app was started, and RuneLite is started by Bolt, which may still
 --    be sitting on another workspace from earlier.
 -- 2. It gets its own full-height column (movetoroot swaps it with the other
---    column), 1300px wide so the 1280x720 game fits. Tiling ignores Java's
+--    column), 1300px wide. Tiling ignores Java's
 --    minimum size, and the game plus plugin panel needs about 1050px, so a
 --    quarter tile used to cut off the right edge. Alone on a workspace it
 --    just takes the whole screen and the layout messages do nothing.
