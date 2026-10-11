@@ -55,7 +55,7 @@ check "pipewire running" systemctl --user is-active pipewire
 check "NetworkManager running" systemctl is-active NetworkManager
 
 section "Terminal workflow"
-for c in tmux starship eza fzf zoxide fastfetch; do
+for c in tmux starship eza fzf zoxide fastfetch sl; do
   check "$c" command -v "$c"
 done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server

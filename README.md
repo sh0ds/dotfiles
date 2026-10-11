@@ -86,7 +86,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
   libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
-  audacity pipewire-alsa mpd rmpc mpd-mpris udiskie starship eza fzf zoxide ttf-jetbrains-mono-nerd
+  audacity pipewire-alsa mpd rmpc mpd-mpris udiskie sl starship eza fzf zoxide ttf-jetbrains-mono-nerd
 yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 

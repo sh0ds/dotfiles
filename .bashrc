@@ -30,6 +30,15 @@ alias ta='arena-dev'                                           # Pi Arena tmux s
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
 
+please() {
+  local c
+  c=$(fc -ln -2 -1 | grep -v '^[[:space:]]*please' | tail -n1)
+  c=${c#"${c%%[![:space:]]*}"}
+  [ -n "$c" ] || return 1
+  printf '\e[35mfine. sudo %s\e[0m\n' "$c"
+  eval "sudo $c"
+}
+
 # System info on new terminals, but not in every tmux pane or nvim terminal
 if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
   fastfetch
