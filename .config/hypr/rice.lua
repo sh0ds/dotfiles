@@ -200,6 +200,19 @@ end
 -- SoundCloud app (PWAsForFirefox), SUPER+S. Firefox isn't see-through on its
 -- own, so it gets the same glass as kitty here.
 dropdown("soundcloud-scratch", { class = "^FFPWA-", title = ".*SoundCloud.*" }, "scratch", "0.92")
+-- Firefox sets its title late and resizes itself after opening, so the rule
+-- above can miss. Snap SoundCloud back into the drop-down frame whenever it
+-- opens or its title changes (every new track).
+local function snap_soundcloud(w)
+    if not (w and w.floating and w.class:find("^FFPWA%-") and w.title:find("SoundCloud")) then return end
+    local m = w.monitor
+    if not m then return end
+    local mw, mh = m.width / m.scale, m.height / m.scale
+    hl.dispatch(hl.dsp.window.resize({ x = math.floor(mw * 0.62), y = math.floor(mh * 0.45), window = w }))
+    hl.dispatch(hl.dsp.window.move({ x = m.x + math.floor(mw * 0.19), y = m.y + 52, window = w }))
+end
+hl.on("window.open", snap_soundcloud)
+hl.on("window.title", snap_soundcloud)
 -- WhatsApp: nchat in a kitty (SUPER+I, ~/.local/bin/chat)
 dropdown("chat",      { class = "^chat$" },      "chat")
 -- Music: rmpc in a kitty (SUPER+U, ~/.local/bin/music)
