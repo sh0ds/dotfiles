@@ -4,6 +4,8 @@ My Arch + Hyprland setup, themed in Catppuccin Mocha.
 
 ![desktop](screenshots/desktop.png)
 
+![demo](screenshots/demo.gif)
+
 ## Description
 
 The configs I use on my desktop. It runs Hyprland 0.56 with the new Lua config. `hyprland.lua` is the base config and `rice.lua` has all the theming, animations, window rules and extra keybinds on top of it. If something in `rice.lua` breaks, the base config keeps working.
