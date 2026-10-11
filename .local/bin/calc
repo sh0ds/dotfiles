@@ -11,5 +11,9 @@ while :; do
     notify-send "Copied" "${last##*= }"
     exit 0
   fi
-  last="$expr = $(qalc -t "$expr" 2>/dev/null)"
+  case ${expr,,} in
+    *"meaning of life"*) last="$expr = 42" ;;
+    1/0|"1 / 0")         last="$expr = nice try" ;;
+    *)                   last="$expr = $(qalc -t "$expr" 2>/dev/null)" ;;
+  esac
 done

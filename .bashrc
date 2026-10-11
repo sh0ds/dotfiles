@@ -52,6 +52,7 @@ command_not_found_handle() {
     gti|gut|tig) printf '\e[35m%s? sure, git\e[0m\n' "$1"; shift; git "$@" ;;
     hello|hi|hey) printf '\e[35mhi %s\e[0m\n' "$USER" ;;
     fuck|wtf) printf '\e[35mlanguage.\e[0m\n' ;;
+    coffee) printf '\e[35mthe terminal does not make coffee. yet.\e[0m\n' ;;
     *)
       local quips=("nope" "never heard of it" "did you mean: touch grass" "that's not a thing (yet)" "skill issue")
       if ((SRANDOM % 4 == 0)); then  # SRANDOM: RANDOM repeats in this subshell
@@ -66,6 +67,12 @@ command_not_found_handle() {
 # System info on new terminals, but not in every tmux pane or nvim terminal
 if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
   fastfetch
+  case $(date +%m-%d) in
+    01-01)       printf '\e[35mhappy new year. same bugs as last year though.\e[0m\n' ;;
+    04-01)       printf '\e[35mnothing you read today is true.\e[0m\n' ;;
+    10-31)       printf '\e[35mboo.\e[0m\n' ;;
+    12-24|12-25) printf '\e[35mmerry christmas. close the laptop.\e[0m\n' ;;
+  esac
 fi
 eval "$(starship init bash)"                     # prompt
 eval "$(fzf --bash)"                             # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
