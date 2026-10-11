@@ -44,7 +44,7 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel) and check t
 ## What's in the profile
 
 - GPU rendering with double draw distance, 4x anti-aliasing, a little fog and a Mocha sky
-- Quest Helper, Inventory Setups, Shortest Path, Dude Where's My Stuff, Clue Details, Banked Experience, Skills Tab Progress Bars
+- Quest Helper, Inventory Setups, Shortest Path, Dude Where's My Stuff, Banked Experience, Skills Tab Progress Bars
 - Farming and birdhouse reminders, idle notifications and high-value drops, all as normal notifications
 - HP and prayer bars next to the side panel, item prices on hover, herb and ore names, no roofs, anti-drag, further zoom-out, smoother animations
 - Mocha colours for loot, hover outlines, the walk tile, XP globes, chat, overlays, minimap dots, player names, marked NPCs, objects and tiles, XP drops and agility courses
