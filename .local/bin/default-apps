@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# default-apps: make videos open in mpv, pictures in imv and PDFs in zathura,
+# from yazi, Firefox downloads, udiskie or xdg-open. Run it once after
+# installing them; it only touches these file types in ~/.config/mimeapps.list.
+set -euo pipefail
+xdg-mime default mpv.desktop \
+  video/mp4 video/x-matroska video/webm video/quicktime video/x-msvideo video/mpeg video/ogg \
+  audio/mpeg audio/flac audio/ogg audio/opus audio/x-wav audio/mp4
+xdg-mime default imv.desktop \
+  image/png image/jpeg image/gif image/webp image/bmp image/tiff image/avif image/svg+xml
+xdg-mime default org.pwmt.zathura-pdf-mupdf.desktop \
+  application/pdf application/epub+zip application/oxps
+echo "Done: video and audio in mpv, pictures in imv, PDFs in zathura."

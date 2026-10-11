@@ -46,12 +46,18 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime; do
   check "$c" command -v "$c"
 done
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt
 check "emoji font" sh -c 'fc-list | grep -qi "Noto Color Emoji"'
 check "snapshots (snapper or timeshift)" sh -c 'command -v snapper || command -v timeshift'
+check "zathura PDF plugin" test -e /usr/lib/zathura/libpdf-mupdf.so
+check "PDFs open in zathura" sh -c 'xdg-mime query default application/pdf | grep -q zathura'
+check "adw-gtk3 theme" test -d /usr/share/themes/adw-gtk3-dark
+check "GTK portal" test -x /usr/lib/xdg-desktop-portal-gtk
+check "paccache timer" systemctl is-enabled paccache.timer
+check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "pipewire running" systemctl --user is-active pipewire

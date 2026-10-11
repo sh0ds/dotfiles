@@ -1,0 +1,8 @@
+# ~/.config/imv/config: pictures from yazi and Firefox. Arrows or j/k flip
+# through the folder, f is fullscreen, q quits.
+# Colours: Catppuccin Mocha (catppuccin/imv).
+[options]
+background=1e1e2e
+overlay_text_color=cdd6f4
+overlay_background_color=11111b
+overlay_font=JetBrainsMono Nerd Font:11

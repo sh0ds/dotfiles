@@ -291,6 +291,16 @@ hl.window_rule({
     idle_inhibit = "always",
 })
 
+-- Proton Pass (SUPER+SHIFT+P) floats in the middle instead of tiling.
+-- The class is matched loosely since the app doesn't set one of its own.
+hl.window_rule({
+    name   = "proton-pass",
+    match  = { class = "(?i)^proton.?pass$" },
+    float  = true,
+    size   = { "(monitor_w*0.5)", "(monitor_h*0.65)" },
+    center = true,
+})
+
 -- Firefox picture-in-picture video: small, bottom right, on every workspace.
 hl.window_rule({
     name  = "pip",
@@ -311,7 +321,12 @@ hl.window_rule({
 -- and the lock screen follow rmpc or SoundCloud, whichever is playing,
 -- instead of always grabbing the first one.
 -- update-check sends a notification when Arch updates pile up.
+-- gsettings: GTK apps and file pickers go dark (adw-gtk3 + Mocha gtk.css).
 hl.on("hyprland.start", function()
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
+        .. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
+        .. "gsettings set org.gnome.desktop.interface accent-color purple; "
+        .. "gsettings set org.gnome.desktop.interface cursor-theme catppuccin-mocha-dark-cursors")
     hl.exec_cmd("udiskie")
     hl.exec_cmd("playerctld daemon")
     hl.exec_cmd("update-check --watch")
@@ -329,6 +344,8 @@ hl.bind(mod .. " + E",              hl.dsp.exec_cmd("kitty -e yazi"))
 hl.bind("CTRL + SHIFT + Escape",    hl.dsp.exec_cmd("sysmon"))
 -- Emoji picker in fuzzel, types the one you pick
 hl.bind(mod .. " + period",         hl.dsp.exec_cmd("emoji"))
+-- Proton Pass. Pressing it again while it's open brings the window back.
+hl.bind(mod .. " + SHIFT + P",      hl.dsp.exec_cmd("proton-pass"))
 -- Unmount every USB stick so it is safe to pull out
 hl.bind(mod .. " + SHIFT + U",      hl.dsp.exec_cmd("udiskie-umount -ad && notify-send -a USB \"Safe to unplug\""))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs

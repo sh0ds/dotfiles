@@ -38,7 +38,10 @@ waybar with three parts:
 - **btop** for CPU, RAM, GPU and processes. `CTRL+SHIFT+Escape` slides it down like the other pop-ups, or click the stats pill.
 - **lazygit**, **bat** and **tldr**: `lg` for git, `cat` with colours (fzf's `Ctrl+T` previews files with it too) and `tldr tar` for short examples instead of the man page. All three in Mocha.
 - **Updates**: a notification shows up when 20 or more Arch updates are waiting, with a button that runs the update. It also tells you when a kernel or driver update needs a reboot.
-- **snapper + snap-pac** take a snapshot before and after every pacman run, so a broken update can be rolled back (see Installing).
+- **snapper + snap-pac** take a snapshot before and after every pacman run, so a broken update can be rolled back (see Installing). paccache clears out old package versions once a week, so pacman's cache doesn't eat the disk.
+- **mpv, imv and zathura** open videos, pictures and PDFs, all in Mocha. Opened from a terminal they take its place until you close them. zathura shows PDFs dark, `CTRL+R` switches to the original colours.
+- **GTK and Qt apps** (pavucontrol, file pickers, settings windows) are dark with Mocha colours and a mauve accent, so nothing flashes white anymore.
+- **Proton Pass** for passwords. `SUPER+SHIFT+P` opens it in the middle of the screen.
 - **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history, window switcher and Wi-Fi menu.
 - **mpd + rmpc** for my own music. mpd plays everything in `~/Music` in the background, rmpc is the player for it with album covers, playlists and search. `SUPER+U` slides it down like the other pop-ups. Thanks to mpd-mpris the bar, the media keys and the lock screen pick it up just like SoundCloud. Press `?` in rmpc for all its keys.
@@ -46,7 +49,7 @@ waybar with three parts:
 
 ### Window rules
 
-SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. WhatsApp runs in the terminal with [nchat](https://github.com/d99kris/nchat) and slides down on `SUPER+I`, in its own scratchpad. Steam and all games go on workspace 5. Games get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
+SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. WhatsApp runs in the terminal with [nchat](https://github.com/d99kris/nchat) and slides down on `SUPER+I`, in its own scratchpad. Steam and all games go on workspace 5. Games started with GameMode get the fast CPU mode and silence notifications until you quit. They also get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
 
 ### Scripts
 
@@ -61,6 +64,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing:
 - `sysmon`: btop as a drop-down, also through `scratch`
 - `emoji`: `SUPER+.` opens an emoji picker, the one you pick gets typed and copied
 - `update-check`: the update notification
+- `default-apps`: run once so videos, pictures and PDFs open in mpv, imv and zathura
 - `ocr`: drag a box around any text on screen and it's copied to your clipboard
 - `rec-toggle`: record a part of the screen to `~/Videos`
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
@@ -96,8 +100,9 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
   audacity pipewire-alsa mpd rmpc mpd-mpris udiskie sl starship eza fzf zoxide ttf-jetbrains-mono-nerd \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer pacman-contrib \
-  wtype unicode-emoji noto-fonts-emoji
-yay -S wlogout catppuccin-cursors-mocha nchat
+  wtype unicode-emoji noto-fonts-emoji mpv imv zathura zathura-pdf-mupdf \
+  adw-gtk-theme qt6ct xdg-desktop-portal-gtk gamemode lib32-gamemode
+yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin
 ```
 
 ### Installing
@@ -111,7 +116,7 @@ bash ~/code/dotfiles/install-dotfiles.sh
 
 Then change a few things to fit your setup:
 
-- Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf`.
+- Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `qt6ct/qt6ct.conf`.
 - For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line). Put the same ID in the `soundcloud` line in `rice.lua`, that's how it knows which window to slide in.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
@@ -126,6 +131,10 @@ Then change a few things to fit your setup:
   mkdir -p ~/Music ~/.local/share/mpd/playlists
   systemctl --user enable --now mpd.service mpd-mpris.service
   ```
+- Run `default-apps` once so files open in mpv, imv and zathura.
+- Turn on the weekly cache cleanup with `sudo systemctl enable --now paccache.timer`. It keeps the last 3 versions of every package.
+- For GameMode, add yourself to its group with `sudo usermod -aG gamemode $USER` and log in again. Then in Steam, right-click a game, Properties, and put `gamemoderun %command%` in Launch Options.
+- In Proton Pass, sign in and turn on "Start at login" in its settings if you want it in the tray. For filling in passwords on websites, also get the Proton Pass add-on for Firefox.
 - In Audacity, set the theme to Dark in the preferences (there's no Catppuccin theme for it) and pick `pipewire` or `default` as the recording device. To record what's playing on your PC, like SoundCloud, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - Run `bat cache --build` once so bat finds the Mocha theme.
 - For snapshots, check that `/` is btrfs (`findmnt -no FSTYPE /` says `btrfs`), then:
@@ -189,6 +198,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+G` / `SUPER+Tab` | Group windows into tabs / next tab |
 | `SUPER+A` | Open my tmux dev session |
 | `SUPER+SHIFT+A` | Audacity |
+| `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+Escape` | Lock |
 | `SUPER+SHIFT+Escape` | Power menu |
 | `SUPER+SHIFT+E` | Log out of Hyprland |
