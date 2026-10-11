@@ -288,7 +288,7 @@ hl.window_rule({
 -- while it has focus, since half of OSRS is standing still clicking once a minute.
 hl.window_rule({
     name         = "runelite",
-    match        = { class = "(?i)runelite" },
+    match        = { class = "(?i).*runelite.*" },   -- rules must match the whole class
     workspace    = "6",
     content      = "game",
     idle_inhibit = "focus",
@@ -297,7 +297,7 @@ hl.window_rule({
 -- RuneLite opens right where you clicked Play.
 hl.window_rule({
     name      = "bolt",
-    match     = { class = "(?i)bolt" },
+    match     = { class = "(?i).*bolt.*" },
     workspace = "6",
     float     = true,
     size      = { "(monitor_w*0.5)", "(monitor_h*0.6)" },
