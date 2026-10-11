@@ -391,7 +391,7 @@ end)
 hl.bind(mod .. " + X", hl.dsp.window.center())
 
 -- Power menu (wlogout)
-hl.bind(mod .. " + SHIFT + Escape", hl.dsp.exec_cmd("wlogout -b 4"))
+hl.bind(mod .. " + SHIFT + Escape", hl.dsp.exec_cmd("wlogout -b 5"))
 -- Colour picker: click anywhere, hex code lands in the clipboard
 hl.bind(mod .. " + SHIFT + C",      hl.dsp.exec_cmd("hyprpicker -a"))
 -- Screenshot a region and draw on it before saving (satty)

@@ -37,7 +37,7 @@ Desktop:
 
 - **swaync** for notifications, `SUPER+N` opens the panel. **swayosd** shows a little pill when you change the volume.
 - **hyprlock** is the lock screen, with the cover and title of whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
-- **wlogout** is the power menu.
+- **wlogout** is the power menu (lock, log out, suspend, reboot, shut down).
 - **awww** for wallpapers. `SUPER+W` grows a random one from `~/Pictures/walls` out of the mouse.
 - **fuzzel** as the launcher. It also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
 - **udiskie** mounts USB sticks as soon as you plug them in. Click Browse in the notification to open it, `SUPER+SHIFT+U` unmounts them all.
