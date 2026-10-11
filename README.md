@@ -1,11 +1,161 @@
 # dotfiles
 
-Hyprland 0.55+ (Lua config), kitty, tmux, Neovim 0.12 + LazyVim, waybar, mako, fuzzel, hyprlock, hypridle. Catppuccin Mocha throughout. Made for the Pi Arena desktop; the full walkthrough is `arch-hyprland-install-guide.md` in the project.
+My Arch + Hyprland setup, themed in Catppuccin Mocha.
 
-```bash
-git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
-bash ~/code/dotfiles/install-dotfiles.sh    # symlinks into $HOME, backs up what was there
-bash ~/code/dotfiles/check-desktop.sh       # 0 FAIL when the desktop is complete
+![desktop](screenshots/desktop.png)
+
+## Description
+
+The configs I use on my desktop. It runs Hyprland 0.56 with the new Lua config. `hyprland.lua` is the base config and `rice.lua` has all the theming, animations, window rules and extra keybinds on top of it. If something in `rice.lua` breaks, the base config keeps working.
+
+### Look
+
+Only the focused window gets the blue-to-mauve border and a soft glow, the rest are slightly dimmed. If there's just one window on a workspace it fills the whole screen without gaps. Windows open with a small pop and settle into place, and every pop-up (drop-down terminal, SoundCloud, notes) slides down from the top of the screen.
+
+### Bar
+
+waybar with three parts:
+
+- **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
+- **Middle:** the clock (hover for a calendar), plus a red LIVE or REC pill when I'm sharing or recording my screen
+- **Right:** tray, Pi/CPU/RAM, volume, network, notifications and a power button
+
+### Everything else
+
+- **swaync** for notifications. `SUPER+N` opens the panel, which slides in from the right.
+- **swayosd** shows a little pill when you change the volume or brightness.
+- **hyprlock** is the lock screen. It shows the cover and title of whatever is playing.
+- **hypridle** dims the screen after 5 minutes, locks after 10, turns the screen off after 11 and suspends after an hour.
+- **wlogout** is the power menu (lock, suspend, reboot, shutdown).
+- **awww** for wallpapers. `SUPER+W` picks a random one from `~/Pictures/walls`.
+- **kitty + tmux** for the terminal. The tmux prefix is `Ctrl+A`, `|` and `-` split panes and `h j k l` move between them.
+- **Neovim** with LazyVim.
+- **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
+- **fastfetch** with a custom "sh0ds" logo.
+- **bash** with a prompt that shows the git branch and the exit code when a command fails.
+
+### Window rules
+
+SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. Steam and all games go on workspace 5. Games get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
+
+### Scripts
+
+Small scripts in `.local/bin` I wrote for things I kept needing:
+
+- `dropterm` and `quicknote`: drop-down terminal and drop-down notes (`~/notes/inbox.md`)
+- `winswitch`: ALT+Tab through all windows, most recent first
+- `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
+- `docs`: search docs from anywhere. `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo
+- `ocr`: drag a box around any text on screen and it's copied to your clipboard
+- `rec-toggle`: record a part of the screen to `~/Videos`
+- `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
+- `live-status`: turns on do-not-disturb while I share my screen, so nothing private pops up on stream
+- `wall-next`, `nightlight`, `waybar-cava`, `np-title`, `np-art`: wallpapers, warm screen colours, the audio bars and the now-playing info for the lock screen
+
+Each script has a short comment at the top explaining what it does.
+
+## Screenshots
+
+SoundCloud in the scratchpad and the notification panel:
+
+![popups](screenshots/popups.png)
+
+The power menu:
+
+![power menu](screenshots/power.png)
+
+The lock screen, with the cover and title of whatever is playing:
+
+![lock screen](screenshots/lock.png)
+
+## Getting Started
+
+### Dependencies
+
+Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions) and these packages:
+
+```
+sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
+  waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
+  grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
+  libqalculate tesseract tesseract-data-eng zoxide ttf-jetbrains-mono-nerd
+yay -S wlogout catppuccin-cursors-mocha
 ```
 
-Edit files through the symlinks, then `git diff` / commit here.
+### Installing
+
+Just clone the repo and run the install script. It symlinks everything into your home folder and moves your old files to `~/.dotfiles-backup/` first, so nothing gets lost.
+
+```
+git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
+bash ~/code/dotfiles/install-dotfiles.sh
+```
+
+Then change a few things to fit your setup:
+
+- Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `wlogout/style.css`.
+- For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line).
+- The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.
+- Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
+- `pi-status` and `arena-dev` are for my Raspberry Pi, so either delete them or set `PI_HOST` to your own.
+
+### Executing program
+
+Log out and back into Hyprland. To see if anything is missing, run:
+
+```
+bash ~/code/dotfiles/check-desktop.sh
+```
+
+### Keybinds
+
+| Key | What it does |
+| --- | --- |
+| `SUPER+Return` | Terminal |
+| `SUPER+Z` | Drop-down terminal |
+| `SUPER+O` | Drop-down notes |
+| `SUPER+B` | Firefox |
+| `SUPER+S` | Show or hide SoundCloud (the scratchpad) |
+| `SUPER+SHIFT+S` | Send a window to the scratchpad |
+| `SUPER+Space` | Launcher |
+| `ALT+Tab` | Switch windows |
+| `SUPER+C` | Calculator |
+| `SUPER+D` | Search docs |
+| `SUPER+SHIFT+V` | Clipboard history |
+| `SUPER+SHIFT+T` | Copy text from the screen |
+| `Print` | Screenshot of a region to the clipboard |
+| `SHIFT+Print` | Screenshot of the whole screen to `~/Pictures` |
+| `CTRL+Print` | Screenshot and draw on it |
+| `SUPER+SHIFT+R` | Start or stop recording |
+| `SUPER+SHIFT+C` | Colour picker |
+| `SUPER+N` | Notifications |
+| `SUPER+W` | New wallpaper |
+| `SUPER+SHIFT+N` | Night light |
+| `SUPER+SHIFT+B` | Hide or show the bar |
+| `SUPER+Q` | Close window |
+| `SUPER+F` / `SUPER+M` | Fullscreen / maximise |
+| `SUPER+V` | Float and center a window |
+| `SUPER+X` | Center a floating window |
+| `SUPER+G` / `SUPER+Tab` | Group windows into tabs / next tab |
+| `SUPER+A` | Open my tmux dev session |
+| `SUPER+Escape` | Lock |
+| `SUPER+SHIFT+Escape` | Power menu |
+| `SUPER+SHIFT+E` | Log out of Hyprland |
+
+Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there.
+
+## Help
+
+This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If the keybinds for the scripts do nothing, check that `~/.local/bin` is in your PATH. If the screen-share picker doesn't show up, restart the portal:
+
+```
+systemctl --user restart xdg-desktop-portal-hyprland
+```
+
+## Credits
+
+Colours by [Catppuccin](https://github.com/catppuccin), the notification theme is from [catppuccin/swaync](https://github.com/catppuccin/swaync) and the Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details

@@ -52,7 +52,7 @@ tooltip label { color: #cdd6f4; }
 /* ---- Workspaces: dots ---- */
 #workspaces { padding: 0 4px; }
 #workspaces button {
-  color: #6c7086; padding: 0 4px; margin: 6px 1px; min-width: 10px;
+  color: #a6adc8; font-size: 9px; padding: 0 4px; margin: 6px 1px; min-width: 10px;
   border-radius: 8px; background: transparent;
   /* Material 3 decelerate curve, same as Hyprland's md3 in rice.lua */
   transition: all 0.35s cubic-bezier(0.05, 0.7, 0.1, 1);
