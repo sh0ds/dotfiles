@@ -291,6 +291,7 @@ hl.window_rule({
     match        = { class = "(?i).*runelite.*", title = "RuneLite.*" },   -- rules must match the whole string
     content      = "game",
     idle_inhibit = "focus",
+    no_dim       = true,    -- stays bright on the side while you work, so you see when you stop fishing
 })
 -- Java opens every RuneLite tooltip and menu as its own window, titled
 -- "win0", "win1" and so on (or nothing). Those float where they pop up and

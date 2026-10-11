@@ -3,6 +3,7 @@
 # resource pack by Smoke (flat, dark grey, gold accents), turns its greys
 # into Mocha's base shades and its gold into mauve, and saves it to
 # ~/.local/share/runelite-mocha, where my RuneLite profile looks for it.
+# Also puts your wallpaper on the login screen.
 # Item, skill, prayer and spell icons keep their own colours.
 # Run it again whenever the pack gets an update.
 # Usage: runelite-skin              (or: runelite-skin DIR to use a local copy)
@@ -109,6 +110,30 @@ private_usernames=0xcba6f7
 public_friend_usernames=0xb4befe
 """
 
+def login_screen():
+    # The login screen gets your current wallpaper, darkened a little so
+    # the login box stays readable. RuneLite reads login.png from its own
+    # folder, which Bolt keeps somewhere under ~/.local/share.
+    wall = os.path.expanduser("~/Pictures/wall.png")
+    if not os.path.exists(wall):
+        return
+    dirs = {os.path.expanduser("~/.runelite")}
+    for root, ds, _ in os.walk(os.path.expanduser("~/.local/share")):
+        if root.count(os.sep) - os.path.expanduser("~").count(os.sep) > 6:
+            ds[:] = []
+        if ".runelite" in ds:
+            dirs.add(os.path.join(root, ".runelite"))
+    im = Image.open(wall).convert("RGB")
+    w, h = 765, 503
+    scale = max(w / im.width, h / im.height)
+    im = im.resize((round(im.width * scale), round(im.height * scale)), Image.LANCZOS)
+    x, y = (im.width - w) // 2, (im.height - h) // 2
+    im = Image.blend(im.crop((x, y, x + w, y + h)), Image.new("RGB", (w, h), hx("1e1e2e")), 0.3)
+    for d in dirs:
+        if os.path.isdir(d):
+            im.save(os.path.join(d, "login.png"))
+            print("login screen:", os.path.join(d, "login.png"))
+
 if len(sys.argv) > 1:
     build(sys.argv[1])
 else:
@@ -117,3 +142,4 @@ else:
         with urllib.request.urlopen(URL) as r:
             tarfile.open(fileobj=io.BytesIO(r.read())).extractall(t, filter="data")
         build(os.path.join(t, os.listdir(t)[0]))
+login_screen()
