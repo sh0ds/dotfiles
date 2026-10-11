@@ -5,9 +5,12 @@ How I get Old School RuneScape looking like the rest of the desktop. Takes about
 ## 1. Install and log in
 
 ```
-sudo pacman -S jre17-openjdk
+sudo pacman -S jre17-openjdk python-pillow
 yay -S bolt-launcher
+runelite-skin
 ```
+
+`runelite-skin` downloads the [RuneLITE](https://github.com/melkypie/resource-packs/tree/pack-RuneLITE) resource pack by Smoke, a flat and minimal take on the game's interface, and recolours it to Mocha: its greys become the same shades as the bar and windows, its gold accent becomes mauve. It lands in `~/.local/share/runelite-mocha`. Run it again if the pack ever gets an update.
 
 Log out and back in once so Hyprland picks up the Java settings. Then press `SUPER+R`, log in to Bolt with your Jagex account, pick your character and start RuneLite.
 
@@ -28,11 +31,11 @@ These are saved to your account, so the profile can't set them. In the game, cli
 
 ## 4. The skin
 
-Open the Resource Packs plugin (paintbrush in RuneLite's side panel) and check that "Use resource pack" is First and the path is `/home/sh0ds/.config/runelite/mocha-pack` (change `sh0ds` if your user is different). If it asks about Interface Styles, say yes. If the interface is still brown, switch to Second and back to First.
+Open the Resource Packs plugin (paintbrush in RuneLite's side panel) and check that "Use resource pack" is First and the path is `/home/sh0ds/.local/share/runelite-mocha` (change `sh0ds` if your user is different). If it asks about Interface Styles, say yes. If the interface doesn't change, switch to Second and back to First.
 
 ## 5. Check it worked
 
-- Side panel, tabs and minimap are flat Mocha, the selected tab is a mauve-tinted panel
+- Side panel, tabs and minimap are flat Mocha, the selected tab has a mauve line under it, the minimap is an octagon
 - Chat text is white with mauve names
 - Hovering an NPC gives it a yellow outline
 - The sky past the draw distance is dark Mocha
@@ -51,4 +54,5 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel) and check t
 
 - **Black bars or a tiny game**: the layout isn't on Resizable, see step 3.
 - **Plugin list is short**: you're still on the default profile, see step 2.3.
-- **Brown interface**: step 4, or run `bash ~/code/dotfiles/install-dotfiles.sh` if `~/.config/runelite/mocha-pack` is missing.
+- **Brown interface**: step 4, or run `runelite-skin` again if `~/.local/share/runelite-mocha` is missing.
+- **Orbs look broken**: LITE Regen Meter isn't on yet, restart RuneLite once so it downloads.

@@ -79,6 +79,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
+- `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`waybar-cava`, `gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
 
 ## Screenshots
@@ -109,7 +110,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity firefox \
-  adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk
+  adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow
 yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher
 ```
 
