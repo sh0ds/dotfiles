@@ -27,7 +27,7 @@ alias v='nvim'
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate -20'
 alias ta='arena-dev'                                           # Pi Arena tmux session
-alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # plan's default C flags
+alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
 
 # System info on new terminals, but not in every tmux pane or nvim terminal

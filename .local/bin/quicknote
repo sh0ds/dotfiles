@@ -7,10 +7,5 @@ inbox="$HOME/notes/inbox.md"
 if ! hyprctl clients -j | jq -e 'any(.[]; .class == "quicknote")' >/dev/null; then
   mkdir -p "${inbox%/*}"
   printf '\n## %s\n\n' "$(date '+%Y-%m-%d %H:%M')" >>"$inbox"
-  kitty --class quicknote -e nvim + -c 'startinsert' "$inbox" & disown
-  for _ in $(seq 20); do
-    hyprctl clients -j | jq -e 'any(.[]; .class == "quicknote")' >/dev/null && break
-    sleep 0.1
-  done
 fi
-hyprctl dispatch 'hl.dsp.workspace.toggle_special("notes")'
+exec scratch quicknote notes kitty --class quicknote -e nvim + -c 'startinsert' "$inbox"

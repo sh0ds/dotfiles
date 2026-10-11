@@ -113,7 +113,7 @@
     "format-icons": { "default": ["", "", ""] },
     "tooltip-format": "Volume {volume}%",
     "on-click": "pavucontrol",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    "on-click-right": "swayosd-client --output-volume mute-toggle"
   },
   "network": {
     "format-wifi": "",

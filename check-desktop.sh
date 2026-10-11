@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# check-desktop.sh: is the Hyprland desktop from the install guide complete?
+# check-desktop.sh: is everything this rice needs installed and running?
 # Changes nothing. Pair it with check-toolchain.sh for the language tools.
 # Usage: bash check-desktop.sh          exit code = number of failures
 set -u

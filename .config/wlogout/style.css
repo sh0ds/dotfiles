@@ -29,7 +29,8 @@ button:focus, button:active, button:hover {
   outline-style: none;
 }
 
-#lock     { background-image: url("/home/sh0ds/.config/wlogout/icons/lock.svg"); }
-#suspend  { background-image: url("/home/sh0ds/.config/wlogout/icons/suspend.svg"); }
-#reboot   { background-image: url("/home/sh0ds/.config/wlogout/icons/reboot.svg"); }
-#shutdown { background-image: url("/home/sh0ds/.config/wlogout/icons/shutdown.svg"); }
+/* Icon paths are relative to this file, so they work for any user */
+#lock     { background-image: url("icons/lock.svg"); }
+#suspend  { background-image: url("icons/suspend.svg"); }
+#reboot   { background-image: url("icons/reboot.svg"); }
+#shutdown { background-image: url("icons/shutdown.svg"); }

@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
 # chat: show/hide WhatsApp (SUPER+I). Runs nchat, a terminal WhatsApp and
-# Telegram client, in a kitty with class "chat". Starts it on first use.
-# rice.lua's "chat" rule floats it in the drop-down frame and parks it in
-# special:chat. Link your phone once with: nchat --setup
-if ! hyprctl clients -j | jq -e 'any(.[]; .class == "chat")' >/dev/null; then
-  kitty --class chat -e nchat & disown
-  # wait until the window exists, so the toggle below shows it
-  for _ in $(seq 20); do
-    hyprctl clients -j | jq -e 'any(.[]; .class == "chat")' >/dev/null && break
-    sleep 0.1
-  done
-fi
-hyprctl dispatch 'hl.dsp.workspace.toggle_special("chat")'
+# Telegram client, in a kitty. Link your phone once with: nchat --setup
+exec scratch chat chat kitty --class chat -e nchat

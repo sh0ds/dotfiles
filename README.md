@@ -42,8 +42,7 @@ SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips1
 
 Small scripts in `.local/bin` I wrote for things I kept needing:
 
-- `dropterm` and `quicknote`: drop-down terminal and drop-down notes (`~/notes/inbox.md`)
-- `chat`: shows or hides WhatsApp (nchat) and starts it if it isn't running yet
+- `dropterm`, `quicknote` and `chat`: drop-down terminal, notes (`~/notes/inbox.md`) and WhatsApp. All three use `scratch`, which starts the window the first time and slides it in and out after that
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `docs`: search docs from anywhere. `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo
@@ -94,7 +93,7 @@ bash ~/code/dotfiles/install-dotfiles.sh
 
 Then change a few things to fit your setup:
 
-- Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `wlogout/style.css`.
+- Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf`.
 - For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line).
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone.
 - The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.

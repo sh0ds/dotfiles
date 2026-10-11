@@ -182,49 +182,30 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- The SoundCloud app (PWAsForFirefox) always opens into the music scratchpad,
--- floating in exactly the drop-down terminal's frame (same size, same spot,
--- same see-through glass), so SUPER+S and SUPER+Z look like one family.
-hl.window_rule({
-    name      = "soundcloud-scratch",
-    match     = { class = "^FFPWA-", title = ".*SoundCloud.*" },
-    float     = true,
-    size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
-    move      = { "(monitor_w*0.19)", 52 },
-    opacity   = "0.92",
-    workspace = "special:scratch silent",
-})
+-- Every drop-down window (SoundCloud, WhatsApp, terminal, notes) floats in the
+-- same frame: 62% wide, 45% high, centred under the bar, each in its own
+-- scratchpad so they slide in and out one at a time.
+local function dropdown(name, match, scratchpad, opacity)
+    hl.window_rule({
+        name      = name,
+        match     = match,
+        float     = true,
+        size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
+        move      = { "(monitor_w*0.19)", 52 },
+        opacity   = opacity,
+        workspace = "special:" .. scratchpad .. " silent",
+    })
+end
 
--- WhatsApp: nchat in a kitty with class "chat", in the same drop-down frame
--- as dropterm, with its own scratchpad (SUPER+I, ~/.local/bin/chat).
-hl.window_rule({
-    name      = "chat",
-    match     = { class = "^chat$" },
-    float     = true,
-    size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
-    move      = { "(monitor_w*0.19)", 52 },
-    workspace = "special:chat silent",
-})
-
--- Drop-down terminal: a kitty with class "dropterm" lives in its own scratchpad.
-hl.window_rule({
-    name      = "dropterm",
-    match     = { class = "^dropterm$" },
-    float     = true,
-    size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
-    move      = { "(monitor_w*0.19)", 52 },
-    workspace = "special:term silent",
-})
-
--- Quick note: the same drop-down shape as dropterm, with nvim on ~/notes/inbox.md.
-hl.window_rule({
-    name      = "quicknote",
-    match     = { class = "^quicknote$" },
-    float     = true,
-    size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
-    move      = { "(monitor_w*0.19)", 52 },
-    workspace = "special:notes silent",
-})
+-- SoundCloud app (PWAsForFirefox), SUPER+S. Firefox isn't see-through on its
+-- own, so it gets the same glass as kitty here.
+dropdown("soundcloud-scratch", { class = "^FFPWA-", title = ".*SoundCloud.*" }, "scratch", "0.92")
+-- WhatsApp: nchat in a kitty (SUPER+I, ~/.local/bin/chat)
+dropdown("chat",      { class = "^chat$" },      "chat")
+-- Drop-down terminal (SUPER+Z, ~/.local/bin/dropterm)
+dropdown("dropterm",  { class = "^dropterm$" },  "term")
+-- Quick note: nvim on ~/notes/inbox.md (SUPER+O, ~/.local/bin/quicknote)
+dropdown("quicknote", { class = "^quicknote$" }, "notes")
 
 -- Steam lives on workspace 5, together with the games it starts, so gaming
 -- never reshuffles the workspaces you code on.
