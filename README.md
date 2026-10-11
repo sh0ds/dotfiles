@@ -33,6 +33,7 @@ waybar with three parts:
 - **kitty + tmux** for the terminal. kitty has a cursor trail and sends a notification when a command that took longer than 15 seconds finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`, `|` and `-` split panes, `h j k l` move between them and `Alt+1-5` jumps to a window.
 - **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
+- **Audacity** for recording and editing audio. `SUPER+SHIFT+A` opens it on workspace 4, and while it's open the screen won't lock or suspend, so long recordings don't get cut off.
 - **fastfetch** with a custom "sh0ds" logo.
 - **bash** with [starship](https://starship.rs) as the prompt, eza instead of ls, fzf on `Ctrl+R` for history and zoxide (`z`) to jump to folders. New terminals greet you with fastfetch.
 
@@ -82,7 +83,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
   libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
-  starship eza fzf zoxide ttf-jetbrains-mono-nerd
+  audacity pipewire-alsa starship eza fzf zoxide ttf-jetbrains-mono-nerd
 yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 
@@ -106,6 +107,7 @@ Then change a few things to fit your setup:
   sed -i '/^desktop_notify_\(enabled\|connectivity\|command\)=/d' "$f"
   printf '%s\n' 'desktop_notify_enabled=1' 'desktop_notify_connectivity=0' "desktop_notify_command=chat-notify '%1' '%2'" >> "$f"
   ```
+- In Audacity, set the theme to Dark in the preferences (there's no Catppuccin theme for it) and pick `pipewire` or `default` as the recording device. To record what's playing on your PC, like SoundCloud, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - `pi-status` and `arena-dev` are for my Raspberry Pi, so either delete them or set `PI_HOST` to your own.
@@ -151,6 +153,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+X` | Center a floating window |
 | `SUPER+G` / `SUPER+Tab` | Group windows into tabs / next tab |
 | `SUPER+A` | Open my tmux dev session |
+| `SUPER+SHIFT+A` | Audacity |
 | `SUPER+Escape` | Lock |
 | `SUPER+SHIFT+Escape` | Power menu |
 | `SUPER+SHIFT+E` | Log out of Hyprland |

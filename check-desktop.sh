@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat audacity; do
   check "$c" command -v "$c"
 done
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'

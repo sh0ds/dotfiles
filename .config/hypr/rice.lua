@@ -243,6 +243,15 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 
+-- Audacity gets workspace 4 to itself, and while it's open the screen never
+-- locks or suspends, so a long recording doesn't get cut off.
+hl.window_rule({
+    name         = "audacity",
+    match        = { class = "(?i)audacity" },
+    workspace    = "4",
+    idle_inhibit = "always",
+})
+
 -- Firefox picture-in-picture video: small, bottom right, on every workspace.
 hl.window_rule({
     name  = "pip",
@@ -301,3 +310,5 @@ hl.bind(mod .. " + SHIFT + T",      hl.dsp.exec_cmd("ocr"))
 hl.bind(mod .. " + O",              hl.dsp.exec_cmd("quicknote"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D",              hl.dsp.exec_cmd("docs"))
+-- Audacity: starts it, or jumps to workspace 4 if it's already open
+hl.bind(mod .. " + SHIFT + A",      hl.dsp.exec_cmd("pgrep -x audacity >/dev/null && hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })' || audacity"))
