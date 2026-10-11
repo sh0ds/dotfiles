@@ -49,7 +49,7 @@ waybar with three parts:
 
 ### Window rules
 
-SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. WhatsApp runs in the terminal with [nchat](https://github.com/d99kris/nchat) and slides down on `SUPER+I`, in its own scratchpad. Steam and all games go on workspace 5. Games started with GameMode get the fast CPU mode and silence notifications until you quit. They also get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
+SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. WhatsApp runs in the terminal with [nchat](https://github.com/d99kris/nchat) and slides down on `SUPER+I`, in its own scratchpad. Steam and all games go on workspace 5. Games automatically get GameMode, so they run in the fast CPU mode and notifications stay quiet until you quit. They also get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
 
 ### Scripts
 
@@ -133,7 +133,7 @@ Then change a few things to fit your setup:
   ```
 - Run `default-apps` once so files open in mpv, imv and zathura.
 - Turn on the weekly cache cleanup with `sudo systemctl enable --now paccache.timer`. It keeps the last 3 versions of every package.
-- For GameMode, add yourself to its group with `sudo usermod -aG gamemode $USER` and log in again. Then in Steam, right-click a game, Properties, and put `gamemoderun %command%` in Launch Options.
+- For GameMode, add yourself to its group with `sudo usermod -aG gamemode $USER` and log in again. Every Steam game gets it on its own, no launch options needed.
 - In Proton Pass, sign in and turn on "Start at login" in its settings if you want it in the tray. For filling in passwords on websites, also get the Proton Pass add-on for Firefox.
 - In Audacity, set the theme to Dark in the preferences (there's no Catppuccin theme for it) and pick `pipewire` or `default` as the recording device. To record what's playing on your PC, like SoundCloud, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - Run `bat cache --build` once so bat finds the Mocha theme.

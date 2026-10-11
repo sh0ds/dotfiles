@@ -281,6 +281,18 @@ hl.window_rule({
     immediate    = true,
     idle_inhibit = "fullscreen",
 })
+-- GameMode for every game, no Steam launch options needed: when a game's
+-- window opens, gamemoded switches it on for that process, and it switches
+-- off by itself when the game quits. Each process is only asked once, since
+-- asking twice would toggle it back off (launchers open several windows).
+local gamemode_pids = {}
+hl.on("window.open", function(w)
+    if not (w and w.class and w.class:match("^steam_app_%d+$")) then return end
+    local pid = w.pid
+    if not pid or pid <= 0 or gamemode_pids[pid] then return end
+    gamemode_pids[pid] = true
+    hl.exec_cmd("gamemoded -r" .. pid)
+end)
 
 -- Audacity gets workspace 4 to itself, and while it's open the screen never
 -- locks or suspends, so a long recording doesn't get cut off.
