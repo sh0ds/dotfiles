@@ -303,6 +303,17 @@ hl.window_rule({
     no_focus         = true,
     no_initial_focus = true,
 })
+-- RuneLite goes next to what's already there, not above or below it.
+-- Dwindle splits a tall space top/bottom, and the game is useless at half
+-- height, so if it lands wider than tall, flip that split (same as SUPER+T).
+hl.on("window.open", function(w)
+    if not (w and not w.floating and w.active and w.class and w.class:lower():find("runelite")
+            and w.title and w.title:match("^RuneLite")) then return end
+    local size = w.size
+    if size and size.x > size.y then
+        hl.dispatch(hl.dsp.layout("togglesplit"))
+    end
+end)
 -- Bolt (the login launcher) floats in the middle of the screen.
 hl.window_rule({
     name   = "bolt",

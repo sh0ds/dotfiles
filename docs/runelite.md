@@ -47,10 +47,13 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel) and check t
 - Quest Helper, Inventory Setups, Shortest Path, Dude Where's My Stuff, Clue Details, Banked Experience, Skills Tab Progress Bars
 - Farming and birdhouse reminders, idle notifications and high-value drops, all as normal notifications
 - HP and prayer bars next to the side panel, item prices on hover, herb and ore names, no roofs, anti-drag, further zoom-out, smoother animations
-- Mocha colours for loot, hover outlines, the walk tile, XP globes, chat and overlays
+- Mocha colours for loot, hover outlines, the walk tile, XP globes, chat, overlays, minimap dots, player names, marked NPCs, objects and tiles, XP drops and agility courses
+- Emote Clue Items, which shows which emote clue items you own and where they are
 - No RuneLite title bar (Hyprland draws the border) and no character name in the window title
 
 ## Help
+
+- **RuneLite opened above or below another window**: it should flip to side by side on its own, `SUPER+T` flips it by hand.
 
 - **Black bars or a tiny game**: the layout isn't on Resizable, see step 3.
 - **Plugin list is short**: you're still on the default profile, see step 2.3.
