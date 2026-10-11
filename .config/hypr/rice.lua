@@ -282,38 +282,32 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 -- Old School RuneScape: RuneLite, started from the Bolt launcher (SUPER+R).
--- It gets workspace 6 to itself, so it fills the screen instead of being
--- squeezed into a tile next to whatever is open. It's Java, so the class is
--- its package name (net-runelite-client-RuneLite). The screen stays awake
--- while it has focus, since half of OSRS is standing still clicking once a minute.
--- Only the main window (titled "RuneLite" or "RuneLite - <name>") is moved:
--- Java opens every tooltip and menu as its own window with the same class,
--- and sending those to workspace 6 made hovering anything jump workspaces.
+-- It opens on whatever workspace you're on and tiles like any other window.
+-- It's Java, so the class is its package name (net-runelite-client-RuneLite).
+-- The screen stays awake while it has focus, since half of OSRS is standing
+-- still clicking once a minute.
 hl.window_rule({
     name         = "runelite",
     match        = { class = "(?i).*runelite.*", title = "RuneLite.*" },   -- rules must match the whole string
-    workspace    = "6",
     content      = "game",
     idle_inhibit = "focus",
 })
--- RuneLite's tooltips and menus have no title: they stay where they pop up
--- and never take focus, so they don't pull the game out from under the mouse.
--- Dialogs with a title (colour pickers etc.) still behave normally.
+-- Java opens every RuneLite tooltip and menu as its own untitled window:
+-- those float where they pop up and never take focus, so they don't pull
+-- the game out from under the mouse. Dialogs with a title behave normally.
 hl.window_rule({
     name     = "runelite-popups",
     match    = { class = "(?i).*runelite.*", title = "^$" },
     float    = true,
     no_focus = true,
 })
--- Bolt (the login launcher) floats in the middle of workspace 6 too, so
--- RuneLite opens right where you clicked Play. Same main-window-only idea.
+-- Bolt (the login launcher) floats in the middle of the screen.
 hl.window_rule({
-    name      = "bolt",
-    match     = { class = "(?i).*bolt.*", title = "negative:^$" },
-    workspace = "6",
-    float     = true,
-    size      = { "(monitor_w*0.5)", "(monitor_h*0.6)" },
-    center    = true,
+    name   = "bolt",
+    match  = { class = "(?i).*bolt.*", title = "negative:^$" },
+    float  = true,
+    size   = { "(monitor_w*0.5)", "(monitor_h*0.6)" },
+    center = true,
 })
 
 -- GameMode for every game, no Steam launch options needed: when a game's
