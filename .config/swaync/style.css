@@ -100,6 +100,9 @@
 }
 .notification-background .close-button:hover { transform: rotate(90deg); }
 
+/* Icons: the "Propo" variant of the Nerd Font gives each icon its own width,
+   so it sits in the middle of its tile instead of hugging the left of a
+   fixed-width cell. */
 .widget-buttons-grid > flowbox > flowboxchild > button label {
   font-family: "JetBrainsMono Nerd Font Propo";
   margin: 0;

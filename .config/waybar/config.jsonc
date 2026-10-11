@@ -4,40 +4,68 @@
   "position": "top",
   "height": 32,
   "margin-top": 8,
-  "margin-left": 10,      // same as Hyprland gaps_out: pills line up with window edges
+  "margin-left": 10, // same as Hyprland gaps_out: pills line up with window edges
   "margin-right": 10,
-  "spacing": 0,          // islands space themselves (style.css margins)
-
+  "spacing": 0, // islands space themselves (style.css margins)
   // Three islands, nothing more: workspaces and music on the left, the clock in
   // the middle (LIVE and REC appear next to it only while active), and one
   // status pill on the right. CPU and RAM hide behind the Pi icon until hovered.
-  "modules-left": ["hyprland/workspaces", "mpris", "custom/cava"],
-  "modules-center": ["custom/live", "custom/rec", "clock"],
-  "modules-right": ["tray", "group/sys", "group/status"],
-
+  "modules-left": [
+    "hyprland/workspaces",
+    "mpris",
+    "custom/cava"
+  ],
+  "modules-center": [
+    "custom/live",
+    "custom/rec",
+    "clock"
+  ],
+  "modules-right": [
+    "tray",
+    "group/sys",
+    "group/status"
+  ],
   // Dots instead of numbers. The active workspace is a mauve pill that
   // stretches smoothly to its new place (transition in style.css); ones with
   // windows are rings, empty ones faint dots.
   "hyprland/workspaces": {
     "format": "{icon}",
-    "format-icons": { "active": "", "persistent": "", "default": "", "empty": "" },
-    "persistent-workspaces": { "*": 5 },   // 1-5 always visible, even when empty
+    "format-icons": {
+      "active": "",
+      "persistent": "",
+      "default": "",
+      "empty": ""
+    },
+    "persistent-workspaces": {
+      "*": 5
+    }, // 1-5 always visible, even when empty
     "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
   },
-
   // Hover the Pi icon and CPU and RAM slide out next to it.
   "group/sys": {
     "orientation": "inherit",
-    "drawer": { "transition-duration": 300, "children-class": "sys-child", "transition-left-to-right": false },
-    "modules": ["custom/pi", "cpu", "memory"]
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "sys-child",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/pi",
+      "cpu",
+      "memory"
+    ]
   },
   // Volume, network, bell and power share one pill.
   "group/status": {
     "orientation": "inherit",
-    "modules": ["pulseaudio", "network", "custom/notification", "custom/power"]
+    "modules": [
+      "pulseaudio",
+      "network",
+      "custom/notification",
+      "custom/power"
+    ]
   },
-
   "clock": {
     "format": "  {:%a %d %b  %H:%M}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
@@ -50,11 +78,11 @@
       "first-day-of-week": 1,
       "on-scroll": 1,
       "format": {
-        "months":   "<span color='#cba6f7'><b>{}</b></span>",
-        "days":     "<span color='#cdd6f4'>{}</span>",
-        "weeks":    "<span color='#6c7086'>W{}</span>",
+        "months": "<span color='#cba6f7'><b>{}</b></span>",
+        "days": "<span color='#cdd6f4'>{}</span>",
+        "weeks": "<span color='#6c7086'>W{}</span>",
         "weekdays": "<span color='#89b4fa'><b>{}</b></span>",
-        "today":    "<span color='#f38ba8'><b><u>{}</u></b></span>"
+        "today": "<span color='#f38ba8'><b><u>{}</u></b></span>"
       }
     },
     "actions": {
@@ -63,7 +91,6 @@
       "on-scroll-down": "shift_down"
     }
   },
-
   // Bell with unread count from swaync; click opens the notification centre.
   "custom/notification": {
     "exec": "swaync-client -swb",
@@ -79,7 +106,6 @@
     "on-click-right": "swaync-client -d -sw",
     "escape": true
   },
-
   // Is rasberry-pizian reachable? Green when it answers a ping, red when not.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
@@ -87,14 +113,25 @@
     "interval": 30,
     "on-click": "kitty -e ssh pi"
   },
-
-  "cpu": { "format": "  {usage}%", "interval": 5 },
-  "memory": { "format": "󰍛  {percentage}%", "interval": 10 },
+  "cpu": {
+    "format": "  {usage}%",
+    "interval": 5
+  },
+  "memory": {
+    "format": "󰍛  {percentage}%",
+    "interval": 10
+  },
   // Icons only; hover for the numbers. The volume keys show the swayosd popup.
   "pulseaudio": {
     "format": "{icon}",
     "format-muted": "",
-    "format-icons": { "default": ["", "", ""] },
+    "format-icons": {
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
     "tooltip-format": "Volume {volume}%",
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
@@ -106,13 +143,18 @@
     "tooltip-format": "{ifname} {ipaddr}/{cidr}",
     "on-click": "kitty -e nmtui"
   },
-  "tray": { "spacing": 8 },
-
+  "tray": {
+    "spacing": 8
+  },
   // Now playing (SoundCloud app, Firefox, mpv). Fixed length so the pills don't slide.
   "mpris": {
-    "format": "{status_icon} {dynamic}",
-    "dynamic-len": 30,
-    "status-icons": { "playing": "▶", "paused": "⏸" },
+    "format": "{status_icon} {title}",
+    "title-len": 32,
+    "tooltip-format": "{artist} – {title}  {position}/{length}",
+    "status-icons": {
+      "playing": "▶",
+      "paused": "⏸"
+    },
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous"
