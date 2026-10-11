@@ -24,7 +24,7 @@ These are saved to your account, so the profile can't set them. In the game, cli
 
 - Layout: **Resizable - Classic layout**
 - **Transparent chatbox**: on
-- Click through chatbox: on (so you can click the game behind it)
+- Click-through chatbox: on, so you can click the game behind it. It only shows up in All Settings (button at the bottom of the Display tab): type `click` into its search box.
 
 ## 4. The skin
 
@@ -32,7 +32,7 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel) and check t
 
 ## 5. Check it worked
 
-- Side panel, tabs and minimap are flat Mocha, the selected tab is mauve
+- Side panel, tabs and minimap are flat Mocha, the selected tab is a mauve-tinted panel
 - Chat text is white with mauve names
 - Hovering an NPC gives it a yellow outline
 - The sky past the draw distance is dark Mocha
