@@ -43,6 +43,7 @@ SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips1
 Small scripts in `.local/bin` I wrote for things I kept needing:
 
 - `dropterm`, `quicknote` and `chat`: drop-down terminal, notes (`~/notes/inbox.md`) and WhatsApp. All three use `scratch`, which starts the window the first time and slides it in and out after that
+- `chat-notify`: turns new WhatsApp messages into notifications; click one and WhatsApp slides in
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `docs`: search docs from anywhere. `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo
@@ -95,7 +96,13 @@ Then change a few things to fit your setup:
 
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf`.
 - For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line).
-- For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone.
+- For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
+
+  ```
+  f=~/.config/nchat/ui.conf
+  sed -i '/^desktop_notify_\(enabled\|connectivity\|command\)=/d' "$f"
+  printf '%s\n' 'desktop_notify_enabled=1' 'desktop_notify_connectivity=0' "desktop_notify_command=chat-notify '%1' '%2'" >> "$f"
+  ```
 - The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - `pi-status` and `arena-dev` are for my Raspberry Pi, so either delete them or set `PI_HOST` to your own.
