@@ -39,6 +39,30 @@ please() {
   eval "sudo $c"
 }
 
+alias yeet='git push'
+alias yoink='git pull'
+
+make() { if [ "$*" = "me a sandwich" ]; then echo "What? Make it yourself."; else command make "$@"; fi; }
+sudo() { if [ "$*" = "make me a sandwich" ]; then echo "Okay."; else command sudo "$@"; fi; }
+
+command_not_found_handle() {
+  case $1 in
+    claer|clera|cler) printf '\e[35mclose enough\e[0m\n'; sleep 0.6; clear ;;
+    exti|eixt|exot|:q|:wq) printf '\e[35mthis is not vim. but okay, bye\e[0m\n'; sleep 0.8; kill -HUP $$ ;;  # runs in a subshell, so plain exit wouldn't close the terminal
+    gti|gut|tig) printf '\e[35m%s? sure, git\e[0m\n' "$1"; shift; git "$@" ;;
+    hello|hi|hey) printf '\e[35mhi %s\e[0m\n' "$USER" ;;
+    fuck|wtf) printf '\e[35mlanguage.\e[0m\n' ;;
+    *)
+      local quips=("nope" "never heard of it" "did you mean: touch grass" "that's not a thing (yet)" "skill issue")
+      if ((SRANDOM % 4 == 0)); then  # SRANDOM: RANDOM repeats in this subshell
+        printf '\e[35m%s: %s\e[0m\n' "$1" "${quips[SRANDOM % ${#quips[@]}]}" >&2
+      else
+        printf 'bash: %s: command not found\n' "$1" >&2
+      fi
+      return 127 ;;
+  esac
+}
+
 # System info on new terminals, but not in every tmux pane or nvim terminal
 if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
   fastfetch

@@ -26,6 +26,7 @@ $conda\
 $time\
 [ ](fg:lavender)\
 $cmd_duration\
+${custom.friday}\
 $line_break\
 $character"""
 
@@ -163,6 +164,10 @@ vimcmd_symbol = '[❮](bold fg:green)'
 vimcmd_replace_one_symbol = '[❮](bold fg:lavender)'
 vimcmd_replace_symbol = '[❮](bold fg:lavender)'
 vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+
+[custom.friday]
+when = 'test "$(date +%u)" = 5'
+format = "[ it's friday ](fg:mauve)"
 
 [cmd_duration]
 show_milliseconds = true
