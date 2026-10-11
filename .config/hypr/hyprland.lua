@@ -197,7 +197,9 @@ end
 
 -- Scratchpad
 hl.bind(mod .. " + S", hl.dsp.workspace.toggle_special("scratch"))
-hl.bind(mod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:scratch" }))
+hl.bind(mod .. " + CTRL + S", hl.dsp.window.move({ workspace = "special:scratch" }))
+-- Same as Windows: snip a region to the clipboard
+hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 
 -- Mouse
 hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))

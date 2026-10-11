@@ -186,7 +186,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
 | `SUPER+I` | WhatsApp |
 | `CTRL+SHIFT+Escape` | btop |
-| `SUPER+SHIFT+S` | Send a window to the SoundCloud scratchpad |
+| `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+A` | Audacity |
 | `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+R` | Old School RuneScape |
@@ -198,7 +198,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+V` | Clipboard history |
 | `SUPER+SHIFT+T` | Copy text from the screen |
 | `SUPER+SHIFT+C` | Colour picker |
-| `Print` / `SHIFT+Print` | Screenshot a region to the clipboard / the whole screen to `~/Pictures` |
+| `Print` or `SUPER+SHIFT+S` / `SHIFT+Print` | Screenshot a region to the clipboard / the whole screen to `~/Pictures` |
 | `CTRL+Print` | Screenshot and draw on it |
 | `SUPER+SHIFT+R` | Start or stop recording |
 | `SUPER+N` | Notifications |
