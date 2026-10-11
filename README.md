@@ -62,7 +62,7 @@ Each script has a short comment at the top explaining what it does.
 
 ## Screenshots
 
-SoundCloud in the scratchpad and the notification panel:
+The music player and the notification panel:
 
 ![popups](screenshots/popups.png)
 
