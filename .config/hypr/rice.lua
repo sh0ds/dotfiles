@@ -135,7 +135,7 @@ hl.animation({ leaf = "fadePopupsIn",  enabled = true, speed = 2,   bezier = "md
 -- Workspaces slide 15% and cross-fade. Kept short (0.35 s): you switch
 -- workspaces hundreds of times a day.
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 3.5, bezier = "md3", style = "slidefade 15%" })
--- Every scratchpad (music, chat, drop-down terminal, quick note) slides all the way
+-- Every scratchpad (SoundCloud, chat, music, drop-down terminal, quick note) slides all the way
 -- down from the top edge, the same way.
 -- Plain "slidevert" picks the direction itself (SoundCloud came up from the
 -- bottom), so pin it: in from the top edge, out back up through the top.
@@ -182,7 +182,7 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- Every drop-down window (SoundCloud, WhatsApp, terminal, notes) floats in the
+-- Every drop-down window (SoundCloud, WhatsApp, music, terminal, notes) floats in the
 -- same frame: 62% wide, 45% high, centred under the bar, each in its own
 -- scratchpad so they slide in and out one at a time.
 local function dropdown(name, match, scratchpad, opacity)
@@ -294,9 +294,13 @@ hl.window_rule({
 ---- TOOLS AND KEYS ----
 ------------------------
 
--- USB sticks mount themselves when plugged in (udiskie, ~/.config/udiskie)
+-- USB sticks mount themselves when plugged in (udiskie, ~/.config/udiskie).
+-- playerctld tracks which player was used last, so the media keys, the bar
+-- and the lock screen follow rmpc or SoundCloud, whichever is playing,
+-- instead of always grabbing the first one.
 hl.on("hyprland.start", function()
     hl.exec_cmd("udiskie")
+    hl.exec_cmd("playerctld daemon")
 end)
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)

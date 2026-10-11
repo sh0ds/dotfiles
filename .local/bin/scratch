@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # scratch: show/hide a drop-down window, starting it on first use.
 # Usage: scratch CLASS WORKSPACE COMMAND...
-# dropterm, chat and quicknote all go through this. rice.lua has a rule per
+# dropterm, chat, music and quicknote all go through this. rice.lua has a rule per
 # CLASS that floats it in the drop-down frame and parks it in special:WORKSPACE.
 set -euo pipefail
 class=$1 ws=$2
