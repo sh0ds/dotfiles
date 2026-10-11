@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# gpu-status: waybar custom/gpu. NVIDIA load and temperature from nvidia-smi
+# (part of nvidia-utils). Prints nothing on machines without it.
+command -v nvidia-smi >/dev/null || exit 0
+read -r load temp mem total < <(nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total \
+  --format=csv,noheader,nounits | head -n1 | tr -d ',')
+[ -n "$load" ] || exit 0
+printf '{"text":"  %s%%  %s°","tooltip":"GPU %s%%, %s°C, VRAM %s / %s MiB"}\n' "$load" "$temp" "$load" "$temp" "$mem" "$total"

@@ -70,14 +70,17 @@ tooltip label { color: #cdd6f4; }
 /* ---- Clock ---- */
 #clock { color: #b4befe; font-weight: bold; padding: 0 14px; }
 
-/* ---- Right: CPU/RAM drawer and the status pill ---- */
-#custom-pi, #cpu, #memory, #pulseaudio, #network, #custom-notification, #custom-power {
+/* ---- Right: stats drawer and the status pill ---- */
+#custom-stats, #cpu, #temperature, #memory, #custom-gpu, #disk,
+#custom-pi, #pulseaudio, #network, #custom-notification, #custom-power {
   padding: 0 7px;
   background: transparent;
 }
 #custom-pi.up   { color: #a6e3a1; }
 #custom-pi.down { color: #f38ba8; }
-#cpu, #memory   { color: #a6adc8; }
+#custom-stats   { color: #cba6f7; font-weight: bold; }
+#cpu, #temperature, #memory, #custom-gpu, #disk { color: #a6adc8; }
+#temperature.critical { color: #f38ba8; }
 #pulseaudio     { color: #89b4fa; }
 #pulseaudio.muted, #network.disconnected { color: #6c7086; }
 #network        { color: #94e2d5; }

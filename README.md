@@ -18,7 +18,7 @@ waybar with three parts:
 
 - **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
 - **Middle:** the clock (hover for a calendar), plus a red LIVE or REC pill when I'm sharing or recording my screen
-- **Right:** tray, CPU (hover for RAM), and one pill with my Raspberry Pi (green when it is online), volume, network, notifications and a power button
+- **Right:** tray, a "stats" pill (hover for CPU, temperature, RAM, GPU and disk), and one pill with my Raspberry Pi (green when it is online), volume, network, notifications and a power button
 
 ### Everything else
 
@@ -51,7 +51,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing:
 - `rec-toggle`: record a part of the screen to `~/Videos`
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
 - `live-status`: turns on do-not-disturb while I share my screen, so nothing private pops up on stream
-- `wall-next`, `nightlight`, `waybar-cava`, `np-title`, `np-art`: wallpapers, warm screen colours, the audio bars and the now-playing info for the lock screen
+- `wall-next`, `nightlight`, `waybar-cava`, `gpu-status`, `np-title`, `np-art`: wallpapers, warm screen colours, the audio bars, the GPU stat and the now-playing info for the lock screen
 
 Each script has a short comment at the top explaining what it does.
 
