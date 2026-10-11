@@ -1,4 +1,4 @@
-/* swayosd: volume and brightness popup in Catppuccin Mocha.
+/* swayosd: volume popup in Catppuccin Mocha.
    Same frosted pill as the waybar islands; the bar fills blue to mauve
    like the window border. Class names from SwayOSD's own style.scss. */
 window#osd {

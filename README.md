@@ -25,7 +25,7 @@ waybar with three parts:
 ### Everything else
 
 - **swaync** for notifications. `SUPER+N` opens the panel, which slides in from the right.
-- **swayosd** shows a little pill when you change the volume or brightness.
+- **swayosd** shows a little pill when you change the volume.
 - **hyprlock** is the lock screen. It shows the cover and title of whatever is playing.
 - **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
 - **wlogout** is the power menu (lock, suspend, reboot, shutdown).
@@ -38,7 +38,7 @@ waybar with three parts:
 - **btop** for CPU, RAM, GPU and processes. `CTRL+SHIFT+Escape` slides it down like the other pop-ups, or click the stats pill.
 - **lazygit**, **bat** and **tldr**: `lg` for git, `cat` with colours (fzf's `Ctrl+T` previews files with it too) and `tldr tar` for short examples instead of the man page. All three in Mocha.
 - **Updates**: a notification shows up when 20 or more Arch updates are waiting, with a button that runs the update. It also tells you when a kernel or driver update needs a reboot.
-- **snapper + snap-pac** take a snapshot before and after every pacman run, so a broken update can be rolled back (see Installing). paccache clears out old package versions once a week, so pacman's cache doesn't eat the disk.
+- **snapper + snap-pac** take a snapshot before and after every pacman run, so a broken update can be rolled back (see Installing). Weekly timers clear out old package versions, trim the SSD and refresh the mirror list.
 - **mpv, imv and zathura** open videos, pictures and PDFs, all in Mocha. Opened from a terminal they take its place until you close them. zathura shows PDFs dark, `CTRL+R` switches to the original colours.
 - **GTK and Qt apps** (pavucontrol, file pickers, settings windows) are dark with Mocha colours and a mauve accent, so nothing flashes white anymore.
 - **Proton Pass** for passwords. `SUPER+SHIFT+P` opens it in the middle of the screen.
@@ -96,7 +96,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 ```
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
-  grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
+  grim slurp satty wl-clipboard cliphist wf-recorder playerctl jq socat \
   libqalculate tesseract tesseract-data-eng libnotify hyprpolkitagent pavucontrol firefox \
   audacity pipewire-alsa mpd rmpc mpd-mpris udiskie sl starship eza fzf zoxide ttf-jetbrains-mono-nerd \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer pacman-contrib \
@@ -132,7 +132,12 @@ Then change a few things to fit your setup:
   systemctl --user enable --now mpd.service mpd-mpris.service
   ```
 - Run `default-apps` once so files open in mpv, imv and zathura.
-- Turn on the weekly cache cleanup with `sudo systemctl enable --now paccache.timer`. It keeps the last 3 versions of every package.
+- Turn on the weekly maintenance timers. paccache keeps the last 3 versions of every package, fstrim keeps the SSD fast and reflector picks fresh, fast mirrors (set your country in `/etc/xdg/reflector/reflector.conf` first, e.g. `--country Germany`):
+
+  ```
+  sudo pacman -S --needed reflector
+  sudo systemctl enable --now paccache.timer fstrim.timer reflector.timer
+  ```
 - For GameMode, add yourself to its group with `sudo usermod -aG gamemode $USER` and log in again. Every Steam game gets it on its own, no launch options needed.
 - In Proton Pass, sign in and turn on "Start at login" in its settings if you want it in the tray. For filling in passwords on websites, also get the Proton Pass add-on for Firefox.
 - In Audacity, set the theme to Dark in the preferences (there's no Catppuccin theme for it) and pick `pipewire` or `default` as the recording device. To record what's playing on your PC, like SoundCloud, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
@@ -203,7 +208,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+Escape` | Power menu |
 | `SUPER+SHIFT+E` | Log out of Hyprland |
 
-Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there. The media, volume and brightness keys work too, even on the lock screen.
+Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there. The media and volume keys work too, even on the lock screen.
 
 ## Help
 

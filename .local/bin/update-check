@@ -20,8 +20,13 @@ check() {
 }
 
 if [ "${1:-}" = --watch ]; then
+  # One watcher at a time: a new login replaces the old one, and it quits
+  # by itself once the Hyprland that started it is gone.
+  pidf=${XDG_RUNTIME_DIR:-/tmp}/update-check.pid
+  [ -r "$pidf" ] && kill "$(<"$pidf")" 2>/dev/null
+  echo $$ >"$pidf"
   sleep 300
-  while :; do check; sleep 6h; done
+  while hyprctl version >/dev/null 2>&1; do check; sleep 6h; done
 else
   check
 fi
