@@ -52,10 +52,15 @@ command_not_found_handle() {
     gti|gut|tig) printf '\e[35m%s? sure, git\e[0m\n' "$1"; shift; git "$@" ;;
     hello|hi|hey) printf '\e[35mhi %s\e[0m\n' "$USER" ;;
     fuck|wtf) printf '\e[35mlanguage.\e[0m\n' ;;
+    matrix|cmatrix) printf '\e[32mthere is no spoon.\e[0m\n' ;;
+    hack|hackerman)
+      for p in 12 47 83 100; do printf '\r\e[32mhacking the mainframe... %s%%\e[0m' "$p"; sleep 0.4; done
+      printf "\n\e[32mI'm in.\e[0m\n" ;;
     coffee) printf '\e[35mthe terminal does not make coffee. yet.\e[0m\n' ;;
     *)
-      local quips=("nope" "never heard of it" "did you mean: touch grass" "that's not a thing (yet)" "skill issue")
-      if ((SRANDOM % 4 == 0)); then  # SRANDOM: RANDOM repeats in this subshell
+      local quips=("nope" "never heard of it" "did you mean: touch grass" "that's not a thing (yet)" "skill issue"
+                   "bold of you to assume that exists" "typo or vibes?" "404")
+      if ((SRANDOM % 5 == 0)); then  # SRANDOM: RANDOM repeats in this subshell
         printf '\e[35m%s: %s\e[0m\n' "$1" "${quips[SRANDOM % ${#quips[@]}]}" >&2
       else
         printf 'bash: %s: command not found\n' "$1" >&2

@@ -27,6 +27,7 @@ $time\
 [ ](fg:lavender)\
 $cmd_duration\
 ${custom.friday}\
+${custom.leet}\
 $line_break\
 $character"""
 
@@ -168,6 +169,10 @@ vimcmd_visual_symbol = '[❮](bold fg:yellow)'
 [custom.friday]
 when = 'test "$(date +%u)" = 5'
 format = "[ it's friday ](fg:mauve)"
+
+[custom.leet]
+when = 'test "$(date +%H%M)" = 1337'
+format = "[ leet ](fg:green)"
 
 [cmd_duration]
 show_milliseconds = true
