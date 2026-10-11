@@ -10,7 +10,7 @@
 
   // Three islands, nothing more: workspaces and music on the left, the clock in
   // the middle (LIVE and REC appear next to it only while active), and one
-  // status pill on the right. CPU and RAM hide behind the Pi icon until hovered.
+  // status pill on the right. RAM hides behind the CPU until hovered.
   "modules-left": ["hyprland/workspaces", "mpris", "custom/cava"],
   "modules-center": ["custom/live", "custom/rec", "clock"],
   "modules-right": ["tray", "group/sys", "group/status"],
@@ -26,16 +26,16 @@
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
   },
 
-  // Hover the Pi icon and CPU and RAM slide out next to it.
+  // This PC: CPU load, hover and RAM slides out next to it.
   "group/sys": {
     "orientation": "inherit",
     "drawer": { "transition-duration": 300, "children-class": "sys-child", "transition-left-to-right": false },
-    "modules": ["custom/pi", "cpu", "memory"]
+    "modules": ["cpu", "memory"]
   },
-  // Volume, network, bell and power share one pill.
+  // Pi, volume, network, bell and power share one pill, icons only.
   "group/status": {
     "orientation": "inherit",
-    "modules": ["pulseaudio", "network", "custom/notification", "custom/power"]
+    "modules": ["custom/pi", "pulseaudio", "network", "custom/notification", "custom/power"]
   },
 
   "clock": {
@@ -80,7 +80,7 @@
     "escape": true
   },
 
-  // Is the Raspberry Pi reachable? Green when it answers a ping, red when not.
+  // Raspberry Pi icon: green when the Pi answers a ping, red when not. Click to ssh in.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
     "return-type": "json",

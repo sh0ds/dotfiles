@@ -18,7 +18,7 @@ waybar with three parts:
 
 - **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
 - **Middle:** the clock (hover for a calendar), plus a red LIVE or REC pill when I'm sharing or recording my screen
-- **Right:** tray, Pi/CPU/RAM, volume, network, notifications and a power button
+- **Right:** tray, CPU (hover for RAM), and one pill with my Raspberry Pi (green when it is online), volume, network, notifications and a power button
 
 ### Everything else
 

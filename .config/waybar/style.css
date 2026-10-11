@@ -70,7 +70,7 @@ tooltip label { color: #cdd6f4; }
 /* ---- Clock ---- */
 #clock { color: #b4befe; font-weight: bold; padding: 0 14px; }
 
-/* ---- Right: Pi drawer and the status pill ---- */
+/* ---- Right: CPU/RAM drawer and the status pill ---- */
 #custom-pi, #cpu, #memory, #pulseaudio, #network, #custom-notification, #custom-power {
   padding: 0 7px;
   background: transparent;
