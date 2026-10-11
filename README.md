@@ -20,7 +20,7 @@ waybar with three parts:
 
 - **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
 - **Middle:** the clock (hover for a calendar), plus a red LIVE pill when I'm sharing my screen and REC when I'm recording
-- **Right:** tray, a "stats" pill (hover for CPU load and temperature, RAM, GPU load and disk), and one pill for my Raspberry Pi (green when it's online), volume, network, notifications and a power button
+- **Right:** tray, a "stats" pill (hover for CPU load and temperature, RAM, GPU load and disk), and one pill for my Raspberry Pi (green when it's online), volume, network (click for a Wi-Fi menu), notifications and a power button
 
 ### Everything else
 
@@ -30,14 +30,14 @@ waybar with three parts:
 - **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
 - **wlogout** is the power menu (lock, suspend, reboot, shutdown).
 - **awww** for wallpapers. `SUPER+W` picks a random one from `~/Pictures/walls`.
-- **kitty + tmux** for the terminal. kitty has a cursor trail and sends a notification when a command that took longer than 15 seconds finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`, `|` and `-` split panes, `h j k l` move between them and `Alt+1-5` jumps to a window.
-- **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
-- **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
-- **mpd + rmpc** for my own music. mpd plays everything in `~/Music` in the background, rmpc is the player for it with album covers, playlists and search. `SUPER+U` slides it down like the other pop-ups. Thanks to mpd-mpris the bar, the media keys and the lock screen pick it up just like SoundCloud. Press `?` in rmpc for all its keys.
 - **udiskie** mounts USB sticks as soon as you plug them in and sends a notification. Click Browse to open a terminal in it. `SUPER+SHIFT+U` unmounts them all, so it's safe to pull them out.
-- **Audacity** for recording and editing audio. `SUPER+SHIFT+A` opens it on workspace 4, and while it's open the screen won't lock or suspend, so long recordings don't get cut off.
-- **fastfetch** with a custom "sh0ds" logo.
+- **kitty + tmux** for the terminal. kitty has a cursor trail and sends a notification when a command that took longer than 15 seconds finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`, `|` and `-` split panes, `h j k l` move between them and `Alt+1-5` jumps to a window.
 - **bash** with [starship](https://starship.rs) as the prompt, eza instead of ls, fzf on `Ctrl+R` for history and zoxide (`z`) to jump to folders. New terminals greet you with fastfetch.
+- **fastfetch** with a custom "sh0ds" logo.
+- **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
+- **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history, window switcher and Wi-Fi menu.
+- **mpd + rmpc** for my own music. mpd plays everything in `~/Music` in the background, rmpc is the player for it with album covers, playlists and search. `SUPER+U` slides it down like the other pop-ups. Thanks to mpd-mpris the bar, the media keys and the lock screen pick it up just like SoundCloud. Press `?` in rmpc for all its keys.
+- **Audacity** for recording and editing audio. `SUPER+SHIFT+A` opens it on workspace 4, and while it's open the screen won't lock or suspend, so long recordings don't get cut off.
 
 ### Window rules
 
@@ -119,7 +119,7 @@ Then change a few things to fit your setup:
 - In Audacity, set the theme to Dark in the preferences (there's no Catppuccin theme for it) and pick `pipewire` or `default` as the recording device. To record what's playing on your PC, like SoundCloud, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
-- `pi-status` and `arena-dev` are for my Raspberry Pi, so either delete them or set `PI_HOST` to your own.
+- The Pi pill, `pi-status` and `arena-dev` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own.
 
 ### Executing program
 
@@ -169,11 +169,11 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+Escape` | Power menu |
 | `SUPER+SHIFT+E` | Log out of Hyprland |
 
-Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there.
+Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there. The media, volume and brightness keys work too, even on the lock screen.
 
 ## Help
 
-This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If a keybind for one of the scripts does nothing, run the install script again: new scripts only get linked into `~/.local/bin` when it runs. If WhatsApp notifications don't show up, make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits. If the screen-share picker doesn't show up, restart the portal:
+This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If a keybind for one of the scripts does nothing, run the install script again: new scripts only get linked into `~/.local/bin` when it runs. `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If the music player ever won't slide in, `pkill -x rmpc` and press `SUPER+U` again. If WhatsApp notifications don't show up, make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits. If the screen-share picker doesn't show up, restart the portal:
 
 ```
 systemctl --user restart xdg-desktop-portal-hyprland
