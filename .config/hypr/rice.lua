@@ -282,19 +282,17 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 -- Old School RuneScape: RuneLite, started from the Bolt launcher (SUPER+R).
--- It floats at 1280x720 in the middle of whatever workspace you're on. Tiled,
--- it got squeezed into tall or narrow tiles, and Hyprland ignores Java's
--- minimum size, so the edge was cut off. 1280 fits the game plus the plugin
--- panel. SUPER+drag moves it, SUPER+right-drag resizes it.
+-- It tiles like any other window, but pseudotiled: the tile can be any shape,
+-- and the game sits in the middle of it at 1280x720 (smaller tiles shrink it,
+-- keeping 16:9). SUPER+P switches pseudotiling off if you want it to fill.
 -- It's Java, so the class is its package name (net-runelite-client-RuneLite).
 -- The screen stays awake while it has focus, since half of OSRS is standing
 -- still clicking once a minute.
 hl.window_rule({
     name         = "runelite",
     match        = { class = "(?i).*runelite.*", title = "RuneLite.*" },   -- rules must match the whole string
-    float        = true,
-    size         = { 1280, 720 },
-    center       = true,
+    pseudo       = true,
+    size         = { 1280, 720 },   -- on a tiled window this is the pseudotile size
     content      = "game",
     idle_inhibit = "focus",
     no_dim       = true,    -- stays bright on the side while you work, so you see when you stop fishing
@@ -310,6 +308,31 @@ hl.window_rule({
     no_focus         = true,
     no_initial_focus = true,
 })
+-- When RuneLite opens:
+-- 1. It comes to the workspace you're looking at. Hyprland opens windows where
+--    their app was started, and RuneLite is started by Bolt, which may still
+--    be sitting on another workspace from earlier.
+-- 2. It gets its own full-height column (movetoroot swaps it with the other
+--    column), 1300px wide so the 1280x720 game fits. Tiling ignores Java's
+--    minimum size, and the game plus plugin panel needs about 1050px, so a
+--    quarter tile used to cut off the right edge. Alone on a workspace it
+--    just takes the whole screen and the layout messages do nothing.
+hl.on("window.open", function(w)
+    if not (w and not w.floating and w.class and w.class:lower():find("runelite")
+            and w.title and w.title:match("^RuneLite")) then return end
+    local here = hl.get_active_workspace()
+    if here and w.workspace and w.workspace.id ~= here.id then
+        hl.dispatch(hl.dsp.window.move({ workspace = here, window = w }))
+    end
+    hl.dispatch(hl.dsp.focus({ window = w }))   -- both layout messages act on the focused window
+    hl.dispatch(hl.dsp.layout("movetoroot"))
+    local mon, at = w.monitor, w.at
+    if not (mon and at) then return end
+    -- splitratio sizes the left column: 1.0 is half, 2.0 would be all of it
+    local share = math.min(1.6, 2 * 1300 / mon.width)
+    local left  = at.x < mon.x + mon.width / 2
+    hl.dispatch(hl.dsp.layout(string.format("splitratio %.3f exact", left and share or 2 - share)))
+end)
 -- Bolt (the login launcher) floats in the middle of the screen.
 hl.window_rule({
     name   = "bolt",
