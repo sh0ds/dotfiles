@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# wifi: Wi-Fi picker in fuzzel (click the network icon in the bar).
+# Strongest networks first, the one you're on is marked. Pick one to connect;
+# new secured networks ask for the password. "wifi settings" (right-click)
+# opens nmtui in Catppuccin colours for everything else (VPN, ethernet, DNS).
+set -euo pipefail
+
+settings() {
+  # nmtui's colours, mapped onto kitty's Mocha palette (blue = blue, black = surface).
+  NEWT_COLORS='root=white,black border=blue,black window=white,black shadow=black,black
+title=magenta,black button=black,blue actbutton=black,magenta compactbutton=white,black
+checkbox=white,black actcheckbox=black,magenta entry=white,black disentry=gray,black
+label=white,black listbox=white,black actlistbox=black,blue sellistbox=magenta,black
+actsellistbox=black,magenta textbox=white,black acttextbox=black,blue helpline=black,black
+roottext=white,black emptyscale=,black fullscale=,blue' \
+    exec kitty --class nmtui -e nmtui
+}
+[ "${1:-}" = settings ] && settings
+
+if [ "$(nmcli -t -f WIFI radio)" != enabled ]; then
+  pick=$(printf '%s\n' "󰖩  Turn Wi-Fi on" "  Network settings" |
+    fuzzel --dmenu --index --prompt 'wifi ' --lines 2) || exit 0
+  [ "$pick" = 0 ] && nmcli radio wifi on && notify-send -a Wi-Fi "Wi-Fi on"
+  [ "$pick" = 1 ] && settings
+  exit 0
+fi
+
+# IN-USE:SIGNAL:SECURITY:SSID, colons inside the SSID come escaped as \:
+ssids=() secured=() lines=("󰖪  Turn Wi-Fi off" "  Network settings")
+declare -A seen=()
+while IFS= read -r row; do
+  inuse=${row%%:*};  row=${row#*:}
+  signal=${row%%:*}; row=${row#*:}
+  security=${row%%:*}
+  ssid=${row#*:}; ssid=${ssid//\\:/:}; ssid=${ssid//\\\\/\\}
+  if [ -z "$ssid" ] || [ -n "${seen[$ssid]:-}" ]; then continue; fi
+  seen[$ssid]=1
+  if   ((signal >= 75)); then bars=󰤨
+  elif ((signal >= 50)); then bars=󰤥
+  elif ((signal >= 25)); then bars=󰤢
+  else                        bars=󰤟; fi
+  lock=" " sec=0; if [ -n "$security" ] && [ "$security" != -- ]; then lock="" sec=1; fi
+  mark=""; [ "$inuse" = "*" ] && mark="  "
+  ssids+=("$ssid") secured+=("$sec")
+  lines+=("$bars $lock  $ssid$mark")
+done < <(nmcli -t -f IN-USE,SIGNAL,SECURITY,SSID device wifi list --rescan auto | sort -t: -k2,2nr)
+
+idx=$(printf '%s\n' "${lines[@]}" | fuzzel --dmenu --index --prompt 'wifi ' --lines 10 --width 40) || exit 0
+[[ $idx =~ ^[0-9]+$ ]] || exit 0
+case $idx in
+  0) nmcli radio wifi off && notify-send -a Wi-Fi "Wi-Fi off"; exit 0 ;;
+  1) settings ;;
+esac
+ssid=${ssids[idx-2]}
+
+# Known network: just bring it up. New one: ask for the password if it needs one.
+if nmcli -t -f NAME connection show | grep -qxF -- "$ssid"; then
+  out=$(nmcli connection up id "$ssid" 2>&1) && ok=1 || ok=0
+elif ((secured[idx-2])); then
+  pw=$(fuzzel --dmenu --password --prompt "password for $ssid: " --lines 0 --width 50 </dev/null) || exit 0
+  out=$(nmcli device wifi connect "$ssid" password "$pw" 2>&1) && ok=1 || ok=0
+else
+  out=$(nmcli device wifi connect "$ssid" 2>&1) && ok=1 || ok=0
+fi
+if ((ok)); then notify-send -a Wi-Fi "Connected" "$ssid"
+else notify-send -a Wi-Fi -u critical "Couldn't connect to $ssid" "${out##*Error: }"; fi

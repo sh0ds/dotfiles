@@ -120,7 +120,10 @@
     "format-ethernet": "󰈀",
     "format-disconnected": "󰌙",
     "tooltip-format": "{ifname} {ipaddr}/{cidr}",
-    "on-click": "kitty -e nmtui"
+    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
+    // Click: Wi-Fi picker in fuzzel. Right-click: nmtui for everything else.
+    "on-click": "~/.local/bin/wifi",
+    "on-click-right": "~/.local/bin/wifi settings"
   },
   "tray": { "spacing": 8 },
 

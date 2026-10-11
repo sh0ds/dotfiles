@@ -49,6 +49,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing:
 
 - `dropterm`, `quicknote`, `chat` and `music`: drop-down terminal, notes (`~/notes/inbox.md`), WhatsApp and the music player. All four use `scratch`, which starts the window the first time and slides it in and out after that
 - `chat-notify`: turns new WhatsApp messages into notifications; click one and WhatsApp slides in
+- `wifi`: click the network icon to pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click for nmtui in matching colours
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `docs`: search docs from anywhere. `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo

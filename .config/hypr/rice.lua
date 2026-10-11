@@ -221,6 +221,14 @@ hl.on("window.title", snap_soundcloud)
 dropdown("chat",      { class = "^chat$" },      "chat")
 -- Music: rmpc in a kitty (SUPER+U, ~/.local/bin/music)
 dropdown("music",     { class = "^music$" },     "music")
+-- Network settings (right-click the network icon): nmtui floating in the middle
+hl.window_rule({
+    name   = "nmtui",
+    match  = { class = "^nmtui$" },
+    float  = true,
+    size   = { "(monitor_w*0.4)", "(monitor_h*0.55)" },
+    center = true,
+})
 -- Drop-down terminal (SUPER+Z, ~/.local/bin/dropterm)
 dropdown("dropterm",  { class = "^dropterm$" },  "term")
 -- Quick note: nvim on ~/notes/inbox.md (SUPER+O, ~/.local/bin/quicknote)
