@@ -63,7 +63,7 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel). "Use resou
 
 ## Help
 
-- **RuneLite opened above or below another window**: `SUPER+T` flips it to side by side.
+- **Window size**: RuneLite floats at 1280x720 in the middle of the screen. Hold `SUPER` and drag to move it, `SUPER` and right-drag to resize it. Narrower than about 1050px and the plugin panel gets cut off.
 - **Black bars or a tiny game**: the layout isn't on Resizable, see step 5.
 - **Plugin list is short**: you're still on the default profile, see step 4.3.
 - **Brown interface**: step 6, or run `runelite-skin` again if `~/.local/share/runelite-mocha` is missing.

@@ -282,13 +282,19 @@ hl.window_rule({
     idle_inhibit = "fullscreen",
 })
 -- Old School RuneScape: RuneLite, started from the Bolt launcher (SUPER+R).
--- It opens on whatever workspace you're on and tiles like any other window.
+-- It floats at 1280x720 in the middle of whatever workspace you're on. Tiled,
+-- it got squeezed into tall or narrow tiles, and Hyprland ignores Java's
+-- minimum size, so the edge was cut off. 1280 fits the game plus the plugin
+-- panel. SUPER+drag moves it, SUPER+right-drag resizes it.
 -- It's Java, so the class is its package name (net-runelite-client-RuneLite).
 -- The screen stays awake while it has focus, since half of OSRS is standing
 -- still clicking once a minute.
 hl.window_rule({
     name         = "runelite",
     match        = { class = "(?i).*runelite.*", title = "RuneLite.*" },   -- rules must match the whole string
+    float        = true,
+    size         = { 1280, 720 },
+    center       = true,
     content      = "game",
     idle_inhibit = "focus",
     no_dim       = true,    -- stays bright on the side while you work, so you see when you stop fishing
@@ -304,17 +310,6 @@ hl.window_rule({
     no_focus         = true,
     no_initial_focus = true,
 })
--- RuneLite goes next to what's already there, not above or below it.
--- Dwindle splits a tall space top/bottom, and the game is useless at half
--- height, so if it lands wider than tall, flip that split (same as SUPER+T).
-hl.on("window.open", function(w)
-    if not (w and not w.floating and w.active and w.class and w.class:lower():find("runelite")
-            and w.title and w.title:match("^RuneLite")) then return end
-    local size = w.size
-    if size and size.x > size.y then
-        hl.dispatch(hl.dsp.layout("togglesplit"))
-    end
-end)
 -- Bolt (the login launcher) floats in the middle of the screen.
 hl.window_rule({
     name   = "bolt",

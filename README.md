@@ -159,7 +159,7 @@ And change a few things to your liking:
   ```
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
-- For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits a tiled window.
+- For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits its window.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
