@@ -17,7 +17,7 @@
 
   // Dots instead of numbers. The active workspace is a mauve pill that
   // stretches smoothly to its new place (transition in style.css); ones with
-  // windows are solid dots, empty ones faint rings.
+  // windows are rings, empty ones faint dots.
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": { "active": "", "default": "●", "persistent": "○", "empty": "○" },
@@ -110,11 +110,8 @@
 
   // Now playing (SoundCloud app, Firefox, mpv). Fixed length so the pills don't slide.
   "mpris": {
-    // Title only: Firefox/YouTube reports position and length too, and the
-    // {dynamic} field let those crowd the title out at 30 chars.
     "format": "{status_icon} {title}",
-    "title-len": 32,
-    "tooltip-format": "{artist} – {title}  {position}/{length}",
+    "title-len": 30,
     "status-icons": { "playing": "▶", "paused": "⏸" },
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
