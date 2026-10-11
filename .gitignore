@@ -1,0 +1,2 @@
+# nchat keeps your logged-in WhatsApp session here. Never commit it.
+.config/nchat/profiles/

@@ -135,7 +135,7 @@ hl.animation({ leaf = "fadePopupsIn",  enabled = true, speed = 2,   bezier = "md
 -- Workspaces slide 15% and cross-fade. Kept short (0.35 s): you switch
 -- workspaces hundreds of times a day.
 hl.animation({ leaf = "workspaces",       enabled = true, speed = 3.5, bezier = "md3", style = "slidefade 15%" })
--- Every scratchpad (music, drop-down terminal, quick note) slides all the way
+-- Every scratchpad (music, chat, drop-down terminal, quick note) slides all the way
 -- down from the top edge, the same way.
 -- Plain "slidevert" picks the direction itself (SoundCloud came up from the
 -- bottom), so pin it: in from the top edge, out back up through the top.
@@ -193,6 +193,17 @@ hl.window_rule({
     move      = { "(monitor_w*0.19)", 52 },
     opacity   = "0.92",
     workspace = "special:scratch silent",
+})
+
+-- WhatsApp: nchat in a kitty with class "chat", in the same drop-down frame
+-- as dropterm, with its own scratchpad (SUPER+I, ~/.local/bin/chat).
+hl.window_rule({
+    name      = "chat",
+    match     = { class = "^chat$" },
+    float     = true,
+    size      = { "(monitor_w*0.62)", "(monitor_h*0.45)" },
+    move      = { "(monitor_w*0.19)", 52 },
+    workspace = "special:chat silent",
 })
 
 -- Drop-down terminal: a kitty with class "dropterm" lives in its own scratchpad.
@@ -269,6 +280,7 @@ hl.window_rule({
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)
 hl.bind(mod .. " + Z",              hl.dsp.exec_cmd("dropterm"))
+hl.bind(mod .. " + I",              hl.dsp.exec_cmd("chat"))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs
 hl.bind(mod .. " + G",              hl.dsp.group.toggle())
 hl.bind(mod .. " + Tab",            hl.dsp.group.next())

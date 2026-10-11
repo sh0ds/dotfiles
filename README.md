@@ -36,13 +36,14 @@ waybar with three parts:
 
 ### Window rules
 
-SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. Steam and all games go on workspace 5. Games get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
+SoundCloud runs as a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox) and always opens in the scratchpad, so `SUPER+S` slides it in and out like the drop-down terminal. WhatsApp runs in the terminal with [nchat](https://github.com/d99kris/nchat) and slides down on `SUPER+I`, in its own scratchpad. Steam and all games go on workspace 5. Games get adaptive sync and skip vsync for lower input lag, and the screen never locks while one is fullscreen. Firefox picture-in-picture videos stay small in the bottom right corner on every workspace.
 
 ### Scripts
 
 Small scripts in `.local/bin` I wrote for things I kept needing:
 
 - `dropterm` and `quicknote`: drop-down terminal and drop-down notes (`~/notes/inbox.md`)
+- `chat`: shows or hides WhatsApp (nchat) and starts it if it isn't running yet
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `docs`: search docs from anywhere. `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo
@@ -79,7 +80,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
   libqalculate tesseract tesseract-data-eng zoxide ttf-jetbrains-mono-nerd
-yay -S wlogout catppuccin-cursors-mocha
+yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 
 ### Installing
@@ -95,6 +96,7 @@ Then change a few things to fit your setup:
 
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `wlogout/style.css`.
 - For SoundCloud, install it as an app with PWAsForFirefox and put its launch command in the autostart block of `hyprland.lua` (replace my ID in the `firefoxpwa site launch` line).
+- For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone.
 - The keyboard is set to German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` if you use a different layout.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - `pi-status` and `arena-dev` are for my Raspberry Pi, so either delete them or set `PI_HOST` to your own.
@@ -116,6 +118,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+O` | Drop-down notes |
 | `SUPER+B` | Firefox |
 | `SUPER+S` | Show or hide SoundCloud (the scratchpad) |
+| `SUPER+I` | Show or hide WhatsApp |
 | `SUPER+SHIFT+S` | Send a window to the scratchpad |
 | `SUPER+Space` | Launcher |
 | `ALT+Tab` | Switch windows |
