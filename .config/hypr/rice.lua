@@ -1,6 +1,6 @@
 -- ~/.config/hypr/rice.lua  (loaded from hyprland.lua with pcall(require, "rice"))
--- Visual extras from desktop-ricing-extras.md. An error in here shows the red
--- bar but leaves the rest of your config running. To turn it all off, comment
+-- Everything that makes it look and move the way it does, plus the extra keys.
+-- An error in here shows the red bar but leaves the rest of your config running. To turn it all off, comment
 -- out the require line in hyprland.lua.
 -- Every option below exists in Hyprland 0.56 (checked against the v0.56.1 source).
 
@@ -99,9 +99,9 @@ hl.config({
     },
 })
 
-------------------------------
+-------------------------------------
 ---- MOTION: smoother animations ----
-------------------------------
+-------------------------------------
 
 -- "glide" is a spring: windows ease into place and settle, with no bounce.
 -- (dampening 25 is just under critical for stiffness 200, so it never wobbles.)
@@ -273,13 +273,13 @@ hl.window_rule({
     keep_aspect_ratio = true,
 })
 
-
--------------------------
+------------------------
 ---- TOOLS AND KEYS ----
--------------------------
+------------------------
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)
 hl.bind(mod .. " + Z",              hl.dsp.exec_cmd("dropterm"))
+-- WhatsApp (nchat) on SUPER+I, same idea
 hl.bind(mod .. " + I",              hl.dsp.exec_cmd("chat"))
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs
 hl.bind(mod .. " + G",              hl.dsp.group.toggle())

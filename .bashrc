@@ -10,28 +10,13 @@ export VISUAL=nvim
 export MANPAGER="nvim +Man!"
 
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+
 # History: big, shared between tmux panes, no duplicates
 HISTSIZE=50000
 HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend checkwinsize globstar
 PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
-
-# Prompt: directory, git branch, red exit code when the last command failed
-if [ -r /usr/share/git/completion/git-prompt.sh ]; then
-  . /usr/share/git/completion/git-prompt.sh
-  # shellcheck disable=SC2034  # read by git-prompt.sh
-  GIT_PS1_SHOWDIRTYSTATE=1
-fi
-__prompt() {
-  local code=$?
-  local err=""
-  [ "$code" -ne 0 ] && err="\[\e[31m\]$code \[\e[0m\]"
-  local branch=""
-  declare -F __git_ps1 >/dev/null && branch=$(__git_ps1 ' (%s)')
-  PS1="${err}\[\e[34m\]\w\[\e[35m\]${branch}\[\e[0m\] \$ "
-}
-PROMPT_COMMAND="__prompt; $PROMPT_COMMAND"
 
 # Aliases
 alias ls='eza --icons --group-directories-first'
@@ -45,10 +30,10 @@ alias ta='arena-dev'                                           # Pi Arena tmux s
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # plan's default C flags
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
 
-[ -f "/home/sh0ds/.ghcup/env" ] && . "/home/sh0ds/.ghcup/env" # ghcup-env
 # System info on new terminals, but not in every tmux pane or nvim terminal
 if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
   fastfetch
 fi
-eval "$(starship init bash)"eval "$(fzf --bash)" # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
+eval "$(starship init bash)"                     # prompt
+eval "$(fzf --bash)"                             # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
 eval "$(zoxide init bash)"                       # z arena jumps to ~/code/pi-arena; zi picks from a list

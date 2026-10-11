@@ -17,7 +17,7 @@
 
   // Dots instead of numbers. The active workspace is a mauve pill that
   // stretches smoothly to its new place (transition in style.css); ones with
-  // windows are rings, empty ones faint dots.
+  // windows are solid dots, empty ones faint rings.
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": { "active": "", "default": "●", "persistent": "○", "empty": "○" },
@@ -80,7 +80,7 @@
     "escape": true
   },
 
-  // Is rasberry-pizian reachable? Green when it answers a ping, red when not.
+  // Is the Raspberry Pi reachable? Green when it answers a ping, red when not.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
     "return-type": "json",

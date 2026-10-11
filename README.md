@@ -10,7 +10,7 @@ The configs I use on my desktop. It runs Hyprland 0.56 with the new Lua config. 
 
 ### Look
 
-Only the focused window gets the blue-to-mauve border and a soft glow, the rest are slightly dimmed. If there's just one window on a workspace it fills the whole screen without gaps. Windows open with a small pop and settle into place, and every pop-up (drop-down terminal, SoundCloud, notes) slides down from the top of the screen.
+Only the focused window gets the blue-to-mauve border and a soft glow, the rest are slightly dimmed. If there's just one window on a workspace it fills the whole screen without gaps. Windows open with a small pop and settle into place, and every pop-up (drop-down terminal, SoundCloud, WhatsApp, notes) slides down from the top of the screen. Bars, menus and notifications sit on frosted glass.
 
 ### Bar
 
@@ -25,14 +25,14 @@ waybar with three parts:
 - **swaync** for notifications. `SUPER+N` opens the panel, which slides in from the right.
 - **swayosd** shows a little pill when you change the volume or brightness.
 - **hyprlock** is the lock screen. It shows the cover and title of whatever is playing.
-- **hypridle** dims the screen after 5 minutes, locks after 10, turns the screen off after 11 and suspends after an hour.
+- **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
 - **wlogout** is the power menu (lock, suspend, reboot, shutdown).
 - **awww** for wallpapers. `SUPER+W` picks a random one from `~/Pictures/walls`.
-- **kitty + tmux** for the terminal. The tmux prefix is `Ctrl+A`, `|` and `-` split panes and `h j k l` move between them.
+- **kitty + tmux** for the terminal. kitty has a cursor trail and sends a notification when a command that took longer than 15 seconds finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`, `|` and `-` split panes, `h j k l` move between them and `Alt+1-5` jumps to a window.
 - **Neovim** with LazyVim.
 - **fuzzel** as the launcher. It also runs the calculator, docs search, clipboard history and window switcher.
 - **fastfetch** with a custom "sh0ds" logo.
-- **bash** with a prompt that shows the git branch and the exit code when a command fails.
+- **bash** with [starship](https://starship.rs) as the prompt, eza instead of ls, fzf on `Ctrl+R` for history and zoxide (`z`) to jump to folders. New terminals greet you with fastfetch.
 
 ### Window rules
 
@@ -79,7 +79,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   waybar kitty tmux neovim fuzzel swaync swayosd awww cava fastfetch \
   grim slurp satty wl-clipboard cliphist wf-recorder playerctl brightnessctl jq socat \
-  libqalculate tesseract tesseract-data-eng zoxide ttf-jetbrains-mono-nerd
+  libqalculate tesseract tesseract-data-eng starship eza fzf zoxide ttf-jetbrains-mono-nerd
 yay -S wlogout catppuccin-cursors-mocha nchat
 ```
 
@@ -103,7 +103,7 @@ Then change a few things to fit your setup:
 
 ### Executing program
 
-Log out and back into Hyprland. To see if anything is missing, run:
+Log out and back into Hyprland. To see if anything is missing, run this. It lists every tool with OK or FAIL:
 
 ```
 bash ~/code/dotfiles/check-desktop.sh
@@ -149,7 +149,7 @@ Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move 
 
 ## Help
 
-This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If the keybinds for the scripts do nothing, check that `~/.local/bin` is in your PATH. If the screen-share picker doesn't show up, restart the portal:
+This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours. If a keybind for one of the scripts does nothing, run the install script again: new scripts only get linked into `~/.local/bin` when it runs. If the screen-share picker doesn't show up, restart the portal:
 
 ```
 systemctl --user restart xdg-desktop-portal-hyprland

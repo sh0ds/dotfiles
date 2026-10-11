@@ -37,7 +37,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
 	hl.exec_cmd("sleep 1 && awww img ~/Pictures/wall.png --transition-type fade")
-	hl.exec_cmd("firefoxpwa site launch 01M4E9WM9PSN126GWCCEG49J4C") -- your command from step 1
+	hl.exec_cmd("firefoxpwa site launch 01M4E9WM9PSN126GWCCEG49J4C") -- SoundCloud app; swap in your own ID from `firefoxpwa profile list`
 end)
 
 -------------------------------
@@ -49,7 +49,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
--- NVIDIA only (see the install guide, step A3). Uncomment both lines.
+-- NVIDIA only. Delete these two lines on AMD or Intel.
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 
@@ -57,7 +57,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 ---- LOOK AND FEEL ----
 -----------------------
 
--- Colours: Catppuccin Mocha, shared with kitty, waybar, tmux, mako, fuzzel.
+-- Colours: Catppuccin Mocha, shared with kitty, waybar, tmux, swaync, fuzzel.
 hl.config({
 	general = {
 		gaps_in = 4,
@@ -127,7 +127,7 @@ hl.config({
 
 hl.config({
 	input = {
-		-- German layout assumed (Europe/Berlin install). Change to "us" if you type on US.
+		-- German layout. Change to "us" if you type on US.
 		kb_layout = "de",
 		kb_variant = "",
 		-- Caps Lock becomes Escape: you'll press Escape constantly in nvim and tmux copy mode.
@@ -231,7 +231,6 @@ hl.window_rule({
 })
 
 -- Small utility windows float instead of tiling.
--- Erlang's observer (week 18) is a wx window; it tiles, which suits it.
 hl.window_rule({
 	name = "float-utilities",
 	match = { class = "^(org.pulseaudio.pavucontrol|nm-connection-editor|blueman-manager)$" },

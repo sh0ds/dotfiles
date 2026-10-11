@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar mako fuzzel swaybg grim slurp wl-copy cliphist brightnessctl playerctl wpctl pavucontrol firefox; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder brightnessctl playerctl wpctl pavucontrol cava qalc tesseract jq firefox firefoxpwa nchat; do
   check "$c" command -v "$c"
 done
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'
@@ -55,11 +55,12 @@ check "pipewire running" systemctl --user is-active pipewire
 check "NetworkManager running" systemctl is-active NetworkManager
 
 section "Terminal workflow"
-check "tmux" command -v tmux
+for c in tmux starship eza fzf zoxide fastfetch; do
+  check "$c" command -v "$c"
+done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server
 check "nvim 0.11+ (built-in LSP config)" nvim --headless -c 'lua if vim.fn.has("nvim-0.11")==0 then os.exit(1) end' -c q
-check "arena-dev on PATH" command -v arena-dev
-check "pi-status on PATH" command -v pi-status
+check "scripts in ~/.local/bin on PATH" command -v dropterm
 
 printf '\n%d OK, %d FAIL\n' "$pass" "$fail"
 exit "$fail"
