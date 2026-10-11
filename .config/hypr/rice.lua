@@ -292,14 +292,16 @@ hl.window_rule({
     content      = "game",
     idle_inhibit = "focus",
 })
--- Java opens every RuneLite tooltip and menu as its own untitled window:
--- those float where they pop up and never take focus, so they don't pull
--- the game out from under the mouse. Dialogs with a title behave normally.
+-- Java opens every RuneLite tooltip and menu as its own window, titled
+-- "win0", "win1" and so on (or nothing). Those float where they pop up and
+-- never take focus, otherwise focus flickers between them and the game every
+-- time you hover something. Dialogs with a real title behave normally.
 hl.window_rule({
-    name     = "runelite-popups",
-    match    = { class = "(?i).*runelite.*", title = "^$" },
-    float    = true,
-    no_focus = true,
+    name             = "runelite-popups",
+    match            = { class = "(?i).*runelite.*", title = "(win\\d+)?" },
+    float            = true,
+    no_focus         = true,
+    no_initial_focus = true,
 })
 -- Bolt (the login launcher) floats in the middle of the screen.
 hl.window_rule({
