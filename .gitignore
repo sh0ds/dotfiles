@@ -1,2 +1,5 @@
 # nchat keeps your logged-in WhatsApp session here. Never commit it.
 .config/nchat/profiles/
+
+# Python leaves compiled copies of runelite-skin next to it
+__pycache__/

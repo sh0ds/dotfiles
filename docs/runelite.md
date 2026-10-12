@@ -21,7 +21,7 @@ Press `SUPER+R`, log in to Bolt with your Jagex account, pick your character and
 runelite-skin
 ```
 
-It downloads the [RuneLITE](https://github.com/melkypie/resource-packs/tree/pack-RuneLITE) resource pack by Smoke, a flat and minimal take on the game's interface, and recolours it to Mocha: its greys become the same shades as the bar and windows, its gold accent becomes mauve. It lands in `~/.local/share/runelite-mocha`. It also puts your current wallpaper on the login screen. Run it again after changing wallpaper or when the pack gets an update.
+It downloads the [RuneLITE](https://github.com/melkypie/resource-packs/tree/pack-RuneLITE) resource pack by Smoke, a flat and minimal take on the game's interface, and recolours it to Mocha: its greys become the same shades as the bar and windows, its gold accent becomes mauve. It lands in `~/.local/share/runelite-mocha`. It also puts your current wallpaper on the login screen, and `SUPER+W` keeps it in sync from then on. Run it again when the pack gets an update.
 
 ## 4. Import the profile
 
@@ -40,7 +40,7 @@ These are saved to your account, so the profile can't set them. In the game, cli
 
 ## 6. Check the skin
 
-Open the Resource Packs plugin (paintbrush in RuneLite's side panel). "Use resource pack" should be First and the path `/home/sh0ds/.local/share/runelite-mocha` (change `sh0ds` if your user is different). If it asks about Interface Styles, say yes. If the interface doesn't change, switch to Second and back to First.
+Click the wrench, search "Resource Packs" and open its settings. "Use resource pack" should be First and the path `/home/sh0ds/.local/share/runelite-mocha` (change `sh0ds` if your user is different). If it asks about Interface Styles, say yes. If the interface doesn't change, switch to Second and back to First.
 
 ## 7. Check it all worked
 
@@ -54,9 +54,9 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel). "Use resou
 
 ## What's in the profile
 
-- GPU rendering with double draw distance, 4x anti-aliasing, a little fog and a Mocha sky
+- GPU rendering at 180 fps with double draw distance, 4x anti-aliasing, a little fog and a Mocha sky
 - Quest Helper, Inventory Setups, Shortest Path, Dude Where's My Stuff, Banked Experience, Skills Tab Progress Bars, Emote Clue Items
-- Farming and birdhouse reminders, idle notifications and high-value drops, all as normal notifications
+- Idle notifications and high-value drops, as normal notifications
 - HP and prayer bars next to the side panel, item prices on hover, herb and ore names, no roofs, anti-drag, further zoom-out, smoother animations
 - Mocha colours for loot, hover outlines, the walk tile, XP globes, chat, overlays, minimap dots, player names, marked NPCs, objects and tiles, XP drops and agility courses (shift+right-click an object or tile to mark it)
 - No RuneLite title bar (Hyprland draws the border) and no character name in the window title
@@ -68,4 +68,5 @@ Open the Resource Packs plugin (paintbrush in RuneLite's side panel). "Use resou
 - **Plugin list is short**: you're still on the default profile, see step 4.3.
 - **Brown interface**: step 6, or run `runelite-skin` again if `~/.local/share/runelite-mocha` is missing.
 - **Normal login screen**: run `runelite-skin` again now that RuneLite has started once.
+- **Updating the profile**: RuneLite copies a profile when you import it, so changes to `mocha.properties` don't reach it on their own. Import it again (step 4), switch to the new one and delete the old one.
 - **Orbs look broken**: LITE Regen Meter isn't on yet, restart RuneLite once so it downloads.

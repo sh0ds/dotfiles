@@ -25,3 +25,7 @@ awww img "$img" --transition-type grow --transition-pos "$pos" --invert-y \
 
 # Keep ~/Pictures/wall.png pointing at the current image (hyprlock, SDDM, fallback).
 ln -sfn "$img" "$link"
+# OSRS's login screen follows along, if the skin is set up
+if [ -d ~/.local/share/runelite-mocha ] && command -v runelite-skin >/dev/null; then
+  runelite-skin --login >/dev/null 2>&1 &
+fi

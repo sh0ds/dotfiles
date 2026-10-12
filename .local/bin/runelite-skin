@@ -7,6 +7,7 @@
 # Item, skill, prayer and spell icons keep their own colours.
 # Run it again whenever the pack gets an update.
 # Usage: runelite-skin              (or: runelite-skin DIR to use a local copy)
+#        runelite-skin --login      only redo the login screen (wall-next runs this)
 import colorsys, io, os, re, shutil, sys, tarfile, tempfile, urllib.request
 from PIL import Image
 
@@ -73,7 +74,11 @@ def build(src):
                 recolour(s, d)
                 n += 1
             elif f == "color.properties":
-                open(d, "w").write(re.sub(r"0x([0-9a-fA-F]{6,8})", hexsub, open(s).read()))
+                text = re.sub(r"0x([0-9a-fA-F]{6,8})", hexsub, open(s).read())
+                # The pack sets an opaque overlay colour and would override the
+                # profile's see-through one: use the bar's glass (base at 80%).
+                text = re.sub(r"(?m)^overlay_color=.*$", "overlay_color=0xcc1e1e2e", text)
+                open(d, "w").write(text)
             elif f != "README.md":
                 shutil.copy(s, d)
     with open(os.path.join(tmp, "pack.properties"), "w") as p:
@@ -134,7 +139,9 @@ def login_screen():
             im.save(os.path.join(d, "login.png"))
             print("login screen:", os.path.join(d, "login.png"))
 
-if len(sys.argv) > 1:
+if sys.argv[1:] == ["--login"]:
+    pass
+elif len(sys.argv) > 1:
     build(sys.argv[1])
 else:
     with tempfile.TemporaryDirectory() as t:
