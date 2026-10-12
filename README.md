@@ -46,7 +46,7 @@ Terminal:
 
 - **kitty + tmux**. kitty has a cursor trail and sends a notification when a long command finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`.
 - **bash** with [starship](https://starship.rs), eza instead of ls, fzf on `Ctrl+R` and zoxide (`z`). New terminals greet you with fastfetch.
-- **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
+- **Neovim** with LazyVim, on the same see-through background as the terminal. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **yazi** for files (`SUPER+E`, or `y` and the shell follows you to wherever you quit it), **lazygit** (`lg`), **bat** instead of cat and **tldr** for short examples instead of man pages.
 
 Apps:
@@ -198,7 +198,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+V` | Clipboard history |
 | `SUPER+SHIFT+T` | Copy text from the screen |
 | `SUPER+SHIFT+C` | Colour picker |
-| `Print` or `SUPER+SHIFT+S` / `SHIFT+Print` | Screenshot a region to the clipboard / the whole screen to `~/Pictures` |
+| `Print` or `SUPER+SHIFT+S` / `SHIFT+Print` | Screenshot a region to the clipboard / the screen you're on to `~/Pictures` |
 | `CTRL+Print` | Screenshot and draw on it |
 | `SUPER+SHIFT+R` | Start or stop recording |
 | `SUPER+N` | Notifications |

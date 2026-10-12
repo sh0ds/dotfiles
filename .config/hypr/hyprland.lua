@@ -153,9 +153,12 @@ hl.bind(mod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mod .. " + Escape", hl.dsp.exec_cmd(lock))
 hl.bind(mod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
 
--- Screenshots: region to clipboard, full screen to ~/Pictures
+-- Screenshots: region to clipboard, the screen you're on to ~/Pictures
+-- (plain grim would glue both monitors into one wide picture)
 hl.bind("Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("grim ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png"))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(
+	"grim -o \"$(hyprctl activeworkspace -j | jq -r .monitor)\" ~/Pictures/shot-$(date +%Y%m%d-%H%M%S).png"
+))
 
 -- Windows
 hl.bind(mod .. " + Q", hl.dsp.window.close())

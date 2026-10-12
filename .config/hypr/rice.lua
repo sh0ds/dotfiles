@@ -205,9 +205,11 @@ end
 -- Use your own ID from `firefoxpwa profile list`. It starts hidden at login,
 -- so SUPER+S is instant the first time too.
 local soundcloud = "FFPWA-01M4E9WM9PSN126GWCCEG49J4C"
-hl.on("hyprland.start", function()
-    hl.exec_cmd("firefoxpwa site launch " .. soundcloud:sub(#"FFPWA-" + 1))
-end)
+local soundcloud_cmd = "firefoxpwa site launch " .. soundcloud:sub(#"FFPWA-" + 1)
+hl.on("hyprland.start", function() hl.exec_cmd(soundcloud_cmd) end)
+-- SUPER+S slides it in, and starts it again if you closed it.
+hl.unbind(mod .. " + S")
+hl.bind(mod .. " + S", hl.dsp.exec_cmd("scratch " .. soundcloud .. " scratch " .. soundcloud_cmd))
 dropdown("soundcloud-scratch", { class = "^" .. soundcloud .. "$" }, "scratch", "0.92")
 -- Firefox resizes itself right after opening, so the size above can get lost.
 -- Snap SoundCloud back into the drop-down frame whenever it
