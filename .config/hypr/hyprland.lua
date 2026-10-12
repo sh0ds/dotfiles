@@ -37,7 +37,6 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
 	hl.exec_cmd("sleep 1 && awww img ~/Pictures/wall.png --transition-type fade")
-	hl.exec_cmd("firefoxpwa site launch 01M4E9WM9PSN126GWCCEG49J4C") -- SoundCloud app; swap in your own ID from `firefoxpwa profile list`
 end)
 
 -------------------------------
@@ -137,16 +136,7 @@ hl.config({
 		kb_options = "caps:escape",
 		follow_mouse = 1,
 		sensitivity = 0,
-		touchpad = {
-			natural_scroll = true,
-		},
 	},
-})
-
-hl.gesture({
-	fingers = 3,
-	direction = "horizontal",
-	action = "workspace",
 })
 
 ---------------------
@@ -233,10 +223,10 @@ hl.window_rule({
 	no_focus = true,
 })
 
--- Small utility windows float instead of tiling.
+-- The volume mixer floats instead of tiling.
 hl.window_rule({
 	name = "float-utilities",
-	match = { class = "^(org.pulseaudio.pavucontrol|nm-connection-editor|blueman-manager)$" },
+	match = { class = "^org.pulseaudio.pavucontrol$" },
 	float = true,
 })
 

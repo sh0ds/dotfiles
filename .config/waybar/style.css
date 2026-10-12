@@ -26,28 +26,18 @@ tooltip label { color: #cdd6f4; }
 }
 #clock:hover, #sys:hover, #status:hover, #tray:hover { background: rgba(49, 50, 68, 0.85); }
 
-/* Music island: track and cava bars share one pill */
+/* Music island: fixed width, so the islands next to it never slide */
 #mpris {
   background: rgba(30, 30, 46, 0.8);
   border: 1px solid #313244;
-  border-right: none;
-  border-radius: 12px 0 0 12px;
-  padding: 0 8px 0 12px;
-  margin-left: 5px;
+  border-radius: 12px;
+  padding: 0 12px;
+  margin: 0 5px;
   color: #a6e3a1;
-  min-width: 250px;            /* fixed width: the cava bars stop sliding */
+  min-width: 250px;
+  transition: color 0.4s ease;
 }
-#mpris { transition: color 0.4s ease; }
 #mpris.paused { color: #6c7086; }
-#custom-cava {
-  background: rgba(30, 30, 46, 0.8);
-  border: 1px solid #313244;
-  border-left: none;
-  border-radius: 0 12px 12px 0;
-  padding: 0 12px 0 0;
-  margin-right: 5px;
-  color: #cba6f7;
-}
 
 /* ---- Workspaces: dots ---- */
 #workspaces { padding: 0 4px; }

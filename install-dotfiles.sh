@@ -9,9 +9,9 @@ src=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 backup="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
 cd "$src"
-find . -type f \
-  ! -path './.git/*' ! -name 'install-dotfiles.sh' ! -name 'check-desktop.sh' ! -name 'README.md' ! -name 'LICENSE' ! -name '.gitignore' ! -path './screenshots/*' ! -path './docs/*' \
-  -printf '%P\n' | sort | while IFS= read -r rel; do
+# Only files git tracks, so nothing local or half-finished gets linked.
+git ls-files | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/)' |
+  while IFS= read -r rel; do
   target="$HOME/$rel"
   if [ -L "$target" ] && [ "$(readlink "$target")" = "$src/$rel" ]; then
     echo "ok      $rel"
@@ -26,6 +26,11 @@ find . -type f \
   ln -s "$src/$rel" "$target"
   echo "linked  $rel"
 done
+
+# Files that were deleted from the repo leave dead links behind: remove them.
+{ find "$HOME" -maxdepth 1 -xtype l -lname "$src/*"
+  find "$HOME/.config" "$HOME/.local/bin" -xtype l -lname "$src/*" 2>/dev/null; } |
+  while IFS= read -r dead; do rm "$dead"; echo "removed ${dead#"$HOME"/}"; done
 
 chmod +x "$src/.local/bin/"*
 mkdir -p "$HOME/Pictures"

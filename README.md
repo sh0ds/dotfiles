@@ -27,7 +27,7 @@ The things I need for a few seconds and then want gone slide down from the top o
 
 waybar with three parts:
 
-- **Left:** workspace dots, the current song or video (click to pause, scroll to skip) and live audio bars
+- **Left:** workspace dots and the current song or video (click to pause, scroll to skip)
 - **Middle:** the clock (hover for a calendar), plus a red LIVE pill when I'm sharing my screen and REC when I'm recording
 - **Right:** tray, a "stats" pill (hover for CPU, temperature, RAM, GPU and disk, click for btop), and one pill for my Raspberry Pi (green when it's online), volume, network (click for a Wi-Fi menu), notifications and a power button
 
@@ -60,7 +60,7 @@ Apps:
 
 Keeping Arch healthy:
 
-- A notification shows up when 20 or more updates are waiting, with a button that runs the update. It tells you when one needs a reboot too.
+- A notification shows up when 20 or more updates are waiting, with a button that runs the update (AUR packages included). It tells you when one needs a reboot too.
 - snapper takes a snapshot before and after every update, so a broken one can be rolled back. Weekly timers clear out old packages, trim the SSD and refresh the mirror list.
 
 ### Scripts
@@ -80,7 +80,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
-- `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`waybar-cava`, `gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
+- `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
 
 ## Screenshots
 
@@ -105,7 +105,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 ```
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux neovim \
-  starship eza fzf zoxide fastfetch cava sl ttf-jetbrains-mono-nerd noto-fonts-emoji \
+  starship eza fzf zoxide fastfetch sl ttf-jetbrains-mono-nerd noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
@@ -135,7 +135,7 @@ And change a few things to your liking:
 
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `qt6ct/qt6ct.conf`.
 - Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
-- For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `firefoxpwa site launch` line in `hyprland.lua` and the `soundcloud` line in `rice.lua`.
+- For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
   ```

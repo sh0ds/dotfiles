@@ -31,7 +31,7 @@
         { "label": "", "command": "sh -c 'swaync-client -cp; calc'" },
         { "label": "", "command": "sh -c 'swaync-client -cp; dropterm'" },
         { "label": "", "command": "sh -c 'swaync-client -cp; loginctl lock-session'" },
-        { "label": "", "command": "sh -c 'swaync-client -cp; wlogout -b 4'" }
+        { "label": "", "command": "sh -c 'swaync-client -cp; wlogout -b 5'" }
       ]
     }
   }

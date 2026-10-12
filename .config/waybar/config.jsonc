@@ -11,7 +11,7 @@
   // Three islands, nothing more: workspaces and music on the left, the clock in
   // the middle (LIVE and REC appear next to it only while active), and one
   // status pill on the right. The system stats hide behind "stats" until hovered.
-  "modules-left": ["hyprland/workspaces", "mpris", "custom/cava"],
+  "modules-left": ["hyprland/workspaces", "mpris"],
   "modules-center": ["custom/live", "custom/rec", "clock"],
   "modules-right": ["tray", "group/sys", "group/status"],
 
@@ -137,12 +137,6 @@
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous"
-  },
-  // Live audio bars from ~/.local/bin/waybar-cava (Arch's waybar has no cava module).
-  "custom/cava": {
-    "exec": "~/.local/bin/waybar-cava",
-    "format": "{}",
-    "tooltip": false
   },
   // Red LIVE pill while the screen is shared (Discord, OBS, Firefox); also
   // turns on do-not-disturb for the duration. Hidden otherwise.

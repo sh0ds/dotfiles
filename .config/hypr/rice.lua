@@ -202,8 +202,12 @@ end
 -- own, so it gets the same glass as kitty here.
 -- Matched by the app's ID, not the page title: the title changes with every
 -- page and track (and SoundCloud's home page even spells it "Soundcloud").
--- Use your own ID from `firefoxpwa profile list` (same one as in hyprland.lua).
+-- Use your own ID from `firefoxpwa profile list`. It starts hidden at login,
+-- so SUPER+S is instant the first time too.
 local soundcloud = "FFPWA-01M4E9WM9PSN126GWCCEG49J4C"
+hl.on("hyprland.start", function()
+    hl.exec_cmd("firefoxpwa site launch " .. soundcloud:sub(#"FFPWA-" + 1))
+end)
 dropdown("soundcloud-scratch", { class = "^" .. soundcloud .. "$" }, "scratch", "0.92")
 -- Firefox resizes itself right after opening, so the size above can get lost.
 -- Snap SoundCloud back into the drop-down frame whenever it
@@ -233,7 +237,7 @@ hl.window_rule({
 -- System monitor: btop (CTRL+SHIFT+Escape or click "stats", ~/.local/bin/sysmon).
 -- Taller than the others, btop needs the rows.
 dropdown("sysmon",    { class = "^sysmon$" },    "sysmon", nil, 0.7)
--- "Update" in the update notification: pacman -Syu floating in the middle
+-- "Update" in the update notification: the system update floating in the middle
 hl.window_rule({
     name   = "update",
     match  = { class = "^update$" },
