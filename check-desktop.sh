@@ -60,6 +60,7 @@ check "GTK portal" test -x /usr/lib/xdg-desktop-portal-gtk
 check "paccache timer" systemctl is-enabled paccache.timer
 check "fstrim timer" systemctl is-enabled fstrim.timer
 check "reflector timer" systemctl is-enabled reflector.timer
+check "firewall on (ufw)" sh -c 'systemctl is-active ufw && systemctl is-enabled ufw'
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "Bolt launcher (OSRS)" sh -c 'command -v bolt-launcher || command -v bolt || flatpak info com.adamcake.Bolt'
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'

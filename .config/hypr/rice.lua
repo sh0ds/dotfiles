@@ -466,6 +466,8 @@ hl.bind(mod .. " + SHIFT + B",      hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
 hl.bind(mod .. " + SHIFT + T",      hl.dsp.exec_cmd("ocr"))
 -- Quick note: drop-down nvim on ~/notes/inbox.md, same slide as the terminal
 hl.bind(mod .. " + O",              hl.dsp.exec_cmd("quicknote"))
+-- Every keybind in a searchable list (read from the README table)
+hl.bind(mod .. " + F1",             hl.dsp.exec_cmd("keys"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D",              hl.dsp.exec_cmd("docs"))
 -- Audacity: starts it, or jumps to workspace 4 if it's already open

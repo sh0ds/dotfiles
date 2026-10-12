@@ -78,6 +78,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
+- `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
@@ -110,7 +111,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity firefox \
-  adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow
+  ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow
 yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher
 ```
 
@@ -123,12 +124,13 @@ git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
 bash ~/code/dotfiles/install-dotfiles.sh
 ```
 
-Then run these once. They set the default apps, load bat's theme, let games use GameMode and turn on the weekly timers:
+Then run these once. They set the default apps, load bat's theme, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network):
 
 ```
 default-apps && bat cache --build
 sudo usermod -aG gamemode $USER
 sudo systemctl enable --now paccache.timer fstrim.timer reflector.timer
+sudo ufw default deny incoming && sudo ufw enable && sudo systemctl enable ufw
 ```
 
 And change a few things to your liking:
@@ -178,6 +180,7 @@ bash ~/code/dotfiles/check-desktop.sh
 
 | Key | What it does |
 | --- | --- |
+| `SUPER+F1` | This list, searchable |
 | `SUPER+Return` | Terminal |
 | `SUPER+Space` | Launcher |
 | `SUPER+B` | Firefox |
@@ -223,6 +226,7 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
 - A keybind for one of the scripts does nothing? Run the install script again, new scripts only get linked into `~/.local/bin` when it runs.
 - `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't slide in, `pkill -x rmpc` and press `SUPER+U` again.
 - WhatsApp notifications don't show up? Make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits.
+- Steam Remote Play or downloads from another PC on the network can't find this one? The firewall blocks them, allow Steam's ports with `sudo ufw allow 27031:27036/udp && sudo ufw allow 27036:27037/tcp`.
 - A GTK app is still light? Log out and back in once, the dark mode gets set at login.
 - The screen-share picker doesn't show up? Restart the portal:
 
