@@ -147,7 +147,7 @@ local mod = "SUPER"
 
 -- Apps
 hl.bind(mod .. " + Return", hl.dsp.exec_cmd(terminal))
-hl.bind(mod .. " + A", hl.dsp.exec_cmd(terminal .. " -e arena-dev")) -- Pi Arena tmux session
+hl.bind(mod .. " + A", hl.dsp.exec_cmd(terminal .. " -e site-dev")) -- sh0ds.dev tmux session
 hl.bind(mod .. " + Space", hl.dsp.exec_cmd(menu))
 hl.bind(mod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mod .. " + Escape", hl.dsp.exec_cmd(lock))

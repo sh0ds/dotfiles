@@ -1,4 +1,4 @@
--- Pi Arena changes to LazyVim. Every file in lua/plugins/ is loaded automatically.
+-- Changes to LazyVim for the sh0ds.dev stack. Every file in lua/plugins/ is loaded automatically.
 return {
   -- Language servers: use the ones the install guide put on your system,
   -- so versions match your compilers (HLS must match GHC from GHCup).
@@ -27,6 +27,6 @@ return {
   -- Syntax highlighting for the rest of the stack
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = { ensure_installed = { "c", "asm", "bash", "awk", "sql", "lua" } },
+    opts = { ensure_installed = { "c", "asm", "bash", "awk", "sql", "lua", "html", "css", "javascript" } },
   },
 }

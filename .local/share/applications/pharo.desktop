@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Pharo
+Comment=The Pharo IDE on ~/pharo/Pharo.image (the site command's code)
+Exec=sh -c '"$HOME/pharo/pharo-ui" "$HOME/pharo/Pharo.image"'
+Terminal=false
+Categories=Development;

@@ -26,7 +26,7 @@ alias grep='grep --color=auto'
 alias v='nvim'
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate -20'
-alias ta='arena-dev'                                           # Pi Arena tmux session
+alias ta='site-dev'                                            # sh0ds.dev tmux session
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
 alias lg='lazygit'                                              # git TUI (SPACE g g in Neovim)
@@ -94,4 +94,4 @@ if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
 fi
 eval "$(starship init bash)"                     # prompt
 eval "$(fzf --bash)"                             # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
-eval "$(zoxide init bash)"                       # z arena jumps to ~/code/pi-arena; zi picks from a list
+eval "$(zoxide init bash)"                       # z site jumps to ~/code/site; zi picks from a list

@@ -75,6 +75,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `emoji`: the emoji you pick gets typed and copied
 - `docs`: `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo
+- `site-dev`: my tmux session for working on sh0ds.dev, with windows for the editor, builds, a REPL and the Pi. The Pharo IDE (`~/pharo`, for the site's `site` command) is "Pharo" in the launcher
 - `ocr`: drag a box around any text on screen and it's copied to your clipboard
 - `rec-toggle`: record a part of the screen to `~/Videos`
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
@@ -177,7 +178,7 @@ And change a few things to your liking:
 - In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
-- The Pi pill, `pi-status` and `arena-dev` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own.
+- The Pi pill and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/site` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
 
 ### Executing program
 
@@ -205,7 +206,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+D` | Bitwig |
 | `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+R` | Old School RuneScape |
-| `SUPER+A` | My tmux dev session |
+| `SUPER+A` | My tmux session for the site |
 | `ALT+Tab` | Switch windows |
 | `SUPER+C` | Calculator |
 | `SUPER+.` | Emoji picker |

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# site-dev: open (or reattach to) the tmux session for the sh0ds.dev overhaul.
+# Four windows, all starting at the site repo:
+#   1 edit   nvim at the repo root
+#   2 build  make, 3sgc, md, the `site` command, git
+#   3 repl   whatever the season needs: sqlite3, ghci, rebar3 shell (Pharo has its own window)
+#   4 pi     ssh to rasberry-pizian (staging builds, `pi visits`, live)
+set -euo pipefail
+
+# Opened from SUPER+A the terminal closes on exit, hiding any error: wait for Enter.
+trap 'echo "site-dev failed (line $LINENO). Press Enter to close."; read -r' ERR
+
+repo=${SITE_REPO:-$HOME/code/site}
+session=site
+
+command -v tmux >/dev/null || { echo "site-dev: tmux is not installed (sudo pacman -S tmux)"; false; }
+[ -d "$repo/.git" ] || { echo "site-dev: no site repo at $repo yet. Clone it there, or set SITE_REPO."; false; }
+
+if ! tmux has-session -t "$session" 2>/dev/null; then
+  tmux new-session -d -s "$session" -n edit -c "$repo"
+  tmux send-keys -t "$session:edit" "nvim ." Enter
+  tmux new-window -t "$session" -n build -c "$repo"
+  tmux new-window -t "$session" -n repl -c "$repo"
+  tmux new-window -t "$session" -n pi -c "$repo"
+  tmux send-keys -t "$session:pi" "ssh pi" Enter
+  tmux select-window -t "$session:edit"
+fi
+
+if [ -n "${TMUX:-}" ]; then
+  tmux switch-client -t "$session"
+else
+  tmux attach-session -t "$session"
+fi

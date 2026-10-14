@@ -1,5 +1,5 @@
-# Prompt: Catppuccin powerline. The language segments are the Pi Arena ones
-# (C, Haskell, Erlang, Python). kitty sends the "command finished" notifications.
+# Prompt: Catppuccin powerline. The language segments are the site's languages
+# (C, Haskell, Erlang) plus Python. kitty sends the "command finished" notifications.
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
