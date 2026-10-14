@@ -392,6 +392,23 @@ hl.window_rule({
 	idle_inhibit = "always",
 })
 
+-- Music making: Bitwig Studio on workspace 6. The screen stays on while it's
+-- open, so it never locks halfway through arranging a track. Plugin windows (synths,
+-- effects) run in Bitwig's plugin host and float on top instead of squeezing
+-- the arrangement into a tile.
+hl.window_rule({
+	name = "bitwig",
+	match = { class = "(?i).*bitwig.*" },
+	workspace = "6",
+	idle_inhibit = "always",
+})
+hl.window_rule({
+	name = "bitwig-plugins",
+	match = { class = "(?i).*pluginhost.*" },
+	float = true,
+	center = true,
+})
+
 -- Proton Pass (SUPER+SHIFT+P) floats in the middle instead of tiling.
 -- The class is matched loosely since the app doesn't set one of its own.
 hl.window_rule({
@@ -501,8 +518,6 @@ hl.bind(mod .. " + O", hl.dsp.exec_cmd("quicknote"))
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D", hl.dsp.exec_cmd("docs"))
--- Audacity: starts it, or jumps to workspace 4 if it's already open
-hl.bind(
-	mod .. " + SHIFT + A",
-	hl.dsp.exec_cmd("pgrep -x audacity >/dev/null && hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })' || audacity")
-)
+-- Audacity and Bitwig: start it, or jump to it if it's open
+hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd("app '(?i)audacity' audacity"))
+hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("app '(?i)bitwig' bitwig-studio"))

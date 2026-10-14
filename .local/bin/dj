@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# dj: my DJ library, on top of beets (~/.config/beets/config.yaml).
+#   dj add FILE...   add tracks or folders: BPM and key get worked out and
+#                    written into the files (first time: dj add ~/Music)
+#   dj [QUERY]       list tracks as BPM, key, artist - title, slowest first
+#                    e.g.  dj genre:speedhouse   dj bpm:150..160   dj initial_key:Am
+#   dj crates        rebuild the playlists by hand (rmpc: Playlists tab)
+#   dj edit QUERY    fix tags (genre, title...) in your editor
+set -euo pipefail
+mkdir -p ~/.local/share/beets
+# shellcheck disable=SC2016  # $bpm etc. are beets fields, not shell variables
+case ${1:-} in
+  add)    shift; exec beet import "$@" ;;
+  crates) exec beet splupdate ;;
+  edit)   shift; exec beet edit "$@" ;;
+  *)      exec beet ls -f '$bpm  $initial_key  $artist - $title' "$@" bpm+ ;;
+esac

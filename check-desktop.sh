@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol qalc tesseract jq firefox firefoxpwa nchat audacity mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime java yay; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol qalc tesseract jq firefox firefoxpwa nchat audacity bitwig-studio beet keyfinder-cli mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime java yay; do
   check "$c" command -v "$c"
 done
 check "python-pillow (runelite-skin)" python3 -c "import PIL"
@@ -61,6 +61,7 @@ check "paccache timer" systemctl is-enabled paccache.timer
 check "fstrim timer" systemctl is-enabled fstrim.timer
 check "reflector timer" systemctl is-enabled reflector.timer
 check "firewall on (ufw)" sh -c 'systemctl is-active ufw && systemctl is-enabled ufw'
+check "in the realtime group (Bitwig)" sh -c 'id -nG | grep -qw realtime'
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "Bolt launcher (OSRS)" sh -c 'command -v bolt-launcher || command -v bolt || flatpak info com.adamcake.Bolt'
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'

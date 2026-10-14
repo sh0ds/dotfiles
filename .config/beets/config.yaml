@@ -1,0 +1,43 @@
+# ~/.config/beets/config.yaml: my DJ library (the `dj` script wraps it).
+# beets keeps a database of every track in ~/Music with its BPM and key, and
+# writes playlists ("crates") that rmpc and mpd show under Playlists.
+directory: ~/Music
+library: ~/.local/share/beets/library.db
+
+# Tracks stay where they are and keep their own tags: most speedhouse edits
+# and bootlegs aren't on MusicBrainz, so looking them up only gets it wrong.
+# Every file is a single track, not part of an album.
+import:
+  copy: no
+  move: no
+  write: yes
+  autotag: no
+  singletons: yes
+
+plugins: autobpm keyfinder smartplaylist mpdupdate edit
+
+# BPM (librosa) and key (keyfinder-cli) are worked out when a track is added
+# and written into the file, so they show up in any DJ software later too.
+autobpm:
+  auto: yes
+keyfinder:
+  auto: yes
+  bin: keyfinder-cli
+
+# Crates, rebuilt whenever the library changes. Sorted by BPM, so they
+# already play in a sensible order.
+smartplaylist:
+  relative_to: ~/Music
+  playlist_dir: ~/.local/share/mpd/playlists
+  playlists:
+    - name: speedhouse.m3u
+      query: 'genre:speedhouse bpm+'
+    - name: new.m3u
+      query: 'added:-30d.. bpm+'
+    - name: 'key $initial_key.m3u'
+      query: 'initial_key::.+ bpm+'
+
+# Tell mpd when playlists change (same address as mpd.conf)
+mpd:
+  host: localhost
+  port: 6600

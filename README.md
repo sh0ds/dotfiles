@@ -54,6 +54,8 @@ Apps:
 - **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud.
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **Audacity** for recording audio. It opens on workspace 4 and keeps the screen awake while it's open.
+- **Bitwig Studio** for making speedhouse, on workspace 6. Synth and effect windows float on top of the arrangement.
+- **beets** for my DJ library, through the `dj` script. `dj add` works out a track's BPM and key and writes them into the file, `dj genre:speedhouse` or `dj bpm:150..160` lists matching tracks by BPM, and crates (speedhouse, new this month, one per key) show up as playlists in rmpc.
 - **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
 - **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. The screen stays awake while it has focus, and RuneLite's idle notifications show up like any other. My RuneLite profile (see Installing) brings the plugins, the Mocha colours and a Mocha skin for the game's interface that I made from the original one.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
@@ -79,6 +81,8 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
+- `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig)
+- `dj`: my DJ library, see the beets line above
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
@@ -110,9 +114,9 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity firefox \
+  mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges python-pipx firefox \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow
-yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher
+yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio keyfinder-cli
 ```
 
 ### Installing
@@ -163,6 +167,13 @@ And change a few things to your liking:
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
 - For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits its window.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
+- For Bitwig, run `sudo usermod -aG realtime $USER` and log out and back in, so it gets the CPU first and doesn't crackle. Then pick PipeWire under Settings > Audio and a block size of 256.
+- For the DJ library, install beets with BPM detection and add what's already in `~/Music` once (it takes a while, every track gets analysed):
+
+  ```
+  pipx install "beets[autobpm]"
+  dj add ~/Music
+  ```
 - In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
@@ -191,6 +202,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `CTRL+SHIFT+Escape` | btop |
 | `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+A` | Audacity |
+| `SUPER+SHIFT+D` | Bitwig |
 | `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+R` | Old School RuneScape |
 | `SUPER+A` | My tmux dev session |
@@ -226,6 +238,7 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
 - A keybind for one of the scripts does nothing? Run the install script again, new scripts only get linked into `~/.local/bin` when it runs.
 - `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't slide in, `pkill -x rmpc` and press `SUPER+U` again.
 - WhatsApp notifications don't show up? Make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits.
+- KDE Connect can't find your phone? The firewall blocks it, let it through with `sudo ufw allow 1714:1764/udp && sudo ufw allow 1714:1764/tcp`.
 - Steam Remote Play or downloads from another PC on the network can't find this one? The firewall blocks them, allow Steam's ports with `sudo ufw allow 27031:27036/udp && sudo ufw allow 27036:27037/tcp`.
 - A GTK app is still light? Log out and back in once, the dark mode gets set at login.
 - The screen-share picker doesn't show up? Restart the portal:
