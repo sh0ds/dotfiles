@@ -55,7 +55,7 @@ Apps:
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **Audacity** for recording audio. It opens on workspace 4 and keeps the screen awake while it's open.
 - **Bitwig Studio** for making speedhouse, on workspace 6. Synth and effect windows float on top of the arrangement.
-- **Engine DJ** for my DJ library, the same analysis, playlists and USB format my Denon gear reads. It's Windows only, so it runs through Lutris and Wine, on workspace 7. Its own USB sync can't see drives under Wine, so [EngineSynchronize](https://github.com/DJABO-dev/EngineSynchronize) copies the library to the stick instead.
+- **Mixo** for my DJ library and playlists, on workspace 7. It can import my old `Engine Library` from `~/Music`.
 - **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. It starts hidden at login, new mail pops up as a notification and clicking it slides aerc in. HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
 - **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
 - **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. The screen stays awake while it has focus, and RuneLite's idle notifications show up like any other. My RuneLite profile (see Installing) brings the plugins, the Mocha colours and a Mocha skin for the game's interface that I made from the original one.
@@ -84,7 +84,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
 - `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
-- `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig, Engine DJ)
+- `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig, Mixo)
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
@@ -116,7 +116,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
+  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian audacity realtime-privileges fuse2 firefox \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect
 yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio
 ```
@@ -172,16 +172,15 @@ And change a few things to your liking:
 - For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, install the Catppuccin theme under Settings > Appearance > Themes; its dark mode is Mocha.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For Bitwig, run `sudo usermod -aG realtime $USER` and log out and back in, so it gets the CPU first and doesn't crackle. Then pick PipeWire under Settings > Audio and a block size of 256.
-- For Engine DJ, add it in Lutris as "Engine DJ" (so `SUPER+SHIFT+M` finds it as `engine-dj`, check with `lutris -l`) with its own prefix, then install what the installer needs and run it from the terminal so you see errors:
+- For Mixo, download the Linux AppImage from [mixo.dj](https://mixo.dj) (AppImages need `fuse2`) and link it so `SUPER+SHIFT+M` finds it:
 
   ```
-  export WINEPREFIX=~/.local/share/wineprefixes/engine-dj
-  winetricks -q vcrun2022 d3dcompiler_47
-  wine "$HOME/Downloads/<the Engine DJ setup>.exe"
-  find "$WINEPREFIX" -iname 'Engine DJ.exe'
+  mkdir -p ~/Applications && mv ~/Downloads/MIXO-*.AppImage ~/Applications/
+  chmod +x ~/Applications/MIXO-*.AppImage
+  ln -sf ~/Applications/MIXO-*.AppImage ~/.local/bin/mixo
   ```
 
-  Point the Lutris executable at the path `find` prints. Your music is under the `Z:` drive. For the USB stick, get the Linux AppImage from the [EngineSynchronize releases](https://github.com/DJABO-dev/EngineSynchronize/releases) in the browser (AppImages need `fuse2`), `chmod +x` it, and back up `Engine Library` (in the prefix's `drive_c/users/$USER/Music`) before the first sync, since it writes to that database.
+  When there's a new version, do the same with the new file. The Fontconfig errors it prints in a terminal are harmless.
 - For mail, aerc gets its passwords from the keyring, so start that once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password; after a tty login it stays locked until something asks for it). Proton needs a paid plan for Bridge (`protonmail-bridge` in the package list above).
 
   Log in to Bridge (`protonmail-bridge`), then in its settings set the IMAP and SMTP connection mode to SSL. Click your account to see the Bridge password (it isn't your Proton password). Then save the three passwords, each command asks for one:
@@ -222,7 +221,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+A` | Audacity |
 | `SUPER+SHIFT+D` | Bitwig |
-| `SUPER+SHIFT+M` | Engine DJ |
+| `SUPER+SHIFT+M` | Mixo |
 | `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+R` | Old School RuneScape |
 | `SUPER+A` | My tmux session for the site |

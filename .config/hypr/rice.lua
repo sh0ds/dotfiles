@@ -414,11 +414,10 @@ hl.window_rule({
 	center = true,
 })
 
--- DJ library: Engine DJ (Windows, through Lutris and Wine) on workspace 7.
--- Wine names the window after the .exe, so the class is matched loosely.
+-- DJ library: Mixo (AppImage) on workspace 7.
 hl.window_rule({
-	name = "engine-dj",
-	match = { class = "(?i).*engine ?dj.*" },
+	name = "mixo",
+	match = { class = "^MIXO$" },
 	workspace = "7",
 })
 
@@ -537,7 +536,7 @@ hl.bind(mod .. " + O", hl.dsp.exec_cmd("notes"))
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D", hl.dsp.exec_cmd("docs"))
--- Audacity, Bitwig and Engine DJ: start it, or jump to it if it's open
+-- Audacity, Bitwig and Mixo: start it, or jump to it if it's open
 hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd("app '(?i)audacity' audacity"))
 hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("app '(?i)bitwig' bitwig-studio"))
-hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("app '(?i)engine ?dj' lutris lutris:rungame/engine-dj"))
+hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("app '^MIXO$' mixo"))
