@@ -18,7 +18,7 @@ Only the focused window gets the blue-to-mauve border and a soft glow, the rest 
 
 The things I need for a few seconds and then want gone slide down from the top of the screen, one at a time, and slide back up when I press the key again:
 
-- `SUPER+Z` terminal, `SUPER+O` notes (`~/notes/inbox.md`)
+- `SUPER+Z` terminal, `SUPER+O` notes ([Obsidian](https://obsidian.md) on `~/notes`, bigger than the rest so it's easy to read)
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
 - `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
@@ -70,7 +70,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a short comment at the top explaining what it does.
 
-- `scratch`: the drop-down logic behind `dropterm`, `quicknote`, `chat`, `inbox`, `music` and `sysmon`
+- `scratch`: the drop-down logic behind `dropterm`, `notes`, `chat`, `inbox`, `music` and `sysmon`
 - `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click the icon for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -116,7 +116,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
+  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect
 yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio
 ```
@@ -169,6 +169,7 @@ And change a few things to your liking:
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
 - For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits its window.
+- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, install the Catppuccin theme under Settings > Appearance > Themes; its dark mode is Mocha.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For Bitwig, run `sudo usermod -aG realtime $USER` and log out and back in, so it gets the CPU first and doesn't crackle. Then pick PipeWire under Settings > Audio and a block size of 256.
 - For Engine DJ, add it in Lutris as "Engine DJ" (so `SUPER+SHIFT+M` finds it as `engine-dj`, check with `lutris -l`) with its own prefix, then install what the installer needs and run it from the terminal so you see errors:
@@ -214,7 +215,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+Space` | Launcher |
 | `SUPER+B` | Firefox |
 | `SUPER+E` | Files |
-| `SUPER+Z` / `SUPER+O` | Drop-down terminal / notes |
+| `SUPER+Z` / `SUPER+O` | Drop-down terminal / notes (Obsidian) |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
 | `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
 | `CTRL+SHIFT+Escape` | btop |

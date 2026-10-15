@@ -182,17 +182,19 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- Every drop-down window (SoundCloud, WhatsApp, music, terminal, notes, btop)
--- floats in the same frame: 62% wide, 45% high (btop gets more height),
--- centred under the bar, each in its own scratchpad so they slide in and out
--- one at a time.
-local function dropdown(name, match, scratchpad, opacity, height)
+-- Every drop-down window (SoundCloud, WhatsApp, mail, music, terminal, btop,
+-- Obsidian) floats in the same frame: 76% wide, 60% high, centred under the
+-- bar, each in its own scratchpad so they slide in and out one at a time.
+-- btop gets more height, Obsidian more of both, so notes stay easy to read.
+local drop_w, drop_h = 0.76, 0.6
+local function dropdown(name, match, scratchpad, opacity, height, width)
+	local w, h = width or drop_w, height or drop_h
 	hl.window_rule({
 		name = name,
 		match = match,
 		float = true,
-		size = { "(monitor_w*0.62)", "(monitor_h*" .. (height or 0.45) .. ")" },
-		move = { "(monitor_w*0.19)", 52 },
+		size = { string.format("(monitor_w*%.2f)", w), string.format("(monitor_h*%.2f)", h) },
+		move = { string.format("(monitor_w*%.2f)", (1 - w) / 2), 52 },
 		opacity = opacity,
 		workspace = "special:" .. scratchpad .. " silent",
 	})
@@ -225,8 +227,8 @@ local function snap_soundcloud(w)
 		return
 	end
 	local mw, mh = m.width / m.scale, m.height / m.scale
-	hl.dispatch(hl.dsp.window.resize({ x = math.floor(mw * 0.62), y = math.floor(mh * 0.45), window = w }))
-	hl.dispatch(hl.dsp.window.move({ x = m.x + math.floor(mw * 0.19), y = m.y + 52, window = w }))
+	hl.dispatch(hl.dsp.window.resize({ x = math.floor(mw * drop_w), y = math.floor(mh * drop_h), window = w }))
+	hl.dispatch(hl.dsp.window.move({ x = m.x + math.floor(mw * (1 - drop_w) / 2), y = m.y + 52, window = w }))
 end
 hl.on("window.open", snap_soundcloud)
 hl.on("window.title", snap_soundcloud)
@@ -246,7 +248,7 @@ hl.window_rule({
 })
 -- System monitor: btop (CTRL+SHIFT+Escape or click "stats", ~/.local/bin/sysmon).
 -- Taller than the others, btop needs the rows.
-dropdown("sysmon", { class = "^sysmon$" }, "sysmon", nil, 0.7)
+dropdown("sysmon", { class = "^sysmon$" }, "sysmon", nil, 0.8)
 -- "Update" in the update notification: the system update floating in the middle
 hl.window_rule({
 	name = "update",
@@ -257,8 +259,9 @@ hl.window_rule({
 })
 -- Drop-down terminal (SUPER+Z, ~/.local/bin/dropterm)
 dropdown("dropterm", { class = "^dropterm$" }, "term")
--- Quick note: nvim on ~/notes/inbox.md (SUPER+O, ~/.local/bin/quicknote)
-dropdown("quicknote", { class = "^quicknote$" }, "notes")
+-- Notes: Obsidian on the ~/notes vault (SUPER+O, ~/.local/bin/notes).
+-- Bigger than the rest: 84% wide and nearly full height, for reading.
+dropdown("notes", { class = "^obsidian$" }, "notes", nil, 0.88, 0.84)
 
 -- Steam lives on workspace 5, together with the games it starts, so gaming
 -- never reshuffles the workspaces you code on.
@@ -528,8 +531,8 @@ hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))
 hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
 -- Copy the text inside a screen region (OCR): error messages in videos, PDFs, screenshots
 hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd("ocr"))
--- Quick note: drop-down nvim on ~/notes/inbox.md, same slide as the terminal
-hl.bind(mod .. " + O", hl.dsp.exec_cmd("quicknote"))
+-- Notes: Obsidian drops down like the terminal, started on first use
+hl.bind(mod .. " + O", hl.dsp.exec_cmd("notes"))
 -- Every keybind in a searchable list (read from the README table)
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
