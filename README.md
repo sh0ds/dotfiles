@@ -115,7 +115,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
-  ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow
+  ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect
 yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio
 ```
 
@@ -128,13 +128,14 @@ git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
 bash ~/code/dotfiles/install-dotfiles.sh
 ```
 
-Then run these once. They set the default apps, load bat's theme, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network):
+Then run these once. They set the default apps, load bat's theme, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network), with the ports KDE Connect needs to find your phone:
 
 ```
 default-apps && bat cache --build
 sudo usermod -aG gamemode $USER
 sudo systemctl enable --now paccache.timer fstrim.timer reflector.timer
 sudo ufw default deny incoming && sudo ufw enable && sudo systemctl enable ufw
+sudo ufw allow 1714:1764/udp && sudo ufw allow 1714:1764/tcp
 ```
 
 And change a few things to your liking:
