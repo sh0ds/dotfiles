@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol qalc tesseract jq firefox firefoxpwa nchat audacity bitwig-studio lutris wine winetricks mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime java yay; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool audacity bitwig-studio lutris wine winetricks mpd rmpc mpd-mpris udiskie yazi btop wtype checkupdates mpv imv zathura qt6ct gamemoderun proton-pass xdg-mime java yay; do
   check "$c" command -v "$c"
 done
 check "python-pillow (runelite-skin)" python3 -c "import PIL"

@@ -20,7 +20,7 @@ The things I need for a few seconds and then want gone slide down from the top o
 
 - `SUPER+Z` terminal, `SUPER+O` notes (`~/notes/inbox.md`)
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
-- `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat))
+- `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
 
 ### Bar
@@ -56,6 +56,7 @@ Apps:
 - **Audacity** for recording audio. It opens on workspace 4 and keeps the screen awake while it's open.
 - **Bitwig Studio** for making speedhouse, on workspace 6. Synth and effect windows float on top of the arrangement.
 - **Engine DJ** for my DJ library, the same analysis, playlists and USB format my Denon gear reads. It's Windows only, so it runs through Lutris and Wine, on workspace 7. Its own USB sync can't see drives under Wine, so [EngineSynchronize](https://github.com/DJABO-dev/EngineSynchronize) copies the library to the stick instead.
+- **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. It starts hidden at login, new mail pops up as a notification and clicking it slides aerc in. HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
 - **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
 - **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. The screen stays awake while it has focus, and RuneLite's idle notifications show up like any other. My RuneLite profile (see Installing) brings the plugins, the Mocha colours and a Mocha skin for the game's interface that I made from the original one.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
@@ -69,7 +70,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a short comment at the top explaining what it does.
 
-- `scratch`: the drop-down logic behind `dropterm`, `quicknote`, `chat`, `music` and `sysmon`
+- `scratch`: the drop-down logic behind `dropterm`, `quicknote`, `chat`, `inbox`, `music` and `sysmon`
 - `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click the icon for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -81,6 +82,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
+- `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig, Engine DJ)
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
@@ -114,7 +116,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
+  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect
 yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio
 ```
@@ -179,6 +181,17 @@ And change a few things to your liking:
   ```
 
   Point the Lutris executable at the path `find` prints. Your music is under the `Z:` drive. For the USB stick, get the Linux AppImage from the [EngineSynchronize releases](https://github.com/DJABO-dev/EngineSynchronize/releases) in the browser (AppImages need `fuse2`), `chmod +x` it, and back up `Engine Library` (in the prefix's `drive_c/users/$USER/Music`) before the first sync, since it writes to that database.
+- For mail, aerc gets its passwords from the keyring, so start that once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password; after a tty login it stays locked until something asks for it). Proton needs a paid plan for Bridge (`protonmail-bridge` in the package list above).
+
+  Log in to Bridge (`protonmail-bridge`), then in its settings set the IMAP and SMTP connection mode to SSL. Click your account to see the Bridge password (it isn't your Proton password). Then save the three passwords, each command asks for one:
+
+  ```
+  secret-tool store --label="mail: proton" aerc proton
+  secret-tool store --label="mail: mail@sh0ds.dev" aerc sh0ds-mail
+  secret-tool store --label="mail: security@sh0ds.dev" aerc sh0ds-security
+  ```
+
+  The IONOS folder names in `accounts.conf` are the German ones. If sending says it can't save to "Gesendete Objekte", open the folder list in aerc and change `copy-to` to what your Sent folder is called.
 - In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
@@ -203,7 +216,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+E` | Files |
 | `SUPER+Z` / `SUPER+O` | Drop-down terminal / notes |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
-| `SUPER+I` | WhatsApp |
+| `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
 | `CTRL+SHIFT+Escape` | btop |
 | `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+A` | Audacity |

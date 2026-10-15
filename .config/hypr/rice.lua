@@ -232,6 +232,8 @@ hl.on("window.open", snap_soundcloud)
 hl.on("window.title", snap_soundcloud)
 -- WhatsApp: nchat in a kitty (SUPER+I, ~/.local/bin/chat)
 dropdown("chat", { class = "^chat$" }, "chat")
+-- Mail: aerc in a kitty (SUPER+SHIFT+I, ~/.local/bin/inbox)
+dropdown("mail", { class = "^mail$" }, "mail")
 -- Music: rmpc in a kitty (SUPER+U, ~/.local/bin/music)
 dropdown("music", { class = "^music$" }, "music")
 -- Network settings (right-click the network icon): nmtui floating in the middle
@@ -460,12 +462,18 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("update-check --watch")
 	hl.exec_cmd("/usr/lib/kdeconnectd")
 	hl.exec_cmd("kdeconnect-indicator") -- optional tray icon
+	-- Mail: Proton's Bridge in the tray, then aerc hidden in its drop-down so
+	-- new mail shows up as notifications from the start
+	hl.exec_cmd("protonmail-bridge --no-window")
+	hl.exec_cmd("kitty --class mail -e aerc")
 end)
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)
 hl.bind(mod .. " + Z", hl.dsp.exec_cmd("dropterm"))
 -- WhatsApp (nchat) on SUPER+I, same idea
 hl.bind(mod .. " + I", hl.dsp.exec_cmd("chat"))
+-- Mail (aerc) on SUPER+SHIFT+I, next to it
+hl.bind(mod .. " + SHIFT + I", hl.dsp.exec_cmd("inbox"))
 -- Music player (rmpc) on SUPER+U, same idea
 hl.bind(mod .. " + U", hl.dsp.exec_cmd("music"))
 -- Files: yazi in a kitty (SUPER+E)

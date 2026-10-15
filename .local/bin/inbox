@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# inbox: show/hide mail (SUPER+SHIFT+I). aerc in a kitty, started hidden at
+# login so new-mail notifications come in even when you never opened it.
+exec scratch mail mail kitty --class mail -e aerc
