@@ -95,3 +95,4 @@ fi
 eval "$(starship init bash)"                     # prompt
 eval "$(fzf --bash)"                             # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
 eval "$(zoxide init bash)"                       # z site jumps to ~/code/site; zi picks from a list
+alias e=hx
