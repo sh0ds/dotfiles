@@ -55,7 +55,7 @@ Apps:
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **Audacity** for recording audio. It opens on workspace 4 and keeps the screen awake while it's open.
 - **Bitwig Studio** for making speedhouse, on workspace 6. Synth and effect windows float on top of the arrangement.
-- **beets** for my DJ library, through the `dj` script. `dj add` works out a track's BPM and key and writes them into the file, `dj genre:speedhouse` or `dj bpm:150..160` lists matching tracks by BPM, and crates (speedhouse, new this month, one per key) show up as playlists in rmpc.
+- **Engine DJ** for my DJ library, the same analysis, playlists and USB format my Denon gear reads. It's Windows only, so it runs through Lutris and Wine, on workspace 7. Its own USB sync can't see drives under Wine, so [EngineSynchronize](https://github.com/DJABO-dev/EngineSynchronize) copies the library to the stick instead.
 - **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
 - **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. The screen stays awake while it has focus, and RuneLite's idle notifications show up like any other. My RuneLite profile (see Installing) brings the plugins, the Mocha colours and a Mocha skin for the game's interface that I made from the original one.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
@@ -82,8 +82,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
-- `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig)
-- `dj`: my DJ library, see the beets line above
+- `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig, Engine DJ)
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
@@ -115,9 +114,9 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges python-pipx firefox \
+  mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf audacity realtime-privileges lutris wine-staging winetricks fuse2 firefox \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow
-yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio keyfinder-cli
+yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio
 ```
 
 ### Installing
@@ -169,12 +168,16 @@ And change a few things to your liking:
 - For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits its window.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For Bitwig, run `sudo usermod -aG realtime $USER` and log out and back in, so it gets the CPU first and doesn't crackle. Then pick PipeWire under Settings > Audio and a block size of 256.
-- For the DJ library, install beets with BPM detection and add what's already in `~/Music` once (it takes a while, every track gets analysed):
+- For Engine DJ, add it in Lutris as "Engine DJ" (so `SUPER+SHIFT+M` finds it as `engine-dj`, check with `lutris -l`) with its own prefix, then install what the installer needs and run it from the terminal so you see errors:
 
   ```
-  pipx install "beets[autobpm]"
-  dj add ~/Music
+  export WINEPREFIX=~/.local/share/wineprefixes/engine-dj
+  winetricks -q vcrun2022 d3dcompiler_47
+  wine "$HOME/Downloads/<the Engine DJ setup>.exe"
+  find "$WINEPREFIX" -iname 'Engine DJ.exe'
   ```
+
+  Point the Lutris executable at the path `find` prints. Your music is under the `Z:` drive. For the USB stick, get the Linux AppImage from the [EngineSynchronize releases](https://github.com/DJABO-dev/EngineSynchronize/releases) in the browser (AppImages need `fuse2`), `chmod +x` it, and back up `Engine Library` (in the prefix's `drive_c/users/$USER/Music`) before the first sync, since it writes to that database.
 - In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
@@ -204,6 +207,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+A` | Audacity |
 | `SUPER+SHIFT+D` | Bitwig |
+| `SUPER+SHIFT+M` | Engine DJ |
 | `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+R` | Old School RuneScape |
 | `SUPER+A` | My tmux session for the site |
