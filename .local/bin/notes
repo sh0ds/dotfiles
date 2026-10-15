@@ -4,4 +4,4 @@
 # Obsidian; SUPER+O starts it again.
 set -euo pipefail
 mkdir -p "$HOME/notes"
-exec scratch obsidian notes obsidian
+exec scratch md.obsidian.Obsidian notes obsidian

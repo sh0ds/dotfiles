@@ -261,7 +261,7 @@ hl.window_rule({
 dropdown("dropterm", { class = "^dropterm$" }, "term")
 -- Notes: Obsidian on the ~/notes vault (SUPER+O, ~/.local/bin/notes).
 -- Bigger than the rest: 84% wide and nearly full height, for reading.
-dropdown("notes", { class = "^obsidian$" }, "notes", nil, 0.88, 0.84)
+dropdown("notes", { class = "^md\\.obsidian\\.Obsidian$" }, "notes", nil, 0.88, 0.84)
 
 -- Steam lives on workspace 5, together with the games it starts, so gaming
 -- never reshuffles the workspaces you code on.
