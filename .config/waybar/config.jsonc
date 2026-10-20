@@ -43,8 +43,9 @@
   "clock": {
     "format": "  {:%a %d %b  %H:%M}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "on-click": "~/.local/bin/calendar",
     // Hover: Catppuccin month calendar with week numbers. Scroll changes month,
-    // right-click switches to the whole year.
+    // right-click switches to the whole year, click opens Proton Calendar.
     "calendar": {
       "mode": "month",
       "mode-mon-col": 3,

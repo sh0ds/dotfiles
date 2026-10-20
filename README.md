@@ -20,6 +20,7 @@ The things I need for a few seconds and then want gone slide down from the top o
 
 - `SUPER+Z` terminal, `SUPER+O` notes ([Obsidian](https://obsidian.md) on `~/notes`, bigger than the rest so it's easy to read)
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
+- `SUPER+Y` Proton Calendar (also a web app, or click the clock)
 - `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
 
@@ -28,7 +29,7 @@ The things I need for a few seconds and then want gone slide down from the top o
 waybar with three parts:
 
 - **Left:** workspace dots and the current song or video (click to pause, scroll to skip)
-- **Middle:** the clock (hover for a calendar), plus a red LIVE pill when I'm sharing my screen and REC when I'm recording
+- **Middle:** the clock (hover for the month, click for Proton Calendar), plus a red LIVE pill when I'm sharing my screen and REC when I'm recording
 - **Right:** tray, a "stats" pill (hover for CPU, temperature, RAM, GPU and disk, click for btop), and one pill for my Raspberry Pi (green when it's online), volume, network (click for a Wi-Fi menu), notifications and a power button
 
 ### Everything else
@@ -70,7 +71,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a short comment at the top explaining what it does.
 
-- `scratch`: the drop-down logic behind `dropterm`, `notes`, `chat`, `inbox`, `music` and `sysmon`
+- `scratch`: the drop-down logic behind `dropterm`, `notes`, `chat`, `inbox`, `calendar`, `music` and `sysmon`
 - `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click the icon for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -145,6 +146,7 @@ And change a few things to your liking:
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `qt6ct/qt6ct.conf`.
 - Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
 - For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
+- For the calendar, open calendar.proton.me in Firefox and install it as an app the same way. Put its ID from `firefoxpwa profile list` in the `id=` line of `~/.local/bin/calendar`, then reload Hyprland. In Proton Calendar's settings, the Carbon theme is the closest to Mocha.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
   ```
@@ -216,6 +218,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+E` | Files |
 | `SUPER+Z` / `SUPER+O` | Drop-down terminal / notes (Obsidian) |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
+| `SUPER+Y` | Calendar |
 | `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
 | `CTRL+SHIFT+Escape` | btop |
 | `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |

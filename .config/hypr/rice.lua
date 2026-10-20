@@ -215,11 +215,25 @@ end)
 hl.unbind(mod .. " + S")
 hl.bind(mod .. " + S", hl.dsp.exec_cmd("scratch " .. soundcloud .. " scratch " .. soundcloud_cmd))
 dropdown("soundcloud-scratch", { class = "^" .. soundcloud .. "$" }, "scratch", "0.92")
+-- Proton Calendar app (PWAsForFirefox), SUPER+Y or a click on the clock.
+-- Its ID is set in ~/.local/bin/calendar and read from there, so it lives in
+-- one place. Started on first use only, it's another Firefox.
+local calendar = "FFPWA-none"
+local calfile = io.open(bin .. "/calendar")
+if calfile then
+	for line in calfile:lines() do
+		calendar = line:match("^id=(FFPWA%-%w+)$") or calendar
+	end
+	calfile:close()
+end
+hl.bind(mod .. " + Y", hl.dsp.exec_cmd("calendar"))
+dropdown("calendar", { class = "^" .. calendar .. "$" }, "calendar", "0.92")
 -- Firefox resizes itself right after opening, so the size above can get lost.
--- Snap SoundCloud back into the drop-down frame whenever it
--- opens or its title changes (every new track).
-local function snap_soundcloud(w)
-	if not (w and w.floating and w.class == soundcloud) then
+-- Snap both web apps back into the drop-down frame whenever they open or
+-- their title changes (every new track, every calendar view).
+local web_apps = { [soundcloud] = true, [calendar] = true }
+local function snap_web_app(w)
+	if not (w and w.floating and web_apps[w.class]) then
 		return
 	end
 	local m = w.monitor
@@ -230,8 +244,8 @@ local function snap_soundcloud(w)
 	hl.dispatch(hl.dsp.window.resize({ x = math.floor(mw * drop_w), y = math.floor(mh * drop_h), window = w }))
 	hl.dispatch(hl.dsp.window.move({ x = m.x + math.floor(mw * (1 - drop_w) / 2), y = m.y + 52, window = w }))
 end
-hl.on("window.open", snap_soundcloud)
-hl.on("window.title", snap_soundcloud)
+hl.on("window.open", snap_web_app)
+hl.on("window.title", snap_web_app)
 -- WhatsApp: nchat in a kitty (SUPER+I, ~/.local/bin/chat)
 dropdown("chat", { class = "^chat$" }, "chat")
 -- Mail: aerc in a kitty (SUPER+SHIFT+I, ~/.local/bin/inbox)
