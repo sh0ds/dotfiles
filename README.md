@@ -84,6 +84,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `app`: jumps to an app if it's open, otherwise starts it
+- `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
@@ -115,7 +116,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   starship eza fzf zoxide fastfetch sl ttf-jetbrains-mono-nerd noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
-  yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
+  yazi fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
   qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect

@@ -18,7 +18,7 @@ The second line is for the shared folder: it lets the VM run as you instead of r
 - Windows 11 from [microsoft.com](https://www.microsoft.com/en-us/software-download/windows11) ("Download Windows 11 Disk Image (ISO) for x64 devices"). Keep the name it comes with (`Win11_...iso`). If the site refuses (it does that behind a VPN), `yay -S quickemu`, then `quickget --download windows 11` fetches the same ISO straight from Microsoft. Move it to `~/Downloads/Win11.iso`.
 - The drivers for the VM: [virtio-win.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso).
 
-Both go in `~/Downloads`.
+Both go in `~/Downloads`. The virtio-win server is slow, so copy that link and run `dl` instead of downloading it in Firefox.
 
 ## 3. Make the VM
 
