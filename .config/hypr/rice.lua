@@ -402,37 +402,15 @@ hl.on("window.open", function(w)
 	hl.exec_cmd("gamemoded -r" .. pid)
 end)
 
--- Audacity gets workspace 4 to itself, and while it's open the screen never
--- locks or suspends, so a long recording doesn't get cut off.
+-- Everything DJ (Lexicon, rekordbox, Traktor, Audacity) lives in a Windows VM
+-- (djvm, SUPER+SHIFT+M) on workspace 7. The screen stays on while it has focus,
+-- and the SUPER keys keep working in it instead of going to Windows.
 hl.window_rule({
-	name = "audacity",
-	match = { class = "(?i)audacity" },
-	workspace = "4",
-	idle_inhibit = "always",
-})
-
--- Music making: Bitwig Studio on workspace 6. The screen stays on while it's
--- open, so it never locks halfway through arranging a track. Plugin windows (synths,
--- effects) run in Bitwig's plugin host and float on top instead of squeezing
--- the arrangement into a tile.
-hl.window_rule({
-	name = "bitwig",
-	match = { class = "(?i).*bitwig.*" },
-	workspace = "6",
-	idle_inhibit = "always",
-})
-hl.window_rule({
-	name = "bitwig-plugins",
-	match = { class = "(?i).*pluginhost.*" },
-	float = true,
-	center = true,
-})
-
--- DJ library: Mixo (AppImage) on workspace 7.
-hl.window_rule({
-	name = "mixo",
-	match = { class = "^MIXO$" },
+	name = "dj-vm",
+	match = { class = "(?i).*virt-viewer.*" },
 	workspace = "7",
+	idle_inhibit = "focus",
+	no_shortcuts_inhibit = true,
 })
 
 -- Proton Pass (SUPER+SHIFT+P) floats in the middle instead of tiling.
@@ -550,7 +528,5 @@ hl.bind(mod .. " + O", hl.dsp.exec_cmd("notes"))
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D", hl.dsp.exec_cmd("docs"))
--- Audacity, Bitwig and Mixo: start it, or jump to it if it's open
-hl.bind(mod .. " + SHIFT + A", hl.dsp.exec_cmd("app '(?i)audacity' audacity"))
-hl.bind(mod .. " + SHIFT + D", hl.dsp.exec_cmd("app '(?i)bitwig' bitwig-studio"))
-hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("app '^MIXO$' mixo"))
+-- The Windows DJ VM: start it, or jump to it if it's open
+hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("djvm"))

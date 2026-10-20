@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# djvm: the Windows VM for everything DJ (Lexicon, rekordbox, Traktor, Audacity).
+#   djvm          start it if it's off and show it, or jump to it (SUPER+SHIFT+M)
+#   djvm off      shut Windows down
+#   djvm create   make the VM once from the two ISOs in ~/Downloads (docs/dj-vm.md)
+# ~/Music/DJ is shared with Windows as drive Z:, so songs dropped in there on
+# this side show up in Windows straight away.
+set -euo pipefail
+export LIBVIRT_DEFAULT_URI=qemu:///session
+vm=dj
+share=$HOME/Music/DJ
+
+case ${1:-} in
+  off)
+    exec virsh shutdown "$vm"
+    ;;
+  create)
+    shopt -s nullglob
+    isos=(~/Downloads/Win11*.iso)
+    virtio=~/Downloads/virtio-win.iso
+    if [ ${#isos[@]} -eq 0 ] || [ ! -f "$virtio" ]; then
+      echo "djvm: put a Win11*.iso and virtio-win.iso in ~/Downloads first" >&2
+      exit 1
+    fi
+    mkdir -p "$share"
+    virt-install --name "$vm" --osinfo win11 \
+      --memory 8192 --vcpus 4 --cpu host-passthrough \
+      --memorybacking source.type=memfd,access.mode=shared \
+      --boot uefi \
+      --disk size=120,bus=virtio \
+      --cdrom "${isos[0]}" --disk "$virtio",device=cdrom \
+      --network passt,model=virtio \
+      --graphics spice --video qxl --sound ich9 \
+      --channel spicevmc \
+      --redirdev usb,type=spicevmc --redirdev usb,type=spicevmc \
+      --filesystem type=mount,driver.type=virtiofs,source.dir="$share",target.dir=dj \
+      --noautoconsole
+    ;;
+esac
+
+if [ "$(virsh domstate "$vm")" != running ]; then
+  virsh start "$vm" >/dev/null
+fi
+exec app '(?i).*virt-viewer.*' virt-viewer --wait --reconnect "$vm"

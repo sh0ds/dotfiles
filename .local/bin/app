@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # app: jump to an app's window if it's open, otherwise start it.
-# Usage: app CLASS-REGEX COMMAND...   e.g.  app '(?i)bitwig' bitwig-studio
-# Used for Audacity, Bitwig and Mixo, which each live on their own workspace.
+# Usage: app CLASS-REGEX COMMAND...   e.g.  app '(?i)obsidian' obsidian
+# Used by djvm for the Windows VM's window.
 set -euo pipefail
 re=$1
 shift

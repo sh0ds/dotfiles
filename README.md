@@ -54,9 +54,7 @@ Apps:
 
 - **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud.
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
-- **Audacity** for recording audio. It opens on workspace 4 and keeps the screen awake while it's open.
-- **Bitwig Studio** for making speedhouse, on workspace 6. Synth and effect windows float on top of the arrangement.
-- **Mixo** for my DJ library and playlists, on workspace 7. It can import my old `Engine Library` from `~/Music`.
+- **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7. Songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`, and USB sticks for exporting can be handed to it from the viewer. Setup in [docs/dj-vm.md](docs/dj-vm.md).
 - **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. It starts hidden at login, new mail pops up as a notification and clicking it slides aerc in. HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
 - **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
 - **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. The screen stays awake while it has focus, and RuneLite's idle notifications show up like any other. My RuneLite profile (see Installing) brings the plugins, the Mocha colours and a Mocha skin for the game's interface that I made from the original one.
@@ -85,7 +83,8 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
 - `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
-- `app`: jumps to an app if it's open, otherwise starts it (Audacity, Bitwig, Mixo)
+- `app`: jumps to an app if it's open, otherwise starts it
+- `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
@@ -117,9 +116,10 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian audacity realtime-privileges fuse2 firefox \
+  aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
+  qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect
-yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher bitwig-studio
+yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher
 ```
 
 ### Installing
@@ -173,16 +173,7 @@ And change a few things to your liking:
 - For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits its window.
 - For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, install the Catppuccin theme under Settings > Appearance > Themes; its dark mode is Mocha.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
-- For Bitwig, run `sudo usermod -aG realtime $USER` and log out and back in, so it gets the CPU first and doesn't crackle. Then pick PipeWire under Settings > Audio and a block size of 256.
-- For Mixo, download the Linux AppImage from [mixo.dj](https://mixo.dj) (AppImages need `fuse2`) and link it so `SUPER+SHIFT+M` finds it:
-
-  ```
-  mkdir -p ~/Applications && mv ~/Downloads/MIXO-*.AppImage ~/Applications/
-  chmod +x ~/Applications/MIXO-*.AppImage
-  ln -sf ~/Applications/MIXO-*.AppImage ~/.local/bin/mixo
-  ```
-
-  When there's a new version, do the same with the new file. The Fontconfig errors it prints in a terminal are harmless.
+- For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
 - For mail, aerc gets its passwords from the keyring, so start that once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password; after a tty login it stays locked until something asks for it). Proton needs a paid plan for Bridge (`protonmail-bridge` in the package list above).
 
   Log in to Bridge (`protonmail-bridge`), then in its settings set the IMAP and SMTP connection mode to SSL. Click your account to see the Bridge password (it isn't your Proton password). Then save the three passwords, each command asks for one:
@@ -194,7 +185,6 @@ And change a few things to your liking:
   ```
 
   The IONOS folder names in `accounts.conf` are the German ones. If sending says it can't save to "Gesendete Objekte", open the folder list in aerc and change `copy-to` to what your Sent folder is called.
-- In Audacity, set the theme to Dark and pick `pipewire` as the recording device. To record what's playing on your PC, start a recording, open pavucontrol and set Audacity to "Monitor of" your speakers in the Recording tab.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - The Pi pill and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
@@ -222,9 +212,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
 | `CTRL+SHIFT+Escape` | btop |
 | `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
-| `SUPER+SHIFT+A` | Audacity |
-| `SUPER+SHIFT+D` | Bitwig |
-| `SUPER+SHIFT+M` | Mixo |
+| `SUPER+SHIFT+M` | Windows DJ VM |
 | `SUPER+SHIFT+P` | Proton Pass |
 | `SUPER+R` | Old School RuneScape |
 | `SUPER+A` | My tmux session for the site |
