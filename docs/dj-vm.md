@@ -122,7 +122,7 @@ Point all of them at `Z:\` for music. To bring over older tracks, move them into
 
 ## Using it
 
-- `SUPER+SHIFT+M` starts the VM and shows it, or jumps to it if it's already open. `djvm off` shuts Windows down. Do that before shutting down Arch, or Windows gets switched off like a power cut.
+- `SUPER+SHIFT+M` starts the VM and shows it, or jumps to it if it's already open. `djvm off` shuts Windows down. Log out, reboot and shut down in the power menu do that first and wait for it, so Windows never gets switched off like a power cut.
 - Click into the window and it has your mouse and keyboard, `Ctrl+Alt` gets them back. The `SUPER` keys always stay with Hyprland, so open the Start menu with a click.
 - USB sticks for exporting: plug it in, `SUPER+SHIFT+U` so Arch lets go of it, then in the viewer's menu File > USB device selection and tick it. Untick it when Windows is done and it comes back to Arch.
 - Sound goes through the viewer, so previewing and recording work. There are no 3D graphics in the VM, so waveforms are drawn by the CPU. Fine for library work, not for mixing live.

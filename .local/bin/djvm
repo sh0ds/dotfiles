@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # djvm: the Windows VM for everything DJ (Lexicon, rekordbox, Traktor, Audacity).
 #   djvm          start it if it's off and show it, or jump to it (SUPER+SHIFT+M)
-#   djvm off      shut Windows down
+#   djvm off      shut Windows down and wait until it's off (the power menu does this)
 #   djvm create   make the VM once from the two ISOs in ~/Downloads (docs/dj-vm.md)
 # ~/Music/DJ is shared with Windows as drive Z:, so songs dropped in there on
 # this side show up in Windows straight away.
@@ -12,7 +12,17 @@ share=$HOME/Music/DJ
 
 case ${1:-} in
   off)
-    exec virsh shutdown "$vm"
+    # Waits until Windows is really off, so the power menu can call it right
+    # before shutting down Arch. Pulls the plug after 90 seconds if it hangs.
+    [ "$(virsh domstate "$vm" 2>/dev/null)" = "shut off" ] && exit 0
+    virsh domstate "$vm" >/dev/null 2>&1 || exit 0
+    notify-send -a "DJ VM" "Shutting down Windows"
+    virsh shutdown "$vm" --mode agent,acpi >/dev/null
+    for _ in $(seq 90); do
+      [ "$(virsh domstate "$vm")" = "shut off" ] && exit 0
+      sleep 1
+    done
+    virsh destroy "$vm" >/dev/null
     ;;
   create)
     shopt -s nullglob

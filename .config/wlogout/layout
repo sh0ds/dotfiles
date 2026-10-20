@@ -6,7 +6,7 @@
 }
 {
     "label" : "logout",
-    "action" : "hyprctl dispatch 'hl.dsp.exit()'",
+    "action" : "sh -c 'djvm off; hyprctl dispatch \"hl.dsp.exit()\"'",
     "text" : "Logout",
     "keybind" : "e"
 }
@@ -18,13 +18,13 @@
 }
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "sh -c 'djvm off; systemctl reboot'",
     "text" : "Reboot",
     "keybind" : "r"
 }
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "sh -c 'djvm off; systemctl poweroff'",
     "text" : "Shutdown",
     "keybind" : "s"
 }
