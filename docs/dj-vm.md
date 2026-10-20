@@ -47,7 +47,40 @@ sc.exe start VirtioFsSvc
 
 `~/Music/DJ` is now `Z:` in Explorer, and it comes back on its own every time Windows starts.
 
-## 5. The apps
+## 5. Declutter
+
+Windows comes with a lot nobody asked for. [Win11Debloat](https://github.com/Raphire/Win11Debloat) clears most of it out and makes a restore point first. Paste this into PowerShell as admin (the clipboard is shared with Arch by now, so copy it from here):
+
+```
+& ([scriptblock]::Create((irm "https://debloat.raphi.re/"))) -Silent -CreateRestorePoint `
+  -RemoveApps -RemoveGamingApps -DisableDVR -DisableGameBarIntegration `
+  -DisableTelemetry -DisableSuggestions -DisableEdgeAds -DisableLockscreenTips -DisableBing `
+  -DisableStoreSearchSuggestions -DisableCopilot -DisableRecall -DisableClickToDo -DisableAISvcAutoStart `
+  -DisableWidgets -HideChat -ShowKnownFileExt -DisableDragTray -DisableModernStandbyNetworking `
+  -DisableFastStartup -PreventUpdateAutoReboot -DisableDeliveryOptimization -DisableLocationServices -DisableFindMyDevice `
+  -EnableDarkMode -DisableTransparency -DisableAnimations `
+  -HideSearchTb -HideTaskview -DisableStartRecommended -DisableStartPhoneLink -ClearStart `
+  -DisableSettingsHome -HideHome -HideGallery -ExplorerToThisPC
+```
+
+That takes out the preinstalled junk (Xbox, Clipchamp, Teams, Solitaire and so on), Copilot, Recall, the widgets, ads and tips everywhere, Bing in the Start menu and most of the telemetry. It also turns on dark mode and turns off transparency and animations, which matters here since the CPU draws everything. The taskbar ends up with just the Start button and your pinned apps, and Windows no longer restarts by itself for updates halfway through an export.
+
+Then a few things that only matter in a VM, same PowerShell:
+
+```
+winget uninstall --id Microsoft.OneDrive -e
+Add-MpPreference -ExclusionPath 'Z:\'
+Set-Service WSearch -StartupType Disabled; Stop-Service WSearch
+powercfg /hibernate off
+powercfg /change standby-timeout-ac 0
+powercfg /change monitor-timeout-ac 0
+```
+
+No OneDrive. Defender stops scanning every song in the shared folder. No search indexing eating the CPU in the background. No hibernation file, and Windows never goes to sleep on its own, since Arch decides when the VM is on. Restart Windows once afterwards.
+
+Edge stays: Windows and some installers need it under the hood. If something you miss is gone, type "restore point" in Start, then System Restore takes you back to before Win11Debloat ran.
+
+## 6. The apps
 
 - [Lexicon](https://www.lexicondj.com) for the library itself: tags, playlists, cleaning up, and syncing to the others.
 - [rekordbox](https://rekordbox.com) for exporting to USB for Pioneer gear.
