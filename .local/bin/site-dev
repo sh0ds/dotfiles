@@ -10,7 +10,7 @@ set -euo pipefail
 # Opened from SUPER+A the terminal closes on exit, hiding any error: wait for Enter.
 trap 'echo "site-dev failed (line $LINENO). Press Enter to close."; read -r' ERR
 
-repo=${SITE_REPO:-$HOME/code/site}
+repo=${SITE_REPO:-$HOME/code/website}
 session=site
 
 command -v tmux >/dev/null || { echo "site-dev: tmux is not installed (sudo pacman -S tmux)"; false; }

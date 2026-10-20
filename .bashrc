@@ -94,5 +94,5 @@ if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
 fi
 eval "$(starship init bash)"                     # prompt
 eval "$(fzf --bash)"                             # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
-eval "$(zoxide init bash)"                       # z site jumps to ~/code/site; zi picks from a list
+eval "$(zoxide init bash)"                       # z website jumps to ~/code/website; zi picks from a list
 alias e=hx
