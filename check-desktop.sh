@@ -68,6 +68,7 @@ check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "Bolt launcher (OSRS)" sh -c 'command -v bolt-launcher || command -v bolt || flatpak info com.adamcake.Bolt'
 check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
+check "aria2 running for Firefox (aria2-rpc)" pgrep -f "aria2c --enable-rpc"
 check "pipewire running" systemctl --user is-active pipewire
 check "NetworkManager running" systemctl is-active NetworkManager
 

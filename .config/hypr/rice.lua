@@ -460,6 +460,8 @@ hl.on("hyprland.start", function()
 	-- new mail shows up as notifications from the start
 	hl.exec_cmd("protonmail-bridge --no-window")
 	hl.exec_cmd("kitty --class mail -e aerc")
+	-- aria2 in the background, Firefox hands its downloads to it
+	hl.exec_cmd("aria2-rpc")
 end)
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# aria2-rpc: aria2 in the background for Firefox. The Aria2 Integration add-on
+# hands every download to it, so they get the same 16 connections as dl.
+# Started at login from rice.lua. Only listens on localhost, and only takes
+# downloads that come with the secret, so websites can't add their own.
+#   aria2-rpc          run it (login does that for you)
+#   aria2-rpc secret   print the secret for the add-on's settings
+# Unfinished downloads are saved and carry on after a restart.
+set -euo pipefail
+state=${XDG_STATE_HOME:-$HOME/.local/state}/aria2
+mkdir -p "$state" ~/Downloads
+if [ ! -s "$state/secret" ]; then
+  (umask 077 && head -c 24 /dev/urandom | base64 | tr -d '/+=' >"$state/secret")
+fi
+if [ "${1:-}" = secret ]; then
+  cat "$state/secret"
+  exit
+fi
+touch "$state/session"
+exec aria2c --enable-rpc --rpc-secret="$(cat "$state/secret")" \
+  --dir ~/Downloads --input-file "$state/session" --save-session "$state/session" \
+  --save-session-interval=30 --on-download-complete ~/.local/bin/dl-done
