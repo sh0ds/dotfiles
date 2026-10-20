@@ -4,7 +4,7 @@
 #   1 edit   nvim at the repo root
 #   2 build  make, 3sgc, md, the `site` command, git
 #   3 repl   whatever the season needs: sqlite3, ghci, rebar3 shell (Pharo has its own window)
-#   4 pi     ssh to rasberry-pizian (staging builds, `pi visits`, live)
+#   4 pi     ssh to raspberry-pizian (staging builds, `pi visits`, live)
 set -euo pipefail
 
 # Opened from SUPER+A the terminal closes on exit, hiding any error: wait for Enter.
