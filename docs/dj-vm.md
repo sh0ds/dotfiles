@@ -85,7 +85,33 @@ Restart Windows once afterwards.
 
 Edge stays: Windows and some installers need it under the hood. If something you miss is gone, type "restore point" in Start, then System Restore takes you back to before Win11Debloat ran.
 
-## 6. The apps
+## 6. More privacy, and Edge
+
+Two scripts from this repo do the rest. Copy them into the shared folder on the Arch side:
+
+```
+cp ~/code/dotfiles/docs/windows/*.ps1 ~/Music/DJ/
+```
+
+Then in Windows, in PowerShell as admin:
+
+```
+powershell -ExecutionPolicy Bypass -File Z:\private.ps1
+powershell -ExecutionPolicy Bypass -File Z:\edge.ps1
+```
+
+[`private.ps1`](windows/private.ps1) turns diagnostic data down as far as the edition allows and switches off the services and scheduled tasks that send it. It also turns off error reports, the advertising ID, activity history and the clipboard sync to other devices. Typing, inking and speech stay on the machine, and apps lose access to the webcam, contacts, calendar, mail and the other things a DJ VM never needs. The microphone stays on for Audacity.
+
+[`edge.ps1`](windows/edge.ps1) sets Edge up through policies. That means no welcome tour, no Microsoft account or sync, strict tracking prevention and no third-party cookies. The new tab page is empty, and there's no Copilot, sidebar, shopping, rewards or promotions. Saving passwords is off (that's Proton Pass's job), and nothing keeps running after you close it. Edge shows "managed by your organization" afterwards, which is just these policies. `edge://policy` lists them.
+
+Two things the policies can't do on a home PC, so do them by hand in Edge:
+
+- Settings > Privacy, search and services > Address bar and search: pick DuckDuckGo.
+- Get uBlock Origin Lite from Edge's add-on store.
+
+Restart Windows, then delete the two scripts from `~/Music/DJ`.
+
+## 7. The apps
 
 - [Lexicon](https://www.lexicondj.com) for the library itself: tags, playlists, cleaning up, and syncing to the others.
 - [rekordbox](https://rekordbox.com) for exporting to USB for Pioneer gear.
