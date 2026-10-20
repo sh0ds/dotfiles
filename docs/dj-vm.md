@@ -68,7 +68,6 @@ That takes out the preinstalled junk (Xbox, Clipchamp, Teams, Solitaire and so o
 Then a few things that only matter in a VM, same PowerShell:
 
 ```
-winget uninstall --id Microsoft.OneDrive -e
 Add-MpPreference -ExclusionPath 'Z:\'
 Set-Service WSearch -StartupType Disabled; Stop-Service WSearch
 powercfg /hibernate off
@@ -76,7 +75,13 @@ powercfg /change standby-timeout-ac 0
 powercfg /change monitor-timeout-ac 0
 ```
 
-No OneDrive. Defender stops scanning every song in the shared folder. No search indexing eating the CPU in the background. No hibernation file, and Windows never goes to sleep on its own, since Arch decides when the VM is on. Restart Windows once afterwards.
+Defender stops scanning every song in the shared folder. No search indexing eating the CPU in the background. No hibernation file, and Windows never goes to sleep on its own, since Arch decides when the VM is on. Then OneDrive, in a normal PowerShell (not admin, since it's installed for your user only):
+
+```
+taskkill /f /im OneDrive.exe; winget uninstall --id Microsoft.OneDrive -e
+```
+
+Restart Windows once afterwards.
 
 Edge stays: Windows and some installers need it under the hood. If something you miss is gone, type "restore point" in Start, then System Restore takes you back to before Win11Debloat ran.
 
