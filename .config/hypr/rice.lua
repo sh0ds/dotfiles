@@ -182,10 +182,10 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- Every drop-down window (SoundCloud, WhatsApp, mail, music, terminal, btop,
--- Obsidian) floats in the same frame: 76% wide, 60% high, centred under the
+-- Every drop-down window (SoundCloud, WhatsApp, mail, music, terminal, btop)
+-- floats in the same frame: 76% wide, 60% high, centred under the
 -- bar, each in its own scratchpad so they slide in and out one at a time.
--- btop gets more height, Obsidian more of both, so notes stay easy to read.
+-- btop gets more height.
 local drop_w, drop_h = 0.76, 0.6
 local function dropdown(name, match, scratchpad, opacity, height, width)
 	local w, h = width or drop_w, height or drop_h
@@ -273,9 +273,6 @@ hl.window_rule({
 })
 -- Drop-down terminal (SUPER+Z, ~/.local/bin/dropterm)
 dropdown("dropterm", { class = "^dropterm$" }, "term")
--- Notes: Obsidian on the ~/notes vault (SUPER+O, ~/.local/bin/notes).
--- Bigger than the rest: 84% wide and nearly full height, for reading.
-dropdown("notes", { class = "^md\\.obsidian\\.Obsidian$" }, "notes", nil, 0.88, 0.84)
 
 -- Steam lives on workspace 5, together with the games it starts, so gaming
 -- never reshuffles the workspaces you code on.
@@ -524,7 +521,7 @@ hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))
 hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
 -- Copy the text inside a screen region (OCR): error messages in videos, PDFs, screenshots
 hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd("ocr"))
--- Notes: Obsidian drops down like the terminal, started on first use
+-- Notes: Obsidian as a normal window, started or focused
 hl.bind(mod .. " + O", hl.dsp.exec_cmd("notes"))
 -- Every keybind in a searchable list (read from the README table)
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))

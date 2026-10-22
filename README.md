@@ -18,7 +18,7 @@ Only the focused window gets the blue-to-mauve border and a soft glow, the rest 
 
 The things I need for a few seconds and then want gone slide down from the top of the screen, one at a time, and slide back up when I press the key again:
 
-- `SUPER+Z` terminal, `SUPER+O` notes ([Obsidian](https://obsidian.md) on `~/notes`, bigger than the rest so it's easy to read)
+- `SUPER+Z` terminal
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
 - `SUPER+Y` Proton Calendar (also a web app, or click the clock)
 - `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
@@ -69,7 +69,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a short comment at the top explaining what it does.
 
-- `scratch`: the drop-down logic behind `dropterm`, `notes`, `chat`, `inbox`, `calendar`, `music` and `sysmon`
+- `scratch`: the drop-down logic behind `dropterm`, `chat`, `inbox`, `calendar`, `music` and `sysmon`
 - `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click the icon for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -209,7 +209,8 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+Space` | Launcher |
 | `SUPER+B` | Firefox |
 | `SUPER+E` | Files |
-| `SUPER+Z` / `SUPER+O` | Drop-down terminal / notes (Obsidian) |
+| `SUPER+Z` | Drop-down terminal |
+| `SUPER+O` | Notes (Obsidian, opens or jumps to it) |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
 | `SUPER+Y` | Calendar |
 | `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |

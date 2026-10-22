@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# notes: show/hide Obsidian on the ~/notes vault (SUPER+O). It drops down like
-# the terminal, only bigger, and starts on first use. Closing the window quits
-# Obsidian; SUPER+O starts it again.
+# notes: Obsidian on the ~/notes vault (SUPER+O), as a normal tiled window.
+# Jumps to it if it's already open, otherwise starts it.
 set -euo pipefail
 mkdir -p "$HOME/notes"
-exec scratch md.obsidian.Obsidian notes obsidian
+exec app '^md\.obsidian\.Obsidian$' obsidian
