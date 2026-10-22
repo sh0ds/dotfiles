@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# power: log out, reboot or shut down, after the DJ VM is off (the power menu).
+# Usage: power logout|reboot|poweroff
+# Runs in its own session, so it keeps going when wlogout closes behind it.
+set -uo pipefail
+case ${1:-} in
+  logout | reboot | poweroff) ;;
+  *) echo "usage: power logout|reboot|poweroff" >&2; exit 1 ;;
+esac
+if [ -z "${POWER_DETACHED:-}" ]; then
+  POWER_DETACHED=1 setsid -f "$0" "$1" >/dev/null 2>&1
+  exit 0
+fi
+djvm off
+case $1 in
+  logout) hyprctl dispatch 'hl.dsp.exit()' ;;
+  *) systemctl "$1" ;;
+esac

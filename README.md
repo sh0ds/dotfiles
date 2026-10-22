@@ -87,6 +87,7 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
 - `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down (the power menu runs that before logging out, rebooting or shutting down)
+- `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
 - `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
 - `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
 - `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
