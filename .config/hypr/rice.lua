@@ -459,6 +459,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("kitty --class mail -e aerc")
 	-- aria2 in the background, Firefox hands its downloads to it
 	hl.exec_cmd("aria2-rpc")
+	-- Easy Effects without a window: the headphone EQ and limiter (docs/audio.md)
+	hl.exec_cmd("easyeffects --service-mode")
 end)
 
 -- Drop-down terminal on SUPER+Z (starts it the first time, then shows/hides it)

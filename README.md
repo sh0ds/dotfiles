@@ -52,7 +52,7 @@ Terminal:
 
 Apps:
 
-- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays songs at their own sample rate instead of resampling everything to 48 kHz, and keeps the sound card awake so there's no pop when a song starts. A "Headphones EQ" output corrects my Corsair Virtuoso XT to the Harman curve ([AutoEQ](https://github.com/jaakkopasanen/AutoEq)); pick the plain headphones in pavucontrol for a flat one.
+- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays songs at their own sample rate instead of resampling everything to 48 kHz, and keeps the sound card awake so there's no pop when a song starts. [Easy Effects](https://github.com/wwmm/easyeffects) corrects my Corsair Virtuoso XT to the Harman curve and keeps it loud without clipping, setup in [docs/audio.md](docs/audio.md).
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7. Songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`, and USB sticks for exporting can be handed to it from the viewer. Setup in [docs/dj-vm.md](docs/dj-vm.md).
 - **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. It starts hidden at login, new mail pops up as a notification and clicking it slides aerc in. HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
@@ -116,7 +116,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux neovim \
   starship eza fzf zoxide fastfetch sl ttf-jetbrains-mono-nerd noto-fonts-emoji \
-  grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa jq socat \
+  grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
