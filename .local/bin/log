@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -euo pipefail
 
-f=LOG.md
+f=~/code/website/LOG.md
 
-last_day=$(grep -oP '^## Day \K[0-9]+' LOG.md | tail -n1)
+last_day=$(grep -oP '^## Day \K[0-9]+' "$f" | tail -n1)
 
 day=$((last_day + 1))
 
