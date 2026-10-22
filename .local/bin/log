@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -6,10 +6,10 @@ f=LOG.md
 
 last_day=$(grep -oP '^## Day \K[0-9]+' LOG.md | tail -n1)
 
-day=$((last_day+1))
+day=$((last_day + 1))
 
-week=$(((day-1)/7))
+week=$(((day - 1) / 7))
 
-printf '\n## Day %d · week %d\nDid:\nStuck:\nLearned:\nRedo:\nNext:\n' "$day" "$week" >> "$f"
+printf '\n## Day %d · week %d\nDid:\nStuck:\nLearned:\nRedo:\nNext:\n' "$day" "$week" >>"$f"
 
 exec nvim + "$f"
