@@ -52,7 +52,7 @@ Terminal:
 
 Apps:
 
-- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud.
+- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays songs at their own sample rate instead of resampling everything to 48 kHz, and keeps the sound card awake so there's no pop when a song starts.
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7. Songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`, and USB sticks for exporting can be handed to it from the viewer. Setup in [docs/dj-vm.md](docs/dj-vm.md).
 - **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. It starts hidden at login, new mail pops up as a notification and clicking it slides aerc in. HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
