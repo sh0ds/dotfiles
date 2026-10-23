@@ -48,7 +48,8 @@ diverged = "<${behind_count}>${ahead_count}"
 up_to_date = ""
 conflicted = "="
 untracked = "?"
-stashed = "$"
+# Single-quoted TOML preserves the backslash for Starship's format parser.
+stashed = '\$'
 modified = "!"
 staged = "+"
 renamed = "r"
