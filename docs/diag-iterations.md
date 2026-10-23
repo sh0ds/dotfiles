@@ -47,3 +47,20 @@ Keep code/content typography and semantic colours intact. Native widgets use
 one accent and a small number of surfaces; the panel's top edge becomes a thin
 blue rule, leaving more attention for notification content. The launcher,
 clock, session console and terminal retain the preceding pass's simpler layout.
+
+## 4 — Quiet motion
+
+Reimagine the desktop as an instrument that responds immediately and then gets
+out of the way. The shell and apps keep their crisp geometry; launcher and
+notification text now fade at native size instead of scaling or travelling
+across the screen. The bar and capture tools remain still. Preserve toolkit
+motion and web reduced-motion support rather than disabling animations in
+applications indiscriminately.
+
+Tighten the critically damped window/layout spring to mass 1, stiffness 1600,
+damping 80, with roughly 97ms to 90% and 166ms to 99% of a step response.
+Window entry scales only 2%, exit only 1%, workspace travel drops to 4%, and
+layer/exit fades take 80ms. Focus and entry opacity retain 120ms, DPMS 400ms.
+These are configured timings and analytical spring values, not measured frame
+pacing. Terminal latency settings, opaque surfaces and disabled blur/shadow/
+glow are retained. No scrolling marquee or perpetual decorative animation.
