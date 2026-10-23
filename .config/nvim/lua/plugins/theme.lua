@@ -36,7 +36,7 @@ return {
         fill = { bg = bg },
         background = { fg = mid, bg = bg },
         buffer_visible = { fg = mid, bg = panel },
-        buffer_selected = { fg = fg, bg = panel, bold = true, italic = false },
+        buffer_selected = { fg = fg, bg = panel, bold = true, italic = false, underline = true },
         indicator_selected = { fg = blue, bg = panel },
         separator = { fg = rule, bg = bg },
         separator_selected = { fg = rule, bg = panel },

@@ -11,9 +11,9 @@ warning.fg=#ffb000
 success.fg=#75c94d
 
 tab.fg=#8a929c
-tab.bg=#0d1014
-tab.selected.fg=#000000
-tab.selected.bg=#1793d1
+tab.bg=#000000
+tab.selected.fg=#1793d1
+tab.selected.bg=#0d1014
 tab.selected.bold=true
 
 border.fg=#3f4650

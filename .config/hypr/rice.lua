@@ -178,7 +178,7 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- Quick apps (SoundCloud, calendar, WhatsApp, mail, music, btop)
+-- Quick apps (SoundCloud, WhatsApp, mail, music, btop)
 -- are normal tiled windows. Each has one key that goes through
 -- ~/.local/bin/app --toggle: start it next to what you're doing, press again
 -- to hide it, press again to bring it back tiled where you are. If it's
@@ -191,9 +191,6 @@ local soundcloud = "01M4E9WM9PSN126GWCCEG49J4C"
 hl.unbind(mod .. " + S")
 hl.unbind(mod .. " + CTRL + S")
 hl.bind(mod .. " + S", hl.dsp.exec_cmd("app --toggle '^FFPWA-" .. soundcloud .. "$' firefoxpwa site launch " .. soundcloud))
--- Proton Calendar app (PWAsForFirefox), SUPER+Y or a click on the clock.
--- Its ID lives in ~/.local/bin/calendar.
-hl.bind(mod .. " + Y", hl.dsp.exec_cmd("calendar"))
 -- Network settings (right-click the network icon): nmtui floating in the middle
 hl.window_rule({
 	name = "nmtui",
