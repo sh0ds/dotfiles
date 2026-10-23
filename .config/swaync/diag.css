@@ -1,7 +1,7 @@
 /* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, square and still. Additions live in style.css. */
 * {
   all: unset;
-  font-size: 18px;
+  font-size: 25px;
   font-family: "VT323", "Terminess Nerd Font";
   transition: none;
 }

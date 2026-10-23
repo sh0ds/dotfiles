@@ -15,7 +15,9 @@ Rectangle {
     readonly property color arch: "#1793d1"
     readonly property color warn: "#ffb000"
     readonly property color error: "#e5484d"
-    readonly property int unit: Math.max(18, Math.round(height / 48))
+    // VT323 is only sharp at 25 px and multiples of it, so every text is 25
+    // px (the clock 175) and the layout is measured in that unit too.
+    readonly property int unit: 25
 
     FontLoader { id: vt; source: "VT323-Regular.ttf" }
     readonly property string mono: vt.status === FontLoader.Ready ? vt.font.family : "monospace"
@@ -66,10 +68,10 @@ Rectangle {
         x: logo.x + logo.width + 28
         y: logo.y - 4
         spacing: 4
-        Text { text: "Arch Linux\u00a0\u00a0" + Qt.formatDate(clock.now, "yyyy-MM-dd"); color: root.dim; font.family: root.mono; font.pixelSize: root.unit * 1.3 }
-        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>host:</font> " + sddm.hostName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit * 1.3 }
-        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>sess:</font> " + root.sessionName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit * 1.3 }
-        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>boot:</font> login"; color: root.ink; font.family: root.mono; font.pixelSize: root.unit * 1.3 }
+        Text { text: "Arch Linux\u00a0\u00a0" + Qt.formatDate(clock.now, "yyyy-MM-dd"); color: root.dim; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
+        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>host:</font> " + sddm.hostName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
+        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>sess:</font> " + root.sessionName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
+        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>boot:</font> login"; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
     }
 
     // The site's double rule under the header
@@ -96,7 +98,8 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             color: root.arch
             font.family: root.mono
-            font.pixelSize: root.unit * 1.4
+            renderType: Text.NativeRendering
+            font.pixelSize: root.unit
         }
         Rectangle {
             width: root.unit * 16
@@ -114,7 +117,8 @@ Rectangle {
                 selectionColor: root.arch
                 selectedTextColor: "#000000"
                 font.family: root.mono
-                font.pixelSize: root.unit * 1.4
+                renderType: TextInput.NativeRendering
+                font.pixelSize: root.unit
                 echoMode: field.secret ? TextInput.Password : TextInput.Normal
                 passwordCharacter: "*"
                 clip: true
@@ -140,6 +144,7 @@ Rectangle {
             text: Qt.formatTime(clock.now, "HH:mm")
             color: "#ffffff"
             font.family: root.mono
+            renderType: Text.NativeRendering
             font.pixelSize: root.unit * 7
         }
 
@@ -164,7 +169,8 @@ Rectangle {
                 : (clock.now.getHours() < 5 ? "<font color='#ffb000'>warn:</font> it's late. go to bed." : " ")
             color: root.ink
             font.family: root.mono
-            font.pixelSize: root.unit * 1.2
+            renderType: Text.NativeRendering
+            font.pixelSize: root.unit
         }
     }
 
@@ -199,7 +205,8 @@ Rectangle {
         text: "<font color='#1793d1'>F1</font> halt&nbsp;&nbsp;&nbsp;<font color='#1793d1'>F2</font> reboot&nbsp;&nbsp;&nbsp;<font color='#1793d1'>F3</font> session&nbsp;&nbsp;&nbsp;<font color='#1793d1'>Enter</font> boot"
         color: root.dim
         font.family: root.mono
-        font.pixelSize: root.unit * 1.2
+        renderType: Text.NativeRendering
+        font.pixelSize: root.unit
     }
 
     // After the fields have their values (children finish loading in any order)

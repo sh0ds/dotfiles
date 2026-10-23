@@ -78,7 +78,7 @@
 /* VT323 for everything around the page; the page itself keeps its fonts */
 #navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
   font-family: "VT323", "Terminess Nerd Font", monospace !important;
-  font-size: 17px !important;
+  font-size: 25px !important;
 }
 
 /* The site's double rule under the toolbars */

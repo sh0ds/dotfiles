@@ -75,8 +75,8 @@ hl.config({
 		},
 		groupbar = {
 			font_family = "VT323",
-			font_size = 15,
-			height = 18,
+			font_size = 25,
+			height = 28,
 			gradients = false,
 			rounding = 0,
 			text_color = "rgb(f4f6f8)",
@@ -312,8 +312,8 @@ hl.on("hyprland.start", function()
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
 			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
-			.. "gsettings set org.gnome.desktop.interface font-name 'VT323 14'; "
-			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'VT323 14'; "
+			.. "gsettings set org.gnome.desktop.interface font-name 'VT323 18.75'; "
+			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'VT323 18.75'; "
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
 	)
 	hl.exec_cmd("udiskie")

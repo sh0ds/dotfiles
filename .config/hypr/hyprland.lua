@@ -10,7 +10,8 @@
 -- `hyprctl monitors` lists names, e.g. "DP-1".
 -- DP-4 is the main screen: it sits at 0x0, gets workspaces 1-5 (waybar keeps
 -- those five on it), the cursor at login, and is XWayland's primary output, so
--- games and the login screen open there. Any other screen goes to its right.
+-- games open there. It stands on the right of the desk, so any other screen
+-- goes to its left (left of 0x0 is fine, Hyprland handles negative positions).
 local main_screen = "DP-4"
 hl.monitor({
 	output = main_screen,
@@ -21,7 +22,7 @@ hl.monitor({
 hl.monitor({
 	output = "",
 	mode = "highrr",
-	position = "auto-right",
+	position = "auto-left",
 	scale = "auto",
 })
 for i = 1, 5 do
@@ -53,8 +54,10 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swaync")
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
-	-- Solid black instead of a picture. SUPER+W still picks one from ~/Pictures/walls.
-	hl.exec_cmd("sleep 1 && awww clear 000000")
+	-- The Diag background: black, a faint dot grid, a dim pixel Arch logo in
+	-- the middle. Drawn 1:1 (no scaling, so the dots stay sharp) and centred
+	-- on every screen. SUPER+W still picks a picture from ~/Pictures/walls.
+	hl.exec_cmd("sleep 1 && awww img --resize no --fill-color 000000 --transition-type none ~/.local/share/backgrounds/diag.png")
 end)
 
 -------------------------------

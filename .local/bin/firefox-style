@@ -1,26 +1,41 @@
 #!/usr/bin/env bash
 # firefox-style: links ~/.config/firefox (userChrome.css, userContent.css,
-# user.js: the Diag look) into your Firefox profile. Run it once with Firefox
-# closed; after that, edits in ~/.config/firefox show up on the next start.
-# Finds the default profile in either place Firefox keeps them.
+# user.js: the Diag look) into every Firefox profile it finds. Closes Firefox
+# first and waits for it, because Firefox rewrites its prefs on exit. After
+# that, edits in ~/.config/firefox show up on the next start.
 set -euo pipefail
 src=$HOME/.config/firefox
-pgrep -x firefox >/dev/null && { echo "Close Firefox first (it rewrites prefs on exit)." >&2; exit 1; }
+
+if pgrep -x firefox >/dev/null || pgrep -x firefox-bin >/dev/null; then
+  echo "Closing Firefox..."
+  pkill -x firefox || true; pkill -x firefox-bin || true
+  for _ in $(seq 50); do
+    pgrep -x firefox >/dev/null || pgrep -x firefox-bin >/dev/null || break
+    sleep 0.2
+  done
+  if pgrep -x firefox >/dev/null || pgrep -x firefox-bin >/dev/null; then
+    echo "Firefox is still running, close it and run this again." >&2; exit 1
+  fi
+fi
+
+n=0
 for base in "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox"; do
   ini=$base/profiles.ini
   [ -f "$ini" ] || continue
-  # The profile the installed Firefox uses ([Install...] Default=), else the one marked Default=1
-  rel=$(awk -F= '/^\[Install/{i=1;next} /^\[/{i=0} i&&$1=="Default"{print $2; exit}' "$ini")
-  [ -n "$rel" ] || rel=$(awk -F= '/^\[Profile/{p="";d=0} $1=="Path"{p=$2} $1=="Default"&&$2=="1"{d=1} d&&p{print p; exit}' "$ini")
-  [ -n "$rel" ] || continue
-  case $rel in /*) prof=$rel ;; *) prof=$base/$rel ;; esac
-  [ -d "$prof" ] || continue
-  mkdir -p "$prof/chrome"
-  ln -sfn "$src/chrome/userChrome.css" "$prof/chrome/userChrome.css"
-  ln -sfn "$src/chrome/userContent.css" "$prof/chrome/userContent.css"
-  ln -sfn "$src/user.js" "$prof/user.js"
-  echo "Linked the Diag look into $prof. Start Firefox."
-  exit 0
+  # Every Path= in profiles.ini, relative or absolute
+  while IFS= read -r rel; do
+    case $rel in /*) prof=$rel ;; *) prof=$base/$rel ;; esac
+    [ -f "$prof/prefs.js" ] || [ -f "$prof/times.json" ] || continue   # a real, used profile
+    mkdir -p "$prof/chrome"
+    ln -sfn "$src/chrome/userChrome.css" "$prof/chrome/userChrome.css"
+    ln -sfn "$src/chrome/userContent.css" "$prof/chrome/userContent.css"
+    ln -sfn "$src/user.js" "$prof/user.js"
+    echo "linked  $prof"
+    n=$((n + 1))
+  done < <(awk -F= '$1=="Path"{print $2}' "$ini")
 done
-echo "No Firefox profile found. Start Firefox once, close it, then run this again." >&2
-exit 1
+if (( n == 0 )); then
+  echo "No Firefox profile found. Start Firefox once, close it, then run this again." >&2
+  exit 1
+fi
+echo "Done. Start Firefox; about:support shows the profile it uses under Profile Directory."
