@@ -1,6 +1,6 @@
 -- ~/.config/hypr/rice.lua  (loaded from hyprland.lua with pcall(require, "rice"))
 -- Everything that makes it look and move the way it does, plus the extra keys.
--- An error in here shows the red bar but leaves the rest of your config running. To turn it all off, comment
+-- An error is logged by the base config, which stays usable. To turn it all off, comment
 -- out the require line in hyprland.lua.
 -- Every option below exists in Hyprland 0.56 (checked against the v0.56.1 source).
 
@@ -71,7 +71,7 @@ hl.config({
 	group = {
 		col = {
 			border_active = "rgb(1793d1)",
-			border_inactive = "rgb(2e353d)",
+			border_inactive = "rgb(3f4650)",
 		},
 		groupbar = {
 			font_family = "Terminess Nerd Font",
@@ -79,10 +79,10 @@ hl.config({
 			height = 22,
 			gradients = false,
 			rounding = 0,
-			text_color = "rgb(f4f6f8)",
+			text_color = "rgb(000000)",
 			text_color_inactive = "rgb(8a929c)",
 			col = {
-				active = "rgb(0e3d5c)",
+				active = "rgb(1793d1)",
 				inactive = "rgb(0d1014)",
 			},
 		},
@@ -364,7 +364,7 @@ end)
 hl.bind(mod .. " + X", hl.dsp.window.center())
 
 -- Power menu (wlogout)
-hl.bind(mod .. " + SHIFT + Escape", hl.dsp.exec_cmd("wlogout -b 5"))
+hl.bind(mod .. " + SHIFT + Escape", hl.dsp.exec_cmd("power-menu"))
 -- Colour picker: click anywhere, hex code lands in the clipboard
 hl.bind(mod .. " + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
 -- Screenshot a region and draw on it before saving (satty)

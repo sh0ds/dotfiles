@@ -34,13 +34,24 @@
 @define-color thumbnail_bg_color #161a1f;
 @define-color thumbnail_fg_color #e6e8ea;
 
-/* Diag visual refinements 2026-10-23 */
-/* Diag readability refinements: GTK3 + GTK4 */
-label, entry, button, spinbutton, combobox, dropdown { color: #c4c9ce; }
-button { min-height: 28px; }
-button:hover { background-color: #161a1f; }
-entry, spinbutton, combobox button, dropdown button { background-color: #161a1f; border: 1px solid #3f4650; border-radius: 0; }
-entry:focus, spinbutton:focus-within, combobox button:focus, dropdown button:focus { border-color: #1793d1; }
-scale trough { min-height: 5px; background-color: #3f4650; border-radius: 0; }
-scale highlight { background-color: #1793d1; border-radius: 0; }
-scale slider { min-width: 14px; min-height: 14px; background-color: #c4c9ce; border-radius: 0; }
+/* Preserve semantic foregrounds from the base theme: a global label colour
+   overrides selected rows, suggested actions and destructive buttons. */
+button, entry, spinbutton, combobox button, dropdown button, popover,
+menu, menuitem, tooltip, scale trough, scale highlight, scale slider {
+  border-radius: 0;
+}
+entry, spinbutton {
+  background-color: @view_bg_color;
+  color: @view_fg_color;
+  border: 1px solid #3f4650;
+}
+entry:focus, spinbutton:focus {
+  border-color: @accent_bg_color;
+}
+selection {
+  background-color: #0e3d5c;
+  color: #e6e8ea;
+}
+scale trough { min-height: 5px; background-color: #3f4650; }
+scale highlight { background-color: @accent_bg_color; }
+scale slider { min-width: 14px; min-height: 14px; }

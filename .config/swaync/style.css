@@ -1,86 +1,63 @@
-/* swaync look: Diag (diag.css) plus the parts that make it match sh0ds.dev:
-   each notification is a block with an Arch blue rule down its left edge
-   (like a code block on the site), the panel has the site's double rule on
-   top, square tiles, no motion. */
+/* Diag: square diagnostic panels, legible text, blue focus and state.
+   Structure and widget defaults live in diag.css; each override appears once. */
 @import url("diag.css");
 
-* {
-  font-family: "Terminess Nerd Font";
-}
-
-/* ---- Frames: popups and the panel sit on black with a thin grey rule ---- */
 .notification-background {
-  margin: 8px;
+  margin: 6px;
   border: 1px solid #3f4650;
   border-left: 2px solid #1793d1;
 }
 .notification-background .notification.critical {
   border-left: 2px solid #e5484d;
 }
-.notification-content .summary { color: #ffffff; }
-.notification-content .body { color: #8a929c; }
-.notification-content .time { color: #5d6670; }
+.notification-content .summary { color: #e6e8ea; font-weight: bold; }
+.notification-content .body { color: #c4c9ce; }
+.notification-content .time { color: #8a929c; }
 .control-center {
   border: 1px solid #3f4650;
-  border-top: 6px double #3f4650;
+  border-top: 4px double #3f4650;
+  padding: 12px;
 }
-
-/* The close button is a plain x, red only under the pointer. */
 .notification-background .close-button {
-  background-color: transparent;
-  color: #5d6670;
+  background: #161a1f;
+  color: #8a929c;
+  min-width: 24px;
+  min-height: 24px;
 }
-.notification-background .close-button:hover {
-  background-color: transparent;
-  color: #e5484d;
+.notification-background .close-button:hover,
+.notification-background .close-button:focus {
+  background: #e5484d;
+  color: #000000;
 }
 
-/* ---- Quick-settings tiles: flat squares, blue when on ---- */
+/* Words remain readable when a Nerd Font glyph is absent. These compact
+   cells also fit the panel at smaller logical display sizes. */
 .widget-buttons-grid > flowbox > flowboxchild > button {
-  min-height: 48px;
+  min-height: 36px;
+  min-width: 0;
+  padding: 4px;
   margin: 2px;
-  background-color: #0d1014;
+  background: #0d1014;
   border: 1px solid #3f4650;
   color: #e6e8ea;
 }
-.widget-buttons-grid > flowbox > flowboxchild > button:hover {
-  border-color: #1793d1;
+.widget-buttons-grid > flowbox > flowboxchild > button label {
+  font-family: "Terminess Nerd Font", monospace;
+  font-size: 16px;
 }
-.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
-  background-color: #1793d1;
+.widget-buttons-grid > flowbox > flowboxchild > button:hover,
+.widget-buttons-grid > flowbox > flowboxchild > button:focus {
   border-color: #1793d1;
+  background: #161a1f;
+}
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked,
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked label {
+  background: #1793d1;
   color: #000000;
 }
-.widget-buttons-grid > flowbox > flowboxchild > button label {
-  font-family: "Terminess Nerd Font Propo";
-  font-size: 1.6rem;
-  margin: 0;
-  padding: 0;
+.widget-title button:focus, .notification-action:focus,
+.widget-mpris button:focus {
+  outline: 2px solid #1793d1;
+  outline-offset: -2px;
 }
-
-.widget-dnd > switch:checked { background: #1793d1; }
-
-/* Diag visual refinements 2026-10-23 */
-/* Diag quick-setting icon alignment */
-.widget-buttons-grid > flowbox > flowboxchild > button { min-height: 52px; min-width: 0; padding: 3px; }
-.widget-buttons-grid > flowbox > flowboxchild > button label { font-family: "Terminess Nerd Font", monospace; font-size: 26px; font-weight: normal; }
-.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked label { color: #000000; }
 .widget-mpris button image { -gtk-icon-size: 24px; }
-
-
-/* Diag: visible, centered quick-setting icons */
-.widget-buttons-grid > flowbox > flowboxchild > button {
-  min-height: 56px;
-  padding: 0;
-  background-image: none;
-}
-
-.widget-buttons-grid > flowbox > flowboxchild > button label {
-  opacity: 1;
-  font-family: "Terminess Nerd Font Mono", "Symbols Nerd Font Mono", monospace;
-  font-size: 30px;
-  font-weight: normal;
-  letter-spacing: 0;
-  margin: 0;
-  padding: 0;
-}

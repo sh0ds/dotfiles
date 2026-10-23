@@ -1,43 +1,32 @@
-/* Diag power menu: five flat squares on black, the hovered one framed
-   in blue. Icons are recoloured to the same grey. */
-
+/* Diag power menu: opaque square cells, one focus frame, no layout motion. */
 * {
-  background-image: none;
   box-shadow: none;
-  font-family: "Terminess Nerd Font";
-  font-size: 22px;
+  text-shadow: none;
+  font-family: "Terminess Nerd Font", monospace;
+  font-size: 20px;
 }
-
-window {
-  background-color: rgba(0, 0, 0, 0.92);
-}
-
+window { background-color: #000000; }
 button {
   margin: 4px;
   border-radius: 0;
-  border: 1px solid #3f4650;
-  color: #8a929c;
+  border: 2px solid #3f4650;
+  color: #c4c9ce;
   background-color: #000000;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 18%;
+  background-size: 48px 48px;
+  transition: background-color 120ms linear, border-color 120ms linear;
 }
-
-button:focus, button:active, button:hover {
-  background-color: #161a1f;
+button:focus, button:hover {
+  background-color: #0d1014;
   border-color: #1793d1;
-  color: #1793d1;
+  color: #e6e8ea;
   outline-style: none;
 }
-
-/* Icon paths are relative to this file, so they work for any user */
+button:active { background-color: #161a1f; }
+#reboot:focus, #shutdown:focus { border-color: #ffb000; }
 #lock     { background-image: url("icons/lock.svg"); }
 #logout   { background-image: url("icons/logout.svg"); }
 #suspend  { background-image: url("icons/suspend.svg"); }
 #reboot   { background-image: url("icons/reboot.svg"); }
 #shutdown { background-image: url("icons/shutdown.svg"); }
-
-/* Diag visual refinements 2026-10-23 */
-/* Diag: uniform thin-stroke power icons */
-button { background-size: 48px 48px; }
-button:focus, button:hover { background-color: #0d1014; }

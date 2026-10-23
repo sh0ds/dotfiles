@@ -1,7 +1,7 @@
 /**
  * @name Diag
  * @description Black diagnostic UI with restrained Arch-blue accents
- * @version 1.1.0
+ * @version 1.2.0
  * @author sh0ds
  */
 
@@ -10,14 +10,14 @@
 .visual-refresh,
 .visual-refresh.theme-dark {
   --background-primary: #000000 !important;
-  --background-secondary: #0a0d10 !important;
+  --background-secondary: #0d1014 !important;
   --background-secondary-alt: #0d1014 !important;
   --background-tertiary: #000000 !important;
   --background-floating: #0d1014 !important;
 
   --background-base-lowest: #000000 !important;
   --background-base-lower: #000000 !important;
-  --background-base-low: #0a0d10 !important;
+  --background-base-low: #0d1014 !important;
   --background-surface-high: #0d1014 !important;
   --background-surface-higher: #161a1f !important;
   --background-surface-highest: #161a1f !important;
@@ -38,6 +38,21 @@
   --brand-500: #1793d1 !important;
 
   --button-filled-brand-background: #1793d1 !important;
+  --button-filled-brand-background-hover: #5fb8e8 !important;
+  --button-filled-brand-text: #000000 !important;
+  --button-filled-brand-text-hover: #000000 !important;
+  --status-danger: #e5484d !important;
+  --status-warning: #ffb000 !important;
+  --status-positive: #75c94d !important;
+  --background-mentioned: #161a1f !important;
+  --background-mentioned-hover: #161a1f !important;
+  --mention-foreground: #5fb8e8 !important;
+  --mention-background: #0e3d5c !important;
+  --input-background: #0d1014 !important;
+  --input-border: #3f4650 !important;
+  --border-subtle: #3f4650 !important;
+  --border-normal: #3f4650 !important;
+  --font-code: "Terminess Nerd Font Mono", monospace !important;
 
   --scrollbar-thin-thumb: #3f4650 !important;
   --scrollbar-auto-thumb: #3f4650 !important;
@@ -47,11 +62,11 @@
   --font-display: "Terminess Nerd Font", monospace !important;
 }
 
-/* Square surfaces, consistent with Diag */
+/* Scope geometry to controls. A blanket [class*=container] rule also
+   catches avatars, video masks and third-party content. */
 .theme-dark button,
 .theme-dark input,
 .theme-dark textarea,
-.theme-dark [class*="container"],
 .theme-dark [class*="button"] {
   border-radius: 0 !important;
 }
@@ -71,7 +86,7 @@
 .theme-dark [class*="sidebarList"],
 .theme-dark [class*="sidebarRegion"],
 .theme-dark [class*="privateChannels"] {
-  background: #0a0d10 !important;
+  background: #0d1014 !important;
 }
 
 /* Restrained selected-channel state */
@@ -96,4 +111,10 @@
 .theme-dark ::selection {
   background: #0e3d5c !important;
   color: #e6e8ea !important;
+}
+
+/* Keep keyboard focus visible; do not animate layout or resize content. */
+.theme-dark :is(button, input, textarea):focus-visible {
+  outline: 2px solid #1793d1 !important;
+  outline-offset: 2px;
 }

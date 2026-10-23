@@ -9,7 +9,7 @@ local c = {
   panel = "#0d1014",
   sel = "#0e3d5c",
   line = "#2e353d",
-  dim = "#5d6670",
+  dim = "#8a929c",
   mid = "#8a929c",
   fg = "#c4c9ce",
   bright = "#f4f6f8",
@@ -59,7 +59,7 @@ local groups = {
   WarningMsg = { fg = c.warn },
   Cursor = { fg = "#000000", bg = c.arch },
 
-  Comment = { fg = c.dim, italic = true },
+  Comment = { fg = c.dim },
   Constant = { fg = c.soft },
   String = { fg = c.arch },
   Character = { fg = c.arch },

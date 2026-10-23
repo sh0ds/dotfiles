@@ -6,7 +6,7 @@
 
 /* :root[lwtheme] too: a leftover theme add-on (Catppuccin) sets these on
    the root element, and this makes sure ours still win. */
-:root, :root[lwtheme], :root:-moz-lwtheme {
+:root, :root[lwtheme] {
   --diag-bg: #000000;
   --diag-row: #161a1f;
   --diag-panel: #0d1014;
@@ -15,6 +15,7 @@
   --diag-fg: #c4c9ce;
   --diag-ink: #e6e8ea;
   --diag-arch: #1793d1;
+  --diag-sel: #0e3d5c;
 
   /* frame, toolbars, tabs */
   --lwt-accent-color: var(--diag-bg) !important;
@@ -131,7 +132,7 @@
   border-radius: 0 !important;
   outline: none !important;
 }
-.tabbrowser-tab:not([selected]) .tab-label { color: var(--diag-dim) !important; }
+.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-label { color: var(--diag-dim) !important; }
 .tabbrowser-tab:not([selected]):hover .tab-label { color: #ffffff !important; }
 
 /* Address bar: square, 2 px frame, blue while typing */
@@ -159,36 +160,14 @@ panel, menupopup {
   --panel-shadow: none !important;
 }
 
-/* Diag: flat black tabs with a minimal blue selection rule */
-
-/* Remove Firefox's default tab background */
-#tabbrowser-tabs .tabbrowser-tab .tab-background {
-  background: #000000 !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  border: 0 !important;
-  border-radius: 0 !important;
+/* Keep the entire selected surface visible. A clipped background also clips
+   multiselection and focus feedback. Vertical tabs use a leading rule. */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
+  box-shadow: inset 2px 0 0 var(--diag-arch) !important;
 }
 
-/* Selected tab: black with only a top rule */
-#tabbrowser-tabs .tabbrowser-tab[selected] .tab-background {
-  background: #000000 !important;
-  outline: 2px solid #1793d1 !important;
-  clip-path: inset(0 0 calc(100% - 2px) 0) !important;
-}
-
-/* Selected label */
-#tabbrowser-tabs .tabbrowser-tab[selected] .tab-label {
-  color: #c4c9ce !important;
-  font-weight: 500 !important;
-}
-
-/* Inactive tabs */
-#tabbrowser-tabs .tabbrowser-tab:not([selected]) .tab-label {
-  color: #5d6670 !important;
-}
-
-/* Subtle hover */
-#tabbrowser-tabs .tabbrowser-tab:not([selected]):hover .tab-background {
-  background: #0a0d10 !important;
+@media (prefers-reduced-motion: no-preference) {
+  .tab-background {
+    transition: background-color 120ms linear !important;
+  }
 }

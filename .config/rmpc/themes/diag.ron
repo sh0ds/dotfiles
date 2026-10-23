@@ -5,12 +5,12 @@
 #![enable(unwrap_variant_newtypes)]
 (
     text_color: "#e6e8ea",
-    preview_label_style: (fg: "#ffb000"),
+    preview_label_style: (fg: "#8a929c"),
     preview_metadata_group_style: (fg: "#1793d1", modifiers: "Bold"),
     highlighted_item_style: (fg: "#1793d1", modifiers: "Bold"),
-    current_item_style: (fg: "#000000", bg: "#4aa3df", modifiers: "Bold"),
-    borders_style: (fg: "#2e353d"),
-    highlight_border_style: (fg: "#4aa3df"),
+    current_item_style: (fg: "#000000", bg: "#1793d1", modifiers: "Bold"),
+    borders_style: (fg: "#3f4650"),
+    highlight_border_style: (fg: "#1793d1"),
     symbols: (
         song: "󰎈",
         dir: "",
@@ -19,7 +19,7 @@
         ellipsis: "…",
     ),
     progress_bar: (
-        symbols: ["━", "━", "●", "━", "━"],
+        symbols: ["─", "─", "█", "─", "─"],
         track_style: (fg: "#161a1f"),
         elapsed_style: (fg: "#1793d1"),
         thumb_style: (fg: "#1793d1"),
@@ -28,7 +28,7 @@
         symbols: ["│", "█", "▲", "▼"],
         track_style: (fg: "#161a1f"),
         ends_style: (fg: "#2e353d"),
-        thumb_style: (fg: "#4aa3df"),
+        thumb_style: (fg: "#1793d1"),
     ),
     tab_bar: (
         active_style: (fg: "#000000", bg: "#1793d1", modifiers: "Bold"),

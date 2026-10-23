@@ -6,7 +6,7 @@
    workspace, LIVE, REC) are inset like buttons on a panel. */
 * {
   font-family: "Terminess Nerd Font", monospace;
-  font-size: 20px;
+  font-size: 18px;
   min-height: 0;
   border: none;
   border-radius: 0;
@@ -38,19 +38,19 @@ tooltip label { color: #e6e8ea; font-size: 16px; }
   /* 120 ms, same as the window frame in rice.lua, so both land together */
   transition: background-color 120ms linear, color 120ms linear;
 }
-#workspaces button.empty  { color: #5d6670; }
+#workspaces button.empty  { color: #8a929c; }
 #workspaces button.active { color: #000000; background: #1793d1; }
 #workspaces button.urgent { color: #e5484d; box-shadow: inset 0 -2px #e5484d; }
 #workspaces button:hover  { color: #ffffff; background: transparent; }
 #workspaces button.active:hover { color: #000000; background: #1793d1; }
 
-#mpris { padding: 0 14px; color: #8a929c; }
+#mpris { padding: 0 10px; color: #8a929c; }
 #mpris.playing { color: #e6e8ea; }
 
 /* ---- Right side: readings two spaces apart, like the site's lists ---- */
 #custom-stats,
 #custom-pi, #pulseaudio, #custom-notification, #clock, #custom-power {
-  padding: 0 10px;
+  padding: 0 8px;
   background: transparent;
   transition: color 120ms linear;
 }

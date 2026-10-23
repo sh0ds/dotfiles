@@ -7,16 +7,16 @@
 default.fg=#e6e8ea
 
 error.fg=#e5484d
-warning.fg=#f08c3c
+warning.fg=#ffb000
 success.fg=#75c94d
 
-tab.fg=#5d6670
+tab.fg=#8a929c
 tab.bg=#0d1014
-tab.selected.fg=#e6e8ea
-tab.selected.bg=#000000
+tab.selected.fg=#000000
+tab.selected.bg=#1793d1
 tab.selected.bold=true
 
-border.fg=#000000
+border.fg=#3f4650
 border.bold=true
 
 msglist_unread.bold=true
@@ -25,17 +25,17 @@ msglist_flagged.bold=true
 msglist_result.fg=#4aa3df
 msglist_result.bold=true
 msglist_*.selected.bold=true
-msglist_*.selected.bg=#161a1f
+msglist_*.selected.bg=#0e3d5c
 
 dirlist_*.selected.bold=true
-dirlist_*.selected.bg=#161a1f
+dirlist_*.selected.bg=#0e3d5c
 
 statusline_default.fg=#8a929c
 statusline_default.bg=#161a1f
 statusline_error.bold=true
 statusline_success.bold=true
 
-completion_default.selected.bg=#161a1f
+completion_default.selected.bg=#0e3d5c
 
 part_filename.selected.fg=#e6e8ea
 part_filename.selected.bg=#000000
