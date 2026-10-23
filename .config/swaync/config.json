@@ -2,8 +2,8 @@
   "$schema": "/etc/xdg/swaync/configSchema.json",
   "positionX": "right",
   "positionY": "top",
-  "control-center-margin-top": 6,
-  "control-center-margin-bottom": 40,
+  "control-center-margin-top": 38,
+  "control-center-margin-bottom": 6,
   "control-center-margin-right": 6,
   "control-center-width": 400,
   "notification-window-width": 380,
@@ -33,7 +33,8 @@
       "text": "quiet:"
     },
     "mpris": {
-      "image-size": 64
+      "show-album-art": "when-available",
+      "autohide": false
     },
     "volume": {
       "label": "vol:",

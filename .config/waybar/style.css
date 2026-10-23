@@ -1,9 +1,5 @@
-/* ~/.config/waybar/style.css  (Diag)
-   The bar is one diagnostic line, styled like sh0ds.dev: Terminess on black, a
-   double rule on top, "key: value" readings (keys are coloured in
-   config.jsonc). Nothing paints over the rule: modules sit 6 px inside the
-   bar, hover only brightens the text, and the only filled blocks (current
-   workspace, LIVE, REC) are inset like buttons on a panel. */
+/* Diag instrument rail. Geometry stays fixed; only colour responds to input.
+   GTK CSS, not browser CSS: no layout animation or unsupported flex rules. */
 * {
   font-family: "Terminess Nerd Font", monospace;
   font-size: 18px;
@@ -13,66 +9,93 @@
   box-shadow: none;
   text-shadow: none;
 }
-
 window#waybar {
   background: #000000;
+  color: #c4c9ce;
+  border-bottom: 1px solid #3f4650;
+}
+
+/* The clock is the only bright reading; modules on either side form a rail. */
+.modules-left, .modules-right { padding: 3px 0; }
+.modules-center { padding: 0; }
+#clock {
   color: #e6e8ea;
-  border-top: 4px double #3f4650;
+  background: #0d1014;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0 16px;
+  border-left: 1px solid #3f4650;
+  border-right: 1px solid #3f4650;
+  border-bottom: 2px solid #1793d1;
 }
-
-tooltip { background: #0d1014; border: 1px solid #3f4650; border-left: 2px solid #1793d1; }
-tooltip label { color: #e6e8ea; font-size: 16px; }
-
-/* Every module: same inset from the rule and the bottom edge */
-#workspaces, #mpris, #custom-live, #custom-rec, #tray, #custom-stats,
-#custom-pi, #pulseaudio, #custom-notification, #clock, #custom-power {
-  margin: 5px 0 4px;
-}
-
-/* ---- Workspaces: numbers, the current one an inset Arch blue block ---- */
-#workspaces { margin-left: 8px; }
+#workspaces { margin: 0 10px 0 8px; }
 #workspaces button {
+  min-width: 26px;
+  padding: 0 4px;
+  margin: 0 1px;
   color: #8a929c;
   background: transparent;
-  padding: 0 8px;
-  /* 120 ms, same as the window frame in rice.lua, so both land together */
+  border-bottom: 2px solid transparent;
+  transition: background-color 120ms linear, color 120ms linear, border-color 120ms linear;
+}
+#workspaces button.empty { color: #8a929c; }
+#workspaces button.active {
+  color: #e6e8ea;
+  background: #0d1014;
+  border-bottom-color: #1793d1;
+}
+#workspaces button:hover {
+  background: #161a1f;
+  color: #e6e8ea;
+}
+#workspaces button.urgent {
+  color: #ffb000;
+  border-bottom-color: #ffb000;
+}
+#mpris {
+  color: #8a929c;
+  border-left: 1px solid #3f4650;
+  padding: 0 12px;
+}
+#mpris.playing { color: #c4c9ce; }
+
+/* Short labelled cells; detailed readings stay behind sys/its tooltip. */
+#custom-stats, #custom-pi, #pulseaudio, #custom-notification, #tray, #custom-power {
+  padding: 0 10px;
+  border-left: 1px solid #3f4650;
   transition: background-color 120ms linear, color 120ms linear;
 }
-#workspaces button.empty  { color: #8a929c; }
-#workspaces button.active { color: #000000; background: #1793d1; }
-#workspaces button.urgent { color: #e5484d; box-shadow: inset 0 -2px #e5484d; }
-#workspaces button:hover  { color: #ffffff; background: transparent; }
-#workspaces button.active:hover { color: #000000; background: #1793d1; }
-
-#mpris { padding: 0 10px; color: #8a929c; }
-#mpris.playing { color: #e6e8ea; }
-
-/* ---- Right side: readings two spaces apart, like the site's lists ---- */
-#custom-stats,
-#custom-pi, #pulseaudio, #custom-notification, #clock, #custom-power {
-  padding: 0 8px;
-  background: transparent;
-  transition: color 120ms linear;
+#custom-stats { border-left: none; }
+#custom-stats.open { background: #0d1014; }
+#custom-stats.hot { color: #ffb000; border-bottom: 2px solid #ffb000; }
+#pulseaudio.muted { color: #8a929c; }
+#tray { padding: 0 8px; }
+#custom-power {
+  color: #1793d1;
+  padding: 0 12px;
+  margin-right: 4px;
 }
-#tray { padding: 0 10px; }
-/* Opened, the stats sit a step dimmer than the always-on readings */
-#custom-stats.open { color: #c4c9ce; }
-#custom-stats.hot { color: #ffb000; }
-
-#pulseaudio.muted { color: #5d6670; }
-#custom-power { color: #8a929c; padding-right: 14px; }
-
-/* Hover: brighter text, nothing else */
-#custom-power:hover, #pulseaudio:hover, #custom-notification:hover, #clock:hover,
-#custom-stats:hover, #custom-pi:hover, #mpris:hover {
-  background: transparent;
-  color: #ffffff;
+#clock:hover, #mpris:hover, #custom-stats:hover, #custom-pi:hover,
+#pulseaudio:hover, #custom-notification:hover {
+  background: #161a1f;
+  color: #e6e8ea;
 }
+#custom-power:hover { background: #1793d1; color: #000000; }
 
-/* ---- Only while active: inset blocks, like the last BOOT step on the site ---- */
+/* Capture warnings sit beside the workspaces so they never steal the clock. */
 #custom-live.live, #custom-rec.rec {
   color: #000000;
   background: #1793d1;
-  padding: 0 10px;
+  padding: 0 8px;
+  margin: 1px 4px;
+  font-weight: bold;
 }
+#custom-rec.rec { background: #ffb000; }
 #custom-live.idle, #custom-rec.idle { padding: 0; margin: 0; }
+
+tooltip {
+  background: #0d1014;
+  border: 1px solid #3f4650;
+  border-top: 2px solid #1793d1;
+}
+tooltip label { color: #e6e8ea; font-size: 16px; padding: 6px; }

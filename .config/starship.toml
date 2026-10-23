@@ -1,11 +1,9 @@
-# Prompt: Diag, one plain line. Path in blue, git and languages in
-# grey, the time at the end. No powerline blocks, no icons. The language
-# segments are the site's languages (C, Haskell, Erlang) plus Python.
-# kitty sends the "command finished" notifications.
+# Diag prompt: a compact instrument line, then a clear input cursor.
+# Nerd Font icons share kitty's Terminess / Symbols Nerd Font fallback.
 "$schema" = 'https://starship.rs/config-schema.json'
-
+add_newline = true
+palette = 'diag'
 format = """
-$username\
 $directory\
 $git_branch\
 $git_status\
@@ -14,100 +12,101 @@ $haskell\
 $erlang\
 $python\
 $cmd_duration\
-${custom.friday}\
-${custom.leet}\
 $time\
 $line_break\
+$username\
+$hostname\
 $character"""
 
-palette = 'diag'
-
-[username]
-show_always = false
-style_user = "fg:mid"
-style_root = "bold fg:error"
-format = '[$user ]($style)'
-
 [directory]
-style = "fg:arch"
-format = "[$path]($style) "
+style = 'bold fg:bright'
+format = '[ ](fg:arch)[$path]($style)[$read_only](fg:error) '
+read_only = ' '
 truncation_length = 3
-truncation_symbol = "../"
+truncate_to_repo = true
+truncation_symbol = '…/'
 
 [git_branch]
-style = "fg:mid"
-format = '[$branch]($style)'
+symbol = ' '
+style = 'fg:arch'
+format = '[$symbol$branch]($style) '
 
 [git_status]
-style = "fg:mid"
-format = '[$all_status$ahead_behind]($style) '
-# Plain ASCII, like the rest of the prompt.
-ahead = ">${count}"
-behind = "<${count}"
-diverged = "<${behind_count}>${ahead_count}"
-up_to_date = ""
-conflicted = "="
-untracked = "?"
-# Single-quoted TOML preserves the backslash for Starship's format parser.
-stashed = '\$'
-modified = "!"
-staged = "+"
-renamed = "r"
-deleted = "x"
-typechanged = "t"
+style = 'fg:mid'
+format = '([$all_status$ahead_behind]($style) )'
+ahead = '↑${count}'
+behind = '↓${count}'
+diverged = '↕${ahead_count}/${behind_count}'
+conflicted = '=${count}'
+untracked = '?${count}'
+# Single-quoted TOML preserves this escape for Starship's format parser.
+stashed = '\$${count}'
+modified = '!${count}'
+staged = '+${count}'
+renamed = 'r${count}'
+deleted = 'x${count}'
+typechanged = '~${count}'
 
 [c]
-style = "fg:dim"
-format = '[c( $version)]($style) '
-
-[erlang]
-style = "fg:dim"
-format = '[erl( $version)]($style) '
+symbol = ' '
+style = 'fg:mid'
+format = '[$symbol($version)]($style) '
+version_format = '${major}.${minor}'
 
 [haskell]
-style = "fg:dim"
-format = '[ghc( $version)]($style) '
+symbol = ' '
+style = 'fg:mid'
+format = '[$symbol($version)]($style) '
+version_format = '${major}.${minor}'
+
+[erlang]
+symbol = ' '
+style = 'fg:mid'
+format = '[$symbol($version)]($style) '
 
 [python]
-style = "fg:dim"
-format = '[py( $version)(\($virtualenv\))]($style) '
+symbol = ' '
+style = 'fg:mid'
+format = '[$symbol($version)( · $virtualenv)]($style) '
+version_format = '${major}.${minor}'
 
 [cmd_duration]
-show_milliseconds = true
-style = "fg:dim"
-format = "[took $duration]($style) "
-
-[custom.friday]
-when = 'test "$(date +%u)" = 5'
-format = "[it's friday ](fg:arch)"
-
-[custom.leet]
-when = 'test "$(date +%H%M)" = 1337'
-format = "[leet ](fg:arch)"
+min_time = 2000
+show_milliseconds = false
+style = 'fg:mid'
+format = '[󱎫 $duration]($style) '
 
 [time]
 disabled = false
-time_format = "%R"
-style = "fg:dim"
-format = '[$time]($style)'
+time_format = '%H:%M'
+style = 'fg:mid'
+format = '[󰥔 $time]($style)'
 
 [line_break]
-disabled = true
+disabled = false
+
+[username]
+show_always = false
+style_user = 'fg:mid'
+style_root = 'bold fg:error'
+format = '[$user]($style) '
+
+[hostname]
+ssh_only = true
+style = 'fg:mid'
+format = '[󰒋 $hostname]($style) '
 
 [character]
-disabled = false
-format = " $symbol "
-success_symbol = '[\$](fg:arch)'
-error_symbol = '[\$](fg:error)'
-vimcmd_symbol = '[:](fg:arch)'
-vimcmd_replace_one_symbol = '[r](fg:arch)'
-vimcmd_replace_symbol = '[R](fg:arch)'
+format = '$symbol '
+success_symbol = '[❯](fg:arch)'
+error_symbol = '[❯](fg:error)'
+vimcmd_symbol = '[❮](fg:arch)'
+vimcmd_replace_one_symbol = '[r](fg:error)'
+vimcmd_replace_symbol = '[R](fg:error)'
 vimcmd_visual_symbol = '[v](fg:arch)'
 
 [palettes.diag]
-dim = "#5d6670"
-mid = "#8a929c"
-fg = "#c4c9ce"
-bright = "#f4f6f8"
-arch = "#1793d1"
-error = "#e5484d"
+mid = '#8a929c'
+bright = '#e6e8ea'
+arch = '#1793d1'
+error = '#e5484d'

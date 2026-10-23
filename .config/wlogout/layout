@@ -1,30 +1,30 @@
 {
-    "label" : "lock",
-    "action" : "loginctl lock-session",
-    "text" : "lock",
-    "keybind" : "l"
+  "label": "lock",
+  "action": "loginctl lock-session",
+  "text": "01  LOCK SESSION       [L]",
+  "keybind": "l"
 }
 {
-    "label" : "logout",
-    "action" : "power logout",
-    "text" : "logout",
-    "keybind" : "e"
+  "label": "logout",
+  "action": "power logout",
+  "text": "02  END SESSION        [E]",
+  "keybind": "e"
 }
 {
-    "label" : "suspend",
-    "action" : "systemctl suspend",
-    "text" : "suspend",
-    "keybind" : "u"
+  "label": "suspend",
+  "action": "systemctl suspend",
+  "text": "03  SUSPEND            [U]",
+  "keybind": "u"
 }
 {
-    "label" : "reboot",
-    "action" : "power reboot",
-    "text" : "reboot",
-    "keybind" : "r"
+  "label": "reboot",
+  "action": "power reboot",
+  "text": "04  REBOOT             [R]",
+  "keybind": "r"
 }
 {
-    "label" : "shutdown",
-    "action" : "power poweroff",
-    "text" : "shutdown",
-    "keybind" : "s"
+  "label": "shutdown",
+  "action": "power poweroff",
+  "text": "05  POWER OFF          [S]",
+  "keybind": "s"
 }
