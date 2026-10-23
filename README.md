@@ -112,13 +112,18 @@ Five numbered text actions with visible hotkeys. No logos or power icons.
 
 ![Text-only Diag session console](screenshots/power.png)
 
-### Music and motion captures
+### Music and notifications
 
-The current music/notification screenshot and motion recordings are still to be added. For a complete gallery, the remaining useful captures are:
+rmpc playing alongside the SwayNC panel, with real track artwork, framed playback controls, quick settings and volume. The Waybar rail shows the current track.
+
+![rmpc playing with the Diag notification and music panel](screenshots/notifications.png)
+
+### Motion recordings
+
+Static screenshots show the layout; recordings would help review transitions and playback controls. Useful optional captures:
 
 | Capture | What to show |
 | --- | --- |
-| `notifications.png` | rmpc playing with the notification panel open: track artwork, transport buttons, quick settings and volume. |
 | `demo.gif` or `demo.mp4` | 15–25 seconds opening a second window, changing workspace/focus, opening fuzzel, toggling a quick app, then opening/cancelling the session console. |
 | `music.gif` or `music.mp4` | 8–12 seconds of play/pause, skipping a track and switching player if available. Include a long title or missing artwork. |
 
