@@ -44,7 +44,7 @@
       "format": {
         "months":   "<span color='#f4f6f8'><b>{}</b></span>",
         "days":     "<span color='#c4c9ce'>{}</span>",
-        "weeks":    "<span color='#5d6670'>W{}</span>",
+        "weeks":    "<span color='#8a929c'>W{}</span>",
         "weekdays": "<span color='#8a929c'>{}</span>",
         "today":    "<span color='#1793d1'><b><u>{}</u></b></span>"
       }
@@ -64,9 +64,9 @@
     "format": "{icon} {text}",
     "format-icons": {
       "notification": "<span color='#1793d1'>msg</span>",
-      "none": "<span color='#5d6670'>msg</span>",
+      "none": "<span color='#8a929c'>msg</span>",
       "dnd-notification": "<span color='#1793d1'>dnd</span>",
-      "dnd-none": "<span color='#5d6670'>dnd</span>"
+      "dnd-none": "<span color='#8a929c'>dnd</span>"
     },
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
@@ -94,7 +94,7 @@
   // Bound media width: long titles must not push the clock off smaller screens.
   "mpris": {
     "format": "<span color='#1793d1'>play</span>  {artist} / {title}",
-    "format-paused": "<span color='#5d6670'>hold</span>  {artist} / {title}",
+    "format-paused": "<span color='#8a929c'>hold</span>  {artist} / {title}",
     "artist-len": 10,
     "title-len": 20,
     "max-length": 28,

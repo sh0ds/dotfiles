@@ -19,8 +19,7 @@ end
 ---- LOOK: Diag, flat and exact ----
 ------------------------------------
 
--- Diag: the look of sh0ds.dev (Terminess, key: value lines, double rules,
--- inverted blocks) in Arch Linux colours: black, cool greys and one Arch
+-- Diag: the look of sh0ds.dev (Terminess, ruled rows and precise labels) in Arch Linux colours: black, cool greys and one Arch
 -- blue. Square corners, 2 px borders like the site's rules, small gaps, no
 -- shadows, no blur, no dimming. Motion is small and physical: damped
 -- springs, no bounce (see MOTION). The focused window is the only thing on

@@ -70,14 +70,15 @@ and Plymouth already use the Diag palette. Their existing design is retained.
 
 ## Motion and responsiveness
 
-Hyprland's critically damped spring remains unchanged: mass 1, stiffness 1225,
-damping 70 (`2 * sqrt(1225)`). It has no overshoot. Window travel stays small
-(97% entry scale and 8% workspace shift); exits and focus fades remain short.
+Hyprland uses a critically damped spring: mass 1, stiffness 1600, damping 80
+(`2 * sqrt(1600)`). It has no overshoot. Window travel stays small (98% entry
+scale, 99% exit scale and 4% workspace shift). Layer/exit fades take 80ms;
+focus and entry opacity take 120ms. Popups fade at their native text size.
 No blur, glow, shadows, continuous border animation, or moving bar was added.
-Web app tab transitions honour `prefers-reduced-motion`. GTK controls retain
+Browser/Electron tab transitions honour `prefers-reduced-motion`. GTK controls retain
 toolkit behaviour; this theme does not disable application animations globally.
 
-The bar and power grid have more room at smaller logical resolutions, but
+The bar and text-only session console have more room at smaller logical resolutions, but
 their complete layout must still be checked on the real monitor setup. Very
 narrow screens or an unusually large system tray can still crowd the bar.
 
@@ -102,7 +103,7 @@ In the cloud workspace:
 
 No actual Arch/Hyprland desktop, GPU timing, lock authentication, nchat login,
 MPD session, Firefox profile, Electron app or Qt application was exercised.
-Browser/app updates can change selectors. Steam, Proton PWAs and proprietary
+Browser/app updates can change selectors. Steam, SoundCloud’s PWA and proprietary
 apps control parts of their own UI; GTK/Qt colours do not override all web
 content. The checked-in screenshots predate Diag and are historical, not proof
 of this version's appearance.
@@ -136,3 +137,9 @@ SDDM/Plymouth are unchanged and do not need reinstalling for this pass.
 Rollback is file based: restore the reviewed prior checkout and any replaced
 local configs from the installer backup, then restart only the affected apps.
 No production Pi configuration, service, or website source changed here.
+
+See [the five design passes](diag-iterations.md) for the subsequent typography,
+contrast, native control and motion refinements. The Pi label now uses red `pi`
+and a green colon, as requested. Proton Calendar integration is removed; the
+clock retains a local month/year tooltip. A stale installer-owned Calendar link
+is removed on reinstall, while unrelated user links are preserved.
