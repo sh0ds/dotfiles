@@ -10,7 +10,7 @@ These are the configs I use every day. It runs Hyprland 0.56 with the new Lua co
 
 ### Look
 
-My site looks like the screen a Raspberry Pi 5 shows before Linux boots, and I wanted the desktop to match it, just in Arch colours. So it's black, cool greys and Arch blue (`#1793d1`), VT323 for the bar, terminal, Neovim, launcher, lock and login screen, Terminess where text gets small (Firefox tabs, menus, apps, notification text), and text written as `key: value` with the key in blue. Rules are 2 px, panels get the site's double rule, and anything that's on is an inverted blue block. Windows tile with small gaps, square corners and a 2 px border, and only the focused window gets a blue frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. VT323 is pixel art and only sharp at 25 px, so everything uses 25 px and a fontconfig rule turns off smoothing for it. It has no bold, italics or icons, so bold stays regular and kitty takes the Nerd Font icons from a symbols-only font. Firefox, Obsidian, the login screen and the boot splash get the same look. The lock screen is the site's header: a pixel Arch logo with `host:`, `kern:` and `up:` next to it.
+My site looks like the screen a Raspberry Pi 5 shows before Linux boots, and I wanted the desktop to match it, just in Arch colours. So it's black, cool greys and Arch blue (`#1793d1`), one font everywhere (Terminess, Terminus with Nerd Font icons, readable at every size), and text written as `key: value` with the key in blue. Rules are 2 px, panels get the site's double rule, and anything that's on is an inverted blue block. Windows tile with small gaps, square corners and a 2 px border, and only the focused window gets a blue frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. Firefox, Obsidian, the login screen and the boot splash get the same look. The lock screen is the site's header: a pixel Arch logo with `host:`, `kern:` and `up:` next to it.
 
 Every app I use gets the same colours, GTK and Qt included, and Neovim has its own little `diag` scheme where code is grey, keywords are bright and strings and numbers are blue.
 
@@ -113,7 +113,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 ```
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux neovim \
-  starship eza fzf zoxide fastfetch sl ttf-terminus-nerd ttf-nerd-fonts-symbols-mono xorg-xrandr noto-fonts-emoji \
+  starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
@@ -147,7 +147,7 @@ And change a few things to your liking:
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `qt6ct/qt6ct.conf`.
 - Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
 - For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
-- For the Diag look in Firefox (black toolbars, VT323, the selected tab a blue block, a plain black new tab), close Firefox and run `firefox-style` once. It links `~/.config/firefox` into your profile.
+- For the Diag look in Firefox (black toolbars, Terminess, the selected tab marked in blue, a plain black new tab), close Firefox and run `firefox-style` once. It links `~/.config/firefox` into your profile.
 - For the login screen and boot splash in the same look, run `bash ~/code/dotfiles/system/install-system.sh` (it asks for sudo). Preview the login screen with `sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/diag`.
 - For the calendar, open calendar.proton.me in Firefox and install it as an app the same way. Put its ID from `firefoxpwa profile list` in the `id=` line of `~/.local/bin/calendar`, then reload Hyprland. In Proton Calendar's settings, the Carbon theme fits best.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
@@ -259,7 +259,7 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
 
 ## Credits
 
-The Diag look is mine (from my site), VT323 is by the VT323 Project Authors under the SIL Open Font License (`.local/share/fonts/VT323-OFL.txt`), but the swaync, btop, lazygit, rmpc, aerc, zathura, qt6ct and [yazi](https://github.com/yazi-rs/flavors) theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
+The Diag look is mine (from my site), but the swaync, btop, lazygit, rmpc, aerc, zathura, qt6ct and [yazi](https://github.com/yazi-rs/flavors) theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
 
 ## License
 

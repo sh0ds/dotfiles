@@ -114,9 +114,8 @@
 .tabbrowser-tab:not([selected]):hover .tab-background { background: var(--diag-row) !important; }
 ::selection { background: var(--diag-sel, #0e3d5c) !important; color: #f4f6f8 !important; }
 
-/* Terminess around the page: VT323 is too coarse at tab and menu sizes,
-   Terminus is drawn for them (16 px is one of its native sizes). The page
-   itself keeps its fonts. */
+/* Terminess around the page, like the rest of the desktop (16 px is one
+   of its native sizes). The page itself keeps its fonts. */
 #navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
   font-family: "Terminess Nerd Font", monospace !important;
   font-size: 16px !important;

@@ -12,7 +12,7 @@ repo=$(dirname "$here")
 t=/usr/share/sddm/themes/diag
 sudo install -d "$t"
 sudo install -m 644 "$here"/sddm/diag/{Main.qml,metadata.desktop,theme.conf} "$t/"
-sudo install -m 644 "$repo/.local/share/fonts/VT323-Regular.ttf" "$repo/.config/hypr/arch-logo.png" "$t/"
+sudo install -m 644 "$repo/.config/hypr/arch-logo.png" "$t/"
 sudo install -d /etc/sddm.conf.d
 for old in /etc/sddm.conf.d/*.conf; do
   [ -e "$old" ] || continue

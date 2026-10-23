@@ -1,12 +1,12 @@
 /* ~/.config/waybar/style.css  (Diag)
-   The bar is one diagnostic line, styled like sh0ds.dev: VT323 on black, a
+   The bar is one diagnostic line, styled like sh0ds.dev: Terminess on black, a
    double rule on top, "key: value" readings (keys are coloured in
    config.jsonc). Nothing paints over the rule: modules sit 6 px inside the
    bar, hover only brightens the text, and the only filled blocks (current
    workspace, LIVE, REC) are inset like buttons on a panel. */
 * {
-  font-family: "VT323", "Terminess Nerd Font", monospace;
-  font-size: 25px;
+  font-family: "Terminess Nerd Font", monospace;
+  font-size: 20px;
   min-height: 0;
   border: none;
   border-radius: 0;
@@ -21,7 +21,7 @@ window#waybar {
 }
 
 tooltip { background: #0d1014; border: 1px solid #3f4650; border-left: 2px solid #1793d1; }
-tooltip label { color: #e6e8ea; font-family: "Terminess Nerd Font", monospace; font-size: 16px; }
+tooltip label { color: #e6e8ea; font-size: 16px; }
 
 /* Every module: same inset from the rule and the bottom edge */
 #workspaces, #mpris, #custom-live, #custom-rec, #tray, #custom-stats,

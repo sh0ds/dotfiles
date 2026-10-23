@@ -1,8 +1,8 @@
 /* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, square and still. Additions live in style.css. */
 * {
   all: unset;
-  font-size: 25px;
-  font-family: "VT323", "Terminess Nerd Font";
+  font-size: 18px;
+  font-family: "Terminess Nerd Font";
   transition: none;
 }
 
@@ -75,8 +75,6 @@ trough {
 
 .notification-content .body {
   color: #c4c9ce;
-  /* The text itself in Terminess, readable at this size; titles stay VT323 */
-  font-family: "Terminess Nerd Font";
   font-size: 16px;
 }
 

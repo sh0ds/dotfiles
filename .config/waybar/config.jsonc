@@ -2,7 +2,7 @@
 {
   "layer": "top",
   "position": "bottom",
-  "height": 38,
+  "height": 34,
   "spacing": 0,
 
   // Left: workspaces and what's playing. Middle: LIVE and REC, only while

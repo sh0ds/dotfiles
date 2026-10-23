@@ -41,8 +41,7 @@ format = '[$branch]($style)'
 [git_status]
 style = "fg:mid"
 format = '[$all_status$ahead_behind]($style) '
-# Plain ASCII: VT323 has no arrows, and a glyph from another font sits
-# crooked in the line (that was the "main↑").
+# Plain ASCII, like the rest of the prompt.
 ahead = ">${count}"
 behind = "<${count}"
 diverged = "<${behind_count}>${ahead_count}"

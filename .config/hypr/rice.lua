@@ -19,7 +19,7 @@ end
 ---- LOOK: Diag, flat and exact ----
 ------------------------------------
 
--- Diag: the look of sh0ds.dev (VT323, key: value lines, double rules,
+-- Diag: the look of sh0ds.dev (Terminess, key: value lines, double rules,
 -- inverted blocks) in Arch Linux colours: black, cool greys and one Arch
 -- blue. Square corners, 2 px borders like the site's rules, small gaps, no
 -- shadows, no blur, no dimming. Motion is small and physical: damped
@@ -74,9 +74,9 @@ hl.config({
 			border_inactive = "rgb(2e353d)",
 		},
 		groupbar = {
-			font_family = "VT323",
-			font_size = 25,
-			height = 28,
+			font_family = "Terminess Nerd Font",
+			font_size = 16,
+			height = 22,
 			gradients = false,
 			rounding = 0,
 			text_color = "rgb(f4f6f8)",

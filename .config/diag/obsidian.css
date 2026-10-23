@@ -30,8 +30,7 @@
   --h2-color: #e6e8ea;
   --h3-color: #e6e8ea;
   --hr-color: #3f4650;
-  /* Terminess for reading and the interface (VT323 is too coarse for long
-     text at small sizes; 16 and 18 px are native Terminus sizes) */
+  /* Terminess, like the rest of the desktop; 18 px is a native Terminus size */
   --font-interface-theme: "Terminess Nerd Font", monospace;
   --font-text-theme: "Terminess Nerd Font", monospace;
   --font-monospace-theme: "Terminess Nerd Font Mono", monospace;

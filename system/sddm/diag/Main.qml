@@ -15,12 +15,10 @@ Rectangle {
     readonly property color arch: "#1793d1"
     readonly property color warn: "#ffb000"
     readonly property color error: "#e5484d"
-    // VT323 is only sharp at 25 px and multiples of it, so every text is 25
-    // px (the clock 175) and the layout is measured in that unit too.
-    readonly property int unit: 25
+    // Terminess (ttf-terminus-nerd), 20 px is one of its native sizes
+    readonly property int unit: 20
 
-    FontLoader { id: vt; source: "VT323-Regular.ttf" }
-    readonly property string mono: vt.status === FontLoader.Ready ? vt.font.family : "monospace"
+    readonly property string mono: "Terminess Nerd Font"
 
     property int sessionIndex: sessionModel.lastIndex >= 0 ? sessionModel.lastIndex : 0
     property string state_: ""        // "" | "busy" | "fail"
@@ -145,7 +143,7 @@ Rectangle {
             color: "#ffffff"
             font.family: root.mono
             renderType: Text.NativeRendering
-            font.pixelSize: root.unit * 7
+            font.pixelSize: root.unit * 6
         }
 
         Field {
