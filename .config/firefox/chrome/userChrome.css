@@ -171,3 +171,9 @@ panel, menupopup {
     transition: background-color 120ms linear !important;
   }
 }
+
+/* Selection and keyboard focus are separate states. */
+.tabbrowser-tab:focus-visible .tab-background {
+  outline: 2px solid var(--diag-arch) !important;
+  outline-offset: -2px !important;
+}

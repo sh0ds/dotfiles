@@ -1,7 +1,7 @@
 /**
  * @name Diag
  * @description Black diagnostic UI with restrained Arch-blue accents
- * @version 1.2.0
+ * @version 1.3.0
  * @author sh0ds
  */
 
@@ -67,7 +67,7 @@
 .theme-dark button,
 .theme-dark input,
 .theme-dark textarea,
-.theme-dark [class*="button"] {
+.theme-dark [role="button"] {
   border-radius: 0 !important;
 }
 
@@ -114,7 +114,7 @@
 }
 
 /* Keep keyboard focus visible; do not animate layout or resize content. */
-.theme-dark :is(button, input, textarea):focus-visible {
+.theme-dark :is(button, input, textarea, [role="button"]):focus-visible {
   outline: 2px solid #1793d1 !important;
   outline-offset: 2px;
 }

@@ -32,3 +32,18 @@ Proton Calendar is removed at the user's request: retire its helper, SUPER+Y
 binding, PWA instructions and external clock launch. Retain the native Waybar
 month/year view. Leave the aerc calendar attachment filter intact; it displays
 mail content and is not the removed PWA.
+
+## 3 — Readable instruments
+
+Reimagine the full rice as a display you can read for hours, not a photo with
+attractive but faint secondary text. Fix blue-on-amber text in lazygit and
+amber-on-red errors in Yazi. Use amber explicitly for Yazi's select mode. Make
+Qt inactive text/placeholders and quoted mail readable. Give Neovim diagnostics
+quiet solid surfaces, GTK/SwayNC switches a visible thumb, and keyboard focus
+its own outline in Firefox and Vesktop. Narrow Electron selectors to semantic
+buttons rather than guessing every class containing "button".
+
+Keep code/content typography and semantic colours intact. Native widgets use
+one accent and a small number of surfaces; the panel's top edge becomes a thin
+blue rule, leaving more attention for notification content. The launcher,
+clock, session console and terminal retain the preceding pass's simpler layout.
