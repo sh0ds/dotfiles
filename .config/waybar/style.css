@@ -1,90 +1,66 @@
-/* ~/.config/waybar/style.css  (Catppuccin Mocha, three floating islands)
-   The bar itself is transparent. Each island is a see-through rounded pill, so
-   Hyprland's layer blur (rice.lua, "frosted-layers") frosts the wallpaper behind. */
+/* ~/.config/waybar/style.css  (Amethyst)
+   One flat black line along the bottom edge with a 1 px rule on top.
+   Text only, separated by thin rules; violet marks the one thing that matters. */
 * {
-  font-family: "JetBrainsMono Nerd Font", monospace;
-  font-size: 13px;
+  font-family: "Terminess Nerd Font", monospace;
+  font-size: 14px;
   min-height: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: none;
 }
 
 window#waybar {
-  background: transparent;
-  color: #cdd6f4;
+  background: #000000;
+  color: #b0a6c4;
+  border-top: 1px solid #2b2238;
 }
 
-tooltip { background: rgba(30, 30, 46, 0.95); border: 1px solid #45475a; border-radius: 10px; }
-tooltip label { color: #cdd6f4; }
+tooltip { background: #0b0910; border: 1px solid #2b2238; }
+tooltip label { color: #b0a6c4; }
 
-/* ---- Islands ---- */
-#workspaces, #clock, #tray, #sys, #status, #custom-live, #custom-rec {
-  background: rgba(30, 30, 46, 0.8);
-  border: 1px solid #313244;
-  border-radius: 12px;
-  padding: 0 10px;
-  margin: 0 5px;   /* 10 px between islands, the same as between windows */
-  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-}
-#clock:hover, #sys:hover, #status:hover, #tray:hover { background: rgba(49, 50, 68, 0.85); }
-
-/* Music island: fixed width, so the islands next to it never slide */
-#mpris {
-  background: rgba(30, 30, 46, 0.8);
-  border: 1px solid #313244;
-  border-radius: 12px;
-  padding: 0 12px;
-  margin: 0 5px;
-  color: #a6e3a1;
-  min-width: 250px;
-  transition: color 0.4s ease;
-}
-#mpris.paused { color: #6c7086; }
-
-/* ---- Workspaces: dots ---- */
-#workspaces { padding: 0 4px; }
+/* ---- Workspaces: numbers ---- */
 #workspaces button {
-  color: #a6adc8; font-size: 9px; padding: 0 4px; margin: 6px 1px; min-width: 10px;
-  border-radius: 8px; background: transparent;
-  border: none; box-shadow: none; text-shadow: none;   /* same look under any GTK theme */
-  /* Material 3 decelerate curve, same as Hyprland's md3 in rice.lua */
-  transition: all 0.35s cubic-bezier(0.05, 0.7, 0.1, 1);
+  color: #7f7494;
+  background: transparent;
+  padding: 0 6px;
+  /* 120 ms, same as the window frame in rice.lua, so both land together */
+  transition: background-color 120ms linear, color 120ms linear;
 }
-/* Active workspace: the same blue-to-mauve gradient as the focused window's border */
-#workspaces button.active {
-  min-width: 26px; color: #1e1e2e;
-  background: #cba6f7;
-  background-image: linear-gradient(90deg, #89b4fa, #cba6f7);
-}
-#workspaces button.empty  { color: #45475a; }
-#workspaces button.urgent { color: #f38ba8; }
-#workspaces button:hover  { background: #313244; box-shadow: none; }
+#workspaces button.empty  { color: #5e5270; }
+#workspaces button.active { color: #000000; background: #b06cff; }
+#workspaces button.urgent { color: #e0607a; box-shadow: inset 0 -2px #e0607a; }
+#workspaces button:hover  { background: #0b0910; }
 
-/* ---- Clock ---- */
-#clock { color: #b4befe; font-weight: bold; padding: 0 14px; }
+#mpris { padding: 0 10px; color: #7f7494; }
+#mpris.playing { color: #b0a6c4; }
 
-/* ---- Right: stats drawer and the status pill ---- */
-#custom-stats, #cpu, #temperature, #memory, #custom-gpu, #disk,
-#custom-pi, #pulseaudio, #network, #custom-notification, #custom-power {
+/* ---- Right side: a thin rule between readings ---- */
+#cpu, #memory, #temperature, #custom-gpu, #custom-pi, #pulseaudio,
+#network, #custom-notification, #clock, #custom-power {
   padding: 0 7px;
   background: transparent;
 }
-#custom-pi.up   { color: #a6e3a1; }
-#custom-pi.down { color: #f38ba8; }
-#custom-stats   { color: #cba6f7; font-weight: bold; }
-#cpu, #temperature, #memory, #custom-gpu, #disk { color: #a6adc8; }
-#temperature.critical { color: #f38ba8; }
-#pulseaudio     { color: #89b4fa; }
-#pulseaudio.muted, #network.disconnected { color: #6c7086; }
-#network        { color: #94e2d5; }
-#custom-notification { color: #f9e2af; }
-#custom-power   { color: #f38ba8; }
-#pulseaudio, #network, #custom-notification, #custom-power { transition: color 0.2s ease; }
-#custom-power:hover, #custom-notification:hover, #pulseaudio:hover { color: #cdd6f4; }
+#memory, #temperature, #custom-gpu, #custom-pi, #pulseaudio,
+#network, #custom-notification, #clock, #custom-power {
+  border-left: 1px solid #2b2238;
+}
+#tray { padding: 0 8px; }
 
-/* ---- Only while active ---- */
-/* REC pill (rec-status) */
-#custom-rec.rec  { color: #f38ba8; border-color: #f38ba8; font-weight: bold; }
-#custom-rec.idle { padding: 0; margin: 0; border: none; background: transparent; }
-/* LIVE pill (live-status): red and slowly pulsing while sharing the screen */
-@keyframes live-pulse { from { border-color: #f38ba8; } to { border-color: #45475a; } }
-#custom-live.live { color: #f38ba8; font-weight: bold; animation: live-pulse 1.2s ease-in-out infinite alternate; }
-#custom-live.idle { padding: 0; margin: 0; border: none; background: transparent; }
+#custom-pi.up        { color: #b06cff; }
+#custom-pi.down      { color: #e0607a; }
+#temperature.critical { color: #e0607a; }
+#pulseaudio.muted, #network.disconnected { color: #5e5270; }
+#clock               { color: #ece4fb; }
+#custom-power        { color: #7f7494; padding-right: 10px; }
+#custom-power:hover, #pulseaudio:hover, #custom-notification:hover, #clock:hover { background: #0b0910; color: #ece4fb; }
+
+/* ---- Only while active: inverted, no animation ---- */
+#custom-live.live, #custom-rec.rec {
+  color: #000000;
+  background: #b06cff;
+  padding: 0 8px;
+  font-weight: bold;
+}
+#custom-live.idle, #custom-rec.idle { padding: 0; margin: 0; }

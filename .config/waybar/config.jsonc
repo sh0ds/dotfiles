@@ -1,50 +1,31 @@
-// ~/.config/waybar/config.jsonc
+// ~/.config/waybar/config.jsonc  (Amethyst: one line of text along the bottom)
 {
   "layer": "top",
-  "position": "top",
-  "height": 32,
-  "margin-top": 8,
-  "margin-left": 10,      // same as Hyprland gaps_out: pills line up with window edges
-  "margin-right": 10,
-  "spacing": 0,          // islands space themselves (style.css margins)
+  "position": "bottom",
+  "height": 24,
+  "spacing": 0,
 
-  // Three islands, nothing more: workspaces and music on the left, the clock in
-  // the middle (LIVE and REC appear next to it only while active), and one
-  // status pill on the right. The system stats hide behind "stats" until hovered.
+  // Left: workspaces and what's playing. Middle: LIVE and REC, only while
+  // active. Right: plain readings, then the clock and the power button.
+  // No icons, no pills: every module is a word and a number.
   "modules-left": ["hyprland/workspaces", "mpris"],
-  "modules-center": ["custom/live", "custom/rec", "clock"],
-  "modules-right": ["tray", "group/sys", "group/status"],
+  "modules-center": ["custom/live", "custom/rec"],
+  "modules-right": ["tray", "cpu", "memory", "temperature", "custom/gpu", "custom/pi", "pulseaudio", "network", "custom/notification", "clock", "custom/power"],
 
-  // Dots instead of numbers. The active workspace is a mauve pill that
-  // stretches smoothly to its new place (transition in style.css); ones with
-  // windows are solid dots, empty ones faint rings.
+  // Numbers. The current one is a violet block, empty ones are dim, one that
+  // wants attention is underlined red.
   "hyprland/workspaces": {
-    "format": "{icon}",
-    "format-icons": { "active": "", "default": "●", "persistent": "○", "empty": "○" },
+    "format": "{name}",
     "persistent-workspaces": { "*": 5 },   // 1-5 always visible, even when empty
     "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
   },
 
-  // This PC's stats: shows "stats", hover and CPU, temperature, RAM, GPU and
-  // disk slide out next to it. Click any of them for btop.
-  "group/sys": {
-    "orientation": "inherit",
-    "drawer": { "transition-duration": 300, "children-class": "sys-child", "transition-left-to-right": false },
-    "modules": ["custom/stats", "cpu", "temperature", "memory", "custom/gpu", "disk"]
-  },
-  "custom/stats": { "format": "stats", "tooltip": false, "on-click": "~/.local/bin/sysmon" },
-  // Pi, volume, network, bell and power share one pill, icons only.
-  "group/status": {
-    "orientation": "inherit",
-    "modules": ["custom/pi", "pulseaudio", "network", "custom/notification", "custom/power"]
-  },
-
   "clock": {
-    "format": "  {:%a %d %b  %H:%M}",
+    "format": "{:%Y-%m-%d %H:%M}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
     "on-click": "~/.local/bin/calendar",
-    // Hover: Catppuccin month calendar with week numbers. Scroll changes month,
+    // Hover: month calendar with week numbers. Scroll changes month,
     // right-click switches to the whole year, click opens Proton Calendar.
     "calendar": {
       "mode": "month",
@@ -53,11 +34,11 @@
       "first-day-of-week": 1,
       "on-scroll": 1,
       "format": {
-        "months":   "<span color='#cba6f7'><b>{}</b></span>",
-        "days":     "<span color='#cdd6f4'>{}</span>",
-        "weeks":    "<span color='#6c7086'>W{}</span>",
-        "weekdays": "<span color='#89b4fa'><b>{}</b></span>",
-        "today":    "<span color='#f38ba8'><b><u>{}</u></b></span>"
+        "months":   "<span color='#ece4fb'><b>{}</b></span>",
+        "days":     "<span color='#b0a6c4'>{}</span>",
+        "weeks":    "<span color='#5e5270'>W{}</span>",
+        "weekdays": "<span color='#7f7494'>{}</span>",
+        "today":    "<span color='#b06cff'><b><u>{}</u></b></span>"
       }
     },
     "actions": {
@@ -67,23 +48,23 @@
     }
   },
 
-  // Bell with unread count from swaync; click opens the notification centre.
+  // Unread count from swaync; click opens the notification centre.
   "custom/notification": {
     "exec": "swaync-client -swb",
     "return-type": "json",
-    "format": "{icon}",
+    "format": "{icon} {text}",
     "format-icons": {
-      "notification": "<span foreground='#f38ba8'><sup></sup></span>",
-      "none": "",
-      "dnd-notification": "<span foreground='#f38ba8'><sup></sup></span>",
-      "dnd-none": ""
+      "notification": "<span foreground='#b06cff'>msg</span>",
+      "none": "msg",
+      "dnd-notification": "<span foreground='#b06cff'>dnd</span>",
+      "dnd-none": "dnd"
     },
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
   },
 
-  // Raspberry Pi icon: green when the Pi answers a ping, red when not. Click to ssh in.
+  // "pi up" in violet when the Pi answers a ping, "pi down" when not. Click to ssh in.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
     "return-type": "json",
@@ -91,14 +72,14 @@
     "on-click": "kitty -e ssh pi"
   },
 
-  "cpu": { "format": "  {usage}%", "interval": 5, "on-click": "~/.local/bin/sysmon" },
-  "memory": { "format": "󰍛  {percentage}%", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB", "on-click": "~/.local/bin/sysmon" },
+  "cpu": { "format": "cpu {usage:>2}%", "interval": 5, "on-click": "~/.local/bin/sysmon" },
+  "memory": { "format": "mem {used:0.1f}G", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB", "on-click": "~/.local/bin/sysmon" },
   // CPU package temperature. coretemp is Intel's sensor; on AMD use k10temp.
   "temperature": {
     "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
     "input-filename": "temp1_input",
     "critical-threshold": 85,
-    "format": "  {temperatureC}°",
+    "format": "{temperatureC:>2}°C",
     "interval": 5,
     "on-click": "~/.local/bin/sysmon"
   },
@@ -108,45 +89,45 @@
     "interval": 5,
     "on-click": "~/.local/bin/sysmon"
   },
-  "disk": { "path": "/", "format": "  {percentage_used}%", "interval": 60, "tooltip-format": "{used} of {total} used on /", "on-click": "~/.local/bin/sysmon" },
-  // Icons only; hover for the numbers. The volume keys show the swayosd popup.
+  // The volume keys show the swayosd popup.
   "pulseaudio": {
-    "format": "{icon}",
-    "format-muted": "",
-    "format-icons": { "default": ["", "", ""] },
-    "tooltip-format": "Volume {volume}%",
+    "format": "vol {volume:>3}",
+    "format-muted": "vol mute",
+    "tooltip": false,
     "on-click": "pavucontrol",
     "on-click-right": "swayosd-client --output-volume mute-toggle"
   },
   "network": {
-    "format-wifi": "",
-    "format-ethernet": "󰈀",
-    "format-disconnected": "󰌙",
+    "format-wifi": "wifi {signalStrength}% ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-ethernet": "eth ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "interval": 2,
+    "format-disconnected": "net down",
     "tooltip-format": "{ifname} {ipaddr}/{cidr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
     // Click: Wi-Fi picker in fuzzel. Right-click: nmtui for everything else.
     "on-click": "~/.local/bin/wifi",
     "on-click-right": "~/.local/bin/wifi settings"
   },
-  "tray": { "spacing": 8 },
+  "tray": { "spacing": 6, "icon-size": 14 },
 
-  // Now playing (SoundCloud app, Firefox, mpv). Fixed length so the pills don't slide.
+  // Now playing (SoundCloud app, Firefox, mpv, mpd). Fixed length so nothing shifts.
   "mpris": {
-    "format": "{status_icon} {title}",
+    "format": "{artist} - {title}",
+    "format-paused": "{artist} - {title} (paused)",
+    "artist-len": 20,
     "title-len": 30,
-    "status-icons": { "playing": "▶", "paused": "⏸" },
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous"
   },
-  // Red LIVE pill while the screen is shared (Discord, OBS, Firefox); also
-  // turns on do-not-disturb for the duration. Hidden otherwise.
+  // LIVE while the screen is shared (Discord, OBS, Firefox); also turns on
+  // do-not-disturb for the duration. Hidden otherwise.
   "custom/live": {
     "exec": "~/.local/bin/live-status",
     "return-type": "json",
     "restart-interval": 5
   },
-  // Red REC pill while rec-toggle (SUPER+SHIFT+R) is recording; hidden otherwise.
+  // REC while rec-toggle (SUPER+SHIFT+R) is recording; hidden otherwise.
   "custom/rec": {
     "exec": "~/.local/bin/rec-status",
     "return-type": "json",
@@ -154,7 +135,7 @@
     "on-click": "~/.local/bin/rec-toggle"
   },
   "custom/power": {
-    "format": "⏻",
+    "format": "off",
     "on-click": "wlogout -b 5",
     "tooltip": false
   }

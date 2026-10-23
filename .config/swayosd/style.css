@@ -1,30 +1,29 @@
-/* swayosd: volume popup in Catppuccin Mocha.
-   Same frosted pill as the waybar islands; the bar fills blue to mauve
-   like the window border. Class names from SwayOSD's own style.scss. */
+/* swayosd: volume popup in Amethyst. A flat black box with a 1 px plum
+   rule and a violet bar, no rounding. Class names from SwayOSD's style.scss. */
 window#osd {
-  border-radius: 999px;
-  border: 1px solid rgba(203, 166, 247, 0.35);   /* mauve edge */
-  background: rgba(30, 30, 46, 0.85);            /* base */
+  border-radius: 0;
+  border: 1px solid #2b2238;
+  background: #000000;
 }
 
 window#osd #container {
-  margin: 14px 20px;
+  margin: 10px 14px;
 }
 
 window#osd image,
 window#osd label {
-  color: #cdd6f4;                                /* text */
+  color: #b0a6c4;
 }
 
 window#osd progressbar:disabled,
 window#osd image:disabled {
-  opacity: 0.45;                                 /* muted */
+  opacity: 0.45;
 }
 
 window#osd progressbar,
 window#osd segmentedprogress {
-  min-height: 8px;
-  border-radius: 999px;
+  min-height: 6px;
+  border-radius: 0;
   background: transparent;
   border: none;
 }
@@ -32,21 +31,21 @@ window#osd segmentedprogress {
 window#osd trough,
 window#osd segment {
   min-height: inherit;
-  border-radius: inherit;
+  border-radius: 0;
   border: none;
-  background: #45475a;                           /* surface1 */
+  background: #2b2238;
 }
 
 window#osd progress,
 window#osd segment.active {
   min-height: inherit;
-  border-radius: inherit;
+  border-radius: 0;
   border: none;
-  background-image: linear-gradient(to right, #89b4fa, #cba6f7);
+  background: #b06cff;
 }
 
 window#osd segment {
-  margin-left: 8px;
+  margin-left: 4px;
 }
 window#osd segment:first-child {
   margin-left: 0;

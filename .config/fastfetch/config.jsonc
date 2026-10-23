@@ -3,15 +3,14 @@
   "logo": {
     "type": "file",
     "source": "~/.config/fastfetch/sh0ds.txt",
-    // $1-$5 in sh0ds.txt: one colour per letter, blue to mauve like the window border.
-    // $6: the shadow edges (Catppuccin surface2).
+    // $1-$5 in sh0ds.txt: the letters, all violet. $6: the shadow edges, plum.
     "color": {
-      "1": "#89b4fa", "2": "#9eaefa", "3": "#b4befe", "4": "#c0aef9", "5": "#cba6f7",
-      "6": "#585b70"
+      "1": "#b06cff", "2": "#b06cff", "3": "#b06cff", "4": "#b06cff", "5": "#b06cff",
+      "6": "#2b2238"
     },
     "padding": { "top": 3, "left": 1, "right": 3 }
   },
-  "display": { "separator": "  ", "color": { "keys": "#cba6f7", "title": "#89b4fa" } },
+  "display": { "separator": "  ", "color": { "keys": "#7f7494", "title": "#ece4fb" } },
   "modules": [
     "title", "separator", "os", "kernel", "wm", "shell", "terminal", "packages", "uptime",
     { "type": "command", "key": "GHC", "text": "ghc --numeric-version" },

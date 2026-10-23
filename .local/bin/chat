@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# chat: show/hide WhatsApp (SUPER+I). Runs nchat, a terminal WhatsApp and
-# Telegram client, in a kitty. Link your phone once with: nchat --setup
-exec scratch chat chat kitty --class chat -e nchat
+# chat: WhatsApp (SUPER+I). Runs nchat, a terminal WhatsApp and Telegram
+# client, in a kitty. Link your phone once with: nchat --setup
+exec app '^chat$' kitty --class chat -e nchat

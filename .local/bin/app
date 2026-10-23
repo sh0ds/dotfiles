@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
-# app: jump to an app's window if it's open, otherwise start it.
+# app: one key per app. Jump to its window wherever it is, start it tiled on
+# the current workspace if it isn't open, and jump back to where you were if
+# you're already on it.
 # Usage: app CLASS-REGEX COMMAND...   e.g.  app '(?i)obsidian' obsidian
-# Used by notes (Obsidian) and djvm (the Windows VM's window).
+# Used by notes, djvm, chat, inbox, music, calendar, sysmon and
+# SoundCloud (SUPER+S in rice.lua).
 set -euo pipefail
 re=$1
 shift
+active=$(hyprctl activewindow -j | jq -r '.class // empty')
+if [ -n "$active" ] && jq -en --arg c "$active" --arg re "$re" '$c | test($re)' >/dev/null; then
+  exec hyprctl dispatch 'hl.dsp.focus({ last = true })'
+fi
 addr=$(hyprctl clients -j | jq -r --arg re "$re" '[.[] | select(.class | test($re))][0].address // empty')
 if [ -n "$addr" ]; then
   exec hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })"

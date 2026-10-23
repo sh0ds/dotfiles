@@ -1,76 +1,73 @@
 # dotfiles
 
-My Arch + Hyprland setup, themed in Catppuccin Mocha.
+My Arch + Hyprland desktop in Amethyst, a flat black-and-violet look I made for it.
 
 ![desktop](screenshots/desktop.png)
 
-![demo](screenshots/demo.gif)
-
 ## Description
 
-The configs I use on my desktop. It runs Hyprland 0.56 with the new Lua config. `hyprland.lua` is the base config and `rice.lua` has all the theming, animations, window rules and extra keybinds on top of it. If something in `rice.lua` breaks, the base config keeps working.
+These are the configs I use every day. It runs Hyprland 0.56 with the new Lua config: `hyprland.lua` is a plain base config and `rice.lua` has the look, the window rules and my extra keybinds on top. If something in `rice.lua` breaks, the base still works.
 
 ### Look
 
-Only the focused window gets the blue-to-mauve border and a soft glow, the rest are slightly dimmed. If there's just one window on a workspace it fills the whole screen without gaps. Windows open with a small pop and settle into place. Bars, menus and notifications sit on frosted glass, and every app I could find a Catppuccin theme for uses it, GTK and Qt apps included, so nothing flashes white.
+I wanted it to look like the machine underneath, not like a theme. So it's black, greys with a bit of plum in them and one violet, and that's it. Windows tile with small gaps, square corners and a 1 px border, and only the focused window gets a violet frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. Everything is set in Terminess, a sharp bitmap-style font.
 
-### Pop-ups
+Every app I use gets the same colours, GTK and Qt included, and Neovim has its own little `amethyst` scheme where code is grey, keywords are bright and strings and numbers are violet.
 
-The things I need for a few seconds and then want gone slide down from the top of the screen, one at a time, and slide back up when I press the key again:
+![demo](screenshots/demo.gif)
 
-- `SUPER+Z` terminal
+### Bar
+
+One line of plain text along the bottom, no icons. Workspace numbers (the current one as a violet block) and what's playing on the left, LIVE or REC in the middle while I'm sharing or recording, and on the right plain readings like `cpu 07%`, `mem 3.1G`, `52°C`, `pi up`, `vol  64`, network throughput and an ISO date and time. Click the stats for btop, the clock for my calendar and `off` for the power menu.
+
+### Quick apps
+
+The things I need for a few seconds are normal tiled windows with one key each. The key jumps to the app wherever it is, starts it next to what I'm doing if it isn't open, and jumps back to where I was if I'm already on it. Mail starts at login on workspace 10, so its notifications work from the start.
+
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
 - `SUPER+Y` Proton Calendar (also a web app, or click the clock)
 - `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
 
-### Bar
+![quick apps](screenshots/popups.png)
 
-waybar with three parts:
-
-- **Left:** workspace dots and the current song or video (click to pause, scroll to skip)
-- **Middle:** the clock (hover for the month, click for Proton Calendar), plus a red LIVE pill when I'm sharing my screen and REC when I'm recording
-- **Right:** tray, a "stats" pill (hover for CPU, temperature, RAM, GPU and disk, click for btop), and one pill for my Raspberry Pi (green when it's online), volume, network (click for a Wi-Fi menu), notifications and a power button
-
-### Everything else
+### What's in it
 
 Desktop:
 
-- **swaync** for notifications, `SUPER+N` opens the panel. **swayosd** shows a little pill when you change the volume.
-- **hyprlock** is the lock screen, with the cover and title of whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
-- **wlogout** is the power menu (lock, log out, suspend, reboot, shut down).
-- **awww** for wallpapers. `SUPER+W` grows a random one from `~/Pictures/walls` out of the mouse.
-- **fuzzel** as the launcher. It also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
-- **udiskie** mounts USB sticks as soon as you plug them in. Click Browse in the notification to open it, `SUPER+SHIFT+U` unmounts them all.
+- **swaync** for notifications (`SUPER+N` opens the panel), **swayosd** for the volume bar, **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
+- **hyprlock** locks the screen: black, `user@host`, kernel and uptime, the clock, a `password:` prompt and whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
+- **wlogout** is the power menu, **udiskie** mounts USB sticks when you plug them in (`SUPER+SHIFT+U` unmounts them all), and **awww** keeps the wallpaper black (`SUPER+W` puts up a random picture from `~/Pictures/walls` if I want one).
 
 Terminal:
 
-- **kitty + tmux**. kitty has a cursor trail and sends a notification when a long command finishes while you're looking elsewhere. The tmux prefix is `Ctrl+A`.
-- **bash** with [starship](https://starship.rs), eza instead of ls, fzf on `Ctrl+R` and zoxide (`z`). New terminals greet you with fastfetch.
-- **Neovim** with LazyVim, on the same see-through background as the terminal. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
-- **yazi** for files (`SUPER+E`, or `y` and the shell follows you to wherever you quit it), **lazygit** (`lg`), **bat** instead of cat and **tldr** for short examples instead of man pages.
+- **kitty + tmux**, both in the same colours. kitty sends a notification when a long command finishes while I'm looking elsewhere. The tmux prefix is `Ctrl+A`.
+- **bash** with [starship](https://starship.rs) as one plain line, eza instead of ls, fzf on `Ctrl+R` and zoxide (`z`). New terminals greet you with fastfetch.
+- **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
+- **yazi** for files (`SUPER+E`, or `y` and the shell follows you to wherever you quit it), **lazygit** (`lg`), **bat** instead of cat and **tldr** instead of man pages for quick examples.
+
+![neovim](screenshots/nvim.png)
 
 Apps:
 
-- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays songs at their own sample rate instead of resampling everything to 48 kHz, and keeps the sound card awake so there's no pop when a song starts. [Easy Effects](https://github.com/wwmm/easyeffects) corrects my Corsair Virtuoso XT to the Harman curve and keeps it loud without clipping, setup in [docs/audio.md](docs/audio.md).
+- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays every song at its own sample rate and [Easy Effects](https://github.com/wwmm/easyeffects) corrects my Corsair Virtuoso XT to the Harman curve without clipping, setup in [docs/audio.md](docs/audio.md).
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
-- **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7. Songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`, and USB sticks for exporting can be handed to it from the viewer. Setup in [docs/dj-vm.md](docs/dj-vm.md).
-- **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. It starts hidden at login, new mail pops up as a notification and clicking it slides aerc in. HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
-- **Proton Pass** for passwords, floating in the middle on `SUPER+SHIFT+P`.
-- **Old School RuneScape** in [RuneLite](https://runelite.net), started from the [Bolt](https://bolt.adamcake.com) launcher so Jagex accounts work on Linux. `SUPER+R` opens it, or jumps back to it if it's already running. The screen stays awake while it has focus, and RuneLite's idle notifications show up like any other. My RuneLite profile (see Installing) brings the plugins, the Mocha colours and a Mocha skin for the game's interface that I made from the original one.
+- **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7, and songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`. Setup in [docs/dj-vm.md](docs/dj-vm.md).
+- **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. New mail shows up as a notification, HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
+- **Obsidian** for notes on `SUPER+O`, **Proton Pass** for passwords on `SUPER+SHIFT+P`.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
 
 Keeping Arch healthy:
 
-- A notification shows up when 20 or more updates are waiting, with a button that runs the update (AUR packages included). It tells you when one needs a reboot too.
+- A notification shows up when 20 or more updates are waiting, with a button that runs the update (AUR included). It tells you when one needs a reboot too.
 - snapper takes a snapshot before and after every update, so a broken one can be rolled back. Weekly timers clear out old packages, trim the SSD and refresh the mirror list.
 
 ### Scripts
 
-Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a short comment at the top explaining what it does.
+Small scripts in `.local/bin` for things I kept needing. Each one has a short comment at the top.
 
-- `scratch`: the drop-down logic behind `dropterm`, `chat`, `inbox`, `calendar`, `music` and `sysmon`
-- `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click the icon for nmtui
+- `app`: the jump, start or jump back logic behind `chat`, `inbox`, `calendar`, `music`, `sysmon`, `notes` and SoundCloud
+- `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click `wifi` in the bar for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `emoji`: the emoji you pick gets typed and copied
@@ -80,29 +77,30 @@ Small scripts in `.local/bin` I wrote for things I kept needing. Each one has a 
 - `rec-toggle`: record a part of the screen to `~/Videos`
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
-- `chat-notify`: WhatsApp messages as notifications, click one and WhatsApp slides in
+- `chat-notify`: WhatsApp messages as notifications, click one and it jumps to WhatsApp
 - `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `app`: jumps to an app if it's open, otherwise starts it
+- `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
-- `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down (the power menu runs that before logging out, rebooting or shutting down)
+- `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
-- `osrs`: focuses RuneLite if it's open, otherwise starts Bolt
-- `runelite-skin`: builds the Mocha skin for OSRS from the RuneLITE resource pack
-- `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`, `np-art`)
+- `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`)
 
 ## Screenshots
 
-The music player and the notification panel:
+The launcher with the calculator:
 
-![popups](screenshots/popups.png)
+![launcher](screenshots/launcher.png)
 
-The power menu:
+The notification panel:
+
+![notifications](screenshots/notifications.png)
+
+The power menu and the lock screen:
 
 ![power menu](screenshots/power.png)
-
-The lock screen:
 
 ![lock screen](screenshots/lock.png)
 
@@ -115,14 +113,14 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 ```
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux neovim \
-  starship eza fzf zoxide fastfetch sl ttf-jetbrains-mono-nerd noto-fonts-emoji \
+  starship eza fzf zoxide fastfetch sl ttf-terminus-nerd noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
   qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
-  ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector jre17-openjdk python-pillow kdeconnect
-yay -S wlogout catppuccin-cursors-mocha nchat proton-pass-bin bolt-launcher
+  ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector kdeconnect
+yay -S wlogout nchat proton-pass-bin
 ```
 
 ### Installing
@@ -134,10 +132,10 @@ git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
 bash ~/code/dotfiles/install-dotfiles.sh
 ```
 
-Then run these once. They set the default apps, load bat's theme, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network), with the ports KDE Connect needs to find your phone:
+Then run these once. They set the default apps, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network), with the ports KDE Connect needs to find your phone:
 
 ```
-default-apps && bat cache --build
+default-apps
 sudo usermod -aG gamemode $USER
 sudo systemctl enable --now paccache.timer fstrim.timer reflector.timer
 sudo ufw default deny incoming && sudo ufw enable && sudo systemctl enable ufw
@@ -149,7 +147,7 @@ And change a few things to your liking:
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `qt6ct/qt6ct.conf`.
 - Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
 - For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
-- For the calendar, open calendar.proton.me in Firefox and install it as an app the same way. Put its ID from `firefoxpwa profile list` in the `id=` line of `~/.local/bin/calendar`, then reload Hyprland. In Proton Calendar's settings, the Carbon theme is the closest to Mocha.
+- For the calendar, open calendar.proton.me in Firefox and install it as an app the same way. Put its ID from `firefoxpwa profile list` in the `id=` line of `~/.local/bin/calendar`, then reload Hyprland. In Proton Calendar's settings, the Carbon theme fits best.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
   ```
@@ -173,8 +171,7 @@ And change a few things to your liking:
   ```
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
-- For OSRS, follow [docs/runelite.md](docs/runelite.md): it's five minutes of clicking to import my RuneLite profile and switch the game to the layout that fits its window.
-- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, install the Catppuccin theme under Settings > Appearance > Themes; its dark mode is Mocha.
+- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, pick the dark base theme under Settings > Appearance and set the accent colour to `#b06cff`.
 - For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
@@ -191,7 +188,7 @@ And change a few things to your liking:
   The IONOS folder names in `accounts.conf` are the German ones. If sending says it can't save to "Gesendete Objekte", open the folder list in aerc and change `copy-to` to what your Sent folder is called.
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
-- The Pi pill and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
+- The `pi up` reading and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
 
 ### Executing program
 
@@ -210,16 +207,13 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+Space` | Launcher |
 | `SUPER+B` | Firefox |
 | `SUPER+E` | Files |
-| `SUPER+Z` | Drop-down terminal |
 | `SUPER+O` | Notes (Obsidian, opens or jumps to it) |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
 | `SUPER+Y` | Calendar |
 | `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
 | `CTRL+SHIFT+Escape` | btop |
-| `SUPER+CTRL+S` | Send a window to the SoundCloud scratchpad |
 | `SUPER+SHIFT+M` | Windows DJ VM |
 | `SUPER+SHIFT+P` | Proton Pass |
-| `SUPER+R` | Old School RuneScape |
 | `SUPER+A` | My tmux session for the site |
 | `ALT+Tab` | Switch windows |
 | `SUPER+C` | Calculator |
@@ -251,7 +245,7 @@ Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move 
 This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours.
 
 - A keybind for one of the scripts does nothing? Run the install script again, new scripts only get linked into `~/.local/bin` when it runs.
-- `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't slide in, `pkill -x rmpc` and press `SUPER+U` again.
+- `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't come down, `pkill -x rmpc` and press `SUPER+U` again.
 - WhatsApp notifications don't show up? Make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits.
 - KDE Connect can't find your phone? The firewall blocks it, let it through with `sudo ufw allow 1714:1764/udp && sudo ufw allow 1714:1764/tcp`.
 - Steam Remote Play or downloads from another PC on the network can't find this one? The firewall blocks them, allow Steam's ports with `sudo ufw allow 27031:27036/udp && sudo ufw allow 27036:27037/tcp`.
@@ -264,7 +258,7 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
 
 ## Credits
 
-Colours by [Catppuccin](https://github.com/catppuccin) and its ports for swaync, btop, bat, lazygit, mpv, imv, zathura, qt5ct and [yazi](https://github.com/yazi-rs/flavors). The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
+The Amethyst colours are mine, but the swaync, btop, lazygit, rmpc, aerc, zathura, qt6ct and [yazi](https://github.com/yazi-rs/flavors) theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
 
 ## License
 

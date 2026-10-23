@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# wifi: Wi-Fi picker in fuzzel (click the network icon in the bar).
+# wifi: Wi-Fi picker in fuzzel (click "wifi" in the bar).
 # Strongest networks first, the one you're on is marked. Pick one to connect;
 # new secured networks ask for the password. "wifi settings" (right-click)
-# opens nmtui in Catppuccin colours for everything else (VPN, ethernet, DNS).
+# opens nmtui in Amethyst colours for everything else (VPN, ethernet, DNS).
 set -euo pipefail
 
 settings() {
-  # nmtui's colours, mapped onto kitty's Mocha palette (blue = blue, black = surface).
-  NEWT_COLORS='root=white,black border=blue,black window=white,black shadow=black,black
-title=magenta,black button=black,blue actbutton=black,magenta compactbutton=white,black
+  # nmtui's colours, mapped onto kitty's 16 colours (magenta = violet, black = panel).
+  NEWT_COLORS='root=white,black border=magenta,black window=white,black shadow=black,black
+title=magenta,black button=black,white actbutton=black,magenta compactbutton=white,black
 checkbox=white,black actcheckbox=black,magenta entry=white,black disentry=gray,black
-label=white,black listbox=white,black actlistbox=black,blue sellistbox=magenta,black
-actsellistbox=black,magenta textbox=white,black acttextbox=black,blue helpline=black,black
-roottext=white,black emptyscale=,black fullscale=,blue' \
+label=white,black listbox=white,black actlistbox=black,magenta sellistbox=magenta,black
+actsellistbox=black,magenta textbox=white,black acttextbox=black,magenta helpline=black,black
+roottext=white,black emptyscale=,black fullscale=,magenta' \
     exec kitty --class nmtui -e nmtui
 }
 [ "${1:-}" = settings ] && settings

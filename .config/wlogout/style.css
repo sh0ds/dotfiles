@@ -1,31 +1,31 @@
-/* Catppuccin Mocha, mauve accent. Based on github.com/catppuccin/wlogout (MIT),
-   rounded to the rice grid: 12 px corners, 10 px gaps. */
+/* Amethyst power menu: five flat squares on black, the hovered one framed
+   in violet. Icons are recoloured to the same plum grey. */
 
 * {
   background-image: none;
   box-shadow: none;
-  font-family: "JetBrainsMono Nerd Font";
+  font-family: "Terminess Nerd Font";
 }
 
 window {
-  background-color: rgba(17, 17, 27, 0.55);   /* crust; Hyprland blurs behind it */
+  background-color: rgba(0, 0, 0, 0.92);
 }
 
 button {
-  margin: 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(203, 166, 247, 0.25);
-  color: #cdd6f4;
-  background-color: rgba(24, 24, 37, 0.85);   /* mantle */
+  margin: 4px;
+  border-radius: 0;
+  border: 1px solid #2b2238;
+  color: #b0a6c4;
+  background-color: #000000;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 22%;
-  transition: background-color 0.2s, border-color 0.2s;
+  background-size: 18%;
 }
 
 button:focus, button:active, button:hover {
-  background-color: rgba(49, 50, 68, 0.95);   /* surface0 */
-  border-color: #cba6f7;
+  background-color: #0b0910;
+  border-color: #b06cff;
+  color: #ece4fb;
   outline-style: none;
 }
 

@@ -1,9 +1,3 @@
--- Catppuccin with no background of its own, so Neovim sits on kitty's frosted
--- glass like every other terminal app instead of a solid block.
-return {
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    opts = { transparent_background = true },
-  },
-}
+-- The colours are in colors/amethyst.lua (set as LazyVim's colorscheme in
+-- config/lazy.lua). No background of its own, so Neovim sits on kitty's black.
+return {}

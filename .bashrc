@@ -32,6 +32,8 @@ alias qa='qemu-aarch64'                                        # run ARM64 binar
 alias lg='lazygit'                                              # git TUI (SPACE g g in Neovim)
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
+# fzf in Amethyst: violet matches and pointer, plum selection, square border
+export FZF_DEFAULT_OPTS="--border=sharp --color=fg:#b0a6c4,bg:-1,hl:#b06cff,fg+:#ece4fb,bg+:#1a1424,hl+:#c99bff,info:#5e5270,prompt:#7f7494,pointer:#b06cff,marker:#b06cff,spinner:#b06cff,header:#7f7494,border:#2b2238,gutter:-1"
 
 # y: yazi, and when you quit it the shell stays in the folder you were in
 y() {

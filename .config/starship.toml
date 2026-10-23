@@ -1,163 +1,99 @@
-# Prompt: Catppuccin powerline. The language segments are the site's languages
-# (C, Haskell, Erlang) plus Python. kitty sends the "command finished" notifications.
+# Prompt: Amethyst, one plain line. Path in violet, git and languages in
+# grey, the time at the end. No powerline blocks, no icons. The language
+# segments are the site's languages (C, Haskell, Erlang) plus Python.
+# kitty sends the "command finished" notifications.
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[](red)\
-$os\
 $username\
-[](bg:peach fg:red)\
 $directory\
-[](bg:yellow fg:peach)\
 $git_branch\
 $git_status\
-[](fg:yellow bg:green)\
 $c\
 $haskell\
 $erlang\
 $python\
-[](fg:green bg:lavender)\
-$time\
-[ ](fg:lavender)\
 $cmd_duration\
 ${custom.friday}\
 ${custom.leet}\
+$time\
 $line_break\
 $character"""
 
-palette = 'catppuccin_mocha'
-
-[os]
-disabled = false
-style = "bg:red fg:crust"
-
-[os.symbols]
-Windows = ""
-Ubuntu = "󰕈"
-SUSE = ""
-Raspbian = "󰐿"
-Mint = "󰣭"
-Macos = "󰀵"
-Manjaro = ""
-Linux = "󰌽"
-Gentoo = "󰣨"
-Fedora = "󰣛"
-Alpine = ""
-Amazon = ""
-Android = ""
-AOSC = ""
-Arch = "󰣇"
-Artix = "󰣇"
-CentOS = ""
-Debian = "󰣚"
-Redhat = "󱄛"
-RedHatEnterprise = "󱄛"
+palette = 'amethyst'
 
 [username]
-show_always = true
-style_user = "bg:red fg:crust"
-style_root = "bg:red fg:crust"
-format = '[ $user]($style)'
+show_always = false
+style_user = "fg:mid"
+style_root = "bold fg:error"
+format = '[$user ]($style)'
 
 [directory]
-style = "bg:peach fg:crust"
-format = "[ $path ]($style)"
+style = "fg:violet"
+format = "[$path]($style) "
 truncation_length = 3
 truncation_symbol = "…/"
 
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"Developer" = "󰲋 "
-
 [git_branch]
-symbol = ""
-style = "bg:yellow"
-format = '[[ $symbol $branch ](fg:crust bg:yellow)]($style)'
+style = "fg:mid"
+format = '[$branch]($style)'
 
 [git_status]
-style = "bg:yellow"
-format = '[[($all_status$ahead_behind )](fg:crust bg:yellow)]($style)'
+style = "fg:mid"
+format = '[$all_status$ahead_behind]($style) '
 
 [c]
-symbol = " "
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "fg:dim"
+format = '[c( $version)]($style) '
 
 [erlang]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "fg:dim"
+format = '[erl( $version)]($style) '
 
 [haskell]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version) ](fg:crust bg:green)]($style)'
+style = "fg:dim"
+format = '[ghc( $version)]($style) '
 
 [python]
-symbol = ""
-style = "bg:green"
-format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:green)]($style)'
+style = "fg:dim"
+format = '[py( $version)(\($virtualenv\))]($style) '
+
+[cmd_duration]
+show_milliseconds = true
+style = "fg:dim"
+format = "[took $duration]($style) "
+
+[custom.friday]
+when = 'test "$(date +%u)" = 5'
+format = "[it's friday ](fg:violet)"
+
+[custom.leet]
+when = 'test "$(date +%H%M)" = 1337'
+format = "[leet ](fg:violet)"
 
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:lavender"
-format = '[[  $time ](fg:crust bg:lavender)]($style)'
+style = "fg:dim"
+format = '[$time]($style)'
 
 [line_break]
 disabled = true
 
 [character]
 disabled = false
-success_symbol = '[❯](bold fg:green)'
-error_symbol = '[❯](bold fg:red)'
-vimcmd_symbol = '[❮](bold fg:green)'
-vimcmd_replace_one_symbol = '[❮](bold fg:lavender)'
-vimcmd_replace_symbol = '[❮](bold fg:lavender)'
-vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+format = " $symbol "
+success_symbol = '[\$](fg:violet)'
+error_symbol = '[\$](fg:error)'
+vimcmd_symbol = '[:](fg:violet)'
+vimcmd_replace_one_symbol = '[r](fg:violet)'
+vimcmd_replace_symbol = '[R](fg:violet)'
+vimcmd_visual_symbol = '[v](fg:violet)'
 
-[custom.friday]
-when = 'test "$(date +%u)" = 5'
-format = "[ it's friday ](fg:mauve)"
-
-[custom.leet]
-when = 'test "$(date +%H%M)" = 1337'
-format = "[ leet ](fg:green)"
-
-[cmd_duration]
-show_milliseconds = true
-format = " in $duration "
-style = "bg:lavender"
-disabled = false
-
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
-
+[palettes.amethyst]
+dim = "#5e5270"
+mid = "#7f7494"
+fg = "#b0a6c4"
+bright = "#ece4fb"
+violet = "#b06cff"
+error = "#e0607a"

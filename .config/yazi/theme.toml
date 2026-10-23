@@ -1,5 +1,5 @@
-# ~/.config/yazi/theme.toml: Catppuccin Mocha, from yazi-rs/flavors
-# (vendored in flavors/, so there's no `ya pkg add` step).
+# ~/.config/yazi/theme.toml: Amethyst, the catppuccin-mocha flavor from
+# yazi-rs/flavors recoloured (vendored in flavors/, no `ya pkg add` step).
 [flavor]
-dark  = "catppuccin-mocha"
-light = "catppuccin-mocha"
+dark  = "amethyst"
+light = "amethyst"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# live-status: red "LIVE" pill in waybar while the screen is being shared,
+# live-status: violet "LIVE" in waybar while the screen is being shared,
 # and do-not-disturb on swaync for the duration, so private notifications
 # never pop up on stream. Listens to Hyprland's screencastv2 event
 # ("screencastv2>>1,<type>,<name>" on start, 0 on stop; Hyprland 0.56).
@@ -12,7 +12,7 @@ active=0 live=0 name="" dnd_before=""
 
 show() {
   if (( live )); then
-    jq -cn --arg n "$name" '{text: "󰐌 LIVE", tooltip: "Sharing: \($n)", class: "live"}'
+    jq -cn --arg n "$name" '{text: "LIVE", tooltip: "Sharing: \($n)", class: "live"}'
   else
     echo '{"text": "", "class": "idle"}'
   fi

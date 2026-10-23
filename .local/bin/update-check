@@ -2,7 +2,7 @@
 # update-check: a notification when Arch updates pile up, nothing in the bar.
 # Started by rice.lua: checks 5 minutes after login, then every 6 hours.
 # Click "Update" for a terminal running yay -Syu, which updates the AUR
-# packages too (Bolt, nchat, wlogout, ...); pacman alone would skip them.
+# packages too (nchat, wlogout, ...); pacman alone would skip them.
 # snap-pac takes a snapshot first.
 # UPDATE_THRESHOLD sets how many updates count as "piling up" (default 20).
 set -uo pipefail

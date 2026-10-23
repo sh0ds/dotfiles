@@ -36,20 +36,19 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swaync")
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
-	hl.exec_cmd("sleep 1 && awww img ~/Pictures/wall.png --transition-type fade")
+	-- Solid black instead of a picture. SUPER+W still picks one from ~/Pictures/walls.
+	hl.exec_cmd("sleep 1 && awww clear 000000")
 end)
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
-hl.env("XCURSOR_THEME", "catppuccin-mocha-dark-cursors")
+hl.env("XCURSOR_THEME", "Adwaita")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Mocha (~/.config/qt6ct)
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Amethyst (~/.config/qt6ct)
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
-hl.env("_JAVA_AWT_WM_NONREPARENTING", "1") -- Java apps (RuneLite) draw grey without it on tiling WMs
-hl.env("_JAVA_OPTIONS", "-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true") -- smooth text in RuneLite's side panel
 
 -- NVIDIA only. Delete these two lines on AMD or Intel.
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
@@ -59,15 +58,16 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 ---- LOOK AND FEEL ----
 -----------------------
 
--- Colours: Catppuccin Mocha, shared with kitty, waybar, tmux, swaync, fuzzel.
+-- Plain defaults here, no animations; the Amethyst look (colours, gaps,
+-- borders, animations) is set in rice.lua and overrides these.
 hl.config({
 	general = {
-		gaps_in = 4,
-		gaps_out = 8,
-		border_size = 2,
+		gaps_in = 0,
+		gaps_out = 0,
+		border_size = 1,
 		col = {
-			active_border = { colors = { "rgba(89b4faee)", "rgba(cba6f7ee)" }, angle = 45 },
-			inactive_border = "rgba(45475aaa)",
+			active_border = "rgb(b06cff)",
+			inactive_border = "rgb(2b2238)",
 		},
 		resize_on_border = true,
 		allow_tearing = false,
@@ -75,43 +75,19 @@ hl.config({
 	},
 
 	decoration = {
-		rounding = 8,
-		rounding_power = 2,
-		active_opacity = 1.0,
-		inactive_opacity = 0.95,
+		rounding = 0,
 		shadow = {
-			enabled = true,
-			range = 6,
-			render_power = 3,
-			color = 0xee11111b,
+			enabled = false,
 		},
 		blur = {
-			enabled = true,
-			size = 4,
-			passes = 2,
-			vibrancy = 0.1696,
+			enabled = false,
 		},
 	},
 
 	animations = {
-		enabled = true,
+		enabled = false,
 	},
 })
-
--- Snappier than the defaults: you'll switch workspaces hundreds of times a day.
-hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
-hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
-hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1 } } })
-hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
-
-hl.animation({ leaf = "global", enabled = true, speed = 8, bezier = "default" })
-hl.animation({ leaf = "border", enabled = true, speed = 5, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windows", enabled = true, speed = 3.5, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "easeOutQuint", style = "popin 90%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.5, bezier = "linear", style = "popin 90%" })
-hl.animation({ leaf = "fade", enabled = true, speed = 2.5, bezier = "quick" })
-hl.animation({ leaf = "layers", enabled = true, speed = 3, bezier = "easeOutQuint" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1.8, bezier = "almostLinear", style = "fade" })
 
 hl.config({
 	dwindle = {

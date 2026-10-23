@@ -46,10 +46,9 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool virsh virt-install virt-viewer mpd rmpc mpd-mpris udiskie yazi aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime java yay; do
+for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool virsh virt-install virt-viewer mpd rmpc mpd-mpris udiskie yazi aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
   check "$c" command -v "$c"
 done
-check "python-pillow (runelite-skin)" python3 -c "import PIL"
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt
 check "emoji font" sh -c 'fc-list | grep -qi "Noto Color Emoji"'
 check "snapshots (snapper or timeshift)" sh -c 'command -v snapper || command -v timeshift'
@@ -65,8 +64,7 @@ check "KVM (DJ VM)" test -w /dev/kvm
 check "virtiofsd (DJ VM shared folder)" test -x /usr/lib/virtiofsd
 check "~/Music/DJ (DJ VM shared folder)" test -d "$HOME/Music/DJ"
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
-check "Bolt launcher (OSRS)" sh -c 'command -v bolt-launcher || command -v bolt || flatpak info com.adamcake.Bolt'
-check "JetBrainsMono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd"'
+check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "aria2 running for Firefox (aria2-rpc)" pgrep -f "aria2c --enable-rpc"
 check "pipewire running" systemctl --user is-active pipewire
@@ -78,7 +76,7 @@ for c in tmux starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
 done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server
 check "nvim 0.11+ (built-in LSP config)" nvim --headless -c 'lua if vim.fn.has("nvim-0.11")==0 then os.exit(1) end' -c q
-check "scripts in ~/.local/bin on PATH" command -v dropterm
+check "scripts in ~/.local/bin on PATH" command -v app
 
 printf '\n%d OK, %d FAIL\n' "$pass" "$fail"
 exit "$fail"

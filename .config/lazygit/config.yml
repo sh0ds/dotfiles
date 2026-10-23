@@ -1,33 +1,33 @@
-# ~/.config/lazygit/config.yml: Catppuccin Mocha with mauve borders
-# (catppuccin/lazygit). Run `lg`, or SPACE g g inside Neovim.
+# ~/.config/lazygit/config.yml: Amethyst, square borders, violet on the
+# focused panel. Run `lg`, or SPACE g g inside Neovim.
 gui:
   nerdFontsVersion: "3"
-  border: rounded
+  border: single
   theme:
     activeBorderColor:
-      - '#cba6f7'
+      - '#b06cff'
       - bold
     inactiveBorderColor:
-      - '#a6adc8'
+      - '#9a90ae'
     searchingActiveBorderColor:
-      - '#f9e2af'
+      - '#d9b77a'
     optionsTextColor:
-      - '#89b4fa'
+      - '#9a8cff'
     selectedLineBgColor:
-      - '#313244'
+      - '#1a1424'
     inactiveViewSelectedLineBgColor:
-      - '#6c7086'
+      - '#5e5270'
     cherryPickedCommitFgColor:
-      - '#cba6f7'
+      - '#b06cff'
     cherryPickedCommitBgColor:
-      - '#45475a'
+      - '#2b2238'
     markedBaseCommitFgColor:
-      - '#89b4fa'
+      - '#9a8cff'
     markedBaseCommitBgColor:
-      - '#f9e2af'
+      - '#d9b77a'
     unstagedChangesColor:
-      - '#f38ba8'
+      - '#e0607a'
     defaultFgColor:
-      - '#cdd6f4'
+      - '#c9c0db'
     authorColors:
-      '*': '#b4befe'
+      '*': '#c99bff'

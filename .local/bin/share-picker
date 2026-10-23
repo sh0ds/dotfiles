@@ -30,7 +30,7 @@ menu=$(
     handle=${entry%%'[HC>]'*}; rest=${entry#*'[HC>]'}
     class=${rest%%'[HT>]'*};   rest=${rest#*'[HT>]'}
     title=${rest%%'[HE>]'*}
-    [[ $class == dropterm || -z $handle ]] && continue
+    [[ -z $handle ]] && continue
     printf '  Window  %s: %.60s\twindow:%s\n' "$class" "$title" "$handle"
   done
 )

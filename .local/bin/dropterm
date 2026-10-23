@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-# dropterm: show/hide the drop-down kitty (SUPER+Z). Starts it on first use.
-exec scratch dropterm term kitty --class dropterm

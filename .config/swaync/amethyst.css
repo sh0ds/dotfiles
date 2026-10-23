@@ -1,13 +1,13 @@
-/* Catppuccin Mocha for swaync, built from github.com/catppuccin/swaync (MIT). Unchanged; additions live in style.css. */
+/* Amethyst for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, square and still. Additions live in style.css. */
 * {
   all: unset;
   font-size: 14px;
-  font-family: "Ubuntu Nerd Font";
-  transition: 200ms;
+  font-family: "Terminess Nerd Font";
+  transition: none;
 }
 
 trough highlight {
-  background: #cdd6f4;
+  background: #c9c0db;
 }
 
 scale {
@@ -18,42 +18,42 @@ scale trough {
   margin: 0rem 1rem;
   min-height: 8px;
   min-width: 70px;
-  border-radius: 12.6px;
+  border-radius: 0;
 }
 
 trough slider {
   margin: -10px;
-  border-radius: 12.6px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
-  transition: all 0.2s ease;
-  background-color: #89b4fa;
+  border-radius: 0;
+  box-shadow: none;
+  transition: none;
+  background-color: #b06cff;
 }
 
 trough slider:hover {
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.8), 0 0 8px #89b4fa;
+  box-shadow: none;
 }
 
 trough {
-  background-color: #313244;
+  background-color: #1a1424;
 }
 
 /* notifications */
 .notification-background {
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px #45475a;
-  border-radius: 12.6px;
+  box-shadow: none;
+  border-radius: 0;
   margin: 18px;
-  background: #181825;
-  color: #cdd6f4;
+  background: #0b0910;
+  color: #c9c0db;
   padding: 0;
 }
 
 .notification-background .notification {
   padding: 7px;
-  border-radius: 12.6px;
+  border-radius: 0;
 }
 
 .notification-background .notification.critical {
-  box-shadow: inset 0 0 7px 0 #f38ba8;
+  box-shadow: none;
 }
 
 .notification .notification-content {
@@ -66,15 +66,15 @@ trough {
 }
 
 .notification-content .summary {
-  color: #cdd6f4;
+  color: #c9c0db;
 }
 
 .notification-content .time {
-  color: #a6adc8;
+  color: #9a90ae;
 }
 
 .notification-content .body {
-  color: #bac2de;
+  color: #b0a6c4;
 }
 
 .notification > *:last-child > * {
@@ -84,73 +84,73 @@ trough {
 .notification-background .close-button {
   margin: 7px;
   padding: 2px;
-  border-radius: 6.3px;
-  color: #1e1e2e;
-  background-color: #f38ba8;
+  border-radius: 0;
+  color: #000000;
+  background-color: #e0607a;
 }
 
 .notification-background .close-button:hover {
-  background-color: #eba0ac;
+  background-color: #e88a9a;
 }
 
 .notification-background .close-button:active {
-  background-color: #f5c2e7;
+  background-color: #d6a6f0;
 }
 
 .notification .notification-action {
-  border-radius: 7px;
-  color: #cdd6f4;
-  box-shadow: inset 0 0 0 1px #45475a;
+  border-radius: 0;
+  color: #c9c0db;
+  box-shadow: none;
   margin: 4px;
   padding: 8px;
   font-size: 0.2rem; /* controls the button size not text size*/
 }
 
 .notification .notification-action {
-  background-color: #313244;
+  background-color: #1a1424;
 }
 
 .notification .notification-action:hover {
-  background-color: #45475a;
+  background-color: #2b2238;
 }
 
 .notification .notification-action:active {
-  background-color: #585b70;
+  background-color: #3d3150;
 }
 
 .notification.critical progress {
-  background-color: #f38ba8;
+  background-color: #e0607a;
 }
 
 .notification.low progress,
 .notification.normal progress {
-  background-color: #89b4fa;
+  background-color: #b06cff;
 }
 
 .notification progress,
 .notification trough,
 .notification progressbar {
-  border-radius: 12.6px;
+  border-radius: 0;
   padding: 3px 0;
 }
 
 /* control center */
 .control-center {
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.8), inset 0 0 0 1px #313244;
-  border-radius: 12.6px;
-  background-color: #1e1e2e;
-  color: #cdd6f4;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: #000000;
+  color: #c9c0db;
   padding: 14px;
 }
 
 .control-center .notification-background {
-  border-radius: 7px;
-  box-shadow: inset 0 0 0 1px #45475a;
+  border-radius: 0;
+  box-shadow: none;
   margin: 4px 10px;
 }
 
 .control-center .notification-background .notification {
-  border-radius: 7px;
+  border-radius: 0;
 }
 
 .control-center .notification-background .notification.low {
@@ -158,24 +158,24 @@ trough {
 }
 
 .control-center .widget-title > label {
-  color: #cdd6f4;
+  color: #c9c0db;
   font-size: 1.3em;
 }
 
 .control-center .widget-title button {
-  border-radius: 7px;
-  color: #cdd6f4;
-  background-color: #313244;
-  box-shadow: inset 0 0 0 1px #45475a;
+  border-radius: 0;
+  color: #c9c0db;
+  background-color: #1a1424;
+  box-shadow: none;
   padding: 8px;
 }
 
 .control-center .widget-title button:hover {
-  background-color: #45475a;
+  background-color: #2b2238;
 }
 
 .control-center .widget-title button:active {
-  background-color: #585b70;
+  background-color: #3d3150;
 }
 
 .control-center .notification-group {
@@ -183,7 +183,7 @@ trough {
 }
 
 .control-center .notification-group:focus .notification-background {
-  background-color: #313244;
+  background-color: #1a1424;
 }
 
 scrollbar slider {
@@ -198,58 +198,58 @@ scrollbar trough {
 /* dnd */
 .widget-dnd {
   margin-top: 5px;
-  border-radius: 8px;
+  border-radius: 0;
   font-size: 1.1rem;
 }
 
 .widget-dnd > switch {
   font-size: initial;
-  border-radius: 8px;
-  background: #313244;
+  border-radius: 0;
+  background: #1a1424;
   box-shadow: none;
 }
 
 .widget-dnd > switch:checked {
-  background: #89b4fa;
+  background: #b06cff;
 }
 
 .widget-dnd > switch slider {
-  background: #45475a;
-  border-radius: 8px;
+  background: #2b2238;
+  border-radius: 0;
 }
 
 /* mpris */
 .widget-mpris-player {
-  background: #313244;
-  border-radius: 12.6px;
-  color: #cdd6f4;
+  background: #1a1424;
+  border-radius: 0;
+  color: #c9c0db;
 }
 
 .mpris-overlay {
-  background-color: #313244;
+  background-color: #1a1424;
   opacity: 0.9;
   padding: 15px 10px;
 }
 
 .widget-mpris-album-art {
   -gtk-icon-size: 100px;
-  border-radius: 12.6px;
+  border-radius: 0;
   margin: 0 10px;
 }
 
 .widget-mpris-title {
   font-size: 1.2rem;
-  color: #cdd6f4;
+  color: #c9c0db;
 }
 
 .widget-mpris-subtitle {
   font-size: 1rem;
-  color: #bac2de;
+  color: #b0a6c4;
 }
 
 .widget-mpris button {
-  border-radius: 12.6px;
-  color: #cdd6f4;
+  border-radius: 0;
+  color: #c9c0db;
   margin: 0 5px;
   padding: 2px;
 }
@@ -259,11 +259,11 @@ scrollbar trough {
 }
 
 .widget-mpris button:hover {
-  background-color: #313244;
+  background-color: #1a1424;
 }
 
 .widget-mpris button:active {
-  background-color: #45475a;
+  background-color: #2b2238;
 }
 
 .widget-mpris button:disabled {
@@ -276,17 +276,17 @@ scrollbar trough {
 }
 
 .widget-menubar > box > .menu-button-bar > :last-child {
-  color: #f38ba8;
+  color: #e0607a;
 }
 
 .power-buttons button:hover,
 .powermode-buttons button:hover,
 .screenshot-buttons button:hover {
-  background: #313244;
+  background: #1a1424;
 }
 
 .control-center .widget-label > label {
-  color: #cdd6f4;
+  color: #c9c0db;
   font-size: 2rem;
 }
 
@@ -303,21 +303,21 @@ scrollbar trough {
 }
 
 .widget-volume label {
-  color: #74c7ec;
+  color: #b06cff;
   padding: 0 1rem;
 }
 
 .widget-volume trough highlight {
-  background: #74c7ec;
+  background: #b06cff;
 }
 
 .widget-backlight trough highlight {
-  background: #f9e2af;
+  background: #b06cff;
 }
 
 .widget-backlight label {
   font-size: 1.5rem;
-  color: #f9e2af;
+  color: #b06cff;
 }
 
 .widget-backlight .KB {

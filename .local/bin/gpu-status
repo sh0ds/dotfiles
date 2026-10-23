@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # gpu-status: waybar custom/gpu. NVIDIA load from nvidia-smi (part of
-# nvidia-utils); temperature and VRAM go in the tooltip, so the stats pill
+# nvidia-utils); temperature and VRAM go in the tooltip, so the bar
 # shows only one temperature, the CPU's. Prints nothing on machines without it.
 command -v nvidia-smi >/dev/null || exit 0
 read -r load temp mem total < <(nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total \
   --format=csv,noheader,nounits | head -n1 | tr -d ',')
 [ -n "$load" ] || exit 0
-printf '{"text":"  %s%%","tooltip":"GPU %s%%, %s°C, VRAM %s / %s MiB"}\n' "$load" "$load" "$temp" "$mem" "$total"
+printf '{"text":"gpu %s%%","tooltip":"GPU %s%%, %s°C, VRAM %s / %s MiB"}\n' "$load" "$load" "$temp" "$mem" "$total"
