@@ -18,6 +18,11 @@ HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend checkwinsize globstar
 PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
+# File listings use Diag independently of kitty's ANSI palette.
+if [ -r "${XDG_CONFIG_HOME:-$HOME/.config}/diag/ls-colors.sh" ]; then
+  . "${XDG_CONFIG_HOME:-$HOME/.config}/diag/ls-colors.sh"
+fi
+
 # Aliases
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first --git'

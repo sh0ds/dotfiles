@@ -1,0 +1,166 @@
+# Diag for eza: files grey, directories blue; colour conveys type/status.
+# Environment mappings are reset by diag/ls-colors.sh to avoid inherited themes.
+filekinds:
+  normal:
+    foreground: '#c4c9ce'
+  directory:
+    foreground: '#1793d1'
+    is_bold: true
+  symlink:
+    foreground: '#5fb8e8'
+  pipe:
+    foreground: '#ffb000'
+  block_device:
+    foreground: '#ffb000'
+  char_device:
+    foreground: '#ffb000'
+  socket:
+    foreground: '#1793d1'
+  special:
+    foreground: '#ffb000'
+  executable:
+    foreground: '#75c94d'
+  mount_point:
+    foreground: '#1793d1'
+    is_bold: true
+perms:
+  user_read:
+    foreground: '#c4c9ce'
+  user_write:
+    foreground: '#8a929c'
+  user_execute_file:
+    foreground: '#75c94d'
+  user_execute_other:
+    foreground: '#75c94d'
+  group_read:
+    foreground: '#8a929c'
+  group_write:
+    foreground: '#8a929c'
+  group_execute:
+    foreground: '#75c94d'
+  other_read:
+    foreground: '#8a929c'
+  other_write:
+    foreground: '#8a929c'
+  other_execute:
+    foreground: '#75c94d'
+  special_user_file:
+    foreground: '#ffb000'
+  special_other:
+    foreground: '#ffb000'
+  attribute:
+    foreground: '#8a929c'
+size:
+  major:
+    foreground: '#c4c9ce'
+  minor:
+    foreground: '#c4c9ce'
+  number_byte:
+    foreground: '#c4c9ce'
+  number_kilo:
+    foreground: '#c4c9ce'
+  number_mega:
+    foreground: '#c4c9ce'
+  number_giga:
+    foreground: '#c4c9ce'
+  number_huge:
+    foreground: '#c4c9ce'
+  unit_byte:
+    foreground: '#8a929c'
+  unit_kilo:
+    foreground: '#8a929c'
+  unit_mega:
+    foreground: '#8a929c'
+  unit_giga:
+    foreground: '#8a929c'
+  unit_huge:
+    foreground: '#8a929c'
+users:
+  user_you:
+    foreground: '#c4c9ce'
+  user_root:
+    foreground: '#e5484d'
+  user_other:
+    foreground: '#8a929c'
+  group_yours:
+    foreground: '#8a929c'
+  group_other:
+    foreground: '#8a929c'
+  group_root:
+    foreground: '#e5484d'
+links:
+  normal:
+    foreground: '#8a929c'
+  multi_link_file:
+    foreground: '#1793d1'
+git:
+  new:
+    foreground: '#75c94d'
+  modified:
+    foreground: '#ffb000'
+  deleted:
+    foreground: '#e5484d'
+  renamed:
+    foreground: '#1793d1'
+  typechange:
+    foreground: '#ffb000'
+  ignored:
+    foreground: '#8a929c'
+  conflicted:
+    foreground: '#e5484d'
+git_repo:
+  branch_main:
+    foreground: '#1793d1'
+  branch_other:
+    foreground: '#1793d1'
+  git_clean:
+    foreground: '#8a929c'
+  git_dirty:
+    foreground: '#ffb000'
+file_type:
+  image:
+    foreground: '#c4c9ce'
+  video:
+    foreground: '#c4c9ce'
+  music:
+    foreground: '#c4c9ce'
+  lossless:
+    foreground: '#c4c9ce'
+  crypto:
+    foreground: '#c4c9ce'
+  document:
+    foreground: '#c4c9ce'
+  compressed:
+    foreground: '#c4c9ce'
+  temp:
+    foreground: '#c4c9ce'
+  compiled:
+    foreground: '#c4c9ce'
+  build:
+    foreground: '#c4c9ce'
+  source:
+    foreground: '#c4c9ce'
+punctuation:
+  foreground: '#8a929c'
+date:
+  foreground: '#8a929c'
+inode:
+  foreground: '#8a929c'
+blocks:
+  foreground: '#8a929c'
+header:
+  foreground: '#e6e8ea'
+octal:
+  foreground: '#8a929c'
+flags:
+  foreground: '#8a929c'
+symlink_path:
+  foreground: '#5fb8e8'
+control_char:
+  foreground: '#e5484d'
+broken_symlink:
+  foreground: '#e5484d'
+broken_path_overlay:
+  foreground: '#e5484d'
+filenames: {}
+extensions: {}

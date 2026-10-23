@@ -45,6 +45,7 @@ Terminal:
 - **kitty + tmux**, both in the same colours. kitty sends a notification when a long command finishes while I'm looking elsewhere. The tmux prefix is `Ctrl+A`.
 - **bash** with a two-line [Starship](https://starship.rs) prompt: directory, Git state, language, elapsed time and clock above a blue input marker. A few Nerd Font icons provide landmarks; a failed command turns the marker red. eza replaces ls, fzf handles `Ctrl+R`, and zoxide gives you `z`. New terminals greet you with fastfetch.
 - **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
+- **eza** for `ls`, `ll` and `lt`: blue directories, grey files/metadata, green executables and red broken links. Its own Diag theme and shell colour mappings replace inherited file-listing palettes while keeping the icons.
 - **yazi** for files (`SUPER+E`, or `y` and the shell follows you to wherever you quit it), **lazygit** (`lg`), **bat** instead of cat and **tldr** instead of man pages for quick examples.
 
 Apps:
@@ -278,6 +279,7 @@ Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move 
 
 This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours.
 
+- `ls` or `ll` still looks like Mocha? Pull and reinstall the dotfiles, then open a new terminal. Bash loads `.config/diag/ls-colors.sh`, which selects `.config/eza/theme.yml` and replaces inherited `LS_COLORS`/`EZA_COLORS` mappings. The installer backs up a previous theme at that path.
 - A keybind for one of the scripts does nothing? Run the install script again, new scripts only get linked into `~/.local/bin` when it runs.
 - `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't come down, `pkill -x rmpc` and press `SUPER+U` again.
 - WhatsApp notifications don't show up? Make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits.
