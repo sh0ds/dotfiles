@@ -77,6 +77,7 @@ for c in tmux starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
 done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server
 check "nvim 0.11+ (built-in LSP config)" nvim --headless -c 'lua if vim.fn.has("nvim-0.11")==0 then os.exit(1) end' -c q
+check "eza has a Diag theme" test -r "${XDG_CONFIG_HOME:-$HOME/.config}/eza/theme.yml"
 check "scripts in ~/.local/bin on PATH" command -v app
 check "responsive power menu on PATH" command -v power-menu
 check "btop uses Diag" grep -q '^color_theme = "diag"' "$HOME/.config/btop/btop.conf"

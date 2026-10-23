@@ -46,6 +46,10 @@ websites, book pages, documents, photos, and video should remain readable.
 - Neovim: explicit lualine/bufferline styles prevent default colour fallbacks;
   comments are brighter and upright for the pixel font. Mode names remain
   visible even though all mode blocks share the same blue.
+- eza/GNU ls: file-kind colours and metadata now have an explicit Diag theme;
+  shell initialization selects it and replaces inherited Mocha colour mappings.
+  A real eza 0.21 long listing with icons was checked against injected Mocha
+  overrides, including normal/image/executable files and healthy/broken links.
 - btop, rmpc, Yazi, lazygit and aerc: focus/selection is consistent with Diag;
   btop uses solid graphs and grey structural borders. btop gets a copied config
   because it writes that file on exit. Its existing `sysmon` launcher already
