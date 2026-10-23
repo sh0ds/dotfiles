@@ -312,8 +312,8 @@ hl.on("hyprland.start", function()
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
 			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
-			.. "gsettings set org.gnome.desktop.interface font-name 'VT323 18.75'; "
-			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'VT323 18.75'; "
+			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font 12'; "
+			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 12'; "
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
 	)
 	hl.exec_cmd("udiskie")

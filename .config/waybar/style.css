@@ -21,7 +21,7 @@ window#waybar {
 }
 
 tooltip { background: #0d1014; border: 1px solid #3f4650; border-left: 2px solid #1793d1; }
-tooltip label { color: #e6e8ea; font-size: 25px; }
+tooltip label { color: #e6e8ea; font-family: "Terminess Nerd Font", monospace; font-size: 16px; }
 
 /* Every module: same inset from the rule and the bottom edge */
 #workspaces, #mpris, #custom-live, #custom-rec, #tray, #custom-stats,

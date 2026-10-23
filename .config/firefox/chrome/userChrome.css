@@ -1,6 +1,6 @@
 /* Firefox in Diag: the sh0ds.dev look in Arch blue, like the rest of the
-   desktop. Black toolbars, VT323 for tabs, the address bar and menus, square
-   corners, 2 px rules, the selected tab an Arch blue block. Mostly Firefox's
+   desktop. Black toolbars, Terminess for tabs, the address bar and menus,
+   square corners, 2 px rules, the selected tab marked with an Arch blue rule. Mostly Firefox's
    own theme variables, so it survives updates; `firefox-style` links this
    into your profile. */
 
@@ -25,8 +25,8 @@
   --toolbox-textcolor: var(--diag-fg) !important;
   --toolbar-bgcolor: var(--diag-bg) !important;
   --toolbar-color: var(--diag-ink) !important;
-  --tab-selected-bgcolor: var(--diag-arch) !important;
-  --tab-selected-textcolor: #000000 !important;
+  --tab-selected-bgcolor: var(--diag-row) !important;
+  --tab-selected-textcolor: #ffffff !important;
   --tab-hover-background-color: var(--diag-row) !important;
   --tab-loading-fill: var(--diag-arch) !important;
   --tab-border-radius: 0 !important;
@@ -100,22 +100,26 @@
   accent-color: var(--diag-arch) !important;
 }
 
-/* The selected tab, set directly as well: vertical tabs and some themes
-   don't go through --tab-selected-bgcolor */
-.tabbrowser-tab[selected] .tab-background,
-.tabbrowser-tab[multiselected] .tab-background {
-  background: var(--diag-arch) !important;
+/* The selected tab: a row with a 2 px Arch blue rule on its edge and white
+   text, like a code block on the site. Painted on the tab itself, not only
+   .tab-background, so vertical tabs get it too; the text stays readable even
+   if a theme repaints the background. */
+.tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
+  background: var(--diag-row) !important;
   background-image: none !important;
+  box-shadow: inset 2px 0 0 var(--diag-arch) !important;
 }
-.tabbrowser-tab[selected] .tab-label,
-.tabbrowser-tab[selected] .tab-close-button { color: #000000 !important; }
+.tabbrowser-tab:is([selected], [visuallyselected]) .tab-label { color: #ffffff !important; }
+.tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--diag-arch) !important; }
 .tabbrowser-tab:not([selected]):hover .tab-background { background: var(--diag-row) !important; }
 ::selection { background: var(--diag-sel, #0e3d5c) !important; color: #f4f6f8 !important; }
 
-/* VT323 for everything around the page; the page itself keeps its fonts */
+/* Terminess around the page: VT323 is too coarse at tab and menu sizes,
+   Terminus is drawn for them (16 px is one of its native sizes). The page
+   itself keeps its fonts. */
 #navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
-  font-family: "VT323", "Terminess Nerd Font", monospace !important;
-  font-size: 25px !important;
+  font-family: "Terminess Nerd Font", monospace !important;
+  font-size: 16px !important;
 }
 
 /* The site's double rule under the toolbars */
@@ -131,7 +135,6 @@
 }
 .tabbrowser-tab:not([selected]) .tab-label { color: var(--diag-dim) !important; }
 .tabbrowser-tab:not([selected]):hover .tab-label { color: #ffffff !important; }
-.tabbrowser-tab[selected] .tab-close-button { color: #000000 !important; }
 
 /* Address bar: square, 2 px frame, blue while typing */
 #urlbar-background, #searchbar {

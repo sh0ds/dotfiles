@@ -75,6 +75,9 @@ trough {
 
 .notification-content .body {
   color: #c4c9ce;
+  /* The text itself in Terminess, readable at this size; titles stay VT323 */
+  font-family: "Terminess Nerd Font";
+  font-size: 16px;
 }
 
 .notification > *:last-child > * {

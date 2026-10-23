@@ -30,10 +30,12 @@
   --h2-color: #e6e8ea;
   --h3-color: #e6e8ea;
   --hr-color: #3f4650;
-  --font-interface-theme: "VT323", "Terminess Nerd Font", monospace;
-  --font-text-theme: "VT323", "Terminess Nerd Font", monospace;
-  --font-monospace-theme: "VT323", "Terminess Nerd Font Mono", monospace;
-  --font-text-size: 25px;
+  /* Terminess for reading and the interface (VT323 is too coarse for long
+     text at small sizes; 16 and 18 px are native Terminus sizes) */
+  --font-interface-theme: "Terminess Nerd Font", monospace;
+  --font-text-theme: "Terminess Nerd Font", monospace;
+  --font-monospace-theme: "Terminess Nerd Font Mono", monospace;
+  --font-text-size: 18px;
   --radius-s: 0;
   --radius-m: 0;
   --radius-l: 0;
