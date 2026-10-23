@@ -30,10 +30,9 @@ end
 --   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
 	general = {
-		-- 3 px between windows (two inner gaps meet, so 6 px of black), 6 px
-		-- to the screen edge.
-		gaps_in = 3,
-		gaps_out = 6,
+		-- A 4 px unit: 8 px between neighbouring tiles and 8 px at the edge.
+		gaps_in = 4,
+		gaps_out = 8,
 		border_size = 2,
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
 		allow_tearing = true,
