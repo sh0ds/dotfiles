@@ -30,7 +30,7 @@ border_style  = { fg = "#3f4650" }
 # : Tabs {{{
 
 [tabs]
-active   = { fg = "#000000", bg = "#1793d1", bold = true }
+active   = { fg = "#1793d1", bg = "#0d1014", bold = true }
 inactive = { fg = "#1793d1", bg = "#161a1f" }
 
 # : }}}

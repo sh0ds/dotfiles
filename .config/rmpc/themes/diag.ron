@@ -31,7 +31,7 @@
         thumb_style: (fg: "#1793d1"),
     ),
     tab_bar: (
-        active_style: (fg: "#000000", bg: "#1793d1", modifiers: "Bold"),
+        active_style: (fg: "#1793d1", bg: "#0d1014", modifiers: "Bold"),
         inactive_style: (fg: "#a3aab2"),
     ),
 )

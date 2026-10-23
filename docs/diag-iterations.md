@@ -18,3 +18,17 @@ readable; diagrams, web pages and media keep their original colours.
 The distinction is structural: surfaces provide grouping, blue marks the thing
 being used, and semantic warning/error colours retain meaning. The background
 and login/lock artwork already fit that system and remain intact.
+
+## 2 — Workbench
+
+Reimagine the rice as a workbench rather than a screen full of competing active
+blocks. Browser/editor navigation uses a small blue rule; terminal app tabs use
+a blue label on a quiet panel. Apply that hierarchy to Firefox, Obsidian,
+Neovim, kitty, tmux, Yazi, rmpc and aerc. The compositor's group and explicit
+mode indicators keep native inversion where it carries useful state. Reset
+tmux cells so active styling does not leak to neighbouring windows.
+
+Proton Calendar is removed at the user's request: retire its helper, SUPER+Y
+binding, PWA instructions and external clock launch. Retain the native Waybar
+month/year view. Leave the aerc calendar attachment filter intact; it displays
+mail content and is not the removed PWA.

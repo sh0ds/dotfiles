@@ -55,13 +55,13 @@
   --menu-radius: 0px;
 }
 .theme-dark .workspace-tab-header-container {
-  border-bottom: 4px double #3f4650;
+  border-bottom: 1px solid #3f4650;
 }
 .theme-dark .workspace-tab-header { background: #000000; box-shadow: none; }
 .theme-dark .workspace-tab-header.is-active {
   background: #161a1f;
   color: #e6e8ea;
-  box-shadow: inset 0 2px 0 #1793d1;
+  box-shadow: inset 0 -2px 0 #1793d1;
 }
 .theme-dark .workspace-tab-header::before,
 .theme-dark .workspace-tab-header::after { display: none; }

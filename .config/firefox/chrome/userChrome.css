@@ -108,7 +108,7 @@
 .tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
   background: var(--diag-row) !important;
   background-image: none !important;
-  box-shadow: inset 0 2px 0 var(--diag-arch) !important;
+  box-shadow: inset 0 -2px 0 var(--diag-arch) !important;
 }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-label { color: #ffffff !important; }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--diag-arch) !important; }
@@ -122,12 +122,12 @@
   font-size: 16px !important;
 }
 
-/* The site's double rule under the toolbars */
+/* One structural rule: emphasis belongs to the selected tab. */
 #navigator-toolbox {
-  border-bottom: 4px double var(--diag-rule) !important;
+  border-bottom: 1px solid var(--diag-rule) !important;
 }
 
-/* Tabs: flat, dim until hovered; the selected one is the blue block */
+/* Tabs: a quiet row and a blue selection marker. */
 .tabbrowser-tab .tab-background {
   border-radius: 0 !important;
   outline: none !important;

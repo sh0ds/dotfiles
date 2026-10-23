@@ -20,7 +20,7 @@ Every app I use gets the same colours, GTK and Qt included, and Neovim has its o
 
 A slim instrument rail across the top. Numbered workspaces and a bounded `play` reading sit on the left, the clock holds the centre, and separated `sys`, `pi`, volume, messages, tray and `[exit]` controls sit on the right. A blue underline marks the active workspace; amber marks a recording or an urgent window. Hover changes colour without moving the layout.
 
-Click `sys` to expand CPU, memory and temperature; its tooltip holds GPU and network detail. Right-click opens btop. The centred clock opens Proton Calendar and shows the date/calendar on hover. LIVE and REC appear beside the workspaces. `[exit]` opens a compact, text-only session console with numbered actions and visible hotkeys. No logos or power icons.
+Click `sys` to expand CPU, memory and temperature; its tooltip holds GPU and network detail. Right-click opens btop. The centred clock shows the date/calendar on hover; click switches between month and year. LIVE and REC appear beside the workspaces. `[exit]` opens a compact, text-only session console with numbered actions and visible hotkeys. No logos or power icons.
 
 The notification centre uses a matching flat music transport: a solid black-grey surface, small real artwork when available, and framed playback controls. It never puts blurred artwork or an application logo behind the track title.
 
@@ -29,7 +29,6 @@ The notification centre uses a matching flat music transport: a solid black-grey
 The things I need for a few seconds are normal tiled windows with one key each. The key starts the app next to what I'm doing, pressing it again hides it, and the next press brings it back tiled wherever I am now. Mail starts hidden at login, so its notifications work from the start.
 
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
-- `SUPER+Y` Proton Calendar (also a web app, or click the clock)
 - `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
 
@@ -70,7 +69,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` for things I kept needing. Each one has a short comment at the top.
 
-- `app`: the start, hide and bring back logic behind `chat`, `inbox`, `calendar`, `music`, `sysmon`, `notes` and SoundCloud
+- `app`: the start, hide and bring back logic behind `chat`, `inbox`, `music`, `sysmon`, `notes` and SoundCloud
 - `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click `wifi` in the bar for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -158,7 +157,6 @@ And change a few things to your liking:
 - For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
 - For the Diag look in Firefox (black toolbars, Terminess, the selected tab marked in blue, a plain black new tab), close Firefox and run `firefox-style` once. It links `~/.config/firefox` into your profile.
 - For the login screen and boot splash in the same look, run `bash ~/code/dotfiles/system/install-system.sh` (it asks for sudo). Preview the login screen with `sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/diag`.
-- For the calendar, open calendar.proton.me in Firefox and install it as an app the same way. Put its ID from `firefoxpwa profile list` in the `id=` line of `~/.local/bin/calendar`, then reload Hyprland. In Proton Calendar's settings, the Carbon theme fits best.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
   ```
@@ -220,7 +218,6 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+E` | Files |
 | `SUPER+O` | Notes (Obsidian, opens or jumps to it) |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
-| `SUPER+Y` | Calendar |
 | `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
 | `CTRL+SHIFT+Escape` | btop |
 | `SUPER+SHIFT+M` | Windows DJ VM |
