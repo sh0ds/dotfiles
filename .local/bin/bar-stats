@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# bar-stats: waybar custom/stats. Closed it just says "stats"; click it and
+# the same module shows cpu, mem, temp, gpu and network instead, click again
+# to close. One module instead of a waybar drawer, so it works the same on
+# every waybar version.
+#   bar-stats          print the module (waybar runs this every 2 s)
+#   bar-stats toggle   open or close it (on-click)
+set -u
+run=${XDG_RUNTIME_DIR:-/tmp}
+open=$run/bar-stats.open
+key() { printf "<span color='#1793d1'>%s:</span>" "$1"; }
+
+if [ "${1:-}" = toggle ]; then
+  if [ -e "$open" ]; then rm -f "$open"; else : >"$open"; fi
+  pkill -RTMIN+9 waybar   # "signal": 9 in config.jsonc: redraw now
+  exit 0
+fi
+
+if [ ! -e "$open" ]; then
+  printf '{"text":"%s","class":"closed","tooltip":"click: cpu, mem, temp, gpu, net"}\n' "<span color='#1793d1'>stats</span>"
+  exit 0
+fi
+
+# cpu: busy share since the last run, from /proc/stat
+read -r _ u n s i w q sq st _ </proc/stat
+busy=$((u + n + s + q + sq + st)); total=$((busy + i + w))
+cpu=0
+if read -r pb pt 2>/dev/null <"$run/bar-stats.cpu" && [ "$total" -gt "$pt" ]; then
+  cpu=$(( (busy - pb) * 100 / (total - pt) ))
+fi
+echo "$busy $total" >"$run/bar-stats.cpu"
+
+# mem: used = total - available, in GiB
+mem=$(awk '/^MemTotal/{t=$2} /^MemAvailable/{a=$2} END{printf "%.1fG", (t-a)/1048576}' /proc/meminfo)
+
+# temp: CPU package (coretemp on Intel, k10temp on AMD)
+temp=
+for h in /sys/class/hwmon/hwmon*; do
+  case $(cat "$h/name" 2>/dev/null) in
+    coretemp|k10temp) temp=$(( $(cat "$h/temp1_input") / 1000 )); break ;;
+  esac
+done
+
+# gpu: NVIDIA load, when there is one
+gpu=
+if command -v nvidia-smi >/dev/null; then
+  gpu=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -n1)
+fi
+
+# net: bytes per second on the default route since the last run
+dev=$(ip route show default 2>/dev/null | awk '{for(i=1;i<NF;i++) if($i=="dev"){print $(i+1); exit}}')
+net="$(key net) down"
+if [ -n "$dev" ] && [ -r "/sys/class/net/$dev/statistics/rx_bytes" ]; then
+  rx=$(cat "/sys/class/net/$dev/statistics/rx_bytes"); tx=$(cat "/sys/class/net/$dev/statistics/tx_bytes")
+  now=$(date +%s)
+  down=0 up=0
+  if read -r pr ptx pn 2>/dev/null <"$run/bar-stats.net" && [ "$now" -gt "$pn" ]; then
+    down=$(( (rx - pr) / (now - pn) )); up=$(( (tx - ptx) / (now - pn) ))
+  fi
+  echo "$rx $tx $now" >"$run/bar-stats.net"
+  human() { numfmt --to=iec --suffix=B --format='%.0f' "$1"; }
+  label=eth; [ -d "/sys/class/net/$dev/wireless" ] && label=wifi
+  net="$(key "$label") dn $(human "$down") up $(human "$up")"
+fi
+
+out="$(key cpu)$(printf '%3s' "$cpu")%  $(key mem) $mem"
+[ -n "$temp" ] && out+="  $(key temp)$(printf '%3s' "$temp")°C"
+[ -n "$gpu" ] && out+="  $(key gpu)$(printf '%3s' "$gpu")%"
+out+="  $net"
+class=open
+[ -n "$temp" ] && [ "$temp" -ge 85 ] && class=hot
+printf '{"text":"%s","class":"%s","tooltip":"click: close  right-click: btop"}\n' "$out" "$class"

@@ -18,7 +18,7 @@ Every app I use gets the same colours, GTK and Qt included, and Neovim has its o
 
 ### Bar
 
-One diagnostic line along the bottom under a double rule, no icons. Workspace numbers (the current one as a blue block) and `play:` with what's playing on the left, LIVE or REC in the middle while I'm sharing or recording. On the right `stats`: click it and `cpu:`, `mem:`, `temp:`, `gpu:` and `eth:` slide out, click again and they're gone, so nothing ticks away all day (right-click opens btop). After that `pi: up`, `vol: 64`, `msg:`, `time:` with an ISO date and `halt` for the power menu. Hovering only brightens the text. The main screen is DP-4, on the right of the desk: it gets workspaces 1 to 5, the cursor, the games and the login screen (`system/install-system.sh` switches the other screens off while SDDM runs).
+One diagnostic line along the bottom under a double rule, no icons. Workspace numbers (the current one as a blue block) and `play:` with what's playing on the left, LIVE or REC in the middle while I'm sharing or recording. On the right `stats`: click it and `cpu:`, `mem:`, `temp:`, `gpu:` and `eth:` show up in its place, click again and it's back to `stats`, so nothing ticks away all day (right-click opens btop). After that `pi: up`, `vol: 64`, `msg:`, `time:` with an ISO date and `halt` for the power menu. Hovering only brightens the text. The main screen is DP-4, on the right of the desk: it gets workspaces 1 to 5, the cursor, the games and the login screen (`system/install-system.sh` switches the other screens off while SDDM runs).
 
 ### Quick apps
 
@@ -37,7 +37,7 @@ Desktop:
 
 - **swaync** for notifications (`SUPER+N` opens the panel), **swayosd** for the volume bar, **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
 - **hyprlock** locks the screen: black, `user@host`, kernel and uptime, the clock, a `password:` prompt and whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
-- **wlogout** is the power menu, **udiskie** mounts USB sticks when you plug them in (`SUPER+SHIFT+U` unmounts them all), and **awww** draws the background: black with a faint dot grid and a dim pixel Arch logo, 1:1 so it stays sharp (`SUPER+W` puts up a random picture from `~/Pictures/walls` if I want one).
+- **wlogout** is the power menu, **udiskie** mounts USB sticks when you plug them in (`SUPER+SHIFT+U` unmounts them all), and **awww** draws the background: black with a faint dot grid and a dim pixel Arch logo, 1:1 so it stays sharp.
 
 Terminal:
 
@@ -86,7 +86,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
 - `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
-- `update-check`, `default-apps`, `wall-next`, `nightlight`, and the helpers behind the bar and the lock screen (`gpu-status`, `pi-status`, `rec-status`, `np-title`)
+- `update-check`, `default-apps`, `nightlight`, and the helpers behind the bar and the lock screen (`bar-stats`, `pi-status`, `rec-status`, `np-title`)
 
 ## Screenshots
 
@@ -228,7 +228,6 @@ bash ~/code/dotfiles/check-desktop.sh
 | `CTRL+Print` | Screenshot and draw on it |
 | `SUPER+SHIFT+R` | Start or stop recording |
 | `SUPER+N` | Notifications |
-| `SUPER+W` | New wallpaper |
 | `SUPER+SHIFT+N` | Night light |
 | `SUPER+SHIFT+B` | Hide or show the bar |
 | `SUPER+SHIFT+U` | Unmount USB sticks |

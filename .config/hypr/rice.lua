@@ -351,8 +351,6 @@ hl.bind(mod .. " + SHIFT + U", hl.dsp.exec_cmd('udiskie-umount -ad && notify-sen
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs
 hl.bind(mod .. " + G", hl.dsp.group.toggle())
 hl.bind(mod .. " + Tab", hl.dsp.group.next())
--- Next random wallpaper from ~/Pictures/walls (needs awww and wall-next)
-hl.bind(mod .. " + W", hl.dsp.exec_cmd("wall-next"))
 -- Notification centre (swaync)
 hl.bind(mod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 -- Floating windows: SUPER+V now floats the window AND puts it in the middle of

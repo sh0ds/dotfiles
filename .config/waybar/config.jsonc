@@ -13,17 +13,16 @@
   // the key in Arch blue, the value in white. No icons, no pills.
   "modules-left": ["hyprland/workspaces", "mpris"],
   "modules-center": ["custom/live", "custom/rec"],
-  "modules-right": ["tray", "group/stats", "custom/pi", "pulseaudio", "custom/notification", "clock", "custom/power"],
+  "modules-right": ["tray", "custom/stats", "custom/pi", "pulseaudio", "custom/notification", "clock", "custom/power"],
 
-  "group/stats": {
-    "orientation": "inherit",
-    "drawer": { "transition-duration": 150, "transition-left-to-right": false, "click-to-reveal": true, "children-class": "stat" },
-    "modules": ["custom/stats", "cpu", "memory", "temperature", "custom/gpu", "network"]
-  },
-  // The drawer's handle. Click: show or hide the readings. Right-click: btop.
+  // Closed it reads "stats"; click it and the same spot shows cpu, mem,
+  // temp, gpu and network (bar-stats), click again to close. Right-click: btop.
   "custom/stats": {
-    "format": "<span color='#1793d1'>stats</span>",
-    "tooltip": false,
+    "exec": "~/.local/bin/bar-stats",
+    "return-type": "json",
+    "interval": 2,
+    "signal": 9,
+    "on-click": "~/.local/bin/bar-stats toggle",
     "on-click-right": "~/.local/bin/sysmon"
   },
 
@@ -87,23 +86,6 @@
     "on-click": "kitty -e ssh pi"
   },
 
-  "cpu": { "format": "<span color='#1793d1'>cpu:</span>{usage:>3}%", "interval": 5, "on-click": "~/.local/bin/sysmon" },
-  "memory": { "format": "<span color='#1793d1'>mem:</span> {used:0.1f}G", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB", "on-click": "~/.local/bin/sysmon" },
-  // CPU package temperature. coretemp is Intel's sensor; on AMD use k10temp.
-  "temperature": {
-    "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
-    "input-filename": "temp1_input",
-    "critical-threshold": 85,
-    "format": "<span color='#1793d1'>temp:</span>{temperatureC:>3}°C",
-    "interval": 5,
-    "on-click": "~/.local/bin/sysmon"
-  },
-  "custom/gpu": {
-    "exec": "~/.local/bin/gpu-status",
-    "return-type": "json",
-    "interval": 5,
-    "on-click": "~/.local/bin/sysmon"
-  },
   // The volume keys show the swayosd popup.
   "pulseaudio": {
     "format": "<span color='#1793d1'>vol:</span>{volume:>4}",
@@ -111,17 +93,6 @@
     "tooltip": false,
     "on-click": "pavucontrol",
     "on-click-right": "swayosd-client --output-volume mute-toggle"
-  },
-  "network": {
-    "format-wifi": "<span color='#1793d1'>wifi:</span> {signalStrength}% ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "format-ethernet": "<span color='#1793d1'>eth:</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "interval": 2,
-    "format-disconnected": "<span color='#1793d1'>net:</span> down",
-    "tooltip-format": "{ifname} {ipaddr}/{cidr}",
-    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
-    // Click: Wi-Fi picker in fuzzel. Right-click: nmtui for everything else.
-    "on-click": "~/.local/bin/wifi",
-    "on-click-right": "~/.local/bin/wifi settings"
   },
   "tray": { "spacing": 6, "icon-size": 14 },
 

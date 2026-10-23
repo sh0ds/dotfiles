@@ -56,7 +56,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("awww-daemon")
 	-- The Diag background: black, a faint dot grid, a dim pixel Arch logo in
 	-- the middle. Drawn 1:1 (no scaling, so the dots stay sharp) and centred
-	-- on every screen. SUPER+W still picks a picture from ~/Pictures/walls.
+	-- on every screen.
 	hl.exec_cmd("sleep 1 && awww img --resize no --fill-color 000000 --transition-type none ~/.local/share/backgrounds/diag.png")
 end)
 
