@@ -90,10 +90,12 @@ narrow screens or an unusually large system tray can still crowd the bar.
 
 In the cloud workspace:
 
-- Eight headless regression tests pass: installer backup/idempotence and Qt
+- Nine headless regression tests pass: installer backup/idempotence and Qt
   rendering (including spaces and ampersands), literal/bounded lock metadata,
   stats toggle/reset, and power layout across desktop, HiDPI, portrait and small
-  logical display sizes. The new Starship prompt was also rendered by Starship
+  logical display sizes. A PTY integration test checks that site-dev starts SSH
+  at the calling terminal width rather than the detached 80-column default.
+  The new Starship prompt was also rendered by Starship
   1.27.0 in a real fixture Git repository with a stash, exit statuses 0 and 1,
   and command duration; no format warnings were emitted.
 - ShellCheck warning-level checks pass for all `.local/bin` scripts and the

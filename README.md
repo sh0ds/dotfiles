@@ -90,7 +90,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
 - `update-check`, `default-apps`, `nightlight`, and the helpers behind the bar and the lock screen (`bar-stats`, `pi-status`, `rec-status`, `np-title`)
 
-## Screenshots and recordings
+## Screenshots
 
 Current desktop captures from 2026-10-23, kept at their original resolution. The app overview above shows Firefox, kitty and Obsidian with the top rail and focused window frame.
 
@@ -118,17 +118,6 @@ rmpc playing alongside the SwayNC panel, with real track artwork, framed playbac
 
 ![rmpc playing with the Diag notification and music panel](screenshots/notifications.png)
 
-### Motion recordings
-
-Static screenshots show the layout; recordings would help review transitions and playback controls. Useful optional captures:
-
-| Capture | What to show |
-| --- | --- |
-| `demo.gif` or `demo.mp4` | 15–25 seconds opening a second window, changing workspace/focus, opening fuzzel, toggling a quick app, then opening/cancelling the session console. |
-| `music.gif` or `music.mp4` | 8–12 seconds of play/pause, skipping a track and switching player if available. Include a long title or missing artwork. |
-
-Optional: current `lock.png`, `launcher.png` and a secondary monitor capture. MP4 at 60 fps is useful for reviewing motion; GIF works inline in the README. Keep normal playback speed and note the display scale/refresh rate when reporting layout or motion issues.
-
 <details>
 <summary>Historical captures — earlier rice</summary>
 
@@ -138,7 +127,6 @@ These predate the current Diag layout.
 ![Previous quick apps](screenshots/archive/popups.png)
 ![Previous power menu](screenshots/archive/power.png)
 ![Previous lock screen](screenshots/archive/lock.png)
-![Previous motion demo](screenshots/archive/demo.gif)
 
 </details>
 

@@ -17,7 +17,9 @@ command -v tmux >/dev/null || { echo "site-dev: tmux is not installed (sudo pacm
 [ -d "$repo/.git" ] || { echo "site-dev: no site repo at $repo yet. Clone it there, or set SITE_REPO."; false; }
 
 if ! tmux has-session -t "$session" 2>/dev/null; then
-  tmux new-session -d -s "$session" -n edit -c "$repo"
+  # Detached sessions otherwise start at 80x24. Match the calling terminal
+  # before SSH/fastfetch prints, so attaching does not reflow the greeting.
+  tmux new-session -d -x - -y - -s "$session" -n edit -c "$repo"
   tmux send-keys -t "$session:edit" "nvim ." Enter
   tmux new-window -t "$session" -n build -c "$repo"
   tmux new-window -t "$session" -n repl -c "$repo"

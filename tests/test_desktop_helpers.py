@@ -3,12 +3,17 @@
 Uses isolated targets and command stubs; never installs into the real home,
 starts a desktop, signals a recorder, or changes network/power state.
 """
+import fcntl
 import json
 import os
+import pty
 from pathlib import Path
 import shutil
+import struct
 import subprocess
 import tempfile
+import termios
+import time
 import unittest
 import xml.etree.ElementTree as ET
 
@@ -35,6 +40,45 @@ class Helpers(unittest.TestCase):
             ["bash", str(REPO / ".local/bin" / name), *args],
             env=self.env, text=True, capture_output=True, check=True, timeout=10,
         ).stdout
+
+    @unittest.skipUnless(shutil.which("tmux"), "tmux is required for the PTY integration test")
+    def test_site_dev_ssh_starts_at_terminal_size(self):
+        # Exercise the actual helper and tmux with an isolated server. The SSH
+        # stand-in records the size a remote greeting would see before attach.
+        real_tmux = shutil.which("tmux")
+        socket = self.root / "tmux.sock"
+        config = self.root / "tmux.conf"
+        config.write_text("set -g default-shell /bin/bash\nset -g default-command /bin/bash\nset -g base-index 1\n")
+        repo = self.root / "website"
+        (repo / ".git").mkdir(parents=True)
+        size_file = self.root / "ssh-size"
+        self.env.update(REAL_TMUX=real_tmux, TEST_SOCKET=str(socket),
+                        TEST_CONFIG=str(config), SSH_SIZE_FILE=str(size_file),
+                        SITE_REPO=str(repo), TERM="xterm-256color", HOME=str(self.root))
+        self.env.pop("TMUX", None)
+        self.stub("tmux", 'exec "$REAL_TMUX" -S "$TEST_SOCKET" -f "$TEST_CONFIG" "$@"')
+        self.stub("ssh", 'stty size > "$SSH_SIZE_FILE"')
+        self.stub("nvim", "exit 0")
+        master, slave = pty.openpty()
+        fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 55, 137, 0, 0))
+        process = subprocess.Popen(["bash", str(REPO / ".local/bin/site-dev")],
+                                   env=self.env, stdin=slave, stdout=slave, stderr=slave)
+        try:
+            deadline = time.monotonic() + 5
+            while not size_file.exists() and time.monotonic() < deadline:
+                time.sleep(0.02)
+            self.assertTrue(size_file.exists(), "Pi window did not start SSH")
+            rows, columns = map(int, size_file.read_text().split())
+            self.assertEqual(columns, 137)
+            # The status line may consume one row when a client attaches.
+            self.assertIn(rows, (54, 55))
+        finally:
+            subprocess.run([real_tmux, "-S", str(socket), "kill-server"],
+                           capture_output=True)
+            process.terminate()
+            process.wait(timeout=5)
+            os.close(master)
+            os.close(slave)
 
     def test_lock_metadata_is_literal_markup(self):
         self.stub("playerctl", 'printf "%s" "$PLAYER_METADATA"')
