@@ -64,3 +64,29 @@ layer/exit fades take 80ms. Focus and entry opacity retain 120ms, DPMS 400ms.
 These are configured timings and analytical spring values, not measured frame
 pacing. Terminal latency settings, opaque surfaces and disabled blur/shadow/
 glow are retained. No scrolling marquee or perpetual decorative animation.
+
+## 5 — Daily use
+
+Reimagine the final rice around the states encountered in normal use: paused
+music, no messages, a dim terminal colour, an inactive Qt window, keyboard
+focus, a disconnected Pi and a retired launcher. Bring meaningful secondary
+text up to the existing mid-grey instead of introducing a new colour. Keep
+kitty and Neovim's embedded terminal palette synchronized. Apply the user's
+explicit identity exception: red `pi`, green `:`, neutral `up`, red `down`.
+
+Complete the integration review: the eight headless helper tests pass,
+including safe removal of the retired Calendar symlink while keeping an
+unrelated dangling user link. ShellCheck passes for the helpers and installers;
+36 shell files and 11 Lua files parse; JSON/JSONC, TOML, YAML and SVG checks
+pass. GTK 3 and GTK 4 parse their relevant styles and all notification imports.
+The updated tmux config loads. Normal text on panel, selected text, and the
+corrected amber/red states exceed a 4.5:1 contrast ratio (5.37:1 to 11.46:1 for
+the measured pairs). The Pi outputs are checked in both mocked network states.
+
+Refresh the README instead of advertising historical screenshots as the new
+rice. Supply an exact capture list for the desktop, terminal, notifications,
+session console and apps, plus motion/player recordings. Actual application
+rendering, multi-monitor behaviour, authentication and compositor frame pacing
+still need those desktop captures. Existing wallpaper/login/lock design and
+production Pi services are preserved; Proton Calendar's installed browser PWA
+must be removed through PWAsForFirefox if it is still present locally.

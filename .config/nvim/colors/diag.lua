@@ -123,7 +123,7 @@ end
 -- The terminal inside nvim uses the same 16 colours as kitty.
 local term = {
   "#0d1014", "#e5484d", "#75c94d", "#ffb000", "#4aa3df", "#1793d1", "#7cc7d6", "#c4c9ce",
-  "#5d6670", "#ee7a7d", "#9fdc7c", "#ffd166", "#8fc3e6", "#5fb8e8", "#a9e0ea", "#f4f6f8",
+  "#8a929c", "#ee7a7d", "#9fdc7c", "#ffd166", "#8fc3e6", "#5fb8e8", "#a9e0ea", "#f4f6f8",
 }
 for i, col in ipairs(term) do
   vim.g["terminal_color_" .. (i - 1)] = col

@@ -2,19 +2,19 @@
 
 My Arch + Hyprland desktop in Diag, the look of [sh0ds.dev](https://sh0ds.dev) in Arch Linux blue.
 
-![desktop](screenshots/desktop.png)
-
 ## Description
 
 These are the configs I use every day. It runs Hyprland 0.56 with the new Lua config: `hyprland.lua` is a plain base config and `rice.lua` has the look, the window rules and my extra keybinds on top. If something in `rice.lua` breaks, the base still works.
 
 ### Look
 
-My site looks like the screen a Raspberry Pi 5 shows before Linux boots, and I wanted the desktop to match it, just in Arch colours. So it's black, cool greys and Arch blue (`#1793d1`), one font everywhere (Terminess, Terminus with Nerd Font icons, readable at every size), and text written as `key: value` with the key in blue. Rules are 2 px, panels get the site's double rule, and anything that's on is an inverted blue block. Windows tile with small gaps, square corners and a 2 px border, and only the focused window gets a blue frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. Firefox, Obsidian, the login screen and the boot splash get the same look. The lock screen is the site's header: a pixel Arch logo with `host:`, `kern:` and `up:` next to it.
+Black, cool greys and Arch blue (`#1793d1`). Terminess for the interface, square corners and small, regular gaps. A 4 px spacing unit keeps the shell tidy: 8 px between tiles and at the screen edge, 1 px separators inside apps and a 2 px focus marker. One tiled window still gets the whole workspace.
 
-Every app I use gets the same colours, GTK and Qt included, and Neovim has its own little `diag` scheme where code is grey, keywords are bright and strings and numbers are blue.
+The active thing gets the colour. Tabs use a blue label or underline on a quiet row; text selection uses blue-grey with light text. Buttons and mode indicators can invert to blue with black text. Amber means attention, red means an error, green means success. The Pi label is the exception: red `pi`, green `:`, neutral `up` or red `down`.
 
-![demo](screenshots/demo.gif)
+The surfaces are opaque. No blur, glow or shadows. Windows settle on a spring without bouncing, and short fades handle menus and popups without scaling their text. Workspace travel is small, the bar stays still, and there are no scrolling titles or decorative loops. The exact motion settings and five design passes are in [the iteration notes](docs/diag-iterations.md).
+
+GTK, Qt, browser chrome, terminal tools and Electron apps share the same hierarchy as far as their theme support allows. Websites, documents, pictures and video keep their own content colours and typography. The lock screen, login screen and boot splash retain the Diag identity.
 
 ### Bar
 
@@ -32,8 +32,6 @@ The things I need for a few seconds are normal tiled windows with one key each. 
 - `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
 
-![quick apps](screenshots/popups.png)
-
 ### What's in it
 
 Desktop:
@@ -45,11 +43,9 @@ Desktop:
 Terminal:
 
 - **kitty + tmux**, both in the same colours. kitty sends a notification when a long command finishes while I'm looking elsewhere. The tmux prefix is `Ctrl+A`.
-- **bash** with [starship](https://starship.rs) as one plain line, eza instead of ls, fzf on `Ctrl+R` and zoxide (`z`). New terminals greet you with fastfetch.
+- **bash** with a two-line [Starship](https://starship.rs) prompt: directory, Git state, language, elapsed time and clock above a blue input marker. A few Nerd Font icons provide landmarks; a failed command turns the marker red. eza replaces ls, fzf handles `Ctrl+R`, and zoxide gives you `z`. New terminals greet you with fastfetch.
 - **Neovim** with LazyVim. My cheat sheet for it is in [docs/neovim.md](docs/neovim.md).
 - **yazi** for files (`SUPER+E`, or `y` and the shell follows you to wherever you quit it), **lazygit** (`lg`), **bat** instead of cat and **tldr** instead of man pages for quick examples.
-
-![neovim](screenshots/nvim.png)
 
 Apps:
 
@@ -70,7 +66,7 @@ Keeping Arch healthy:
 Small scripts in `.local/bin` for things I kept needing. Each one has a short comment at the top.
 
 - `app`: the start, hide and bring back logic behind `chat`, `inbox`, `music`, `sysmon`, `notes` and SoundCloud
-- `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click `wifi` in the bar for nmtui
+- `wifi`: the notification panel’s Wi-Fi button opens a network picker; choose Network settings or run `wifi settings` for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
 - `emoji`: the emoji you pick gets typed and copied
@@ -83,7 +79,6 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `chat-notify`: WhatsApp messages as notifications, click one and it jumps to WhatsApp
 - `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
-- `app`: jumps to an app if it's open, otherwise starts it
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
@@ -92,23 +87,45 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
 - `update-check`, `default-apps`, `nightlight`, and the helpers behind the bar and the lock screen (`bar-stats`, `pi-status`, `rec-status`, `np-title`)
 
-## Screenshots
+## Screenshots and recordings
 
-These screenshots show an older desktop revision. See [the Diag design review](docs/diag-design.md) for the current styling, validation and application notes.
+The current Diag captures are pending. The files already in `screenshots/` show an older rice, so they are kept as history rather than presented as the current design.
 
-The launcher with the calculator:
+### Screenshots to capture
 
-![launcher](screenshots/launcher.png)
+These five PNGs cover the main desktop. Capture them after pulling and installing the latest revision, at native resolution and normal display scale. Leave the bar visible where practical.
 
-The notification panel:
+| File | What to show |
+| --- | --- |
+| `desktop.png` | The whole main screen with two or three tiled apps, focused and inactive borders, wallpaper and the full top rail. |
+| `terminal.png` | Kitty with the new prompt in a Git repo, one successful command and one failed command; include tmux or Neovim beside it. |
+| `notifications.png` | `SUPER+N` with one sample notification, quick settings, the volume slider and the music widget playing a track. |
+| `power.png` | The complete text-only session console; hover or keyboard-focus one row so the highlight and hotkey are visible. Cancel with Escape. |
+| `apps.png` | Firefox and Obsidian beside one terminal app such as Yazi, rmpc, lazygit or btop. Include selected tabs/items to compare app styling. |
 
-![notifications](screenshots/notifications.png)
+Optional: `lock.png` for Hyprlock and `launcher.png` for fuzzel with a search and selected result. If another monitor uses a different scale or orientation, also capture `desktop-secondary.png` at its native resolution.
 
-The power menu and the lock screen:
+### Recordings to capture
 
-![power menu](screenshots/power.png)
+| File | Length | What to show |
+| --- | --- | --- |
+| `demo.gif` or `demo.mp4` | 15–25 s | Open a second window, change workspace, move focus, open/close fuzzel, toggle a quick app, then open/cancel the session console. Keep the pointer visible. |
+| `music.gif` or `music.mp4` | 8–12 s | Open notifications, play/pause, skip a track and switch player if two are available. Include a long title or a track without artwork to expose clipping/fallback issues. |
 
-![lock screen](screenshots/lock.png)
+MP4 at 60 fps is preferable for reviewing smoothness; GIF is fine for the README. Record at normal speed. Provide one clean PNG per state rather than a stitched collage, using sample content without private messages. Alongside the files, note the monitor resolution/scale, refresh rate, app names and anything that looks wrong.
+
+Once these captures are supplied, they can replace the historical assets and be embedded here. The filenames above are a capture plan, not links to screenshots that do not exist yet.
+
+<details>
+<summary>Historical captures</summary>
+
+![Previous desktop](screenshots/desktop.png)
+![Previous quick apps](screenshots/popups.png)
+![Previous power menu](screenshots/power.png)
+![Previous lock screen](screenshots/lock.png)
+![Previous motion demo](screenshots/demo.gif)
+
+</details>
 
 ## Getting Started
 
@@ -131,7 +148,7 @@ yay -S wlogout nchat proton-pass-bin
 
 ### Installing
 
-Clone the repo and run the install script. It symlinks everything into your home folder and moves your old files to `~/.dotfiles-backup/` first, so nothing gets lost.
+Clone the repo and run the install script. It links the tracked configs into your home folder and moves replaced files to `~/.dotfiles-backup/` first, so nothing gets lost.
 
 ```
 git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
@@ -198,6 +215,16 @@ And change a few things to your liking:
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - The `pi up` reading and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
+
+### Updating an existing installation
+
+Close btop and nchat first. Check `git status --short`; preserve any local edits before pulling. Then, on the branch you use:
+
+```sh
+git pull --ff-only && bash install-dotfiles.sh
+```
+
+Log out and back in to load the full shell. The prompt updates at the next command. The installer removes its own dangling launcher links; this retires the old Proton Calendar helper. If the Calendar PWA is still installed in your Firefox profile, remove it separately through PWAsForFirefox. The clock now uses only its built-in month/year view.
 
 ### Executing program
 

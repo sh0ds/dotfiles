@@ -33,7 +33,7 @@ alias lg='lazygit'                                              # git TUI (SPACE
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
 # fzf in Diag: blue matches and pointer, blue-grey selection, square border
-export FZF_DEFAULT_OPTS="--border=sharp --color=fg:#c4c9ce,bg:-1,hl:#1793d1,fg+:#f4f6f8,bg+:#161a1f,hl+:#5fb8e8,info:#5d6670,prompt:#8a929c,pointer:#1793d1,marker:#1793d1,spinner:#1793d1,header:#8a929c,border:#2e353d,gutter:-1"
+export FZF_DEFAULT_OPTS="--border=sharp --color=fg:#c4c9ce,bg:-1,hl:#1793d1,fg+:#f4f6f8,bg+:#161a1f,hl+:#5fb8e8,info:#8a929c,prompt:#8a929c,pointer:#1793d1,marker:#1793d1,spinner:#1793d1,header:#8a929c,border:#2e353d,gutter:-1"
 
 # y: yazi, and when you quit it the shell stays in the folder you were in
 y() {

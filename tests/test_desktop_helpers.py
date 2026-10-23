@@ -117,10 +117,19 @@ class Helpers(unittest.TestCase):
         old = target / ".config/kitty/kitty.conf"
         old.parent.mkdir(parents=True)
         old.write_text("existing user config\n")
+        # Retiring a helper removes only our own stale link, not an unrelated
+        # dangling user link. This is how the Calendar launcher is retired.
+        stale = target / ".local/bin/calendar"
+        stale.parent.mkdir(parents=True)
+        stale.symlink_to(checkout / ".local/bin/calendar")
+        unrelated = target / ".local/bin/user-helper"
+        unrelated.symlink_to(self.root / "external/missing")
         template = checkout / ".config/qt6ct/qt6ct.conf"
         before = template.read_bytes()
         command = ["bash", str(checkout / "install-dotfiles.sh"), "--target", str(target)]
         subprocess.run(command, check=True, capture_output=True, timeout=15)
+        self.assertFalse(stale.is_symlink())
+        self.assertTrue(unrelated.is_symlink())
         palette_config = target / ".config/qt6ct/qt6ct.conf"
         self.assertFalse(palette_config.is_symlink())
         self.assertIn(f"color_scheme_path={target}/.config/qt6ct/colors/diag.conf",
