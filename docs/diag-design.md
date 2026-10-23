@@ -109,9 +109,9 @@ No actual Arch/Hyprland desktop, GPU timing, lock authentication, nchat login,
 MPD session, Firefox profile, Electron app or Qt application was exercised.
 Browser/app updates can change selectors. Steam, SoundCloud’s PWA and proprietary
 apps control parts of their own UI; GTK/Qt colours do not override all web
-content. The README now includes four original user-supplied Diag captures from
+content. The README now includes five original user-supplied Diag captures from
 2026-10-23. Earlier images are under `screenshots/archive/`. Static captures
-show the app, terminal, desktop and session-console appearance; they do not
+show the app, terminal, desktop, session-console and music-panel appearance; they do not
 validate animation timing or every interaction.
 
 ## Apply on the desktop
