@@ -8,4 +8,4 @@ if [[ $id == *XXXX* ]]; then
   exit 1
 fi
 id=${id#FFPWA-}
-exec app "^FFPWA-$id\$" firefoxpwa site launch "$id"
+exec app --toggle "^FFPWA-$id\$" firefoxpwa site launch "$id"

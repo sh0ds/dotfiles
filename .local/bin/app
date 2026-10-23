@@ -1,19 +1,40 @@
 #!/usr/bin/env bash
-# app: one key per app. Jump to its window wherever it is, start it tiled on
-# the current workspace if it isn't open, and jump back to where you were if
-# you're already on it.
-# Usage: app CLASS-REGEX COMMAND...   e.g.  app '(?i)obsidian' obsidian
-# Used by notes, djvm, chat, inbox, music, calendar, sysmon and
-# SoundCloud (SUPER+S in rice.lua).
+# app: one key per app.
+#   app CLASS-REGEX COMMAND...           jump to its window wherever it is,
+#                                        start it tiled here if it isn't open,
+#                                        jump back if you're already on it
+#   app --toggle CLASS-REGEX COMMAND...  the same, but pressing the key on the
+#                                        app hides it, and the next press brings
+#                                        it back tiled on the workspace you're on
+# Hidden windows wait on special:hidden, which has no key and isn't in the bar.
+# notes and djvm jump; chat, inbox, music, calendar, sysmon and SoundCloud
+# (SUPER+S in rice.lua) toggle.
 set -euo pipefail
+toggle=0
+[ "${1:-}" = --toggle ] && { toggle=1; shift; }
 re=$1
 shift
+d() { hyprctl dispatch "$1" >/dev/null; }
+
 active=$(hyprctl activewindow -j | jq -r '.class // empty')
 if [ -n "$active" ] && jq -en --arg c "$active" --arg re "$re" '$c | test($re)' >/dev/null; then
-  exec hyprctl dispatch 'hl.dsp.focus({ last = true })'
+  if (( toggle )); then
+    addr=$(hyprctl activewindow -j | jq -r '.address')
+    d "hl.dsp.window.move({ workspace = \"special:hidden\", follow = false, window = \"address:$addr\" })"
+  else
+    d 'hl.dsp.focus({ last = true })'
+  fi
+  exit 0
 fi
-addr=$(hyprctl clients -j | jq -r --arg re "$re" '[.[] | select(.class | test($re))][0].address // empty')
-if [ -n "$addr" ]; then
-  exec hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })"
+
+read -r addr ws < <(hyprctl clients -j | jq -r --arg re "$re" \
+  '[.[] | select(.class | test($re))][0] // empty | "\(.address) \(.workspace.name)"') || true
+if [ -n "${addr:-}" ]; then
+  if [ "$ws" = special:hidden ]; then
+    here=$(hyprctl activeworkspace -j | jq -r '.id')
+    d "hl.dsp.window.move({ workspace = \"$here\", window = \"address:$addr\" })"
+  fi
+  d "hl.dsp.focus({ window = \"address:$addr\" })"
+  exit 0
 fi
 "$@" >/dev/null 2>&1 & disown

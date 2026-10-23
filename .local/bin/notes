@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # notes: Obsidian on the ~/notes vault (SUPER+O), as a normal tiled window.
-# Jumps to it if it's already open, otherwise starts it.
+# Jumps to it if it's already open, otherwise starts it. Also links the Diag
+# CSS snippet into the vault (turn it on once: Settings -> Appearance -> CSS
+# snippets -> diag).
 set -euo pipefail
-mkdir -p "$HOME/notes"
+mkdir -p "$HOME/notes/.obsidian/snippets"
+ln -sfn "$HOME/.config/diag/obsidian.css" "$HOME/notes/.obsidian/snippets/diag.css"
 exec app '^md\.obsidian\.Obsidian$' obsidian

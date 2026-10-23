@@ -10,7 +10,7 @@ backup="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
 cd "$src"
 # Only files git tracks, so nothing local or half-finished gets linked.
-git ls-files | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/)' |
+git ls-files | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/)' |
   while IFS= read -r rel; do
   target="$HOME/$rel"
   if [ -L "$target" ] && [ "$(readlink "$target")" = "$src/$rel" ]; then

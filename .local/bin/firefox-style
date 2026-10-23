@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# firefox-style: links ~/.config/firefox (userChrome.css, userContent.css,
+# user.js: the Diag look) into your Firefox profile. Run it once with Firefox
+# closed; after that, edits in ~/.config/firefox show up on the next start.
+# Finds the default profile in either place Firefox keeps them.
+set -euo pipefail
+src=$HOME/.config/firefox
+pgrep -x firefox >/dev/null && { echo "Close Firefox first (it rewrites prefs on exit)." >&2; exit 1; }
+for base in "$HOME/.config/mozilla/firefox" "$HOME/.mozilla/firefox"; do
+  ini=$base/profiles.ini
+  [ -f "$ini" ] || continue
+  # The profile the installed Firefox uses ([Install...] Default=), else the one marked Default=1
+  rel=$(awk -F= '/^\[Install/{i=1;next} /^\[/{i=0} i&&$1=="Default"{print $2; exit}' "$ini")
+  [ -n "$rel" ] || rel=$(awk -F= '/^\[Profile/{p="";d=0} $1=="Path"{p=$2} $1=="Default"&&$2=="1"{d=1} d&&p{print p; exit}' "$ini")
+  [ -n "$rel" ] || continue
+  case $rel in /*) prof=$rel ;; *) prof=$base/$rel ;; esac
+  [ -d "$prof" ] || continue
+  mkdir -p "$prof/chrome"
+  ln -sfn "$src/chrome/userChrome.css" "$prof/chrome/userChrome.css"
+  ln -sfn "$src/chrome/userContent.css" "$prof/chrome/userContent.css"
+  ln -sfn "$src/user.js" "$prof/user.js"
+  echo "Linked the Diag look into $prof. Start Firefox."
+  exit 0
+done
+echo "No Firefox profile found. Start Firefox once, close it, then run this again." >&2
+exit 1

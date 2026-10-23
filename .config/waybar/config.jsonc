@@ -2,22 +2,36 @@
 {
   "layer": "top",
   "position": "bottom",
-  "height": 26,
+  "height": 34,
   "spacing": 0,
 
   // Left: workspaces and what's playing. Middle: LIVE and REC, only while
-  // active. Right: readings, then the clock and the power button.
+  // active. Right: "stats" (click it: cpu, mem, temp, gpu and network slide
+  // out, click again to hide them, so nothing ticks away all day), then the
+  // Pi, volume, notifications, the clock and the power button.
   // Like the diagnostic lines on sh0ds.dev: every module is "key: value",
   // the key in Arch blue, the value in white. No icons, no pills.
   "modules-left": ["hyprland/workspaces", "mpris"],
   "modules-center": ["custom/live", "custom/rec"],
-  "modules-right": ["tray", "cpu", "memory", "temperature", "custom/gpu", "custom/pi", "pulseaudio", "network", "custom/notification", "clock", "custom/power"],
+  "modules-right": ["tray", "group/stats", "custom/pi", "pulseaudio", "custom/notification", "clock", "custom/power"],
+
+  "group/stats": {
+    "orientation": "inherit",
+    "drawer": { "transition-duration": 150, "transition-left-to-right": false, "click-to-reveal": true, "children-class": "stat" },
+    "modules": ["custom/stats", "cpu", "memory", "temperature", "custom/gpu", "network"]
+  },
+  // The drawer's handle. Click: show or hide the readings. Right-click: btop.
+  "custom/stats": {
+    "format": "<span color='#1793d1'>stats</span>",
+    "tooltip": false,
+    "on-click-right": "~/.local/bin/sysmon"
+  },
 
   // Numbers. The current one is a blue block, empty ones are dim, one that
   // wants attention is underlined red.
   "hyprland/workspaces": {
     "format": "{name}",
-    "persistent-workspaces": { "*": 5 },   // 1-5 always visible, even when empty
+    "persistent-workspaces": { "DP-4": [1, 2, 3, 4, 5] },   // 1-5 always on the main screen, even when empty
     "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
     "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
   },

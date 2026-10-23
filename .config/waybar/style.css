@@ -1,11 +1,12 @@
 /* ~/.config/waybar/style.css  (Diag)
    The bar is one diagnostic line, styled like sh0ds.dev: VT323 on black, a
    double rule on top, "key: value" readings (keys are coloured in
-   config.jsonc). Hover lights the row up, like a file line on the site;
-   only the current workspace and LIVE/REC are solid blue blocks. */
+   config.jsonc). Nothing paints over the rule: modules sit 6 px inside the
+   bar, hover only brightens the text, and the only filled blocks (current
+   workspace, LIVE, REC) are inset like buttons on a panel. */
 * {
   font-family: "VT323", "Terminess Nerd Font", monospace;
-  font-size: 19px;
+  font-size: 22px;
   min-height: 0;
   border: none;
   border-radius: 0;
@@ -16,50 +17,63 @@
 window#waybar {
   background: #000000;
   color: #e6e8ea;
-  border-top: 3px double #3f4650;
+  border-top: 4px double #3f4650;
 }
 
 tooltip { background: #0d1014; border: 1px solid #3f4650; border-left: 2px solid #1793d1; }
-tooltip label { color: #e6e8ea; }
+tooltip label { color: #e6e8ea; font-size: 20px; }
 
-/* ---- Workspaces: numbers, the current one an Arch blue block ---- */
+/* Every module: same inset from the rule and the bottom edge */
+#workspaces, #mpris, #custom-live, #custom-rec, #tray, #stats,
+#custom-pi, #pulseaudio, #custom-notification, #clock, #custom-power {
+  margin: 5px 0 4px;
+}
+
+/* ---- Workspaces: numbers, the current one an inset Arch blue block ---- */
+#workspaces { margin-left: 8px; }
 #workspaces button {
   color: #8a929c;
   background: transparent;
-  padding: 0 7px;
+  padding: 0 8px;
   /* 120 ms, same as the window frame in rice.lua, so both land together */
   transition: background-color 120ms linear, color 120ms linear;
 }
 #workspaces button.empty  { color: #3f4650; }
 #workspaces button.active { color: #000000; background: #1793d1; }
 #workspaces button.urgent { color: #e5484d; box-shadow: inset 0 -2px #e5484d; }
-#workspaces button:hover  { color: #e6e8ea; background: #161a1f; }
+#workspaces button:hover  { color: #ffffff; background: transparent; }
+#workspaces button.active:hover { color: #000000; background: #1793d1; }
 
-#mpris { padding: 0 12px; color: #8a929c; }
+#mpris { padding: 0 14px; color: #8a929c; }
 #mpris.playing { color: #e6e8ea; }
 
-/* ---- Right side: readings a space apart, like the site's key column ---- */
-#cpu, #memory, #temperature, #custom-gpu, #custom-pi, #pulseaudio,
-#network, #custom-notification, #clock, #custom-power {
-  padding: 0 9px;
+/* ---- Right side: readings two spaces apart, like the site's lists ---- */
+#cpu, #memory, #temperature, #custom-gpu, #network, #custom-stats,
+#custom-pi, #pulseaudio, #custom-notification, #clock, #custom-power {
+  padding: 0 10px;
   background: transparent;
-  transition: background-color 120ms linear, color 120ms linear;
+  transition: color 120ms linear;
 }
-#tray { padding: 0 9px; }
+#tray { padding: 0 10px; }
+/* The opened stats sit a step dimmer than the always-on readings */
+.stat { color: #c4c9ce; }
 
 #temperature.critical { color: #ffb000; }
 #pulseaudio.muted, #network.disconnected { color: #5d6670; }
-#custom-power        { color: #8a929c; padding-right: 12px; }
+#custom-power { color: #8a929c; padding-right: 14px; }
+
+/* Hover: brighter text, nothing else */
 #custom-power:hover, #pulseaudio:hover, #custom-notification:hover, #clock:hover,
-#cpu:hover, #memory:hover, #temperature:hover, #custom-gpu:hover, #custom-pi:hover, #network:hover {
-  background: #161a1f;
+#custom-stats:hover, #cpu:hover, #memory:hover, #temperature:hover, #custom-gpu:hover,
+#custom-pi:hover, #network:hover, #mpris:hover {
+  background: transparent;
   color: #ffffff;
 }
 
-/* ---- Only while active: inverted, like the last BOOT step on the site ---- */
+/* ---- Only while active: inset blocks, like the last BOOT step on the site ---- */
 #custom-live.live, #custom-rec.rec {
   color: #000000;
   background: #1793d1;
-  padding: 0 9px;
+  padding: 0 10px;
 }
 #custom-live.idle, #custom-rec.idle { padding: 0; margin: 0; }

@@ -1,0 +1,72 @@
+# Diag boot splash: black, the pixel Arch logo, and under it a framed meter
+# filling with Arch blue blocks, like the meters on sh0ds.dev. The disk
+# password prompt (if any) is a "password:" line under the meter.
+
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+
+cx = Window.GetX() + Window.GetWidth() / 2;
+cy = Window.GetY() + Window.GetHeight() / 2;
+
+logo.image = Image("logo.png");
+logo.sprite = Sprite(logo.image);
+logo.sprite.SetPosition(cx - logo.image.GetWidth() / 2, cy - logo.image.GetHeight() - 20, 1);
+
+frame.image = Image("frame.png");
+frame.x = cx - frame.image.GetWidth() / 2;
+frame.y = cy + 30;
+frame.sprite = Sprite(frame.image);
+frame.sprite.SetPosition(frame.x, frame.y, 1);
+
+# 40 blocks, 10 px apart, switched on as the boot goes
+block.image = Image("block.png");
+for (i = 0; i < 40; i++) {
+  blocks[i] = Sprite(block.image);
+  blocks[i].SetPosition(frame.x + 4 + i * 10, frame.y + 4, 2);
+  blocks[i].SetOpacity(0);
+}
+shown = 0;
+
+fun progress_callback(duration, progress) {
+  want = Math.Int(progress * 40);
+  if (want > 40) { want = 40; }
+  while (shown < want) {
+    blocks[shown].SetOpacity(1);
+    shown++;
+  }
+}
+Plymouth.SetBootProgressFunction(progress_callback);
+
+fun label(text, r, g, b) {
+  return Image.Text(text, r, g, b);
+}
+
+key.sprite = Sprite();
+fun show_line(text, r, g, b) {
+  img = label(text, r, g, b);
+  key.sprite.SetImage(img);
+  key.sprite.SetPosition(cx - img.GetWidth() / 2, frame.y + 40, 3);
+  key.sprite.SetOpacity(1);
+}
+
+fun password_callback(prompt, bullets) {
+  stars = "";
+  for (i = 0; i < bullets; i++) stars += "*";
+  show_line("password: " + stars, 0.09, 0.58, 0.82);
+}
+Plymouth.SetDisplayPasswordFunction(password_callback);
+
+fun normal_callback() {
+  key.sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(normal_callback);
+
+fun message_callback(text) {
+  show_line(text, 0.54, 0.57, 0.61);
+}
+Plymouth.SetMessageFunction(message_callback);
+
+fun quit_callback() {
+  for (i = 0; i < 40; i++) blocks[i].SetOpacity(1);
+}
+Plymouth.SetQuitFunction(quit_callback);

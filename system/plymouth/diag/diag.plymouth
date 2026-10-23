@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Diag
+Description=The sh0ds.dev look in Arch blue: pixel logo and a meter like the ones on the site
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/diag
+ScriptFile=/usr/share/plymouth/themes/diag/diag.script

@@ -181,8 +181,9 @@ hl.window_rule({
 
 -- Quick apps (SoundCloud, calendar, WhatsApp, mail, music, btop)
 -- are normal tiled windows. Each has one key that goes through
--- ~/.local/bin/app: jump to the window wherever it is, start it next to what
--- you're doing if it isn't open, jump back if you're already on it.
+-- ~/.local/bin/app --toggle: start it next to what you're doing, press again
+-- to hide it, press again to bring it back tiled where you are. If it's
+-- visible on another workspace, the key jumps there.
 
 -- SoundCloud app (PWAsForFirefox), SUPER+S. Matched by the app's ID, not the
 -- page title, which changes with every track. Use your own ID from
@@ -190,7 +191,7 @@ hl.window_rule({
 local soundcloud = "01M4E9WM9PSN126GWCCEG49J4C"
 hl.unbind(mod .. " + S")
 hl.unbind(mod .. " + CTRL + S")
-hl.bind(mod .. " + S", hl.dsp.exec_cmd("app '^FFPWA-" .. soundcloud .. "$' firefoxpwa site launch " .. soundcloud))
+hl.bind(mod .. " + S", hl.dsp.exec_cmd("app --toggle '^FFPWA-" .. soundcloud .. "$' firefoxpwa site launch " .. soundcloud))
 -- Proton Calendar app (PWAsForFirefox), SUPER+Y or a click on the clock.
 -- Its ID lives in ~/.local/bin/calendar.
 hl.bind(mod .. " + Y", hl.dsp.exec_cmd("calendar"))
@@ -311,8 +312,8 @@ hl.on("hyprland.start", function()
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
 			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
-			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font 11'; "
-			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 11'; "
+			.. "gsettings set org.gnome.desktop.interface font-name 'VT323 14'; "
+			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'VT323 14'; "
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
 	)
 	hl.exec_cmd("udiskie")
@@ -320,10 +321,11 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("update-check --watch")
 	hl.exec_cmd("/usr/lib/kdeconnectd")
 	hl.exec_cmd("kdeconnect-indicator") -- optional tray icon
-	-- Mail: Proton's Bridge in the tray, then aerc out of the way on
-	-- workspace 10 so new mail shows up as notifications from the start
+	-- Mail: Proton's Bridge in the tray, then aerc hidden (special:hidden,
+	-- where `app --toggle` parks windows) so new mail shows up as
+	-- notifications from the start; SUPER+SHIFT+I brings it in
 	hl.exec_cmd("protonmail-bridge --no-window")
-	hl.exec_cmd("kitty --class mail -e aerc", { workspace = "10 silent" })
+	hl.exec_cmd("kitty --class mail -e aerc", { workspace = "special:hidden silent" })
 	-- aria2 in the background, Firefox hands its downloads to it
 	hl.exec_cmd("aria2-rpc")
 	-- Easy Effects without a window: the headphone EQ and limiter (docs/audio.md)

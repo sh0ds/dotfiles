@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# inbox: mail (SUPER+SHIFT+I). aerc in a kitty. rice.lua starts it at login
-# on workspace 10, so new-mail notifications come in even when you never
-# opened it; this jumps there, or starts it here if you closed it.
-exec app '^mail$' kitty --class mail -e aerc
+# inbox: mail (SUPER+SHIFT+I). aerc in a kitty. rice.lua starts it hidden at
+# login, so new-mail notifications come in even when you never opened it;
+# the key brings it in, and hides it again.
+exec app --toggle '^mail$' kitty --class mail -e aerc

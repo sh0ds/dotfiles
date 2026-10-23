@@ -7,13 +7,30 @@
 ---- MONITORS ----
 ------------------
 
--- `hyprctl monitors` lists names, e.g. "DP-1". One catch-all is enough to start.
+-- `hyprctl monitors` lists names, e.g. "DP-1".
+-- DP-4 is the main screen: it sits at 0x0, gets workspaces 1-5 (waybar keeps
+-- those five on it), the cursor at login, and is XWayland's primary output, so
+-- games and the login screen open there. Any other screen goes to its right.
+local main_screen = "DP-4"
+hl.monitor({
+	output = main_screen,
+	mode = "highrr",
+	position = "0x0",
+	scale = "auto",
+})
 hl.monitor({
 	output = "",
 	mode = "highrr",
-	position = "auto",
+	position = "auto-right",
 	scale = "auto",
 })
+for i = 1, 5 do
+	hl.workspace_rule({ workspace = tostring(i), monitor = main_screen, default = i == 1 })
+end
+hl.config({ cursor = { default_monitor = main_screen } })
+hl.on("hyprland.start", function()
+	hl.exec_cmd("command -v xrandr >/dev/null && xrandr --output " .. main_screen .. " --primary")
+end)
 
 -----------------
 ---- PROGRAMS ---

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # music: the music player (SUPER+U). rmpc in a kitty, playing from mpd, so
 # the music keeps going when the window is closed.
-exec app '^music$' kitty --class music -e rmpc
+exec app --toggle '^music$' kitty --class music -e rmpc

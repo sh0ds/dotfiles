@@ -17,4 +17,4 @@ set_opt() {
 set_opt color_theme '"diag"'
 set_opt theme_background false   # kitty's black behind it
 set_opt vim_keys true            # h j k l in the process list
-exec app '^sysmon$' kitty --class sysmon -e btop
+exec app --toggle '^sysmon$' kitty --class sysmon -e btop

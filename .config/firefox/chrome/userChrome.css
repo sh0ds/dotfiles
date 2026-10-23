@@ -1,0 +1,122 @@
+/* Firefox in Diag: the sh0ds.dev look in Arch blue, like the rest of the
+   desktop. Black toolbars, VT323 for tabs, the address bar and menus, square
+   corners, 2 px rules, the selected tab an Arch blue block. Mostly Firefox's
+   own theme variables, so it survives updates; `firefox-style` links this
+   into your profile. */
+
+:root {
+  --diag-bg: #000000;
+  --diag-row: #161a1f;
+  --diag-panel: #0d1014;
+  --diag-rule: #3f4650;
+  --diag-dim: #8a929c;
+  --diag-fg: #c4c9ce;
+  --diag-ink: #e6e8ea;
+  --diag-arch: #1793d1;
+
+  /* frame, toolbars, tabs */
+  --lwt-accent-color: var(--diag-bg) !important;
+  --lwt-accent-color-inactive: var(--diag-bg) !important;
+  --lwt-text-color: var(--diag-fg) !important;
+  --toolbox-bgcolor: var(--diag-bg) !important;
+  --toolbox-bgcolor-inactive: var(--diag-bg) !important;
+  --toolbox-textcolor: var(--diag-fg) !important;
+  --toolbar-bgcolor: var(--diag-bg) !important;
+  --toolbar-color: var(--diag-ink) !important;
+  --tab-selected-bgcolor: var(--diag-arch) !important;
+  --tab-selected-textcolor: #000000 !important;
+  --tab-hover-background-color: var(--diag-row) !important;
+  --tab-loading-fill: var(--diag-arch) !important;
+  --tab-border-radius: 0 !important;
+  --tab-min-height: 30px !important;
+  --tab-block-margin: 3px !important;
+
+  /* address bar */
+  --toolbar-field-background-color: var(--diag-panel) !important;
+  --toolbar-field-color: var(--diag-ink) !important;
+  --toolbar-field-border-color: var(--diag-rule) !important;
+  --toolbar-field-focus-background-color: var(--diag-bg) !important;
+  --toolbar-field-focus-color: #ffffff !important;
+  --toolbar-field-focus-border-color: var(--diag-arch) !important;
+  --urlbar-box-bgcolor: var(--diag-row) !important;
+  --urlbar-box-hover-bgcolor: var(--diag-row) !important;
+  --urlbar-box-text-color: var(--diag-ink) !important;
+  --urlbarView-highlight-background: var(--diag-arch) !important;
+  --urlbarView-highlight-color: #000000 !important;
+  --urlbarView-hover-background: var(--diag-row) !important;
+
+  /* buttons, menus, panels, sidebar */
+  --toolbarbutton-border-radius: 0 !important;
+  --toolbarbutton-hover-background: var(--diag-row) !important;
+  --toolbarbutton-active-background: var(--diag-rule) !important;
+  --toolbarbutton-icon-fill: var(--diag-fg) !important;
+  --toolbarbutton-icon-fill-attention: var(--diag-arch) !important;
+  --arrowpanel-background: var(--diag-panel) !important;
+  --arrowpanel-color: var(--diag-ink) !important;
+  --arrowpanel-border-color: var(--diag-rule) !important;
+  --arrowpanel-border-radius: 0 !important;
+  --arrowpanel-dimmed: var(--diag-row) !important;
+  --panel-separator-color: var(--diag-rule) !important;
+  --menu-background-color: var(--diag-panel) !important;
+  --menu-color: var(--diag-ink) !important;
+  --menu-border-color: var(--diag-rule) !important;
+  --menuitem-hover-background-color: var(--diag-arch) !important;
+  --menuitem-hover-color: #000000 !important;
+  --sidebar-background-color: var(--diag-bg) !important;
+  --sidebar-text-color: var(--diag-fg) !important;
+  --sidebar-border-color: var(--diag-rule) !important;
+  --chrome-content-separator-color: var(--diag-rule) !important;
+  --focus-outline-color: var(--diag-arch) !important;
+  --border-radius-small: 0 !important;
+  --border-radius-medium: 0 !important;
+  --border-radius-large: 0 !important;
+  --border-radius-circle: 0 !important;
+  --button-border-radius: 0 !important;
+  --identity-icon-color: var(--diag-dim) !important;
+}
+
+/* VT323 for everything around the page; the page itself keeps its fonts */
+#navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
+  font-family: "VT323", "Terminess Nerd Font", monospace !important;
+  font-size: 17px !important;
+}
+
+/* The site's double rule under the toolbars */
+#navigator-toolbox {
+  border-bottom: 4px double var(--diag-rule) !important;
+}
+
+/* Tabs: flat, dim until hovered; the selected one is the blue block */
+.tabbrowser-tab .tab-background {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.tabbrowser-tab:not([selected]) .tab-label { color: var(--diag-dim) !important; }
+.tabbrowser-tab:not([selected]):hover .tab-label { color: #ffffff !important; }
+.tabbrowser-tab[selected] .tab-close-button { color: #000000 !important; }
+
+/* Address bar: square, 2 px frame, blue while typing */
+#urlbar-background, #searchbar {
+  border-radius: 0 !important;
+  border-width: 2px !important;
+  box-shadow: none !important;
+}
+#urlbar[focused] > #urlbar-background {
+  outline: 2px solid var(--diag-arch) !important;
+  outline-offset: -2px !important;
+}
+
+/* Vertical tabs: the sidebar strip gets a rule on its edge, like the site's key column */
+#sidebar-main {
+  border-inline-end: 2px solid var(--diag-rule) !important;
+}
+
+/* No rounded corners or soft shadows anywhere in the chrome */
+* {
+  --panel-shadow-margin: 0px !important;
+}
+panel, menupopup {
+  --panel-border-radius: 0 !important;
+  --panel-shadow: none !important;
+}

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # chat: WhatsApp (SUPER+I). Runs nchat, a terminal WhatsApp and Telegram
 # client, in a kitty. Link your phone once with: nchat --setup
-exec app '^chat$' kitty --class chat -e nchat
+exec app --toggle '^chat$' kitty --class chat -e nchat

@@ -1,0 +1,43 @@
+/* Firefox's own pages (new tab, home, settings, add-ons) in Diag: black,
+   Arch blue links and buttons, square corners. Websites aren't touched. */
+
+@-moz-document url-prefix("about:") {
+  :root {
+    --in-content-page-background: #000000 !important;
+    --in-content-page-color: #e6e8ea !important;
+    --in-content-box-background: #0d1014 !important;
+    --in-content-box-border-color: #3f4650 !important;
+    --in-content-border-color: #3f4650 !important;
+    --in-content-link-color: #1793d1 !important;
+    --in-content-link-color-hover: #5fb8e8 !important;
+    --in-content-primary-button-background: #1793d1 !important;
+    --in-content-primary-button-background-hover: #5fb8e8 !important;
+    --in-content-primary-button-text-color: #000000 !important;
+    --in-content-button-background: #161a1f !important;
+    --in-content-button-background-hover: #3f4650 !important;
+    --in-content-button-text-color: #e6e8ea !important;
+    --in-content-item-selected: #1793d1 !important;
+    --in-content-item-selected-text: #000000 !important;
+    --in-content-focus-outline-color: #1793d1 !important;
+    --color-accent-primary: #1793d1 !important;
+    --color-accent-primary-hover: #5fb8e8 !important;
+    --border-radius-small: 0 !important;
+    --border-radius-medium: 0 !important;
+    --border-radius-large: 0 !important;
+    --button-border-radius: 0 !important;
+  }
+}
+
+/* New tab and home: just black, with the search box square */
+@-moz-document url("about:newtab"), url("about:home"), url("about:blank") {
+  body, .activity-stream {
+    background: #000000 !important;
+    color: #e6e8ea !important;
+  }
+  .search-wrapper .search-handoff-button, .search-wrapper input {
+    border-radius: 0 !important;
+    background-color: #0d1014 !important;
+    border: 2px solid #3f4650 !important;
+    box-shadow: none !important;
+  }
+}

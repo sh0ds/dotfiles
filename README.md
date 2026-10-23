@@ -10,7 +10,7 @@ These are the configs I use every day. It runs Hyprland 0.56 with the new Lua co
 
 ### Look
 
-My site looks like the screen a Raspberry Pi 5 shows before Linux boots, and I wanted the desktop to match it, just in Arch colours. So it's black, cool greys and Arch blue (`#1793d1`), VT323 for everything that isn't code, and text written as `key: value` with the key in blue. Rules are 2 px, panels get the site's double rule, and anything that's on is an inverted blue block. Windows tile with small gaps, square corners and a 2 px border, and only the focused window gets a blue frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. The terminal and Neovim use Terminess, a sharp bitmap-style font with all the icons. The lock screen is the site's header: a pixel Arch logo with `host:`, `kern:` and `up:` next to it.
+My site looks like the screen a Raspberry Pi 5 shows before Linux boots, and I wanted the desktop to match it, just in Arch colours. So it's black, cool greys and Arch blue (`#1793d1`), VT323 for everything, terminal and Neovim included, and text written as `key: value` with the key in blue. Rules are 2 px, panels get the site's double rule, and anything that's on is an inverted blue block. Windows tile with small gaps, square corners and a 2 px border, and only the focused window gets a blue frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. VT323 has no bold, italics or icons, so bold stays regular and kitty takes the Nerd Font icons from a symbols-only font. Firefox, Obsidian, the login screen and the boot splash get the same look. The lock screen is the site's header: a pixel Arch logo with `host:`, `kern:` and `up:` next to it.
 
 Every app I use gets the same colours, GTK and Qt included, and Neovim has its own little `diag` scheme where code is grey, keywords are bright and strings and numbers are blue.
 
@@ -18,11 +18,11 @@ Every app I use gets the same colours, GTK and Qt included, and Neovim has its o
 
 ### Bar
 
-One diagnostic line along the bottom under a double rule, no icons. Workspace numbers (the current one as a blue block) and `play:` with what's playing on the left, LIVE or REC in the middle while I'm sharing or recording, and on the right readings like `cpu: 7%`, `mem: 3.1G`, `temp: 52°C`, `pi: up`, `vol: 64`, `eth:` throughput and `time:` with an ISO date. Click the stats for btop, the clock for my calendar and `halt` for the power menu.
+One diagnostic line along the bottom under a double rule, no icons. Workspace numbers (the current one as a blue block) and `play:` with what's playing on the left, LIVE or REC in the middle while I'm sharing or recording. On the right `stats`: click it and `cpu:`, `mem:`, `temp:`, `gpu:` and `eth:` slide out, click again and they're gone, so nothing ticks away all day (right-click opens btop). After that `pi: up`, `vol: 64`, `msg:`, `time:` with an ISO date and `halt` for the power menu. Hovering only brightens the text. The main screen is DP-4: it gets workspaces 1 to 5, the cursor at login and the games.
 
 ### Quick apps
 
-The things I need for a few seconds are normal tiled windows with one key each. The key jumps to the app wherever it is, starts it next to what I'm doing if it isn't open, and jumps back to where I was if I'm already on it. Mail starts at login on workspace 10, so its notifications work from the start.
+The things I need for a few seconds are normal tiled windows with one key each. The key starts the app next to what I'm doing, pressing it again hides it, and the next press brings it back tiled wherever I am now. Mail starts hidden at login, so its notifications work from the start.
 
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
 - `SUPER+Y` Proton Calendar (also a web app, or click the clock)
@@ -66,7 +66,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` for things I kept needing. Each one has a short comment at the top.
 
-- `app`: the jump, start or jump back logic behind `chat`, `inbox`, `calendar`, `music`, `sysmon`, `notes` and SoundCloud
+- `app`: the start, hide and bring back logic behind `chat`, `inbox`, `calendar`, `music`, `sysmon`, `notes` and SoundCloud
 - `wifi`: pick a Wi-Fi network in fuzzel (it asks for the password on new ones), right-click `wifi` in the bar for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -113,7 +113,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 ```
 sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux neovim \
-  starship eza fzf zoxide fastfetch sl ttf-terminus-nerd noto-fonts-emoji \
+  starship eza fzf zoxide fastfetch sl ttf-terminus-nerd ttf-nerd-fonts-symbols-mono xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
@@ -147,6 +147,8 @@ And change a few things to your liking:
 - Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` and `qt6ct/qt6ct.conf`.
 - Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
 - For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
+- For the Diag look in Firefox (black toolbars, VT323, the selected tab a blue block, a plain black new tab), close Firefox and run `firefox-style` once. It links `~/.config/firefox` into your profile.
+- For the login screen and boot splash in the same look, run `bash ~/code/dotfiles/system/install-system.sh` (it asks for sudo). Preview the login screen with `sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/diag`.
 - For the calendar, open calendar.proton.me in Firefox and install it as an app the same way. Put its ID from `firefoxpwa profile list` in the `id=` line of `~/.local/bin/calendar`, then reload Hyprland. In Proton Calendar's settings, the Carbon theme fits best.
 - For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
 
@@ -171,7 +173,7 @@ And change a few things to your liking:
   ```
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
-- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, pick the dark base theme under Settings > Appearance and set the accent colour to `#1793d1`.
+- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the look, pick the dark base theme under Settings > Appearance and turn on the `diag` CSS snippet there (`notes` links it in).
 - For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
