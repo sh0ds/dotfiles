@@ -1,6 +1,7 @@
 /* Diag: square diagnostic panels, legible text, blue focus and state.
    Structure and widget defaults live in diag.css; each override appears once. */
 @import url("diag.css");
+@import url("mpris.css");
 
 .notification-background {
   margin: 6px;
@@ -60,4 +61,3 @@
   outline: 2px solid #1793d1;
   outline-offset: -2px;
 }
-.widget-mpris button image { -gtk-icon-size: 24px; }

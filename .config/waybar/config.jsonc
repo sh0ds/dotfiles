@@ -1,21 +1,16 @@
-// ~/.config/waybar/config.jsonc  (Diag: one diagnostic line along the bottom)
+// Diag instrument rail: workspaces/media · time · system controls.
 {
   "layer": "top",
-  "position": "bottom",
-  "height": 34,
+  "position": "top",
+  "height": 32,
   "spacing": 0,
 
-  // Left: workspaces and what's playing. Middle: LIVE and REC, only while
-  // active. Right: "stats" (click for cpu/mem/temp, hover for GPU/network,
-  // click again to hide the readings), then the
-  // Pi, volume, notifications, the clock and the power button.
-  // Like the diagnostic lines on sh0ds.dev: every module is "key: value",
-  // the key in Arch blue, the value in white. No icons, no pills.
-  "modules-left": ["hyprland/workspaces", "mpris"],
-  "modules-center": ["custom/live", "custom/rec"],
-  "modules-right": ["tray", "custom/stats", "custom/pi", "pulseaudio", "custom/notification", "clock", "custom/power"],
+  "fixed-center": true,
+  "modules-left": ["hyprland/workspaces", "custom/live", "custom/rec", "mpris"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/stats", "custom/pi", "pulseaudio", "custom/notification", "tray", "custom/power"],
 
-  // Closed it reads "stats"; click it and the same spot shows cpu,
+  // Closed it reads "sys"; click it and the same spot shows cpu,
   // mem and temp (bar-stats); GPU and network stay in its tooltip so the
   // clock and media controls still fit. Click again to close. Right-click: btop.
   "custom/stats": {
@@ -27,8 +22,7 @@
     "on-click-right": "~/.local/bin/sysmon"
   },
 
-  // Numbers. The current one is a blue block, empty ones are dim, one that
-  // wants attention is underlined red.
+  // Numbered workspaces; blue underline for focus, amber for urgency.
   "hyprland/workspaces": {
     "format": "{name}",
     "persistent-workspaces": { "DP-4": [1, 2, 3, 4, 5] },   // 1-5 always on the main screen, even when empty
@@ -37,8 +31,8 @@
   },
 
   "clock": {
-    "format": "<span color='#1793d1'>time:</span> {:%Y-%m-%d %H:%M}",
-    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "format": "{:%H:%M}",
+    "tooltip-format": "{:%A · %Y-%m-%d}\n<tt><small>{calendar}</small></tt>",
     "on-click": "~/.local/bin/calendar",
     // Hover: month calendar with week numbers. Scroll changes month,
     // right-click switches to the whole year, click opens Proton Calendar.
@@ -69,10 +63,10 @@
     "return-type": "json",
     "format": "{icon} {text}",
     "format-icons": {
-      "notification": "<span color='#1793d1'>msg:</span>",
-      "none": "<span color='#5d6670'>msg:</span>",
-      "dnd-notification": "<span color='#1793d1'>dnd:</span>",
-      "dnd-none": "<span color='#5d6670'>dnd:</span>"
+      "notification": "<span color='#1793d1'>msg</span>",
+      "none": "<span color='#5d6670'>msg</span>",
+      "dnd-notification": "<span color='#1793d1'>dnd</span>",
+      "dnd-none": "<span color='#5d6670'>dnd</span>"
     },
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
@@ -89,8 +83,8 @@
 
   // The volume keys show the swayosd popup.
   "pulseaudio": {
-    "format": "<span color='#1793d1'>vol:</span>{volume:>4}",
-    "format-muted": "<span color='#1793d1'>vol:</span> mute",
+    "format": "vol {volume:>3}%",
+    "format-muted": "vol mute",
     "tooltip": false,
     "on-click": "pavucontrol",
     "on-click-right": "swayosd-client --output-volume mute-toggle"
@@ -99,11 +93,11 @@
 
   // Bound media width: long titles must not push the clock off smaller screens.
   "mpris": {
-    "format": "<span color='#1793d1'>play:</span> {artist} - {title}",
-    "format-paused": "<span color='#5d6670'>hold:</span> {artist} - {title}",
+    "format": "<span color='#1793d1'>play</span>  {artist} / {title}",
+    "format-paused": "<span color='#5d6670'>hold</span>  {artist} / {title}",
     "artist-len": 10,
     "title-len": 20,
-    "max-length": 32,
+    "max-length": 28,
     "on-click": "playerctl play-pause",
     "on-scroll-up": "playerctl next",
     "on-scroll-down": "playerctl previous"
@@ -123,7 +117,7 @@
     "on-click": "~/.local/bin/rec-toggle"
   },
   "custom/power": {
-    "format": "halt",
+    "format": "[exit]",
     "on-click": "power-menu",
     "tooltip": false
   }

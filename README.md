@@ -18,7 +18,11 @@ Every app I use gets the same colours, GTK and Qt included, and Neovim has its o
 
 ### Bar
 
-One diagnostic line along the bottom under a double rule, no icons. Workspace numbers (the current one as a blue block) and `play:` with what's playing on the left, LIVE or REC in the middle while I'm sharing or recording. On the right `stats`: click it and `cpu:`, `mem:` and `temp:` show up in its place (hover for GPU and network detail), click again and it's back to `stats`, so nothing ticks away all day (right-click opens btop). After that `pi: up`, `vol: 64`, `msg:`, `time:` with an ISO date and `halt` for the power menu. Hovering only brightens the text. The main screen is DP-4, on the right of the desk: it gets workspaces 1 to 5, the cursor, the games and the login screen (`system/install-system.sh` switches the other screens off while SDDM runs).
+A slim instrument rail across the top. Numbered workspaces and a bounded `play` reading sit on the left, the clock holds the centre, and separated `sys`, `pi`, volume, messages, tray and `[exit]` controls sit on the right. A blue underline marks the active workspace; amber marks a recording or an urgent window. Hover changes colour without moving the layout.
+
+Click `sys` to expand CPU, memory and temperature; its tooltip holds GPU and network detail. Right-click opens btop. The centred clock opens Proton Calendar and shows the date/calendar on hover. LIVE and REC appear beside the workspaces. `[exit]` opens a compact, text-only session console with numbered actions and visible hotkeys. No logos or power icons.
+
+The notification centre uses a matching flat music transport: a solid black-grey surface, small real artwork when available, and framed playback controls. It never puts blurred artwork or an application logo behind the track title.
 
 ### Quick apps
 
@@ -85,7 +89,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
 - `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down
-- `power-menu`: a keyboard-labelled power grid that adapts to HiDPI and portrait screens
+- `power-menu`: a text-only session console that adapts to HiDPI and portrait screens
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
 - `update-check`, `default-apps`, `nightlight`, and the helpers behind the bar and the lock screen (`bar-stats`, `pi-status`, `rec-status`, `np-title`)
 

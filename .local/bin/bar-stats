@@ -23,7 +23,7 @@ if [ "${1:-}" = toggle ]; then
 fi
 
 if [ ! -e "$open" ]; then
-  jq -cn --arg text "<span color='#1793d1'>stats</span>" \
+  jq -cn --arg text "<span color='#1793d1'>sys</span>" \
     '{text:$text, class:"closed", tooltip:"click: cpu, mem, temp · hover: gpu, net · right-click: btop"}'
   exit 0
 fi

@@ -60,10 +60,12 @@ class Helpers(unittest.TestCase):
 
     def test_power_menu_desktop_and_hidpi(self):
         args = self.power_args([{"width": 1920, "height": 1080, "scale": 1}])
-        self.assertEqual(args["-b"], 5)
+        self.assertEqual(args["-b"], 1)
         self.assertEqual(args["-L"], args["-R"])
+        self.assertEqual(1920 - args["-L"] * 2, 420)
         args = self.power_args([{"width": 1920, "height": 1080, "scale": 2}])
-        self.assertEqual(args["-b"], 3)
+        self.assertEqual(args["-b"], 1)
+        self.assertEqual(960 - args["-L"] * 2, 420)
         self.assertLess(args["-T"] * 2, 540)
 
     def test_power_menu_rotation_and_mixed_outputs(self):
@@ -71,11 +73,17 @@ class Helpers(unittest.TestCase):
             {"width": 1920, "height": 1080, "scale": 1},
             {"width": 1920, "height": 1080, "scale": 2, "transform": 1},
         ])
-        self.assertEqual(args["-b"], 2)
+        self.assertEqual(args["-b"], 1)
         self.assertGreaterEqual(args["-L"], 16)
 
     def test_power_menu_without_compositor(self):
-        self.assertEqual(self.power_args([])["-b"], 5)
+        self.assertEqual(self.power_args([])["-b"], 1)
+
+    def test_power_menu_on_small_logical_output(self):
+        args = self.power_args([{"width": 640, "height": 720, "scale": 2}])
+        self.assertEqual(args["-b"], 1)
+        self.assertEqual(args["-L"], 16)
+        self.assertEqual(args["-T"], 16)
 
     def test_bar_toggle_and_counter_reset(self):
         self.env["XDG_RUNTIME_DIR"] = str(self.root)

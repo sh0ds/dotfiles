@@ -221,57 +221,7 @@ scrollbar trough {
   border-radius: 0;
 }
 
-/* mpris */
-.widget-mpris-player {
-  background: #161a1f;
-  border-radius: 0;
-  color: #e6e8ea;
-}
-
-.mpris-overlay {
-  background-color: #161a1f;
-  opacity: 0.9;
-  padding: 15px 10px;
-}
-
-.widget-mpris-album-art {
-  -gtk-icon-size: 100px;
-  border-radius: 0;
-  margin: 0 10px;
-}
-
-.widget-mpris-title {
-  font-size: 1.2rem;
-  color: #e6e8ea;
-}
-
-.widget-mpris-subtitle {
-  font-size: 1rem;
-  color: #c4c9ce;
-}
-
-.widget-mpris button {
-  border-radius: 0;
-  color: #e6e8ea;
-  margin: 0 5px;
-  padding: 2px;
-}
-
-.widget-mpris button image {
-  -gtk-icon-size: 1.8rem;
-}
-
-.widget-mpris button:hover {
-  background-color: #161a1f;
-}
-
-.widget-mpris button:active {
-  background-color: #2e353d;
-}
-
-.widget-mpris button:disabled {
-  opacity: 0.5;
-}
+/* MPRIS styling lives in mpris.css. */
 
 .widget-menubar > box > .menu-button-bar > button > label {
   font-size: 3rem;

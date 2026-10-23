@@ -34,14 +34,15 @@ websites, book pages, documents, photos, and video should remain readable.
   made the slider thumb less oversized, and replaced ambiguous quick-setting
   glyphs with compact labels. `wifi` opens the network picker; `night` remains
   a toggle. The panel still uses `fit-to-screen`.
-- Waybar: media is bounded to 32 characters; the bar uses 18px text and tighter
-  spacing. Expanded stats keep CPU/memory/temperature on the bar and put GPU
+- Waybar: a slim top rail with a centred clock, understated workspace tabs,
+  and separated system controls; media is bounded to 28 characters. Expanded stats keep CPU/memory/temperature on the bar and put GPU
   and network detail in the tooltip. Sampling is serialized across monitors,
   GPU queries have a timeout, and network interface/counter resets cannot
   produce negative transfer rates. Rates use monotonic uptime.
-- Power menu: every entry point uses `power-menu`, with logical-pixel sizing
-  for HiDPI, portrait, and mixed monitors. Keys are visible; destructive actions
-  receive an amber focus frame. The menu has an opaque background.
+- Power menu: every entry point uses `power-menu`, a compact five-row console
+  with numbered text actions and hotkeys, no images or logos. Logical-pixel
+  sizing handles HiDPI, portrait and mixed monitors; destructive actions get
+  an amber focus frame. The menu has an opaque background.
 - Neovim: explicit lualine/bufferline styles prevent default colour fallbacks;
   comments are brighter and upright for the pixel font. Mode names remain
   visible even though all mode blocks share the same blue.
@@ -49,6 +50,12 @@ websites, book pages, documents, photos, and video should remain readable.
   btop uses solid graphs and grey structural borders. btop gets a copied config
   because it writes that file on exit. Its existing `sysmon` launcher already
   selected Diag; the defaults also cover direct launches.
+- Music widget: `swaync/mpris.css` replaces blurred cover backdrops with an
+  opaque framed panel, 40px artwork and square transport controls.
+  `show-album-art: when-available` avoids fallback application logos.
+- Starship: a two-line prompt with directory/Git/language/time icons, Git status
+  counts and a blue command marker that turns red on failure. Removed the
+  Friday/leet custom commands and preserved the escaped literal stash symbol.
 - nchat: added a colour-only theme, including its list, input, top/status bars
   and sender names. Authentication and notification settings are untouched.
 - mpv: stats now use the correct blue/grey palette in mpv's BGR format.
@@ -78,9 +85,12 @@ narrow screens or an unusually large system tray can still crowd the bar.
 
 In the cloud workspace:
 
-- Seven headless regression tests pass: installer backup/idempotence and Qt
+- Eight headless regression tests pass: installer backup/idempotence and Qt
   rendering (including spaces and ampersands), literal/bounded lock metadata,
-  stats toggle/reset, and power layout across desktop, HiDPI and portrait sizes.
+  stats toggle/reset, and power layout across desktop, HiDPI, portrait and small
+  logical display sizes. The new Starship prompt was also rendered by Starship
+  1.27.0 in a real fixture Git repository with a stash, exit statuses 0 and 1,
+  and command duration; no format warnings were emitted.
 - ShellCheck warning-level checks pass for all `.local/bin` scripts and the
   installer, desktop checker and system installer. Shell syntax and Lua parsing
   pass; all 51 Hyprland config assignments were checked against upstream 0.56.1
@@ -116,6 +126,9 @@ Restart the affected desktop apps when convenient. Firefox chrome changes
 need a browser restart and `firefox-style` if the profile has not been linked.
 Enable the Obsidian snippet and Vesktop theme in their Appearance settings.
 Hyprland reloads the linked config when saved; inspect `hyprctl configerrors`.
+Reload SwayNC configuration and styling with `swaync-client -R` and
+`swaync-client -rs`. Restart Waybar to move it to the top; the new prompt
+loads at the next command.
 Run `bash check-desktop.sh` on the actual desktop and check the power menu,
 keyboard focus, selected rows, notifications, audio, media text and both monitors.
 SDDM/Plymouth are unchanged and do not need reinstalling for this pass.

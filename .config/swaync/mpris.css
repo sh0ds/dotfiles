@@ -1,0 +1,65 @@
+/* Diag transport: artwork is metadata, never a backdrop behind text. */
+:root {
+  --mpris-album-art-icon-size: 40px;
+  --mpris-album-art-shadow: none;
+  --mpris-album-art-overlay: #0d1014;
+}
+.widget-mpris { margin: 8px 0; padding: 0; }
+.widget-mpris .widget-mpris-player {
+  margin: 0 2px;
+  background: #0d1014;
+  color: #e6e8ea;
+  border: 1px solid #3f4650;
+  border-left: 2px solid #1793d1;
+  border-radius: 0;
+  box-shadow: none;
+}
+/* The blurred picture is a separate widget, not a CSS background image. */
+.widget-mpris .widget-mpris-player .mpris-background { opacity: 0; filter: none; }
+.widget-mpris .widget-mpris-player .mpris-overlay {
+  background: #0d1014;
+  opacity: 1;
+  padding: 10px;
+}
+.widget-mpris .widget-mpris-album-art {
+  -gtk-icon-size: 40px;
+  margin: 0 6px 0 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.widget-mpris .widget-mpris-title {
+  color: #e6e8ea;
+  font-size: 18px;
+  font-weight: bold;
+}
+.widget-mpris .widget-mpris-subtitle { color: #8a929c; font-size: 16px; }
+.widget-mpris .widget-mpris-player .mpris-overlay button {
+  color: #c4c9ce;
+  background: #000000;
+  border: 1px solid #3f4650;
+  border-radius: 0;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 3px;
+  margin: 8px 0 0;
+  box-shadow: none;
+}
+.widget-mpris button image { -gtk-icon-size: 20px; }
+.widget-mpris .widget-mpris-player .mpris-overlay button:hover,
+.widget-mpris .widget-mpris-player .mpris-overlay button:focus {
+  color: #000000;
+  background: #1793d1;
+  border-color: #1793d1;
+}
+.widget-mpris .widget-mpris-player .mpris-overlay button:disabled { opacity: 0.4; }
+/* Carousel navigation stays distinct from the transport buttons. */
+.widget-mpris > box > button {
+  min-width: 18px;
+  padding: 0 2px;
+  color: #8a929c;
+  background: transparent;
+  border: none;
+}
+.widget-mpris > box > button:hover { color: #1793d1; }
+.widget-mpris > box > button:disabled { opacity: 0.3; }
+.widget-mpris carouselindicatordots { color: #1793d1; margin-top: 4px; }

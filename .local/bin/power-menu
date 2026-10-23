@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# power-menu: size the same wlogout grid for every connected output, including
+# power-menu: size a text-only session console for every output, including
 # portrait and HiDPI screens. Dimensions from Hyprland are physical pixels.
 set -euo pipefail
 width=1280 height=720
@@ -13,12 +13,12 @@ if size=$(hyprctl monitors -j 2>/dev/null | jq -er '
   read -r width height <<<"$size"
 fi
 [[ $width =~ ^[0-9]+$ && $height =~ ^[0-9]+$ ]] || exit 1
-columns=5
-if (( width < 600 )); then columns=2
-elif (( width < 1000 )); then columns=3
-fi
-rows=$(( (5 + columns - 1) / columns ))
-menu_width=$((columns * 176))
+# Five compact rows rather than screen-sized icon tiles. The narrowest
+# logical output sets the width; cap the height for short laptop displays.
+menu_width=420
+(( menu_width > width - 32 )) && menu_width=$((width - 32))
+menu_height=360
+(( menu_height > height - 32 )) && menu_height=$((height - 32))
 side=$(( (width - menu_width) / 2 )); (( side < 16 )) && side=16
-top=$(( (height - rows * 132) / 2 )); (( top < 16 )) && top=16
-exec wlogout -b "$columns" -L "$side" -R "$side" -T "$top" -B "$top" --show-binds
+top=$(( (height - menu_height) / 2 )); (( top < 16 )) && top=16
+exec wlogout -b 1 -L "$side" -R "$side" -T "$top" -B "$top"

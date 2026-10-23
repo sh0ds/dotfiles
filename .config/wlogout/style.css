@@ -1,32 +1,40 @@
-/* Diag power menu: opaque square cells, one focus frame, no layout motion. */
+/* Diag session console: text only, numbered rows, no images or logos. */
 * {
+  background-image: none;
   box-shadow: none;
   text-shadow: none;
   font-family: "Terminess Nerd Font", monospace;
-  font-size: 20px;
+  font-size: 18px;
 }
 window { background-color: #000000; }
 button {
-  margin: 4px;
+  margin: 2px 0;
+  padding: 10px 20px;
   border-radius: 0;
-  border: 2px solid #3f4650;
-  color: #c4c9ce;
-  background-color: #000000;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 48px 48px;
-  transition: background-color 120ms linear, border-color 120ms linear;
-}
-button:focus, button:hover {
+  border: 1px solid #3f4650;
+  border-left: 3px solid #3f4650;
   background-color: #0d1014;
+  color: #c4c9ce;
+  transition: background-color 120ms linear, border-color 120ms linear, color 120ms linear;
+}
+button label { padding: 0; margin: 0; }
+button:hover, button:focus {
+  background-color: #161a1f;
   border-color: #1793d1;
   color: #e6e8ea;
   outline-style: none;
 }
-button:active { background-color: #161a1f; }
-#reboot:focus, #shutdown:focus { border-color: #ffb000; }
-#lock     { background-image: url("icons/lock.svg"); }
-#logout   { background-image: url("icons/logout.svg"); }
-#suspend  { background-image: url("icons/suspend.svg"); }
-#reboot   { background-image: url("icons/reboot.svg"); }
-#shutdown { background-image: url("icons/shutdown.svg"); }
+button:active {
+  background-color: #1793d1;
+  color: #000000;
+}
+#lock { border-top: 3px solid #3f4650; }
+#shutdown { border-bottom: 3px solid #3f4650; }
+#reboot:hover, #reboot:focus, #shutdown:hover, #shutdown:focus {
+  border-color: #ffb000;
+  color: #ffb000;
+}
+#reboot:active, #shutdown:active {
+  background-color: #ffb000;
+  color: #000000;
+}
