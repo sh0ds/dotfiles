@@ -4,7 +4,9 @@
    own theme variables, so it survives updates; `firefox-style` links this
    into your profile. */
 
-:root {
+/* :root[lwtheme] too: a leftover theme add-on (Catppuccin) sets these on
+   the root element, and this makes sure ours still win. */
+:root, :root[lwtheme], :root:-moz-lwtheme {
   --diag-bg: #000000;
   --diag-row: #161a1f;
   --diag-panel: #0d1014;
@@ -73,7 +75,42 @@
   --border-radius-circle: 0 !important;
   --button-border-radius: 0 !important;
   --identity-icon-color: var(--diag-dim) !important;
+
+  /* Firefox's accent (toggles, checkboxes, primary buttons, focus rings,
+     the loading bar). A theme puts its own colour here, Mocha's mauve. */
+  --color-accent-primary: var(--diag-arch) !important;
+  --color-accent-primary-hover: #5fb8e8 !important;
+  --color-accent-primary-active: #5fb8e8 !important;
+  --button-primary-bgcolor: var(--diag-arch) !important;
+  --button-primary-hover-bgcolor: #5fb8e8 !important;
+  --button-primary-active-bgcolor: #5fb8e8 !important;
+  --button-primary-color: #000000 !important;
+  --attention-dot-color: var(--diag-arch) !important;
+  --tab-attention-icon-color: var(--diag-arch) !important;
+  --lwt-tab-line-color: var(--diag-arch) !important;
+  --lwt-toolbar-field-highlight: var(--diag-arch) !important;
+  --lwt-toolbar-field-highlight-text: #000000 !important;
+  --lwt-sidebar-background-color: var(--diag-bg) !important;
+  --lwt-sidebar-text-color: var(--diag-fg) !important;
+  --lwt-sidebar-highlight-background-color: var(--diag-arch) !important;
+  --lwt-sidebar-highlight-text-color: #000000 !important;
+  --lwt-toolbarbutton-icon-fill-attention: var(--diag-arch) !important;
+  --lwt-frame: var(--diag-bg) !important;
+  --lwt-text-color-inactive: var(--diag-dim) !important;
+  accent-color: var(--diag-arch) !important;
 }
+
+/* The selected tab, set directly as well: vertical tabs and some themes
+   don't go through --tab-selected-bgcolor */
+.tabbrowser-tab[selected] .tab-background,
+.tabbrowser-tab[multiselected] .tab-background {
+  background: var(--diag-arch) !important;
+  background-image: none !important;
+}
+.tabbrowser-tab[selected] .tab-label,
+.tabbrowser-tab[selected] .tab-close-button { color: #000000 !important; }
+.tabbrowser-tab:not([selected]):hover .tab-background { background: var(--diag-row) !important; }
+::selection { background: var(--diag-sel, #0e3d5c) !important; color: #f4f6f8 !important; }
 
 /* VT323 for everything around the page; the page itself keeps its fonts */
 #navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
