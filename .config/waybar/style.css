@@ -61,7 +61,7 @@ window#waybar {
 
 /* Short labelled cells; detailed readings stay behind sys/its tooltip. */
 #custom-stats, #custom-pi, #pulseaudio, #custom-notification, #tray, #custom-power {
-  padding: 0 10px;
+  padding: 0 8px;
   border-left: 1px solid #3f4650;
   transition: background-color 120ms linear, color 120ms linear;
 }

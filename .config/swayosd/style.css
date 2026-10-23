@@ -1,7 +1,7 @@
 /* swayosd: volume popup in Diag, drawn like the meters on sh0ds.dev: a
    framed bar with the level as Arch blue blocks. No rounding. Class names
    from SwayOSD's style.scss. */
-* { font-family: "Terminess Nerd Font"; font-size: 20px; }
+* { font-family: "Terminess Nerd Font"; font-size: 18px; }
 window#osd {
   border-radius: 0;
   border: 1px solid #3f4650;
@@ -10,7 +10,7 @@ window#osd {
 }
 
 window#osd #container {
-  margin: 10px 14px;
+  margin: 12px 16px;
 }
 
 window#osd image,
