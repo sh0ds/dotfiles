@@ -1,33 +1,33 @@
-# ~/.config/lazygit/config.yml: Amethyst, square borders, violet on the
+# ~/.config/lazygit/config.yml: Diag, square borders, blue on the
 # focused panel. Run `lg`, or SPACE g g inside Neovim.
 gui:
   nerdFontsVersion: "3"
   border: single
   theme:
     activeBorderColor:
-      - '#b06cff'
+      - '#1793d1'
       - bold
     inactiveBorderColor:
-      - '#9a90ae'
+      - '#a3aab2'
     searchingActiveBorderColor:
-      - '#d9b77a'
+      - '#ffb000'
     optionsTextColor:
-      - '#9a8cff'
+      - '#4aa3df'
     selectedLineBgColor:
-      - '#1a1424'
+      - '#161a1f'
     inactiveViewSelectedLineBgColor:
-      - '#5e5270'
+      - '#5d6670'
     cherryPickedCommitFgColor:
-      - '#b06cff'
+      - '#1793d1'
     cherryPickedCommitBgColor:
-      - '#2b2238'
+      - '#2e353d'
     markedBaseCommitFgColor:
-      - '#9a8cff'
+      - '#4aa3df'
     markedBaseCommitBgColor:
-      - '#d9b77a'
+      - '#ffb000'
     unstagedChangesColor:
-      - '#e0607a'
+      - '#e5484d'
     defaultFgColor:
-      - '#c9c0db'
+      - '#e6e8ea'
     authorColors:
-      '*': '#c99bff'
+      '*': '#5fb8e8'

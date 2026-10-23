@@ -1,13 +1,13 @@
-/* Amethyst for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, square and still. Additions live in style.css. */
+/* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, square and still. Additions live in style.css. */
 * {
   all: unset;
-  font-size: 14px;
-  font-family: "Terminess Nerd Font";
+  font-size: 18px;
+  font-family: "VT323", "Terminess Nerd Font";
   transition: none;
 }
 
 trough highlight {
-  background: #c9c0db;
+  background: #e6e8ea;
 }
 
 scale {
@@ -26,7 +26,7 @@ trough slider {
   border-radius: 0;
   box-shadow: none;
   transition: none;
-  background-color: #b06cff;
+  background-color: #1793d1;
 }
 
 trough slider:hover {
@@ -34,7 +34,7 @@ trough slider:hover {
 }
 
 trough {
-  background-color: #1a1424;
+  background-color: #161a1f;
 }
 
 /* notifications */
@@ -42,8 +42,8 @@ trough {
   box-shadow: none;
   border-radius: 0;
   margin: 18px;
-  background: #0b0910;
-  color: #c9c0db;
+  background: #0d1014;
+  color: #e6e8ea;
   padding: 0;
 }
 
@@ -66,15 +66,15 @@ trough {
 }
 
 .notification-content .summary {
-  color: #c9c0db;
+  color: #e6e8ea;
 }
 
 .notification-content .time {
-  color: #9a90ae;
+  color: #a3aab2;
 }
 
 .notification-content .body {
-  color: #b0a6c4;
+  color: #c4c9ce;
 }
 
 .notification > *:last-child > * {
@@ -86,20 +86,20 @@ trough {
   padding: 2px;
   border-radius: 0;
   color: #000000;
-  background-color: #e0607a;
+  background-color: #e5484d;
 }
 
 .notification-background .close-button:hover {
-  background-color: #e88a9a;
+  background-color: #ee7a7d;
 }
 
 .notification-background .close-button:active {
-  background-color: #d6a6f0;
+  background-color: #a9d6f5;
 }
 
 .notification .notification-action {
   border-radius: 0;
-  color: #c9c0db;
+  color: #e6e8ea;
   box-shadow: none;
   margin: 4px;
   padding: 8px;
@@ -107,24 +107,24 @@ trough {
 }
 
 .notification .notification-action {
-  background-color: #1a1424;
+  background-color: #161a1f;
 }
 
 .notification .notification-action:hover {
-  background-color: #2b2238;
+  background-color: #2e353d;
 }
 
 .notification .notification-action:active {
-  background-color: #3d3150;
+  background-color: #3f4650;
 }
 
 .notification.critical progress {
-  background-color: #e0607a;
+  background-color: #e5484d;
 }
 
 .notification.low progress,
 .notification.normal progress {
-  background-color: #b06cff;
+  background-color: #1793d1;
 }
 
 .notification progress,
@@ -139,7 +139,7 @@ trough {
   box-shadow: none;
   border-radius: 0;
   background-color: #000000;
-  color: #c9c0db;
+  color: #e6e8ea;
   padding: 14px;
 }
 
@@ -158,24 +158,24 @@ trough {
 }
 
 .control-center .widget-title > label {
-  color: #c9c0db;
+  color: #e6e8ea;
   font-size: 1.3em;
 }
 
 .control-center .widget-title button {
   border-radius: 0;
-  color: #c9c0db;
-  background-color: #1a1424;
+  color: #e6e8ea;
+  background-color: #161a1f;
   box-shadow: none;
   padding: 8px;
 }
 
 .control-center .widget-title button:hover {
-  background-color: #2b2238;
+  background-color: #2e353d;
 }
 
 .control-center .widget-title button:active {
-  background-color: #3d3150;
+  background-color: #3f4650;
 }
 
 .control-center .notification-group {
@@ -183,7 +183,7 @@ trough {
 }
 
 .control-center .notification-group:focus .notification-background {
-  background-color: #1a1424;
+  background-color: #161a1f;
 }
 
 scrollbar slider {
@@ -205,28 +205,28 @@ scrollbar trough {
 .widget-dnd > switch {
   font-size: initial;
   border-radius: 0;
-  background: #1a1424;
+  background: #161a1f;
   box-shadow: none;
 }
 
 .widget-dnd > switch:checked {
-  background: #b06cff;
+  background: #1793d1;
 }
 
 .widget-dnd > switch slider {
-  background: #2b2238;
+  background: #2e353d;
   border-radius: 0;
 }
 
 /* mpris */
 .widget-mpris-player {
-  background: #1a1424;
+  background: #161a1f;
   border-radius: 0;
-  color: #c9c0db;
+  color: #e6e8ea;
 }
 
 .mpris-overlay {
-  background-color: #1a1424;
+  background-color: #161a1f;
   opacity: 0.9;
   padding: 15px 10px;
 }
@@ -239,17 +239,17 @@ scrollbar trough {
 
 .widget-mpris-title {
   font-size: 1.2rem;
-  color: #c9c0db;
+  color: #e6e8ea;
 }
 
 .widget-mpris-subtitle {
   font-size: 1rem;
-  color: #b0a6c4;
+  color: #c4c9ce;
 }
 
 .widget-mpris button {
   border-radius: 0;
-  color: #c9c0db;
+  color: #e6e8ea;
   margin: 0 5px;
   padding: 2px;
 }
@@ -259,11 +259,11 @@ scrollbar trough {
 }
 
 .widget-mpris button:hover {
-  background-color: #1a1424;
+  background-color: #161a1f;
 }
 
 .widget-mpris button:active {
-  background-color: #2b2238;
+  background-color: #2e353d;
 }
 
 .widget-mpris button:disabled {
@@ -276,17 +276,17 @@ scrollbar trough {
 }
 
 .widget-menubar > box > .menu-button-bar > :last-child {
-  color: #e0607a;
+  color: #e5484d;
 }
 
 .power-buttons button:hover,
 .powermode-buttons button:hover,
 .screenshot-buttons button:hover {
-  background: #1a1424;
+  background: #161a1f;
 }
 
 .control-center .widget-label > label {
-  color: #c9c0db;
+  color: #e6e8ea;
   font-size: 2rem;
 }
 
@@ -303,21 +303,21 @@ scrollbar trough {
 }
 
 .widget-volume label {
-  color: #b06cff;
+  color: #1793d1;
   padding: 0 1rem;
 }
 
 .widget-volume trough highlight {
-  background: #b06cff;
+  background: #1793d1;
 }
 
 .widget-backlight trough highlight {
-  background: #b06cff;
+  background: #1793d1;
 }
 
 .widget-backlight label {
   font-size: 1.5rem;
-  color: #b06cff;
+  color: #1793d1;
 }
 
 .widget-backlight .KB {

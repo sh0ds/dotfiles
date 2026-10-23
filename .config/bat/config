@@ -1,5 +1,5 @@
 # ~/.config/bat/config. "ansi" uses the terminal's own 16 colours, so bat
-# follows kitty's Amethyst palette with no theme file of its own.
+# follows kitty's Diag palette with no theme file of its own.
 --theme=ansi
 --style=numbers,changes,header
 --italic-text=always

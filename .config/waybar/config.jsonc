@@ -1,18 +1,19 @@
-// ~/.config/waybar/config.jsonc  (Amethyst: one line of text along the bottom)
+// ~/.config/waybar/config.jsonc  (Diag: one diagnostic line along the bottom)
 {
   "layer": "top",
   "position": "bottom",
-  "height": 24,
+  "height": 26,
   "spacing": 0,
 
   // Left: workspaces and what's playing. Middle: LIVE and REC, only while
-  // active. Right: plain readings, then the clock and the power button.
-  // No icons, no pills: every module is a word and a number.
+  // active. Right: readings, then the clock and the power button.
+  // Like the diagnostic lines on sh0ds.dev: every module is "key: value",
+  // the key in Arch blue, the value in white. No icons, no pills.
   "modules-left": ["hyprland/workspaces", "mpris"],
   "modules-center": ["custom/live", "custom/rec"],
   "modules-right": ["tray", "cpu", "memory", "temperature", "custom/gpu", "custom/pi", "pulseaudio", "network", "custom/notification", "clock", "custom/power"],
 
-  // Numbers. The current one is a violet block, empty ones are dim, one that
+  // Numbers. The current one is a blue block, empty ones are dim, one that
   // wants attention is underlined red.
   "hyprland/workspaces": {
     "format": "{name}",
@@ -22,7 +23,7 @@
   },
 
   "clock": {
-    "format": "{:%Y-%m-%d %H:%M}",
+    "format": "<span color='#1793d1'>time:</span> {:%Y-%m-%d %H:%M}",
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
     "on-click": "~/.local/bin/calendar",
     // Hover: month calendar with week numbers. Scroll changes month,
@@ -34,11 +35,11 @@
       "first-day-of-week": 1,
       "on-scroll": 1,
       "format": {
-        "months":   "<span color='#ece4fb'><b>{}</b></span>",
-        "days":     "<span color='#b0a6c4'>{}</span>",
-        "weeks":    "<span color='#5e5270'>W{}</span>",
-        "weekdays": "<span color='#7f7494'>{}</span>",
-        "today":    "<span color='#b06cff'><b><u>{}</u></b></span>"
+        "months":   "<span color='#f4f6f8'><b>{}</b></span>",
+        "days":     "<span color='#c4c9ce'>{}</span>",
+        "weeks":    "<span color='#5d6670'>W{}</span>",
+        "weekdays": "<span color='#8a929c'>{}</span>",
+        "today":    "<span color='#1793d1'><b><u>{}</u></b></span>"
       }
     },
     "actions": {
@@ -54,17 +55,17 @@
     "return-type": "json",
     "format": "{icon} {text}",
     "format-icons": {
-      "notification": "<span foreground='#b06cff'>msg</span>",
-      "none": "msg",
-      "dnd-notification": "<span foreground='#b06cff'>dnd</span>",
-      "dnd-none": "dnd"
+      "notification": "<span color='#1793d1'>msg:</span>",
+      "none": "<span color='#5d6670'>msg:</span>",
+      "dnd-notification": "<span color='#1793d1'>dnd:</span>",
+      "dnd-none": "<span color='#5d6670'>dnd:</span>"
     },
     "on-click": "swaync-client -t -sw",
     "on-click-right": "swaync-client -d -sw",
     "escape": true
   },
 
-  // "pi up" in violet when the Pi answers a ping, "pi down" when not. Click to ssh in.
+  // "pi: up" when the Pi answers a ping, "pi: down" in red when not. Click to ssh in.
   "custom/pi": {
     "exec": "~/.local/bin/pi-status",
     "return-type": "json",
@@ -72,14 +73,14 @@
     "on-click": "kitty -e ssh pi"
   },
 
-  "cpu": { "format": "cpu {usage:>2}%", "interval": 5, "on-click": "~/.local/bin/sysmon" },
-  "memory": { "format": "mem {used:0.1f}G", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB", "on-click": "~/.local/bin/sysmon" },
+  "cpu": { "format": "<span color='#1793d1'>cpu:</span>{usage:>3}%", "interval": 5, "on-click": "~/.local/bin/sysmon" },
+  "memory": { "format": "<span color='#1793d1'>mem:</span> {used:0.1f}G", "interval": 10, "tooltip-format": "RAM {used:0.1f} / {total:0.1f} GiB", "on-click": "~/.local/bin/sysmon" },
   // CPU package temperature. coretemp is Intel's sensor; on AMD use k10temp.
   "temperature": {
     "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
     "input-filename": "temp1_input",
     "critical-threshold": 85,
-    "format": "{temperatureC:>2}°C",
+    "format": "<span color='#1793d1'>temp:</span>{temperatureC:>3}°C",
     "interval": 5,
     "on-click": "~/.local/bin/sysmon"
   },
@@ -91,17 +92,17 @@
   },
   // The volume keys show the swayosd popup.
   "pulseaudio": {
-    "format": "vol {volume:>3}",
-    "format-muted": "vol mute",
+    "format": "<span color='#1793d1'>vol:</span>{volume:>4}",
+    "format-muted": "<span color='#1793d1'>vol:</span> mute",
     "tooltip": false,
     "on-click": "pavucontrol",
     "on-click-right": "swayosd-client --output-volume mute-toggle"
   },
   "network": {
-    "format-wifi": "wifi {signalStrength}% ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
-    "format-ethernet": "eth ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-wifi": "<span color='#1793d1'>wifi:</span> {signalStrength}% ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
+    "format-ethernet": "<span color='#1793d1'>eth:</span> ↓{bandwidthDownBytes} ↑{bandwidthUpBytes}",
     "interval": 2,
-    "format-disconnected": "net down",
+    "format-disconnected": "<span color='#1793d1'>net:</span> down",
     "tooltip-format": "{ifname} {ipaddr}/{cidr}",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
     // Click: Wi-Fi picker in fuzzel. Right-click: nmtui for everything else.
@@ -112,8 +113,8 @@
 
   // Now playing (SoundCloud app, Firefox, mpv, mpd). Fixed length so nothing shifts.
   "mpris": {
-    "format": "{artist} - {title}",
-    "format-paused": "{artist} - {title} (paused)",
+    "format": "<span color='#1793d1'>play:</span> {artist} - {title}",
+    "format-paused": "<span color='#5d6670'>hold:</span> {artist} - {title}",
     "artist-len": 20,
     "title-len": 30,
     "on-click": "playerctl play-pause",
@@ -135,7 +136,7 @@
     "on-click": "~/.local/bin/rec-toggle"
   },
   "custom/power": {
-    "format": "off",
+    "format": "halt",
     "on-click": "wlogout -b 5",
     "tooltip": false
   }

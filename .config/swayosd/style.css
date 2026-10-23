@@ -1,8 +1,11 @@
-/* swayosd: volume popup in Amethyst. A flat black box with a 1 px plum
-   rule and a violet bar, no rounding. Class names from SwayOSD's style.scss. */
+/* swayosd: volume popup in Diag, drawn like the meters on sh0ds.dev: a
+   framed bar with the level as Arch blue blocks. No rounding. Class names
+   from SwayOSD's style.scss. */
+* { font-family: "VT323", "Terminess Nerd Font"; font-size: 18px; }
 window#osd {
   border-radius: 0;
-  border: 1px solid #2b2238;
+  border: 1px solid #3f4650;
+  border-left: 2px solid #1793d1;
   background: #000000;
 }
 
@@ -12,7 +15,7 @@ window#osd #container {
 
 window#osd image,
 window#osd label {
-  color: #b0a6c4;
+  color: #e6e8ea;
 }
 
 window#osd progressbar:disabled,
@@ -22,7 +25,7 @@ window#osd image:disabled {
 
 window#osd progressbar,
 window#osd segmentedprogress {
-  min-height: 6px;
+  min-height: 12px;
   border-radius: 0;
   background: transparent;
   border: none;
@@ -32,8 +35,8 @@ window#osd trough,
 window#osd segment {
   min-height: inherit;
   border-radius: 0;
-  border: none;
-  background: #2b2238;
+  border: 2px solid #8a929c;
+  background: #000000;
 }
 
 window#osd progress,
@@ -41,7 +44,8 @@ window#osd segment.active {
   min-height: inherit;
   border-radius: 0;
   border: none;
-  background: #b06cff;
+  margin: 2px;
+  background: repeating-linear-gradient(90deg, #1793d1 0 7px, transparent 7px 10px);
 }
 
 window#osd segment {

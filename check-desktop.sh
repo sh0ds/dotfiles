@@ -65,6 +65,7 @@ check "virtiofsd (DJ VM shared folder)" test -x /usr/lib/virtiofsd
 check "~/Music/DJ (DJ VM shared folder)" test -d "$HOME/Music/DJ"
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd"'
+check "VT323 (from this repo)" sh -c 'fc-list | grep -qi "VT323"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "aria2 running for Firefox (aria2-rpc)" pgrep -f "aria2c --enable-rpc"
 check "pipewire running" systemctl --user is-active pipewire

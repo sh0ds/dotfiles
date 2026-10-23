@@ -7,7 +7,7 @@
 #   m printf       man page in kitty (C library and commands)
 #   anything else  web search (DuckDuckGo)
 set -euo pipefail
-q=$(fuzzel --dmenu --prompt-only 'docs ' --placeholder 'h foldr · w hyprland · m printf' --width 50) || exit 0
+q=$(fuzzel --dmenu --prompt-only 'docs: ' --placeholder 'h foldr · w hyprland · m printf' --width 50) || exit 0
 [ -n "$q" ] || exit 0
 enc() { jq -rn --arg s "$1" '$s|@uri'; }
 rest=${q#* }

@@ -9,7 +9,7 @@ list=/usr/share/unicode/emoji/emoji-test.txt
 pick=$(awk -F'# ' '/; fully-qualified/ && $2 !~ /skin tone/ {
          split($2, f, " "); name = $2; sub(/^[^ ]+ E[0-9.]+ /, "", name)
          print f[1] "  " name }' "$list" |
-       fuzzel --dmenu --prompt 'emoji ' --lines 12 --width 40) || exit 0
+       fuzzel --dmenu --prompt 'emoji: ' --lines 12 --width 40) || exit 0
 e=${pick%%  *}
 wl-copy -n -- "$e"
 command -v wtype >/dev/null && wtype -- "$e"

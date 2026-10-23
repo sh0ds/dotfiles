@@ -18,7 +18,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   spec = {
-    { "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "amethyst" } },
+    { "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "diag" } },
 
     -- One extra per language in the plan (browse more with :LazyExtras)
     { import = "lazyvim.plugins.extras.lang.clangd" },   -- C: pistat, 3sgc
@@ -32,7 +32,7 @@ require("lazy").setup({
     { import = "plugins" },
   },
   defaults = { lazy = false, version = false },
-  install = { colorscheme = { "amethyst", "habamax" } },
+  install = { colorscheme = { "diag", "habamax" } },
   checker = { enabled = true, notify = false },
   performance = {
     rtp = {

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# np-title: "♪  artist – title" for hyprlock's now-playing label.
+# np-title: hyprlock's "play: artist - title" line (nothing when nothing plays).
 # Lives in a script because hyprlock's config language reads {{ ... }} as a
 # maths expression, so playerctl's format string can't sit in hyprlock.conf.
-playerctl metadata --format '♪  {{ artist }} – {{ title }}' 2>/dev/null
+t=$(playerctl metadata --format '{{ artist }} - {{ title }}' 2>/dev/null) || exit 0
+[ -n "$t" ] || exit 0
+t=${t//&/&amp;}; t=${t//</&lt;}
+printf '<span foreground="#1793d1">play:</span> %s\n' "$t"

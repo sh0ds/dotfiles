@@ -16,28 +16,30 @@ if not (":" .. path .. ":"):find(":" .. bin .. ":", 1, true) then
 end
 
 ------------------------------------
----- LOOK: Amethyst, flat and exact ----
+---- LOOK: Diag, flat and exact ----
 ------------------------------------
 
--- Amethyst: black, plum-tinted greys and one violet. Square corners, 1 px
--- borders, small gaps, no shadows, no blur, no dimming. Motion is small
--- and physical: damped springs, no bounce (see MOTION). The focused window is
--- the only thing on screen with colour in its frame.
+-- Diag: the look of sh0ds.dev (VT323, key: value lines, double rules,
+-- inverted blocks) in Arch Linux colours: black, cool greys and one Arch
+-- blue. Square corners, 2 px borders like the site's rules, small gaps, no
+-- shadows, no blur, no dimming. Motion is small and physical: damped
+-- springs, no bounce (see MOTION). The focused window is the only thing on
+-- screen with colour in its frame.
 -- Palette (the same everywhere: kitty, waybar, swaync, fuzzel, GTK, nvim):
---   bg #000000  panel #0b0910  line #2b2238  dim #5e5270
---   mid #7f7494  fg #b0a6c4  bright #ece4fb  violet #b06cff  error #e0607a
+--   bg #000000  row #161a1f  rule #3f4650  dim #5d6670  mid #8a929c
+--   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
 	general = {
 		-- 3 px between windows (two inner gaps meet, so 6 px of black), 6 px
 		-- to the screen edge.
 		gaps_in = 3,
 		gaps_out = 6,
-		border_size = 1,
+		border_size = 2,
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
 		allow_tearing = true,
 		col = {
-			active_border = "rgb(b06cff)",
-			inactive_border = "rgb(2b2238)",
+			active_border = "rgb(1793d1)",
+			inactive_border = "rgb(3f4650)",
 		},
 	},
 	decoration = {
@@ -65,22 +67,23 @@ hl.config({
 		enable_swallow = true,
 		swallow_regex = "^(kitty)$",
 	},
-	-- Tabbed groups (SUPER+G): a flat tab strip, violet for the active tab.
+	-- Tabbed groups (SUPER+G): a flat tab strip, blue for the active tab.
 	group = {
 		col = {
-			border_active = "rgb(b06cff)",
-			border_inactive = "rgb(2b2238)",
+			border_active = "rgb(1793d1)",
+			border_inactive = "rgb(2e353d)",
 		},
 		groupbar = {
-			font_size = 11,
-			height = 16,
+			font_family = "VT323",
+			font_size = 15,
+			height = 18,
 			gradients = false,
 			rounding = 0,
-			text_color = "rgb(ece4fb)",
-			text_color_inactive = "rgb(7f7494)",
+			text_color = "rgb(f4f6f8)",
+			text_color_inactive = "rgb(8a929c)",
 			col = {
-				active = "rgb(3a2a55)",
-				inactive = "rgb(0b0910)",
+				active = "rgb(0e3d5c)",
+				inactive = "rgb(0d1014)",
 			},
 		},
 	},
@@ -302,12 +305,12 @@ hl.window_rule({
 -- and the lock screen follow rmpc or SoundCloud, whichever is playing,
 -- instead of always grabbing the first one.
 -- update-check sends a notification when Arch updates pile up.
--- gsettings: GTK apps and file pickers go dark (adw-gtk3 + Amethyst gtk.css).
+-- gsettings: GTK apps and file pickers go dark (adw-gtk3 + Diag gtk.css).
 hl.on("hyprland.start", function()
 	hl.exec_cmd(
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
-			.. "gsettings set org.gnome.desktop.interface accent-color purple; "
+			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
 			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font 11'; "
 			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 11'; "
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
@@ -375,7 +378,7 @@ hl.bind(
 hl.bind(mod .. " + C", hl.dsp.exec_cmd("calc"))
 -- Night light on/off
 hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd("nightlight"))
--- Record a region to ~/Videos (press again to stop); waybar shows REC in violet
+-- Record a region to ~/Videos (press again to stop); waybar shows REC in blue
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("rec-toggle"))
 -- Window switcher: every open window in a fuzzel list, Enter jumps to it
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))

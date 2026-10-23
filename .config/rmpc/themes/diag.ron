@@ -1,0 +1,37 @@
+// Diag for rmpc (recoloured from catppuccin/rmpc). Only colours and icons, the layout is rmpc's own
+// (album art left, queue right).
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    text_color: "#e6e8ea",
+    preview_label_style: (fg: "#ffb000"),
+    preview_metadata_group_style: (fg: "#1793d1", modifiers: "Bold"),
+    highlighted_item_style: (fg: "#1793d1", modifiers: "Bold"),
+    current_item_style: (fg: "#000000", bg: "#4aa3df", modifiers: "Bold"),
+    borders_style: (fg: "#2e353d"),
+    highlight_border_style: (fg: "#4aa3df"),
+    symbols: (
+        song: "󰎈",
+        dir: "",
+        playlist: "󰲸",
+        marker: "",
+        ellipsis: "…",
+    ),
+    progress_bar: (
+        symbols: ["━", "━", "●", "━", "━"],
+        track_style: (fg: "#161a1f"),
+        elapsed_style: (fg: "#1793d1"),
+        thumb_style: (fg: "#1793d1"),
+    ),
+    scrollbar: (
+        symbols: ["│", "█", "▲", "▼"],
+        track_style: (fg: "#161a1f"),
+        ends_style: (fg: "#2e353d"),
+        thumb_style: (fg: "#4aa3df"),
+    ),
+    tab_bar: (
+        active_style: (fg: "#000000", bg: "#1793d1", modifiers: "Bold"),
+        inactive_style: (fg: "#a3aab2"),
+    ),
+)

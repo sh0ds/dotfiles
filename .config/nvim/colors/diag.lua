@@ -1,23 +1,23 @@
--- Amethyst: nearly monochrome. Code is grey, keywords are bright, strings
--- and numbers are violet, comments are dim. Errors are the only red.
+-- Diag: nearly monochrome. Code is grey, keywords are bright, strings
+-- and numbers are blue, comments are dim. Errors are the only red.
 vim.cmd("highlight clear")
-vim.g.colors_name = "amethyst"
+vim.g.colors_name = "diag"
 vim.o.background = "dark"
 
 local c = {
   bg = "NONE", -- kitty's black
-  panel = "#0b0910",
-  sel = "#3a2a55",
-  line = "#2b2238",
-  dim = "#5e5270",
-  mid = "#7f7494",
-  fg = "#b0a6c4",
-  bright = "#ece4fb",
-  violet = "#b06cff",
-  soft = "#c99bff",
-  error = "#e0607a",
-  warn = "#d9b77a",
-  ok = "#9fbf8a",
+  panel = "#0d1014",
+  sel = "#0e3d5c",
+  line = "#2e353d",
+  dim = "#5d6670",
+  mid = "#8a929c",
+  fg = "#c4c9ce",
+  bright = "#f4f6f8",
+  arch = "#1793d1",
+  soft = "#5fb8e8",
+  error = "#e5484d",
+  warn = "#ffb000",
+  ok = "#75c94d",
 }
 
 local groups = {
@@ -28,7 +28,7 @@ local groups = {
   FloatTitle = { fg = c.bright, bg = c.panel },
   WinSeparator = { fg = c.line },
   LineNr = { fg = c.dim },
-  CursorLineNr = { fg = c.violet },
+  CursorLineNr = { fg = c.arch },
   CursorLine = { bg = c.panel },
   ColorColumn = { bg = c.panel },
   SignColumn = { bg = c.bg },
@@ -38,9 +38,9 @@ local groups = {
   EndOfBuffer = { fg = c.bg },
   Visual = { bg = c.sel },
   Search = { fg = "#000000", bg = c.soft },
-  IncSearch = { fg = "#000000", bg = c.violet },
+  IncSearch = { fg = "#000000", bg = c.arch },
   CurSearch = { link = "IncSearch" },
-  MatchParen = { fg = c.violet, bold = true },
+  MatchParen = { fg = c.arch, bold = true },
   StatusLine = { fg = c.fg, bg = c.panel },
   StatusLineNC = { fg = c.dim, bg = c.panel },
   TabLine = { fg = c.mid, bg = c.panel },
@@ -51,21 +51,21 @@ local groups = {
   PmenuSbar = { bg = c.panel },
   PmenuThumb = { bg = c.line },
   Title = { fg = c.bright, bold = true },
-  Directory = { fg = c.violet },
-  Question = { fg = c.violet },
-  MoreMsg = { fg = c.violet },
+  Directory = { fg = c.arch },
+  Question = { fg = c.arch },
+  MoreMsg = { fg = c.arch },
   ModeMsg = { fg = c.bright },
   ErrorMsg = { fg = c.error },
   WarningMsg = { fg = c.warn },
-  Cursor = { fg = "#000000", bg = c.violet },
+  Cursor = { fg = "#000000", bg = c.arch },
 
   Comment = { fg = c.dim, italic = true },
   Constant = { fg = c.soft },
-  String = { fg = c.violet },
-  Character = { fg = c.violet },
-  Number = { fg = c.violet },
-  Boolean = { fg = c.violet },
-  Float = { fg = c.violet },
+  String = { fg = c.arch },
+  Character = { fg = c.arch },
+  Number = { fg = c.arch },
+  Boolean = { fg = c.arch },
+  Float = { fg = c.arch },
   Identifier = { fg = c.fg },
   Function = { fg = c.bright },
   Statement = { fg = c.bright, bold = true },
@@ -77,7 +77,7 @@ local groups = {
   Delimiter = { fg = c.mid },
   Underlined = { underline = true },
   Error = { fg = c.error },
-  Todo = { fg = "#000000", bg = c.violet, bold = true },
+  Todo = { fg = "#000000", bg = c.arch, bold = true },
 
   ["@variable"] = { fg = c.fg },
   ["@variable.builtin"] = { fg = c.mid },
@@ -87,7 +87,7 @@ local groups = {
   ["@tag"] = { fg = c.bright },
   ["@tag.attribute"] = { fg = c.mid },
   ["@markup.heading"] = { fg = c.bright, bold = true },
-  ["@markup.link"] = { fg = c.violet, underline = true },
+  ["@markup.link"] = { fg = c.arch, underline = true },
   ["@markup.raw"] = { fg = c.soft },
 
   DiagnosticError = { fg = c.error },
@@ -118,8 +118,8 @@ end
 
 -- The terminal inside nvim uses the same 16 colours as kitty.
 local term = {
-  "#0b0910", "#e0607a", "#9fbf8a", "#d9b77a", "#9a8cff", "#b06cff", "#7fb3c4", "#b0a6c4",
-  "#5e5270", "#e88a9a", "#b4d0a2", "#e6c995", "#b3a9ff", "#c99bff", "#9cc6d4", "#ece4fb",
+  "#0d1014", "#e5484d", "#75c94d", "#ffb000", "#4aa3df", "#1793d1", "#7cc7d6", "#c4c9ce",
+  "#5d6670", "#ee7a7d", "#9fdc7c", "#ffd166", "#8fc3e6", "#5fb8e8", "#a9e0ea", "#f4f6f8",
 }
 for i, col in ipairs(term) do
   vim.g["terminal_color_" .. (i - 1)] = col

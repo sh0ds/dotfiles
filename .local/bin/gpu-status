@@ -6,4 +6,4 @@ command -v nvidia-smi >/dev/null || exit 0
 read -r load temp mem total < <(nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total \
   --format=csv,noheader,nounits | head -n1 | tr -d ',')
 [ -n "$load" ] || exit 0
-printf '{"text":"gpu %s%%","tooltip":"GPU %s%%, %s°C, VRAM %s / %s MiB"}\n' "$load" "$load" "$temp" "$mem" "$total"
+printf '{"text":"%s%3s%%","tooltip":"GPU %s%%, %s°C, VRAM %s / %s MiB"}\n' "<span color='#1793d1'>gpu:</span>" "$load" "$load" "$temp" "$mem" "$total"

@@ -2,11 +2,11 @@
 # wifi: Wi-Fi picker in fuzzel (click "wifi" in the bar).
 # Strongest networks first, the one you're on is marked. Pick one to connect;
 # new secured networks ask for the password. "wifi settings" (right-click)
-# opens nmtui in Amethyst colours for everything else (VPN, ethernet, DNS).
+# opens nmtui in Diag colours for everything else (VPN, ethernet, DNS).
 set -euo pipefail
 
 settings() {
-  # nmtui's colours, mapped onto kitty's 16 colours (magenta = violet, black = panel).
+  # nmtui's colours, mapped onto kitty's 16 colours (magenta = Arch blue, black = panel).
   NEWT_COLORS='root=white,black border=magenta,black window=white,black shadow=black,black
 title=magenta,black button=black,white actbutton=black,magenta compactbutton=white,black
 checkbox=white,black actcheckbox=black,magenta entry=white,black disentry=gray,black
@@ -19,7 +19,7 @@ roottext=white,black emptyscale=,black fullscale=,magenta' \
 
 if [ "$(nmcli -t -f WIFI radio)" != enabled ]; then
   pick=$(printf '%s\n' "󰖩  Turn Wi-Fi on" "  Network settings" |
-    fuzzel --dmenu --index --prompt 'wifi ' --lines 2) || exit 0
+    fuzzel --dmenu --index --prompt 'wifi: ' --lines 2) || exit 0
   [ "$pick" = 0 ] && nmcli radio wifi on && notify-send -a Wi-Fi "Wi-Fi on"
   [ "$pick" = 1 ] && settings
   exit 0
@@ -45,7 +45,7 @@ while IFS= read -r row; do
   lines+=("$bars $lock  $ssid$mark")
 done < <(nmcli -t -f IN-USE,SIGNAL,SECURITY,SSID device wifi list --rescan auto | sort -t: -k2,2nr)
 
-idx=$(printf '%s\n' "${lines[@]}" | fuzzel --dmenu --index --prompt 'wifi ' --lines 10 --width 40) || exit 0
+idx=$(printf '%s\n' "${lines[@]}" | fuzzel --dmenu --index --prompt 'wifi: ' --lines 10 --width 40) || exit 0
 [[ $idx =~ ^[0-9]+$ ]] || exit 0
 case $idx in
   0) nmcli radio wifi off && notify-send -a Wi-Fi "Wi-Fi off"; exit 0 ;;

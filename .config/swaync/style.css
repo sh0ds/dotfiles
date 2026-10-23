@@ -1,47 +1,54 @@
-/* swaync look: Amethyst (amethyst.css) plus the parts that make it flat:
-   1 px frames instead of shadows, square tiles, no motion. */
-@import url("amethyst.css");
+/* swaync look: Diag (diag.css) plus the parts that make it match sh0ds.dev:
+   each notification is a block with an Arch blue rule down its left edge
+   (like a code block on the site), the panel has the site's double rule on
+   top, square tiles, no motion. */
+@import url("diag.css");
 
 * {
-  font-family: "Terminess Nerd Font";
+  font-family: "VT323", "Terminess Nerd Font";
 }
 
-/* ---- Frames: popups and the panel sit on black with a thin plum rule ---- */
+/* ---- Frames: popups and the panel sit on black with a thin grey rule ---- */
 .notification-background {
   margin: 8px;
-  border: 1px solid #2b2238;
+  border: 1px solid #3f4650;
+  border-left: 2px solid #1793d1;
 }
 .notification-background .notification.critical {
-  border-left: 3px solid #e0607a;
+  border-left: 2px solid #e5484d;
 }
+.notification-content .summary { color: #ffffff; }
+.notification-content .body { color: #8a929c; }
+.notification-content .time { color: #5d6670; }
 .control-center {
-  border: 1px solid #2b2238;
+  border: 1px solid #3f4650;
+  border-top: 6px double #3f4650;
 }
 
 /* The close button is a plain x, red only under the pointer. */
 .notification-background .close-button {
   background-color: transparent;
-  color: #5e5270;
+  color: #5d6670;
 }
 .notification-background .close-button:hover {
   background-color: transparent;
-  color: #e0607a;
+  color: #e5484d;
 }
 
-/* ---- Quick-settings tiles: flat squares, violet when on ---- */
+/* ---- Quick-settings tiles: flat squares, blue when on ---- */
 .widget-buttons-grid > flowbox > flowboxchild > button {
   min-height: 48px;
   margin: 2px;
-  background-color: #0b0910;
-  border: 1px solid #2b2238;
-  color: #b0a6c4;
+  background-color: #0d1014;
+  border: 1px solid #3f4650;
+  color: #e6e8ea;
 }
 .widget-buttons-grid > flowbox > flowboxchild > button:hover {
-  border-color: #b06cff;
+  border-color: #1793d1;
 }
 .widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked {
-  background-color: #b06cff;
-  border-color: #b06cff;
+  background-color: #1793d1;
+  border-color: #1793d1;
   color: #000000;
 }
 .widget-buttons-grid > flowbox > flowboxchild > button label {
@@ -51,4 +58,4 @@
   padding: 0;
 }
 
-.widget-dnd > switch:checked { background: #b06cff; }
+.widget-dnd > switch:checked { background: #1793d1; }

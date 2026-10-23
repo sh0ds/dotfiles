@@ -47,7 +47,7 @@ hl.env("XCURSOR_THEME", "Adwaita")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Amethyst (~/.config/qt6ct)
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Diag (~/.config/qt6ct)
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
 -- NVIDIA only. Delete these two lines on AMD or Intel.
@@ -58,7 +58,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 ---- LOOK AND FEEL ----
 -----------------------
 
--- Plain defaults here, no animations; the Amethyst look (colours, gaps,
+-- Plain defaults here, no animations; the Diag look (colours, gaps,
 -- borders, animations) is set in rice.lua and overrides these.
 hl.config({
 	general = {
@@ -66,8 +66,8 @@ hl.config({
 		gaps_out = 0,
 		border_size = 1,
 		col = {
-			active_border = "rgb(b06cff)",
-			inactive_border = "rgb(2b2238)",
+			active_border = "rgb(1793d1)",
+			inactive_border = "rgb(2e353d)",
 		},
 		resize_on_border = true,
 		allow_tearing = false,

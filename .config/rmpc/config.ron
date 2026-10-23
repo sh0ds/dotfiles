@@ -5,6 +5,6 @@
 #![enable(unwrap_variant_newtypes)]
 (
     address: "127.0.0.1:6600",
-    theme: "amethyst",
+    theme: "diag",
     volume_step: 5,
 )

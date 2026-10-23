@@ -1,10 +1,11 @@
-/* Amethyst power menu: five flat squares on black, the hovered one framed
-   in violet. Icons are recoloured to the same plum grey. */
+/* Diag power menu: five flat squares on black, the hovered one framed
+   in blue. Icons are recoloured to the same grey. */
 
 * {
   background-image: none;
   box-shadow: none;
-  font-family: "Terminess Nerd Font";
+  font-family: "VT323", "Terminess Nerd Font";
+  font-size: 20px;
 }
 
 window {
@@ -14,8 +15,8 @@ window {
 button {
   margin: 4px;
   border-radius: 0;
-  border: 1px solid #2b2238;
-  color: #b0a6c4;
+  border: 1px solid #3f4650;
+  color: #8a929c;
   background-color: #000000;
   background-repeat: no-repeat;
   background-position: center;
@@ -23,9 +24,9 @@ button {
 }
 
 button:focus, button:active, button:hover {
-  background-color: #0b0910;
-  border-color: #b06cff;
-  color: #ece4fb;
+  background-color: #161a1f;
+  border-color: #1793d1;
+  color: #1793d1;
   outline-style: none;
 }
 

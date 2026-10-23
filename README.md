@@ -1,6 +1,6 @@
 # dotfiles
 
-My Arch + Hyprland desktop in Amethyst, a flat black-and-violet look I made for it.
+My Arch + Hyprland desktop in Diag, the look of [sh0ds.dev](https://sh0ds.dev) in Arch Linux blue.
 
 ![desktop](screenshots/desktop.png)
 
@@ -10,15 +10,15 @@ These are the configs I use every day. It runs Hyprland 0.56 with the new Lua co
 
 ### Look
 
-I wanted it to look like the machine underneath, not like a theme. So it's black, greys with a bit of plum in them and one violet, and that's it. Windows tile with small gaps, square corners and a 1 px border, and only the focused window gets a violet frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. Everything is set in Terminess, a sharp bitmap-style font.
+My site looks like the screen a Raspberry Pi 5 shows before Linux boots, and I wanted the desktop to match it, just in Arch colours. So it's black, cool greys and Arch blue (`#1793d1`), VT323 for everything that isn't code, and text written as `key: value` with the key in blue. Rules are 2 px, panels get the site's double rule, and anything that's on is an inverted blue block. Windows tile with small gaps, square corners and a 2 px border, and only the focused window gets a blue frame. No shadows, no blur, no transparency. Motion is small and physical. Anything that moves runs on a critically damped spring, the fastest a spring can settle without overshooting, and an interrupted move bends towards its new target instead of restarting. New windows grow in from 97 %, tiles glide aside, and workspaces shift 8 % under a cross-fade. Things that only appear or go away fade in 120 ms, and closing is about twice as fast as opening. The bar never moves. The terminal and Neovim use Terminess, a sharp bitmap-style font with all the icons. The lock screen is the site's header: a pixel Arch logo with `host:`, `kern:` and `up:` next to it.
 
-Every app I use gets the same colours, GTK and Qt included, and Neovim has its own little `amethyst` scheme where code is grey, keywords are bright and strings and numbers are violet.
+Every app I use gets the same colours, GTK and Qt included, and Neovim has its own little `diag` scheme where code is grey, keywords are bright and strings and numbers are blue.
 
 ![demo](screenshots/demo.gif)
 
 ### Bar
 
-One line of plain text along the bottom, no icons. Workspace numbers (the current one as a violet block) and what's playing on the left, LIVE or REC in the middle while I'm sharing or recording, and on the right plain readings like `cpu 07%`, `mem 3.1G`, `52°C`, `pi up`, `vol  64`, network throughput and an ISO date and time. Click the stats for btop, the clock for my calendar and `off` for the power menu.
+One diagnostic line along the bottom under a double rule, no icons. Workspace numbers (the current one as a blue block) and `play:` with what's playing on the left, LIVE or REC in the middle while I'm sharing or recording, and on the right readings like `cpu: 7%`, `mem: 3.1G`, `temp: 52°C`, `pi: up`, `vol: 64`, `eth:` throughput and `time:` with an ISO date. Click the stats for btop, the clock for my calendar and `halt` for the power menu.
 
 ### Quick apps
 
@@ -171,7 +171,7 @@ And change a few things to your liking:
   ```
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
-- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, pick the dark base theme under Settings > Appearance and set the accent colour to `#b06cff`.
+- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the colours, pick the dark base theme under Settings > Appearance and set the accent colour to `#1793d1`.
 - For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
@@ -258,7 +258,7 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
 
 ## Credits
 
-The Amethyst colours are mine, but the swaync, btop, lazygit, rmpc, aerc, zathura, qt6ct and [yazi](https://github.com/yazi-rs/flavors) theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
+The Diag look is mine (from my site), VT323 is by the VT323 Project Authors under the SIL Open Font License (`.local/share/fonts/VT323-OFL.txt`), but the swaync, btop, lazygit, rmpc, aerc, zathura, qt6ct and [yazi](https://github.com/yazi-rs/flavors) theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
 
 ## License
 

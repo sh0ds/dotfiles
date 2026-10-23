@@ -33,6 +33,8 @@ done
   while IFS= read -r dead; do rm "$dead"; echo "removed ${dead#"$HOME"/}"; done
 
 chmod +x "$src/.local/bin/"*
+# VT323 (the bar, lock screen, launcher and notifications) ships in this repo
+command -v fc-cache >/dev/null && fc-cache -f "$HOME/.local/share/fonts" >/dev/null
 mkdir -p "$HOME/Pictures"
 echo
 echo "Done. Backups (if any) are in $HOME/.dotfiles-backup/"

@@ -35,7 +35,7 @@ menu=$(
   done
 )
 
-choice=$(cut -f1 <<<"$menu" | fuzzel --dmenu --index --prompt 'share ' --placeholder 'Enter shares the focused screen' --lines 10 --width 60) || exit 1
+choice=$(cut -f1 <<<"$menu" | fuzzel --dmenu --index --prompt 'share: ' --placeholder 'Enter shares the focused screen' --lines 10 --width 60) || exit 1
 [[ $choice =~ ^[0-9]+$ ]] || exit 1
 sel=$(sed -n "$((choice + 1))p" <<<"$menu" | cut -f2)
 

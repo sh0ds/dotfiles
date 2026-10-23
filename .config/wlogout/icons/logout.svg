@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Logout: an open door frame with an arrow leaving it. Same size and mauve as the other icons. -->
+<!-- Logout: an open door frame with an arrow leaving it. Same size and colour as the other icons. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-  <g fill="none" stroke="#b0a6c4" stroke-width="130" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="none" stroke="#c4c9ce" stroke-width="130" stroke-linecap="round" stroke-linejoin="round">
     <path d="M430 110H200a80 80 0 0 0-80 80v620a80 80 0 0 0 80 80h230"/>
     <path d="M400 500h480"/>
     <path d="M700 310l190 190-190 190"/>

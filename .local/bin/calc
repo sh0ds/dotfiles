@@ -4,7 +4,7 @@
 # Uses qalc from libqalculate.
 last=""
 while :; do
-  expr=$(printf '%s\n' "$last" | fuzzel --dmenu --prompt "= " --lines 1 --width 40) || exit 0
+  expr=$(printf '%s\n' "$last" | fuzzel --dmenu --prompt 'calc: ' --lines 1 --width 40) || exit 0
   [ -n "$expr" ] || exit 0
   if [ "$expr" = "$last" ]; then
     printf '%s' "${last##*= }" | wl-copy

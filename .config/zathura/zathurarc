@@ -4,41 +4,41 @@ set selection-clipboard clipboard
 set adjust-open width
 set font "Terminess Nerd Font 11"
 
-# Amethyst (colours on the layout of catppuccin/zathura)
-set default-fg                rgba(201,192,219,1)
+# Diag (colours on the layout of catppuccin/zathura)
+set default-fg                rgba(230,232,234,1)
 set default-bg                rgba(0,0,0,1)
 
-set completion-bg             rgba(26,20,36,1)
-set completion-fg             rgba(201,192,219,1)
-set completion-highlight-bg   rgba(176,108,255,1)
+set completion-bg             rgba(22,26,31,1)
+set completion-fg             rgba(230,232,234,1)
+set completion-highlight-bg   rgba(23,147,209,1)
 set completion-highlight-fg   rgba(0,0,0,1)
-set completion-group-bg       rgba(11,9,16,1)
-set completion-group-fg       rgba(201,192,219,1)
+set completion-group-bg       rgba(13,16,20,1)
+set completion-group-fg       rgba(230,232,234,1)
 
-set statusbar-fg              rgba(201,192,219,1)
+set statusbar-fg              rgba(230,232,234,1)
 set statusbar-bg              rgba(0,0,0,1)
-set inputbar-fg               rgba(201,192,219,1)
+set inputbar-fg               rgba(230,232,234,1)
 set inputbar-bg               rgba(0,0,0,1)
 
 set notification-bg           rgba(0,0,0,1)
-set notification-fg           rgba(201,192,219,1)
+set notification-fg           rgba(230,232,234,1)
 set notification-error-bg     rgba(0,0,0,1)
-set notification-error-fg     rgba(224,96,122,1)
+set notification-error-fg     rgba(229,72,77,1)
 set notification-warning-bg   rgba(0,0,0,1)
-set notification-warning-fg   rgba(217,183,122,1)
+set notification-warning-fg   rgba(255,176,0,1)
 
 set recolor                   "true"
 set recolor-lightcolor        rgba(0,0,0,1)
-set recolor-darkcolor         rgba(201,192,219,1)
+set recolor-darkcolor         rgba(230,232,234,1)
 
-set index-fg                  rgba(201,192,219,1)
+set index-fg                  rgba(230,232,234,1)
 set index-bg                  rgba(0,0,0,1)
-set index-active-fg           rgba(201,192,219,1)
-set index-active-bg           rgba(26,20,36,1)
+set index-active-fg           rgba(230,232,234,1)
+set index-active-bg           rgba(22,26,31,1)
 
 set render-loading-bg         rgba(0,0,0,1)
-set render-loading-fg         rgba(201,192,219,1)
+set render-loading-fg         rgba(230,232,234,1)
 
-set highlight-color           rgba(127,116,148,0.3)
-set highlight-fg              rgba(201,192,219,1)
-set highlight-active-color    rgba(176,108,255,0.3)
+set highlight-color           rgba(138,146,156,0.3)
+set highlight-fg              rgba(230,232,234,1)
+set highlight-active-color    rgba(23,147,209,0.3)

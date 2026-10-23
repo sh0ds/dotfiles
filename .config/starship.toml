@@ -1,4 +1,4 @@
-# Prompt: Amethyst, one plain line. Path in violet, git and languages in
+# Prompt: Diag, one plain line. Path in blue, git and languages in
 # grey, the time at the end. No powerline blocks, no icons. The language
 # segments are the site's languages (C, Haskell, Erlang) plus Python.
 # kitty sends the "command finished" notifications.
@@ -20,7 +20,7 @@ $time\
 $line_break\
 $character"""
 
-palette = 'amethyst'
+palette = 'diag'
 
 [username]
 show_always = false
@@ -29,7 +29,7 @@ style_root = "bold fg:error"
 format = '[$user ]($style)'
 
 [directory]
-style = "fg:violet"
+style = "fg:arch"
 format = "[$path]($style) "
 truncation_length = 3
 truncation_symbol = "…/"
@@ -65,11 +65,11 @@ format = "[took $duration]($style) "
 
 [custom.friday]
 when = 'test "$(date +%u)" = 5'
-format = "[it's friday ](fg:violet)"
+format = "[it's friday ](fg:arch)"
 
 [custom.leet]
 when = 'test "$(date +%H%M)" = 1337'
-format = "[leet ](fg:violet)"
+format = "[leet ](fg:arch)"
 
 [time]
 disabled = false
@@ -83,17 +83,17 @@ disabled = true
 [character]
 disabled = false
 format = " $symbol "
-success_symbol = '[\$](fg:violet)'
+success_symbol = '[\$](fg:arch)'
 error_symbol = '[\$](fg:error)'
-vimcmd_symbol = '[:](fg:violet)'
-vimcmd_replace_one_symbol = '[r](fg:violet)'
-vimcmd_replace_symbol = '[R](fg:violet)'
-vimcmd_visual_symbol = '[v](fg:violet)'
+vimcmd_symbol = '[:](fg:arch)'
+vimcmd_replace_one_symbol = '[r](fg:arch)'
+vimcmd_replace_symbol = '[R](fg:arch)'
+vimcmd_visual_symbol = '[v](fg:arch)'
 
-[palettes.amethyst]
-dim = "#5e5270"
-mid = "#7f7494"
-fg = "#b0a6c4"
-bright = "#ece4fb"
-violet = "#b06cff"
-error = "#e0607a"
+[palettes.diag]
+dim = "#5d6670"
+mid = "#8a929c"
+fg = "#c4c9ce"
+bright = "#f4f6f8"
+arch = "#1793d1"
+error = "#e5484d"

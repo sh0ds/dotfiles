@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# live-status: violet "LIVE" in waybar while the screen is being shared,
+# live-status: blue "LIVE" in waybar while the screen is being shared,
 # and do-not-disturb on swaync for the duration, so private notifications
 # never pop up on stream. Listens to Hyprland's screencastv2 event
 # ("screencastv2>>1,<type>,<name>" on start, 0 on stop; Hyprland 0.56).

@@ -3,14 +3,14 @@
   "logo": {
     "type": "file",
     "source": "~/.config/fastfetch/sh0ds.txt",
-    // $1-$5 in sh0ds.txt: the letters, all violet. $6: the shadow edges, plum.
+    // $1-$5 in sh0ds.txt: the letters, all blue. $6: the shadow edges, grey.
     "color": {
-      "1": "#b06cff", "2": "#b06cff", "3": "#b06cff", "4": "#b06cff", "5": "#b06cff",
-      "6": "#2b2238"
+      "1": "#1793d1", "2": "#1793d1", "3": "#1793d1", "4": "#1793d1", "5": "#1793d1",
+      "6": "#2e353d"
     },
     "padding": { "top": 3, "left": 1, "right": 3 }
   },
-  "display": { "separator": "  ", "color": { "keys": "#7f7494", "title": "#ece4fb" } },
+  "display": { "separator": "  ", "color": { "keys": "#8a929c", "title": "#f4f6f8" } },
   "modules": [
     "title", "separator", "os", "kernel", "wm", "shell", "terminal", "packages", "uptime",
     { "type": "command", "key": "GHC", "text": "ghc --numeric-version" },

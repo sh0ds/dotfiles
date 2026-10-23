@@ -1,8 +1,8 @@
 # ~/.config/imv/config: pictures from yazi and Firefox. Arrows or j/k flip
 # through the folder, f is fullscreen, q quits.
-# Colours: Amethyst.
+# Colours: Diag.
 [options]
 background=000000
-overlay_text_color=c9c0db
+overlay_text_color=e6e8ea
 overlay_background_color=000000
 overlay_font=Terminess Nerd Font:11
