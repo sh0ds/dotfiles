@@ -4,6 +4,9 @@
 # CSS snippet into the vault (turn it on once: Settings -> Appearance -> CSS
 # snippets -> diag).
 set -euo pipefail
-mkdir -p "$HOME/notes/.obsidian/snippets"
-ln -sfn "$HOME/.config/diag/obsidian.css" "$HOME/notes/.obsidian/snippets/diag.css"
+# OBSIDIAN_VAULT overrides the default vault location.
+vault="${OBSIDIAN_VAULT:-$HOME/notes}"
+mkdir -p "$vault/.obsidian/snippets"
+ln -sfn "$HOME/.config/diag/obsidian.css" "$vault/.obsidian/snippets/diag.css"
+echo "Diag snippet: $vault/.obsidian/snippets/diag.css"
 exec app '^md\.obsidian\.Obsidian$' obsidian

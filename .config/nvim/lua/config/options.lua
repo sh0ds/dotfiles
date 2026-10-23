@@ -3,3 +3,5 @@ vim.opt.relativenumber = true
 vim.opt.scrolloff = 8
 vim.opt.wrap = false
 vim.opt.colorcolumn = "100"
+
+vim.opt.mouse = "a"

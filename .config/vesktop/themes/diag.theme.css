@@ -1,0 +1,32 @@
+/**
+ * @name Diag
+ * @description sh0ds.dev diagnostic theme for Vesktop
+ * @version 1.0.0
+ * @author sh0ds
+ */
+:root, .theme-dark {
+  --background-primary: #000000 !important;
+  --background-secondary: #0d1014 !important;
+  --background-secondary-alt: #161a1f !important;
+  --background-tertiary: #000000 !important;
+  --background-floating: #0d1014 !important;
+  --background-modifier-hover: #161a1f !important;
+  --background-modifier-selected: #0e3d5c !important;
+  --background-modifier-active: #161a1f !important;
+  --text-normal: #e6e8ea !important;
+  --text-muted: #8a929c !important;
+  --text-link: #1793d1 !important;
+  --interactive-normal: #c4c9ce !important;
+  --interactive-hover: #ffffff !important;
+  --interactive-active: #ffffff !important;
+  --brand-experiment: #1793d1 !important;
+  --brand-500: #1793d1 !important;
+  --button-filled-brand-background: #1793d1 !important;
+  --scrollbar-thin-thumb: #3f4650 !important;
+  --scrollbar-auto-thumb: #3f4650 !important;
+  --scrollbar-auto-track: #000000 !important;
+  --font-primary: "Terminess Nerd Font", monospace !important;
+  --font-display: "Terminess Nerd Font", monospace !important;
+}
+.theme-dark * { border-radius: 0 !important; }
+.theme-dark ::selection { background: #0e3d5c !important; color: #f4f6f8 !important; }

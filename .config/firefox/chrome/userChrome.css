@@ -107,7 +107,7 @@
 .tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
   background: var(--diag-row) !important;
   background-image: none !important;
-  box-shadow: inset 2px 0 0 var(--diag-arch) !important;
+  box-shadow: inset 0 2px 0 var(--diag-arch) !important;
 }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-label { color: #ffffff !important; }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--diag-arch) !important; }
@@ -129,7 +129,6 @@
 /* Tabs: flat, dim until hovered; the selected one is the blue block */
 .tabbrowser-tab .tab-background {
   border-radius: 0 !important;
-  box-shadow: none !important;
   outline: none !important;
 }
 .tabbrowser-tab:not([selected]) .tab-label { color: var(--diag-dim) !important; }
