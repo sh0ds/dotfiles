@@ -4,5 +4,8 @@
 # maths expression, so playerctl's format string can't sit in hyprlock.conf.
 t=$(playerctl metadata --format '{{ artist }} - {{ title }}' 2>/dev/null) || exit 0
 [ -n "$t" ] || exit 0
-t=${t//&/&amp;}; t=${t//</&lt;}
+# Bound the line on small lock screens and escape Pango markup. Escape the
+# replacement ampersands too: Bash 5.2+ enables patsub_replacement by default.
+if (( ${#t} > 90 )); then t="${t:0:89}…"; fi
+t=${t//&/\&amp;}; t=${t//</\&lt;}; t=${t//>/\&gt;}
 printf '<span foreground="#1793d1">play:</span> %s\n' "$t"

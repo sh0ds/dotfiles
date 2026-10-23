@@ -1,2 +1,5 @@
 # nchat keeps your logged-in WhatsApp session here. Never commit it.
 .config/nchat/profiles/
+
+# Python validation cache
+__pycache__/

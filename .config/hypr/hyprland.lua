@@ -229,4 +229,8 @@ hl.window_rule({
 	float = true,
 })
 
-pcall(require, "rice")
+-- Keep the base config usable, but do not silently swallow theme failures.
+local rice_ok, rice_error = pcall(require, "rice")
+if not rice_ok then
+	io.stderr:write("Diag rice failed to load: " .. tostring(rice_error) .. "\n")
+end

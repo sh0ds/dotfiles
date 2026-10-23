@@ -62,7 +62,7 @@ check "reflector timer" systemctl is-enabled reflector.timer
 check "firewall on (ufw)" sh -c 'systemctl is-active ufw && systemctl is-enabled ufw'
 check "KVM (DJ VM)" test -w /dev/kvm
 check "virtiofsd (DJ VM shared folder)" test -x /usr/lib/virtiofsd
-check "~/Music/DJ (DJ VM shared folder)" test -d "$HOME/Music/DJ"
+check "Music/DJ shared folder" test -d "$HOME/Music/DJ"
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd"'
 check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd Font"'
@@ -78,6 +78,9 @@ done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server
 check "nvim 0.11+ (built-in LSP config)" nvim --headless -c 'lua if vim.fn.has("nvim-0.11")==0 then os.exit(1) end' -c q
 check "scripts in ~/.local/bin on PATH" command -v app
+check "responsive power menu on PATH" command -v power-menu
+check "btop uses Diag" grep -q '^color_theme = "diag"' "$HOME/.config/btop/btop.conf"
+check "Qt palette path expanded" sh -c 'test -f "$HOME/.config/qt6ct/qt6ct.conf" && ! grep -q @CONFIG_HOME@ "$HOME/.config/qt6ct/qt6ct.conf"'
 
 printf '\n%d OK, %d FAIL\n' "$pass" "$fail"
 exit "$fail"

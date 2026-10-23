@@ -3,7 +3,7 @@
   "positionX": "right",
   "positionY": "top",
   "control-center-margin-top": 6,
-  "control-center-margin-bottom": 30,
+  "control-center-margin-bottom": 40,
   "control-center-margin-right": 6,
   "control-center-width": 400,
   "notification-window-width": 380,
@@ -25,58 +25,56 @@
   ],
   "widget-config": {
     "title": {
-      "text": "Notifications",
+      "text": "notifications:",
       "clear-all-button": true,
-      "button-text": "Clear all"
+      "button-text": "clear"
     },
     "dnd": {
-      "text": "Do not disturb"
+      "text": "quiet:"
     },
     "mpris": {
       "image-size": 64
     },
     "volume": {
-      "label": "",
+      "label": "vol:",
       "show-per-app": false
     },
     "buttons-grid": {
       "buttons-per-row": 4,
       "actions": [
         {
-          "label": "󰖩",
-          "command": "sh -c 'nmcli radio wifi | grep -q enabled && nmcli radio wifi off || nmcli radio wifi on'",
-          "type": "toggle",
-          "update-command": "sh -c 'nmcli radio wifi | grep -q enabled && echo true || echo false'"
+          "label": "wifi",
+          "command": "wifi"
         },
         {
-          "label": "󰖔",
+          "label": "night",
           "command": "nightlight",
           "type": "toggle",
           "update-command": "sh -c 'pgrep -x hyprsunset >/dev/null && echo true || echo false'"
         },
         {
-          "label": "󰄀",
+          "label": "capture",
           "command": "sh -c 'swaync-client -cp; sleep 0.4; grim -g \"$(slurp)\" - | satty --filename - --copy-command wl-copy'"
         },
         {
-          "label": "󰕧",
+          "label": "record",
           "command": "sh -c 'swaync-client -cp; rec-toggle'"
         },
         {
-          "label": "󰃬",
+          "label": "calc",
           "command": "sh -c 'swaync-client -cp; calc'"
         },
         {
-          "label": "󰆍",
+          "label": "term",
           "command": "sh -c 'swaync-client -cp; kitty'"
         },
         {
-          "label": "󰌾",
+          "label": "lock",
           "command": "sh -c 'swaync-client -cp; loginctl lock-session'"
         },
         {
-          "label": "󰐥",
-          "command": "sh -c 'swaync-client -cp; wlogout -b 5'"
+          "label": "halt",
+          "command": "sh -c 'swaync-client -cp; power-menu'"
         }
       ]
     }

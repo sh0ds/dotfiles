@@ -45,7 +45,7 @@ window#osd segment.active {
   border-radius: 0;
   border: none;
   margin: 2px;
-  background: repeating-linear-gradient(90deg, #1793d1 0 7px, transparent 7px 10px);
+  background: #1793d1;
 }
 
 window#osd segment {
