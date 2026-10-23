@@ -59,3 +59,28 @@
 }
 
 .widget-dnd > switch:checked { background: #1793d1; }
+
+/* Diag visual refinements 2026-10-23 */
+/* Diag quick-setting icon alignment */
+.widget-buttons-grid > flowbox > flowboxchild > button { min-height: 52px; min-width: 0; padding: 3px; }
+.widget-buttons-grid > flowbox > flowboxchild > button label { font-family: "Terminess Nerd Font", monospace; font-size: 26px; font-weight: normal; }
+.widget-buttons-grid > flowbox > flowboxchild > button.toggle:checked label { color: #000000; }
+.widget-mpris button image { -gtk-icon-size: 24px; }
+
+
+/* Diag: visible, centered quick-setting icons */
+.widget-buttons-grid > flowbox > flowboxchild > button {
+  min-height: 56px;
+  padding: 0;
+  background-image: none;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button label {
+  opacity: 1;
+  font-family: "Terminess Nerd Font Mono", "Symbols Nerd Font Mono", monospace;
+  font-size: 30px;
+  font-weight: normal;
+  letter-spacing: 0;
+  margin: 0;
+  padding: 0;
+}

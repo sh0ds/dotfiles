@@ -1,32 +1,99 @@
 /**
  * @name Diag
- * @description sh0ds.dev diagnostic theme for Vesktop
- * @version 1.0.0
+ * @description Black diagnostic UI with restrained Arch-blue accents
+ * @version 1.1.0
  * @author sh0ds
  */
-:root, .theme-dark {
+
+:root,
+.theme-dark,
+.visual-refresh,
+.visual-refresh.theme-dark {
   --background-primary: #000000 !important;
-  --background-secondary: #0d1014 !important;
-  --background-secondary-alt: #161a1f !important;
+  --background-secondary: #0a0d10 !important;
+  --background-secondary-alt: #0d1014 !important;
   --background-tertiary: #000000 !important;
   --background-floating: #0d1014 !important;
+
+  --background-base-lowest: #000000 !important;
+  --background-base-lower: #000000 !important;
+  --background-base-low: #0a0d10 !important;
+  --background-surface-high: #0d1014 !important;
+  --background-surface-higher: #161a1f !important;
+  --background-surface-highest: #161a1f !important;
+
   --background-modifier-hover: #161a1f !important;
-  --background-modifier-selected: #0e3d5c !important;
   --background-modifier-active: #161a1f !important;
-  --text-normal: #e6e8ea !important;
+  --background-modifier-selected: #0e3d5c !important;
+
+  --text-normal: #c4c9ce !important;
   --text-muted: #8a929c !important;
   --text-link: #1793d1 !important;
-  --interactive-normal: #c4c9ce !important;
-  --interactive-hover: #ffffff !important;
-  --interactive-active: #ffffff !important;
+
+  --interactive-normal: #8a929c !important;
+  --interactive-hover: #c4c9ce !important;
+  --interactive-active: #e6e8ea !important;
+
   --brand-experiment: #1793d1 !important;
   --brand-500: #1793d1 !important;
+
   --button-filled-brand-background: #1793d1 !important;
+
   --scrollbar-thin-thumb: #3f4650 !important;
   --scrollbar-auto-thumb: #3f4650 !important;
   --scrollbar-auto-track: #000000 !important;
+
   --font-primary: "Terminess Nerd Font", monospace !important;
   --font-display: "Terminess Nerd Font", monospace !important;
 }
-.theme-dark * { border-radius: 0 !important; }
-.theme-dark ::selection { background: #0e3d5c !important; color: #f4f6f8 !important; }
+
+/* Square surfaces, consistent with Diag */
+.theme-dark button,
+.theme-dark input,
+.theme-dark textarea,
+.theme-dark [class*="container"],
+.theme-dark [class*="button"] {
+  border-radius: 0 !important;
+}
+
+/* Voice-channel content: remove the purple gradient */
+.theme-dark [class*="callContainer"],
+.theme-dark [class*="callContent"],
+.theme-dark [class*="root"][class*="call"],
+.theme-dark [class*="gradientContainer"],
+.theme-dark [class*="videoGrid"],
+.theme-dark [class*="scroller"][class*="call"] {
+  background: #000000 !important;
+  background-image: none !important;
+}
+
+/* Channel and server sidebars */
+.theme-dark [class*="sidebarList"],
+.theme-dark [class*="sidebarRegion"],
+.theme-dark [class*="privateChannels"] {
+  background: #0a0d10 !important;
+}
+
+/* Restrained selected-channel state */
+.theme-dark [class*="modeSelected"] [class*="link"] {
+  background: #161a1f !important;
+  box-shadow: inset 2px 0 0 #1793d1 !important;
+}
+
+/* Text and input surfaces */
+.theme-dark [class*="channelTextArea"],
+.theme-dark [class*="themedBackground"] {
+  background: #0d1014 !important;
+  border-radius: 0 !important;
+}
+
+/* Thin structural separators */
+.theme-dark [class*="sidebar"] {
+  border-color: #3f4650 !important;
+}
+
+/* Consistent selection */
+.theme-dark ::selection {
+  background: #0e3d5c !important;
+  color: #e6e8ea !important;
+}

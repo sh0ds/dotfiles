@@ -36,3 +36,8 @@ button:focus, button:active, button:hover {
 #suspend  { background-image: url("icons/suspend.svg"); }
 #reboot   { background-image: url("icons/reboot.svg"); }
 #shutdown { background-image: url("icons/shutdown.svg"); }
+
+/* Diag visual refinements 2026-10-23 */
+/* Diag: uniform thin-stroke power icons */
+button { background-size: 48px 48px; }
+button:focus, button:hover { background-color: #0d1014; }

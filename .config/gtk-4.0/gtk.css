@@ -69,3 +69,14 @@
   --thumbnail-bg-color: #161a1f;
   --thumbnail-fg-color: #e6e8ea;
 }
+
+/* Diag visual refinements 2026-10-23 */
+/* Diag readability refinements: GTK3 + GTK4 */
+label, entry, button, spinbutton, combobox, dropdown { color: #c4c9ce; }
+button { min-height: 28px; }
+button:hover { background-color: #161a1f; }
+entry, spinbutton, combobox button, dropdown button { background-color: #161a1f; border: 1px solid #3f4650; border-radius: 0; }
+entry:focus, spinbutton:focus-within, combobox button:focus, dropdown button:focus { border-color: #1793d1; }
+scale trough { min-height: 5px; background-color: #3f4650; border-radius: 0; }
+scale highlight { background-color: #1793d1; border-radius: 0; }
+scale slider { min-width: 14px; min-height: 14px; background-color: #c4c9ce; border-radius: 0; }

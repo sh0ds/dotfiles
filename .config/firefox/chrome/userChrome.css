@@ -158,3 +158,37 @@ panel, menupopup {
   --panel-border-radius: 0 !important;
   --panel-shadow: none !important;
 }
+
+/* Diag: flat black tabs with a minimal blue selection rule */
+
+/* Remove Firefox's default tab background */
+#tabbrowser-tabs .tabbrowser-tab .tab-background {
+  background: #000000 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Selected tab: black with only a top rule */
+#tabbrowser-tabs .tabbrowser-tab[selected] .tab-background {
+  background: #000000 !important;
+  outline: 2px solid #1793d1 !important;
+  clip-path: inset(0 0 calc(100% - 2px) 0) !important;
+}
+
+/* Selected label */
+#tabbrowser-tabs .tabbrowser-tab[selected] .tab-label {
+  color: #c4c9ce !important;
+  font-weight: 500 !important;
+}
+
+/* Inactive tabs */
+#tabbrowser-tabs .tabbrowser-tab:not([selected]) .tab-label {
+  color: #5d6670 !important;
+}
+
+/* Subtle hover */
+#tabbrowser-tabs .tabbrowser-tab:not([selected]):hover .tab-background {
+  background: #0a0d10 !important;
+}
