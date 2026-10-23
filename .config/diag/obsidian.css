@@ -24,6 +24,10 @@
   --interactive-normal: #161a1f;
   --interactive-hover: #3f4650;
   --interactive-accent: #1793d1;
+  --interactive-accent-rgb: 23, 147, 209;
+  --checkbox-color: #1793d1;
+  --checkbox-marker-color: #000000;
+  --nav-item-color-active: #e6e8ea;
   --interactive-accent-hover: #5fb8e8;
   --color-accent: #1793d1;
   --color-accent-1: #1793d1;

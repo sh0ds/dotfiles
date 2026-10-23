@@ -6,8 +6,8 @@
 cwd = { fg = "#8a929c" }
 
 # Find
-find_keyword  = { fg = "#ffb000", bold = true, italic = true, underline = true }
-find_position = { fg = "#e6e8ea", bg = "reset", bold = true, italic = true }
+find_keyword  = { fg = "#ffb000", bold = true, underline = true }
+find_position = { fg = "#e6e8ea", bg = "reset", bold = true }
 
 # Marker
 marker_copied   = { fg = "#75c94d", bg = "#75c94d" }
@@ -44,8 +44,8 @@ normal_main = { fg = "#000000", bg = "#1793d1", bold = true }
 normal_alt  = { fg = "#1793d1", bg = "#161a1f" }
 
 # Select mode
-select_main = { fg = "#000000", bg = "#8a929c", bold = true }
-select_alt  = { fg = "#8a929c", bg = "#161a1f" }
+select_main = { fg = "#000000", bg = "#ffb000", bold = true }
+select_alt  = { fg = "#ffb000", bg = "#161a1f" }
 
 # Unset mode
 unset_main = { fg = "#000000", bg = "#d8e6f0", bold = true }
@@ -67,7 +67,7 @@ perm_exec  = { fg = "#75c94d" }
 # Progress
 progress_label  = { fg = "#ffffff", bold = true }
 progress_normal = { fg = "#75c94d", bg = "#2e353d" }
-progress_error  = { fg = "#ffb000", bg = "#e5484d" }
+progress_error  = { fg = "#000000", bg = "#e5484d" }
 
 # : }}}
 

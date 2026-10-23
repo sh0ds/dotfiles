@@ -55,3 +55,15 @@ selection {
 scale trough { min-height: 5px; background-color: #3f4650; }
 scale highlight { background-color: @accent_bg_color; }
 scale slider { min-width: 14px; min-height: 14px; }
+
+/* Controls are legible at rest as well as while focused. Do not override
+   button/label foregrounds: the base theme owns semantic action colours. */
+button:focus, entry:focus, switch:focus {
+  outline: 2px solid @accent_bg_color;
+  outline-offset: 2px;
+}
+switch { border-radius: 0; background-color: #3f4650; }
+switch:checked { background-color: @accent_bg_color; }
+switch slider { border-radius: 0; background-color: #c4c9ce; }
+switch:checked slider { background-color: #000000; }
+scale slider { background-color: #c4c9ce; }

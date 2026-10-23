@@ -8,7 +8,7 @@ local c = {
   bg = "NONE", -- kitty's black
   panel = "#0d1014",
   sel = "#0e3d5c",
-  line = "#2e353d",
+  line = "#3f4650",
   dim = "#8a929c",
   mid = "#8a929c",
   fg = "#c4c9ce",
@@ -90,6 +90,10 @@ local groups = {
   ["@markup.link"] = { fg = c.arch, underline = true },
   ["@markup.raw"] = { fg = c.soft },
 
+  DiagnosticVirtualTextError = { fg = c.error, bg = c.panel },
+  DiagnosticVirtualTextWarn = { fg = c.warn, bg = c.panel },
+  DiagnosticVirtualTextInfo = { fg = c.mid, bg = c.panel },
+  DiagnosticVirtualTextHint = { fg = c.mid, bg = c.panel },
   DiagnosticError = { fg = c.error },
   DiagnosticWarn = { fg = c.warn },
   DiagnosticInfo = { fg = c.mid },

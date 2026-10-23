@@ -16,7 +16,7 @@
 .notification-content .time { color: #8a929c; }
 .control-center {
   border: 1px solid #3f4650;
-  border-top: 4px double #3f4650;
+  border-top: 2px solid #1793d1;
   padding: 12px;
 }
 .notification-background .close-button {
@@ -61,3 +61,6 @@
   outline: 2px solid #1793d1;
   outline-offset: -2px;
 }
+
+.widget-dnd > switch:checked slider { background: #000000; }
+.widget-dnd > switch:focus { outline: 2px solid #1793d1; outline-offset: 2px; }

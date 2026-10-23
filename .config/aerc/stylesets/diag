@@ -58,5 +58,5 @@ diff_chunk_func.bold=true
 diff_add.fg=#75c94d
 diff_del.fg=#e5484d
 diff_whitespace.bg=#e5484d
-quote_*.fg=#5d6670
+quote_*.fg=#8a929c
 quote_1.fg=#8a929c
