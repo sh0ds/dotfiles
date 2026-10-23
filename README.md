@@ -2,6 +2,8 @@
 
 My Arch + Hyprland desktop in Diag, the look of [sh0ds.dev](https://sh0ds.dev) in Arch Linux blue.
 
+![Diag desktop with Firefox, kitty and Obsidian](screenshots/apps.png)
+
 ## Description
 
 These are the configs I use every day. It runs Hyprland 0.56 with the new Lua config: `hyprland.lua` is a plain base config and `rice.lua` has the look, the window rules and my extra keybinds on top. If something in `rice.lua` breaks, the base still works.
@@ -90,41 +92,48 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 
 ## Screenshots and recordings
 
-The current Diag captures are pending. The files already in `screenshots/` show an older rice, so they are kept as history rather than presented as the current design.
+Current desktop captures from 2026-10-23, kept at their original resolution. The app overview above shows Firefox, kitty and Obsidian with the top rail and focused window frame.
 
-### Screenshots to capture
+### Desktop
 
-These five PNGs cover the main desktop. Capture them after pulling and installing the latest revision, at native resolution and normal display scale. Leave the bar visible where practical.
+The dot-grid wallpaper, pixel Arch mark and slim Waybar on an empty workspace.
 
-| File | What to show |
+![Diag wallpaper and top rail](screenshots/desktop.png)
+
+### Terminal and editor
+
+LazyVim beside a Pi SSH session and the local terminal prompt. The remote Pi shell has its own separate configuration.
+
+![LazyVim, local terminal and Pi SSH session](screenshots/terminal.png)
+
+### Session console
+
+Five numbered text actions with visible hotkeys. No logos or power icons.
+
+![Text-only Diag session console](screenshots/power.png)
+
+### Music and motion captures
+
+The current music/notification screenshot and motion recordings are still to be added. For a complete gallery, the remaining useful captures are:
+
+| Capture | What to show |
 | --- | --- |
-| `desktop.png` | The whole main screen with two or three tiled apps, focused and inactive borders, wallpaper and the full top rail. |
-| `terminal.png` | Kitty with the new prompt in a Git repo, one successful command and one failed command; include tmux or Neovim beside it. |
-| `notifications.png` | `SUPER+N` with one sample notification, quick settings, the volume slider and the music widget playing a track. |
-| `power.png` | The complete text-only session console; hover or keyboard-focus one row so the highlight and hotkey are visible. Cancel with Escape. |
-| `apps.png` | Firefox and Obsidian beside one terminal app such as Yazi, rmpc, lazygit or btop. Include selected tabs/items to compare app styling. |
+| `notifications.png` | rmpc playing with the notification panel open: track artwork, transport buttons, quick settings and volume. |
+| `demo.gif` or `demo.mp4` | 15–25 seconds opening a second window, changing workspace/focus, opening fuzzel, toggling a quick app, then opening/cancelling the session console. |
+| `music.gif` or `music.mp4` | 8–12 seconds of play/pause, skipping a track and switching player if available. Include a long title or missing artwork. |
 
-Optional: `lock.png` for Hyprlock and `launcher.png` for fuzzel with a search and selected result. If another monitor uses a different scale or orientation, also capture `desktop-secondary.png` at its native resolution.
-
-### Recordings to capture
-
-| File | Length | What to show |
-| --- | --- | --- |
-| `demo.gif` or `demo.mp4` | 15–25 s | Open a second window, change workspace, move focus, open/close fuzzel, toggle a quick app, then open/cancel the session console. Keep the pointer visible. |
-| `music.gif` or `music.mp4` | 8–12 s | Open notifications, play/pause, skip a track and switch player if two are available. Include a long title or a track without artwork to expose clipping/fallback issues. |
-
-MP4 at 60 fps is preferable for reviewing smoothness; GIF is fine for the README. Record at normal speed. Provide one clean PNG per state rather than a stitched collage, using sample content without private messages. Alongside the files, note the monitor resolution/scale, refresh rate, app names and anything that looks wrong.
-
-Once these captures are supplied, they can replace the historical assets and be embedded here. The filenames above are a capture plan, not links to screenshots that do not exist yet.
+Optional: current `lock.png`, `launcher.png` and a secondary monitor capture. MP4 at 60 fps is useful for reviewing motion; GIF works inline in the README. Keep normal playback speed and note the display scale/refresh rate when reporting layout or motion issues.
 
 <details>
-<summary>Historical captures</summary>
+<summary>Historical captures — earlier rice</summary>
 
-![Previous desktop](screenshots/desktop.png)
-![Previous quick apps](screenshots/popups.png)
-![Previous power menu](screenshots/power.png)
-![Previous lock screen](screenshots/lock.png)
-![Previous motion demo](screenshots/demo.gif)
+These predate the current Diag layout.
+
+![Previous desktop](screenshots/archive/desktop.png)
+![Previous quick apps](screenshots/archive/popups.png)
+![Previous power menu](screenshots/archive/power.png)
+![Previous lock screen](screenshots/archive/lock.png)
+![Previous motion demo](screenshots/archive/demo.gif)
 
 </details>
 
