@@ -79,5 +79,12 @@
         }
       ]
     }
+  },
+  "notification-visibility": {
+    "whatsapp-phone-copy": {
+      "state": "ignored",
+      "app-name": "(?i)^(KDE\\s*Connect|kdeconnect(d|\\.daemon)?)$",
+      "summary": "(?i)^WhatsApp( Business)?$"
+    }
   }
 }

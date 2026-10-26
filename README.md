@@ -184,6 +184,14 @@ And change a few things to your liking:
   sed -i '/^desktop_notify_\(enabled\|connectivity\|command\)=/d' "$f"
   printf '%s\n' 'desktop_notify_enabled=1' 'desktop_notify_connectivity=0' "desktop_notify_command=chat-notify '%1' '%2'" >> "$f"
   ```
+  When the phone is connected through KDE Connect, SwayNC hides its mirrored
+  WhatsApp notifications and keeps nchat's desktop alerts. Other phone apps
+  remain visible. Keep nchat running for PC WhatsApp alerts; this also hides
+  phone-only WhatsApp alerts such as calls. To use the phone mirror instead,
+  remove `whatsapp-phone-copy` from SwayNC's `notification-visibility` and disable
+  nchat desktop notifications. After changing SwayNC configuration, reload with
+  `swaync-client -R`.
+
 - For music, put your files in `~/Music` and start mpd. It picks up new files on its own after that:
 
   ```
