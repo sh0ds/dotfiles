@@ -1,54 +1,277 @@
-#!/usr/bin/env bash
-# djvm: the Windows VM for everything DJ (Lexicon, rekordbox, Traktor, Audacity).
-#   djvm          start it if it's off and show it, or jump to it (SUPER+SHIFT+M)
-#   djvm off      shut Windows down and wait until it's off (the power menu does this)
-#   djvm create   make the VM once from the two ISOs in ~/Downloads (docs/dj-vm.md)
-# ~/Music/DJ is shared with Windows as drive Z:, so songs dropped in there on
-# this side show up in Windows straight away.
-set -euo pipefail
-export LIBVIRT_DEFAULT_URI=qemu:///session
-vm=dj
-share=$HOME/Music/DJ
+#!/usr/bin/env python3
+"""Manage the session DJ VM; keep installer media outside disposable Downloads."""
+import argparse
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.request
+import xml.etree.ElementTree as ET
 
-case ${1:-} in
-  off)
-    # Waits until Windows is really off, so the power menu can call it right
-    # before shutting down Arch. Pulls the plug after 90 seconds if it hangs.
-    [ "$(virsh domstate "$vm" 2>/dev/null)" = "shut off" ] && exit 0
-    virsh domstate "$vm" >/dev/null 2>&1 || exit 0
-    notify-send -a "DJ VM" "Shutting down Windows"
-    virsh shutdown "$vm" --mode agent,acpi >/dev/null
-    for _ in $(seq 90); do
-      [ "$(virsh domstate "$vm")" = "shut off" ] && exit 0
-      sleep 1
-    done
-    virsh destroy "$vm" >/dev/null
-    ;;
-  create)
-    shopt -s nullglob
-    isos=(~/Downloads/Win11*.iso)
-    virtio=~/Downloads/virtio-win.iso
-    if [ ${#isos[@]} -eq 0 ] || [ ! -f "$virtio" ]; then
-      echo "djvm: put a Win11*.iso and virtio-win.iso in ~/Downloads first" >&2
-      exit 1
-    fi
-    mkdir -p "$share"
-    virt-install --name "$vm" --osinfo win11 \
-      --memory 8192 --vcpus 4 --cpu host-passthrough \
-      --memorybacking source.type=memfd,access.mode=shared \
-      --boot uefi \
-      --disk size=120,bus=virtio \
-      --cdrom "${isos[0]}" --disk "$virtio",device=cdrom \
-      --network passt,model=virtio \
-      --graphics spice --video qxl --sound ich9 \
-      --channel spicevmc \
-      --redirdev usb,type=spicevmc --redirdev usb,type=spicevmc \
-      --filesystem type=mount,driver.type=virtiofs,source.dir="$share",target.dir=dj \
-      --noautoconsole
-    ;;
-esac
+os.environ['LIBVIRT_DEFAULT_URI'] = 'qemu:///session'
+os.environ['LC_ALL'] = 'C'
+VM = 'dj'
+DATA = Path(os.environ.get('XDG_DATA_HOME') or Path.home() / '.local/share') / 'djvm'
+MEDIA = DATA / 'isos'
+SHARE = Path.home() / 'Music/DJ'
+VIRTIO_URL = ('https://fedorapeople.org/groups/virt/virtio-win/'
+              'direct-downloads/stable-virtio/virtio-win.iso')
 
-if [ "$(virsh domstate "$vm")" != running ]; then
-  virsh start "$vm" >/dev/null
-fi
-exec app '(?i).*virt-viewer.*' virt-viewer --wait --reconnect "$vm"
+
+def fail(message):
+    raise RuntimeError(message)
+
+
+def virsh(*args):
+    return subprocess.check_output(['virsh', '-c', 'qemu:///session', *args], text=True).strip()
+
+
+def exists():
+    return VM in virsh('list', '--all', '--name').splitlines()
+
+
+def state():
+    return virsh('domstate', VM)
+
+
+def stopped():
+    if state() != 'shut off':
+        fail('shut Windows down with djvm off before changing installer media')
+
+
+def xml():
+    return virsh('dumpxml', VM, '--inactive')
+
+
+def optical(tree):
+    return tree.findall("./devices/disk[@device='cdrom']")
+
+
+def source(disk):
+    node = disk.find('source')
+    return Path(node.get('file')) if node is not None and node.get('file') else None
+
+
+def kind(path):
+    name = path.name.lower()
+    if 'virtio-win' in name:
+        return 'virtio'
+    if name.startswith(('win11', 'windows11')):
+        return 'windows'
+    return None
+
+
+def valid_iso(path):
+    # ISO9660 or UDF volume descriptors: reject HTML/error pages, including
+    # successful HTTP responses that are not actually installation media.
+    with path.open('rb') as stream:
+        stream.seek(32768)
+        descriptors = stream.read(32768)
+    if not any(signature in descriptors for signature in (b'CD001', b'BEA01', b'NSR02', b'NSR03')):
+        fail(f'{path} is not an ISO/UDF image; the existing file was left unchanged')
+
+
+def keep_iso(path, name):
+    path = path.expanduser().absolute()
+    valid_iso(path)
+    MEDIA.mkdir(parents=True, exist_ok=True)
+    destination = MEDIA / name
+    if destination.exists():
+        if path.resolve() == destination.resolve():
+            return destination
+        # Do not silently replace an installer still referenced by a VM.
+        import filecmp
+        if filecmp.cmp(path, destination, shallow=False):
+            return destination
+        fail(f'{destination} already exists with different contents; move it aside before replacing it')
+    with tempfile.NamedTemporaryFile(dir=MEDIA, suffix='.part', delete=False) as stream:
+        temporary = Path(stream.name)
+    try:
+        shutil.copyfile(path, temporary)
+        valid_iso(temporary)
+        temporary.replace(destination)
+    finally:
+        temporary.unlink(missing_ok=True)
+    print(f'Kept {destination}')
+    return destination
+
+
+def download_virtio():
+    MEDIA.mkdir(parents=True, exist_ok=True)
+    print('Downloading the stable VirtIO driver ISO from Fedora…', flush=True)
+    with tempfile.NamedTemporaryFile(dir=MEDIA, suffix='.part', delete=False) as stream:
+        temporary = Path(stream.name)
+        try:
+            with urllib.request.urlopen(VIRTIO_URL, timeout=60) as response:
+                expected = response.headers.get('Content-Length') if hasattr(response, 'headers') else None
+                shutil.copyfileobj(response, stream)
+            stream.flush()
+            if expected and temporary.stat().st_size != int(expected):
+                fail('VirtIO download was incomplete; retry djvm setup')
+            valid_iso(temporary)
+            temporary.replace(MEDIA / 'virtio-win.iso')
+        finally:
+            temporary.unlink(missing_ok=True)
+    return MEDIA / 'virtio-win.iso'
+
+
+def discover(media_kind, tree):
+    candidates = []
+    if tree is not None:
+        candidates.extend(p for d in optical(tree) if (p := source(d)) and kind(p) == media_kind)
+    candidates.extend(p for p in (Path.home() / 'Downloads').glob('*')
+                      if p.suffix.lower() == '.iso' and kind(p) == media_kind)
+    candidates = sorted({p.absolute() for p in candidates if p.is_file()})
+    if len(candidates) > 1:
+        fail(f'multiple {media_kind} ISOs found; select one with --{media_kind} PATH')
+    return candidates[0] if candidates else None
+
+
+def backup(definition):
+    directory = DATA / 'backups'
+    directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+    with tempfile.NamedTemporaryFile(mode='w', dir=directory, prefix='dj-', suffix='.xml', delete=False) as stream:
+        stream.write(definition + '\n')
+    print(f'VM definition backup: {stream.name}')
+
+
+def update(disks, definition):
+    if not disks:
+        return
+    stopped()
+    backup(definition)
+    for disk in disks:
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.xml') as stream:
+            stream.write(ET.tostring(disk, encoding='unicode'))
+            stream.flush()
+            virsh('update-device', VM, stream.name, '--config')
+    print('Updated persistent CD-ROM paths. Windows disk and shared music are unchanged.')
+
+
+def setup(args, creating=False):
+    present = exists()
+    if present:
+        stopped()
+    definition = xml() if present else ''
+    tree = ET.fromstring(definition) if present else None
+    paths = {}
+    for media_kind, filename in [('windows', 'windows11.iso'), ('virtio', 'virtio-win.iso')]:
+        selected = getattr(args, media_kind, None)
+        target = MEDIA / filename
+        candidate = Path(selected) if selected else target if target.is_file() else discover(media_kind, tree)
+        if candidate:
+            paths[media_kind] = keep_iso(candidate, filename)
+        elif media_kind == 'windows':
+            if creating or (tree is not None and any(kind(p) == 'windows' for d in optical(tree) if (p := source(d)))):
+                fail('Windows ISO is missing. Use djvm setup --windows /path/to/Win11.iso, '
+                     'or djvm eject if Windows is already installed and no longer needs the installer')
+        else:
+            paths[media_kind] = download_virtio()
+    changed = []
+    for disk in optical(tree) if tree is not None else []:
+        previous = source(disk)
+        if previous is None:
+            continue
+        replacement = paths.get(kind(previous))
+        if replacement is None:
+            replacement = keep_iso(previous, previous.name)
+        if previous != replacement:
+            node = disk.find('source')
+            node.set('file', str(replacement))
+            changed.append(disk)
+    update(changed, definition)
+    print(f'Installer media: {MEDIA}')
+    return paths
+
+
+def preflight():
+    for disk in optical(ET.fromstring(xml())):
+        path = source(disk)
+        if path is not None and not path.is_file():
+            fail(f'missing CD-ROM image: {path}\nRun djvm setup to repair media, '
+                 'or djvm eject if Windows is already installed')
+
+
+def off():
+    if not exists() or state() == 'shut off':
+        return
+    subprocess.run(['notify-send', '-a', 'DJ VM', 'Shutting down Windows'], check=False)
+    virsh('shutdown', VM, '--mode', 'agent,acpi')
+    for _ in range(90):
+        if state() == 'shut off':
+            return
+        time.sleep(1)
+    fail('Windows did not shut down within 90 seconds; leaving it running. '
+         'Shut it down inside Windows and retry. No forced power-off was performed')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('command', nargs='?', choices=['setup', 'create', 'off', 'eject'])
+    parser.add_argument('--windows', metavar='ISO', help='Windows 11 ISO to copy into permanent storage')
+    parser.add_argument('--virtio', metavar='ISO', help='VirtIO ISO to copy instead of downloading')
+    args = parser.parse_args()
+    if (args.windows or args.virtio) and args.command not in ('setup', 'create'):
+        parser.error('--windows and --virtio require setup or create')
+    if args.command == 'off':
+        off()
+        return
+    if args.command == 'setup':
+        setup(args)
+        return
+    if args.command == 'eject':
+        if not exists():
+            fail('no dj VM exists')
+        stopped()
+        definition = xml()
+        disks = []
+        for disk in optical(ET.fromstring(definition)):
+            node = disk.find('source')
+            if node is not None:
+                disk.remove(node)
+                disks.append(disk)
+        update(disks, definition)
+        print('Installer CDs ejected; ISO files are kept.')
+        return
+    if args.command == 'create':
+        if exists():
+            fail('dj already exists; use djvm setup to repair its media')
+        paths = setup(args, creating=True)
+        SHARE.mkdir(parents=True, exist_ok=True)
+        if any(',' in str(path) for path in [*paths.values(), SHARE]):
+            fail('virt-install paths must not contain commas')
+        subprocess.run([
+            'virt-install', '--connect', 'qemu:///session', '--name', VM, '--osinfo', 'win11',
+            '--memory', '8192', '--vcpus', '4', '--cpu', 'host-passthrough',
+            '--memorybacking', 'source.type=memfd,access.mode=shared', '--boot', 'uefi',
+            '--tpm', 'backend.type=emulator,backend.version=2.0,model=tpm-crb',
+            '--disk', 'size=120,bus=virtio', '--cdrom', str(paths['windows']),
+            '--disk', f"{paths['virtio']},device=cdrom", '--network', 'passt,model=virtio',
+            '--graphics', 'spice', '--video', 'qxl', '--sound', 'ich9', '--channel', 'spicevmc',
+            '--redirdev', 'usb,type=spicevmc', '--redirdev', 'usb,type=spicevmc',
+            '--filesystem', f'type=mount,driver.type=virtiofs,source.dir={SHARE},target.dir=dj',
+            '--noautoconsole',
+        ], check=True)
+    elif not exists():
+        fail('no dj VM exists; see docs/dj-vm.md and run djvm create --windows /path/to/Win11.iso')
+    current = state()
+    if current == 'shut off':
+        preflight()
+        virsh('start', VM)
+    elif current != 'running':
+        fail(f'dj is {current}; resolve its state in virsh before starting the viewer')
+    os.execvp('app', ['app', '(?i).*virt-viewer.*', 'virt-viewer', '--connect',
+                      'qemu:///session', '--wait', '--reconnect', VM])
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (RuntimeError, OSError, ValueError, ET.ParseError, subprocess.CalledProcessError) as error:
+        print(f'djvm: {error}', file=sys.stderr)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        sys.exit(130)

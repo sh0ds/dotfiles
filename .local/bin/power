@@ -11,7 +11,11 @@ if [ -z "${POWER_DETACHED:-}" ]; then
   POWER_DETACHED=1 setsid -f "$0" "$1" >/dev/null 2>&1
   exit 0
 fi
-djvm off
+if ! djvm off; then
+  notify-send -a "DJ VM" "Power action cancelled" \
+    "Windows is still running or its state could not be checked. Shut it down and retry." || true
+  exit 1
+fi
 case $1 in
   logout) hyprctl dispatch 'hl.dsp.exit()' ;;
   *) systemctl "$1" ;;

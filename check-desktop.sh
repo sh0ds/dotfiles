@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool virsh virt-install virt-viewer mpd rmpc mpd-mpris udiskie yazi aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
+for c in python3 kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool virsh virt-install virt-viewer mpd rmpc mpd-mpris udiskie yazi aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
   check "$c" command -v "$c"
 done
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt

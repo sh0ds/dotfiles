@@ -13,18 +13,73 @@ grep -q "^$USER:" /etc/subuid || sudo usermod --add-subuids 100000-165535 --add-
 
 The second line is for the shared folder: it lets the VM run as you instead of root, so files Windows writes into `~/Music/DJ` belong to you.
 
-## 2. Download
+## 2. Keep installer media outside Downloads
 
-- Windows 11 from [microsoft.com](https://www.microsoft.com/en-us/software-download/windows11) ("Download Windows 11 Disk Image (ISO) for x64 devices"). Keep the name it comes with (`Win11_...iso`). If the site refuses (it does that behind a VPN), `yay -S quickemu`, then `quickget --download windows 11` fetches the same ISO straight from Microsoft. Move it to `~/Downloads/Win11.iso`.
-- The drivers for the VM: [virtio-win.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso).
+Installer ISOs belong in `~/.local/share/djvm/isos/` (or
+`$XDG_DATA_HOME/djvm/isos/` when set). Windows is kept as `windows11.iso`,
+with the drivers as `virtio-win.iso`. The VM points at these permanent copies,
+so cleaning Downloads cannot break it. This directory contains installation
+media, not the Windows virtual disk or shared music.
 
-Both go in `~/Downloads`. The virtio-win server is slow, so copy that link and run `dl` instead of downloading it in Firefox.
+Download Windows 11 from [Microsoft](https://www.microsoft.com/en-us/software-download/windows11)
+("Download Windows 11 Disk Image (ISO) for x64 devices"). If the site refuses
+behind a VPN, `yay -S quickemu` and `quickget --download windows 11` can fetch it.
+Then select the file you downloaded:
 
-## 3. Make the VM
-
+```sh
+djvm setup --windows "$HOME/Downloads/Win11_English_x64.iso"
 ```
+
+Replace that filename with your actual ISO. Setup **copies** it into permanent
+storage, downloads the stable VirtIO driver ISO directly from
+[Fedora](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso),
+and checks ISO/UDF headers before using either file. Downloads are staged in a
+`.part` file and only installed when complete. To use an already downloaded
+driver ISO, add `--virtio /path/to/virtio-win.iso`.
+
+Original downloads are kept. Once setup succeeds, the copies in Downloads are
+no longer needed. A different ISO cannot silently replace an existing permanent
+copy; move the old permanent copy aside first if you intend to replace it.
+
+### Repair an existing VM with a missing ISO
+
+For the `Cannot access storage file .../Downloads/virtio-win.iso` error:
+
+```sh
+djvm setup
+djvm
+```
+
+Setup imports existing CD-ROM images from the VM definition or Downloads,
+re-downloads missing VirtIO media, and repoints the VM's CD-ROM drives. It must
+run while Windows is shut off. It saves the original persistent VM definition
+under `~/.local/share/djvm/backups/` before changing attachments. It does not
+recreate the VM, touch its Windows disk, or modify `~/Music/DJ`.
+
+If several Windows ISOs are found, pick one with `--windows`. If Windows media
+is missing too, provide a replacement Windows ISO. If Windows is already fully
+installed and you no longer need either installer CD, you can instead use:
+
+```sh
+djvm eject
+djvm
+```
+
+This removes only CD-ROM media attachments while the VM is off. Optical drives,
+ISO files, the Windows disk and shared music remain. To inspect a definition
+backup, open its XML; restore it if needed with
+`virsh -c qemu:///session define /path/to/dj-backup.xml` while Windows is off.
+
+## 3. Make a new VM
+
+After staging the ISOs with setup:
+
+```sh
 djvm create
 ```
+
+Or do both steps with `djvm create --windows /path/to/Win11.iso`. This refuses to
+replace an existing `dj` VM; use `djvm setup` to repair one instead.
 
 That makes a VM called `dj` (8 GB RAM, 4 cores, a 120 GB disk that only takes up what Windows uses) and opens its window on workspace 7. Press a key when it says "Press any key to boot from CD".
 
@@ -122,7 +177,7 @@ Point all of them at `Z:\` for music. To bring over older tracks, move them into
 
 ## Using it
 
-- `SUPER+SHIFT+M` starts the VM and shows it, or jumps to it if it's already open. `djvm off` shuts Windows down. Log out, reboot and shut down in the power menu do that first and wait for it, so Windows never gets switched off like a power cut.
+- `SUPER+SHIFT+M` starts the VM and shows it, or jumps to it if it's already open. `djvm off` requests a clean Windows shutdown and waits up to 90 seconds. If Windows hangs, it reports an error and leaves the VM running. The power menu stops on that error so you can finish shutting Windows down yourself; it never forces power off.
 - Click into the window and it has your mouse and keyboard, `Ctrl+Alt` gets them back. The `SUPER` keys always stay with Hyprland, so open the Start menu with a click.
 - USB sticks for exporting: plug it in, `SUPER+SHIFT+U` so Arch lets go of it, then in the viewer's menu File > USB device selection and tick it. Untick it when Windows is done and it comes back to Arch.
 - Sound goes through the viewer, so previewing and recording work. There are no 3D graphics in the VM, so waveforms are drawn by the CPU. Fine for library work, not for mixing live.

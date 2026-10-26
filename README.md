@@ -85,7 +85,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
-- `djvm`: starts the Windows DJ VM and shows it, `djvm off` shuts it down
+- `djvm`: starts or shows the Windows DJ VM; `djvm off` shuts it down cleanly. `djvm setup` keeps installer ISOs in `~/.local/share/djvm/isos` and repairs old CD-ROM paths; [setup and recovery](docs/dj-vm.md)
 - `power-menu`: a text-only session console that adapts to HiDPI and portrait screens
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
 - `update-check`, `default-apps`, `nightlight`, and the helpers behind the bar and the lock screen (`bar-stats`, `pi-status`, `rec-status`, `np-title`)
@@ -144,7 +144,7 @@ sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-des
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   yazi fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
-  qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
+  python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector kdeconnect
 yay -S wlogout nchat proton-pass-bin
 ```
