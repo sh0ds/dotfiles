@@ -4,9 +4,10 @@
   --mpris-album-art-shadow: none;
   --mpris-album-art-overlay: #0d1014;
 }
-.widget-mpris { margin: 8px 0; padding: 0; }
+/* Grid buttons have a 2 px bottom margin: 10 + 2 gives a 12 px gap. */
+.widget-mpris { margin: 10px 4px 0; padding: 0; }
 .widget-mpris .widget-mpris-player {
-  margin: 0 2px;
+  margin: 0;
   background: #0d1014;
   color: #e6e8ea;
   border: 1px solid #3f4650;
@@ -19,11 +20,11 @@
 .widget-mpris .widget-mpris-player .mpris-overlay {
   background: #0d1014;
   opacity: 1;
-  padding: 10px;
+  padding: 12px;
 }
 .widget-mpris .widget-mpris-album-art {
   -gtk-icon-size: 40px;
-  margin: 0 6px 0 0;
+  margin: 0; /* The player row already supplies 12 px between art and text. */
   border-radius: 0;
   box-shadow: none;
 }
@@ -54,12 +55,15 @@
 .widget-mpris .widget-mpris-player .mpris-overlay button:disabled { opacity: 0.4; }
 /* Carousel navigation stays distinct from the transport buttons. */
 .widget-mpris > box > button {
-  min-width: 18px;
-  padding: 0 2px;
+  min-width: 20px;
+  min-height: 20px;
+  margin: 0;
+  padding: 0;
   color: #8a929c;
   background: transparent;
   border: none;
 }
+.widget-mpris > box > button image { -gtk-icon-size: 16px; }
 .widget-mpris > box > button:hover { color: #1793d1; }
 .widget-mpris > box > button:disabled { opacity: 0.3; }
-.widget-mpris carouselindicatordots { color: #1793d1; margin-top: 4px; }
+.widget-mpris carouselindicatordots { color: #1793d1; margin: 8px 0 0; }

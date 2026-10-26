@@ -4,7 +4,7 @@
 @import url("mpris.css");
 
 .notification-background {
-  margin: 6px;
+  margin: 8px;
   border: 1px solid #3f4650;
   border-left: 2px solid #1793d1;
 }
@@ -31,11 +31,22 @@
   color: #000000;
 }
 
+/* The common content edge is 16 px: 12 px panel padding plus 4 px.
+   Button cells contribute 2 px each, so the grid uses a 2 px outer inset. */
+.widget-title { margin: 0 4px 8px; }
+.widget-dnd { margin: 0 4px; }
+.widget-buttons-grid > flowbox { padding: 0; }
+.widget-buttons-grid > flowbox > flowboxchild { padding: 0; }
+.widget-volume scale { margin: 0; padding: 0; }
+.widget-volume scale trough { margin: 0; }
+.widget-volume scale slider { margin: -3px 0; }
+.widget-notifications { margin-top: 12px; }
+
 /* Words remain readable when a Nerd Font glyph is absent. These compact
    cells also fit the panel at smaller logical display sizes. */
 .widget-buttons-grid > flowbox > flowboxchild > button {
   min-height: 36px;
-  min-width: 0;
+  min-width: 64px;
   padding: 4px;
   margin: 2px;
   background: #0d1014;

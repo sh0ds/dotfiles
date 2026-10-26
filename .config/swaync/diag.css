@@ -11,11 +11,11 @@ trough highlight {
 }
 
 scale {
-  margin: 0 7px;
+  margin: 0;
 }
 
 scale trough {
-  margin: 0rem 1rem;
+  margin: 0;
   min-height: 8px;
   min-width: 70px;
   border-radius: 0;
@@ -43,14 +43,14 @@ trough {
 .notification-background {
   box-shadow: none;
   border-radius: 0;
-  margin: 18px;
+  margin: 8px;
   background: #0d1014;
   color: #e6e8ea;
   padding: 0;
 }
 
 .notification-background .notification {
-  padding: 7px;
+  padding: 8px;
   border-radius: 0;
 }
 
@@ -59,7 +59,7 @@ trough {
 }
 
 .notification .notification-content {
-  margin: 7px;
+  margin: 8px;
 }
 
 .notification .notification-content overlay {
@@ -85,7 +85,7 @@ trough {
 }
 
 .notification-background .close-button {
-  margin: 7px;
+  margin: 8px;
   padding: 2px;
   border-radius: 0;
   color: #000000;
@@ -143,13 +143,13 @@ trough {
   border-radius: 0;
   background-color: #000000;
   color: #e6e8ea;
-  padding: 14px;
+  padding: 12px;
 }
 
 .control-center .notification-background {
   border-radius: 0;
   box-shadow: none;
-  margin: 4px 10px;
+  margin: 4px;
 }
 
 .control-center .notification-background .notification {
@@ -182,7 +182,7 @@ trough {
 }
 
 .control-center .notification-group {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .control-center .notification-group:focus .notification-background {
@@ -200,7 +200,7 @@ scrollbar trough {
 
 /* dnd */
 .widget-dnd {
-  margin-top: 5px;
+  margin: 0 4px;
   border-radius: 0;
   font-size: 1.1rem;
 }
@@ -244,7 +244,8 @@ scrollbar trough {
 }
 
 .widget-buttons-grid {
-  padding-top: 1rem;
+  padding: 0;
+  margin: 10px 2px 0;
 }
 
 .widget-buttons-grid > flowbox > flowboxchild > button label {
@@ -252,12 +253,14 @@ scrollbar trough {
 }
 
 .widget-volume {
-  padding: 1rem 0;
+  padding: 0;
+  margin: 12px 4px 0;
 }
 
 .widget-volume label {
   color: #1793d1;
-  padding: 0 1rem;
+  padding: 0;
+  margin-right: 12px;
 }
 
 .widget-volume trough highlight {

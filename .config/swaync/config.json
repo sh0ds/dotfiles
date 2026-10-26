@@ -2,7 +2,7 @@
   "$schema": "/etc/xdg/swaync/configSchema.json",
   "positionX": "right",
   "positionY": "top",
-  "control-center-margin-top": 40,
+  "control-center-margin-top": 8,
   "control-center-margin-bottom": 8,
   "control-center-margin-right": 8,
   "control-center-width": 400,
@@ -86,5 +86,6 @@
       "app-name": "(?i)^(KDE\\s*Connect|kdeconnect(d|\\.daemon)?)$",
       "summary": "(?i)^WhatsApp( Business)?$"
     }
-  }
+  },
+  "control-center-exclusive-zone": true
 }
