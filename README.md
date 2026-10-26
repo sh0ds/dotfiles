@@ -14,7 +14,7 @@ Black, cool greys and Arch blue (`#1793d1`). Terminess for the interface, square
 
 The active thing gets the colour. Tabs use a blue label or underline on a quiet row; text selection uses blue-grey with light text. Buttons and mode indicators can invert to blue with black text. Amber means attention, red means an error, green means success. The Pi label is the exception: red `pi`, green `:`, neutral `up` or red `down`.
 
-The surfaces are opaque. No blur, glow or shadows. Windows settle on a spring without bouncing, and short fades handle menus and popups without scaling their text. Workspace travel is small, the bar stays still, and there are no scrolling titles or decorative loops. The exact motion settings and five design passes are in [the iteration notes](docs/diag-iterations.md).
+The surfaces are opaque. No blur, glow or shadows. Windows settle on a spring without bouncing, and short fades handle menus and popups without scaling their text. Workspace travel is small, the bar stays still, and there are no scrolling titles or decorative loops.
 
 GTK, Qt, browser chrome, terminal tools and Electron apps share the same hierarchy as far as their theme support allows. Websites, documents, pictures and video keep their own content colours and typography. The lock screen, login screen and boot splash retain the Diag identity.
 
@@ -158,7 +158,7 @@ git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
 bash ~/code/dotfiles/install-dotfiles.sh
 ```
 
-The installer renders the Qt palette path for your home directory and copies btop’s and nchat’s writable configurations; other theme files remain linked. Close btop and nchat before installing. See [the design review](docs/diag-design.md) for the isolated install and validation commands.
+The installer renders the Qt palette path for your home directory and copies btop’s and nchat’s writable configurations; other theme files remain linked. Close btop and nchat before installing.
 
 Then run these once. They set the default apps, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network), with the ports KDE Connect needs to find your phone:
 
