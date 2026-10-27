@@ -210,7 +210,7 @@ And change a few things to your liking:
 
   If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
 - For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the look, pick the dark base theme under Settings > Appearance and turn on the `diag` CSS snippet there (`notes` links it in).
-- For automatic hiding of a single-tab Firefox window while its Picture-in-Picture video is tiled, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select `~/code/dotfiles/.config/firefox/pip-tabs/manifest.json` from your checkout. The add-on puts a tab count in the window title; it does not read URLs or page content. Firefox requires a signed add-on for installation that survives restarts, so this local add-on must be loaded again after restarting Firefox until signed through Mozilla. Tiling works without it, and unmarked browser windows remain visible. Closing the video or opening another tab restores the hidden browser. Reloading Hyprland also restores it.
+- For automatic hiding of a single-tab Firefox source window while its pop-out video is tiled, install the [tab-count add-on](#firefox-picture-in-picture). Tiling works without it; the add-on enables tab-aware hiding and restoration.
 - For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
@@ -228,6 +228,37 @@ And change a few things to your liking:
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - The `pi up` reading and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
+
+### Firefox Picture-in-Picture
+
+The tab-count add-on puts a count in Firefox's window title. It does not read URLs
+or page content, request extra permissions, or collect/transmit data. Hyprland
+hides a single-tab source window while its video is tiled, and restores it when
+the video closes or another tab opens. Reloading Hyprland also restores it.
+
+For a temporary trial, open `about:debugging#/runtime/this-firefox`, choose
+**Load Temporary Add-on**, and select
+`~/code/dotfiles/.config/firefox/pip-tabs/manifest.json`. This lasts until Firefox
+restarts.
+
+For permanent installation in regular Firefox, sign the add-on with Mozilla:
+
+```sh
+cd ~/code/dotfiles/.config/firefox/pip-tabs
+mkdir -p ~/.local/share/firefox-addons
+python -m zipfile -c ~/.local/share/firefox-addons/diag-pip-tabs.zip manifest.json background.js
+```
+
+Sign in to the [Mozilla Add-on Developer Hub](https://addons.mozilla.org/developers/),
+choose **Submit a New Add-on**, then **On your own** (unlisted distribution), and
+upload that ZIP. It does not need a public listing. Follow the validation/signing
+steps and download Mozilla's **signed `.xpi`** when available; renaming the ZIP
+to `.xpi` does not sign it.
+
+Remove the temporary copy in `about:debugging` if loaded. In `about:addons`, open
+the gear menu, choose **Install Add-on From File**, and select the signed XPI.
+It now survives browser restarts. Future code changes need a new version number
+and another signed package; pulling the repo does not update an installed XPI.
 
 ### Updating an existing installation
 

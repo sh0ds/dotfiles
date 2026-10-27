@@ -4,7 +4,19 @@
   "version": "1.0.0",
   "description": "Show the tab count in Firefox's window title so Diag can hide a single-tab PiP source safely.",
   "browser_specific_settings": {
-    "gecko": { "id": "pip-tabs@sh0ds.local", "strict_min_version": "109.0" }
+    "gecko": {
+      "id": "pip-tabs@sh0ds.local",
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
   },
-  "background": { "scripts": ["background.js"] }
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  }
 }
