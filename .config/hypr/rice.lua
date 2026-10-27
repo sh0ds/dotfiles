@@ -281,16 +281,19 @@ hl.window_rule({
 	center = true,
 })
 
--- Firefox picture-in-picture video: small, bottom right, on every workspace.
+-- Firefox picture-in-picture joins the normal tile grid on its workspace.
+-- Firefox fits the video inside the tile; the layout controls the window size.
 hl.window_rule({
-	name = "pip",
-	match = { title = "^Picture-in-Picture$" },
-	float = true,
-	pin = true,
-	size = { 480, 270 },
-	move = { "(monitor_w-500)", "(monitor_h-290)" },
-	keep_aspect_ratio = true,
+	name = "firefox-pip-tiled",
+	match = {
+		class = "(?i)^(firefox.*|org\\.mozilla\\.firefox)$",
+		title = "^(Picture-in-Picture|Bild-im-Bild)$",
+	},
+	tile = true,
+	pin = false,
 })
+
+require("firefox-pip")
 
 ------------------------
 ---- TOOLS AND KEYS ----
