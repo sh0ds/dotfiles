@@ -145,7 +145,7 @@ sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-d
   starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
-  thunar thunar-archive-plugin xarchiver tumbler ffmpegthumbnailer gvfs gvfs-mtp gvfs-smb fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
+  thunar thunar-archive-plugin xarchiver zip unzip tumbler ffmpegthumbnailer gvfs gvfs-mtp gvfs-smb fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
   aerc w3m gnome-keyring libsecret protonmail-bridge mpd rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
   python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector kdeconnect

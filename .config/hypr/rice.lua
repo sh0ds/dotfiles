@@ -202,6 +202,18 @@ hl.window_rule({
 	max_size = { "(monitor_w*0.8)", "(monitor_h*0.8)" },
 })
 
+-- Xarchiver's extraction window is a dialog but is not always marked modal.
+hl.window_rule({
+	name = "archive-action-dialogs",
+	match = {
+		class = "(?i)^xarchiver$",
+		title = "(?i)^(Extract files|Multi-Extract|Add files|Preferences|Password|Password required|Archive properties|Dateien entpacken|Entpacken|Mehrfach.entpacken|Dateien hinzuf.gen|Einstellungen|Passwort.*|Archiveigenschaften)$",
+	},
+	float = true,
+	center = true,
+	max_size = { "(monitor_w*0.8)", "(monitor_h*0.8)" },
+})
+
 -- SoundCloud app (PWAsForFirefox), SUPER+S. Matched by the app's ID, not the
 -- page title, which changes with every track. Use your own ID from
 -- `firefoxpwa profile list`.

@@ -128,3 +128,14 @@ treeview.view header button {
   padding: 4px 8px;
 }
 .thunar toolbar button { padding: 4px; min-width: 24px; min-height: 24px; }
+
+/* File and archive dialogs inherit the same palette and readable typography. */
+window.dialog {
+  background-color: #000000;
+  color: #e6e8ea;
+}
+window.dialog .dialog-action-area { padding: 8px; }
+window.dialog .dialog-action-area button { min-height: 28px; padding: 4px 12px; }
+treeview.view { font-size: 18px; }
+/* This is a cell-renderer view in archive browsers as well as file pickers. */
+treeview.view:selected { background-color: #0e3d5c; color: #f4f6f8; }
