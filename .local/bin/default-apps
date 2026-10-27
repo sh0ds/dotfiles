@@ -3,6 +3,9 @@
 # from Thunar, Firefox downloads, udiskie or xdg-open. Run it once after
 # installing them; it only touches these file types in ~/.config/mimeapps.list.
 set -euo pipefail
+for program in thunar xarchiver; do
+  command -v "$program" >/dev/null || { echo "default-apps: install $program before setting the file-manager defaults" >&2; exit 1; }
+done
 xdg-mime default thunar.desktop inode/directory
 # Archive browsing stays separate from extracting through Thunar's context menu.
 xdg-mime default xarchiver.desktop \

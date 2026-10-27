@@ -2,9 +2,27 @@
 # Apply the Diag defaults once; Thunar keeps later UI changes in xfconf.
 # Run inside your desktop session after installing Thunar and the dotfiles.
 set -euo pipefail
-command -v thunar >/dev/null || { echo 'thunar-setup: install thunar first' >&2; exit 1; }
-command -v xfconf-query >/dev/null || { echo 'thunar-setup: xfconf-query is missing (install xfconf)' >&2; exit 1; }
-set_pref() { xfconf-query --channel thunar --property "/$1" --create --type "$2" --set "$3"; }
+apply=0
+case ${1:-} in
+  "") ;;
+  --apply) apply=1 ;;
+  -h|--help)
+    echo 'Usage: thunar-setup [--apply]'
+    echo 'Fill missing Diag preferences; --apply also replaces the managed layout preferences.'
+    exit 0 ;;
+  *) echo 'Usage: thunar-setup [--apply]' >&2; exit 2 ;;
+esac
+[ "$#" -le 1 ] || { echo 'Usage: thunar-setup [--apply]' >&2; exit 2; }
+for program in thunar xfconf-query python3; do
+  command -v "$program" >/dev/null || { echo "thunar-setup: $program is missing; install the file-manager packages first" >&2; exit 1; }
+done
+[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ] || { echo 'thunar-setup: run this inside your desktop D-Bus session' >&2; exit 1; }
+set_pref() {
+  if [ "$apply" = 0 ] && xfconf-query --channel thunar --property "/$1" >/dev/null 2>&1; then
+    return
+  fi
+  xfconf-query --channel thunar --property "/$1" --create --type "$2" --set "$3"
+}
 set_pref default-view string void
 set_pref last-view string ThunarDetailsView
 set_pref last-side-pane string THUNAR_SIDEPANE_TYPE_SHORTCUTS
@@ -24,13 +42,17 @@ set_pref misc-thumbnail-mode string THUNAR_THUMBNAIL_MODE_ONLY_LOCAL
 
 # Preserve unrelated Xfce preferred-app settings. This file is not linked into
 # the checkout, so later preference changes cannot modify tracked dotfiles.
-python3 - <<'PY'
+python3 - "$apply" <<'PY'
 import os
 from pathlib import Path
 import tempfile
+import sys
 path = Path(os.environ.get('XDG_CONFIG_HOME') or Path.home() / '.config') / 'xfce4/helpers.rc'
 lines = path.read_text().splitlines() if path.exists() else []
 settings = {'TerminalEmulator': 'kitty', 'FileManager': 'thunar'}
+present = {line.split('=', 1)[0].strip() for line in lines if '=' in line}
+if sys.argv[1] != '1':
+    settings = {key: value for key, value in settings.items() if key not in present}
 lines = [line for line in lines if line.split('=', 1)[0].strip() not in settings]
 lines.extend(f'{key}={value}' for key, value in settings.items())
 path.parent.mkdir(parents=True, exist_ok=True)
@@ -42,4 +64,4 @@ try:
 finally:
     temporary.unlink(missing_ok=True)
 PY
-echo 'Thunar defaults applied. Run default-apps for folder associations, then reopen Thunar.'
+echo 'Thunar preferences ready. Run default-apps for folder/archive handlers, then reopen the apps after file operations finish.'
