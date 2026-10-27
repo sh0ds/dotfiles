@@ -6,10 +6,15 @@ command -v thunar >/dev/null || { echo 'thunar-setup: install thunar first' >&2;
 command -v xfconf-query >/dev/null || { echo 'thunar-setup: xfconf-query is missing (install xfconf)' >&2; exit 1; }
 set_pref() { xfconf-query --channel thunar --property "/$1" --create --type "$2" --set "$3"; }
 set_pref default-view string void
-set_pref last-view string ThunarIconView
+set_pref last-view string ThunarDetailsView
 set_pref last-side-pane string THUNAR_SIDEPANE_TYPE_SHORTCUTS
 set_pref last-location-bar string ThunarLocationEntry
-set_pref last-icon-view-zoom-level string THUNAR_ZOOM_LEVEL_100_PERCENT
+set_pref last-icon-view-zoom-level string THUNAR_ZOOM_LEVEL_75_PERCENT
+set_pref last-details-view-zoom-level string THUNAR_ZOOM_LEVEL_38_PERCENT
+set_pref last-details-view-visible-columns string THUNAR_COLUMN_NAME,THUNAR_COLUMN_SIZE,THUNAR_COLUMN_DATE_MODIFIED
+set_pref last-separator-position int 180
+set_pref misc-small-toolbar-icons bool true
+set_pref misc-always-show-tabs bool true
 set_pref last-menubar-visible bool false
 set_pref last-statusbar-visible bool true
 set_pref misc-date-style string THUNAR_DATE_STYLE_ISO

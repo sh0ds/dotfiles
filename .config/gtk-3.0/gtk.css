@@ -70,7 +70,7 @@ scale slider { background-color: #c4c9ce; }
 
 /* Thunar: a tiled file browser with the same rails as the editor and shell. */
 .thunar {
-  font-family: "Terminess Nerd Font";
+  font-family: "Terminess Nerd Font Mono";
   font-size: 18px;
   background-color: #000000;
   color: #c4c9ce;
@@ -102,3 +102,29 @@ scale slider { background-color: #c4c9ce; }
   color: #5fb8e8;
 }
 .thunar statusbar { background-color: #000000; color: #8a929c; border-top: 1px solid #3f4650; padding: 4px 8px; }
+
+/* Selection is a flat row, not a rounded accent button. Keep actual icons
+   and artwork un-tinted so selected folders and archives cannot turn black. */
+@define-color theme_selected_bg_color #0e3d5c;
+@define-color theme_selected_fg_color #f4f6f8;
+.view, .view:selected, .thunar .view:selected {
+  border-radius: 0;
+  -gtk-icon-effect: none;
+}
+.view:selected, .view:selected:focus {
+  background-color: #0e3d5c;
+  color: #f4f6f8;
+}
+.thunar .sidebar .view { font-size: 16px; }
+.thunar statusbar { font-size: 16px; }
+treeview.view header button {
+  font-family: "Terminess Nerd Font Mono";
+  font-size: 16px;
+  font-weight: normal;
+  color: #c4c9ce;
+  background-color: #0d1014;
+  border-bottom: 1px solid #3f4650;
+  border-radius: 0;
+  padding: 4px 8px;
+}
+.thunar toolbar button { padding: 4px; min-width: 24px; min-height: 24px; }
