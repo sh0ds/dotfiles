@@ -183,6 +183,25 @@ hl.window_rule({
 -- to hide it, press again to bring it back tiled where you are. If it's
 -- visible on another workspace, the key jumps there.
 
+-- Rename, extraction, confirmations and preferences must not split the grid.
+-- Keep the application's natural dialog size; cap it to the logical output.
+hl.window_rule({
+	name = "file-manager-modal-dialogs",
+	match = { class = "(?i)^(thunar|org\\.xfce\\.thunar|xarchiver)$", modal = true },
+	float = true,
+	center = true,
+	max_size = { "(monitor_w*0.8)", "(monitor_h*0.8)" },
+})
+-- Some GTK/Wayland versions omit the modal hint on the F2 dialog.
+-- Anchored titles avoid matching ordinary folder windows ending in - Thunar.
+hl.window_rule({
+	name = "thunar-rename-dialog",
+	match = { class = "(?i)^(thunar|org\\.xfce\\.thunar)$", title = '^(Rename ".*"|".*" umbenennen)$' },
+	float = true,
+	center = true,
+	max_size = { "(monitor_w*0.8)", "(monitor_h*0.8)" },
+})
+
 -- SoundCloud app (PWAsForFirefox), SUPER+S. Matched by the app's ID, not the
 -- page title, which changes with every track. Use your own ID from
 -- `firefoxpwa profile list`.
