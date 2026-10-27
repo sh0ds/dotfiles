@@ -40,16 +40,6 @@ export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-ran
 # fzf in Diag: blue matches and pointer, blue-grey selection, square border
 export FZF_DEFAULT_OPTS="--border=sharp --color=fg:#c4c9ce,bg:-1,hl:#1793d1,fg+:#f4f6f8,bg+:#161a1f,hl+:#5fb8e8,info:#8a929c,prompt:#8a929c,pointer:#1793d1,marker:#1793d1,spinner:#1793d1,header:#8a929c,border:#2e353d,gutter:-1"
 
-# y: yazi, and when you quit it the shell stays in the folder you were in
-y() {
-  local tmp cwd
-  tmp=$(mktemp -t yazi-cwd.XXXXXX)
-  command yazi "$@" --cwd-file="$tmp"
-  IFS= read -r -d '' cwd <"$tmp"
-  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && { builtin cd -- "$cwd" || :; }
-  rm -f -- "$tmp"
-}
-
 please() {
   local c
   c=$(fc -ln -2 -1 | grep -v '^[[:space:]]*please' | tail -n1)

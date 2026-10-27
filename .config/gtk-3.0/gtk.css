@@ -67,3 +67,38 @@ switch:checked { background-color: @accent_bg_color; }
 switch slider { border-radius: 0; background-color: #c4c9ce; }
 switch:checked slider { background-color: #000000; }
 scale slider { background-color: #c4c9ce; }
+
+/* Thunar: a tiled file browser with the same rails as the editor and shell. */
+.thunar {
+  font-family: "Terminess Nerd Font";
+  font-size: 18px;
+  background-color: #000000;
+  color: #c4c9ce;
+}
+.thunar toolbar, .thunar menubar {
+  background-color: #0d1014;
+  border-bottom: 1px solid #3f4650;
+  padding: 4px;
+}
+.thunar .view { background-color: #000000; color: #c4c9ce; }
+.thunar .sidebar, .thunar .sidebar .view { background-color: #0d1014; }
+.thunar .view:selected, .thunar .sidebar .view:selected {
+  background-color: #0e3d5c;
+  color: #f4f6f8;
+}
+.thunar paned > separator { background-color: #3f4650; min-width: 1px; min-height: 1px; }
+.thunar notebook > header {
+  background-color: #0d1014;
+  border-bottom: 1px solid #3f4650;
+}
+.thunar notebook > header tabs > tab {
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  padding: 4px 12px;
+}
+.thunar notebook > header tabs > tab:checked {
+  background-color: #161a1f;
+  border-bottom-color: #1793d1;
+  color: #5fb8e8;
+}
+.thunar statusbar { background-color: #000000; color: #8a929c; border-top: 1px solid #3f4650; padding: 4px 8px; }

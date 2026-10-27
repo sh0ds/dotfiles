@@ -1,4 +1,4 @@
-# ~/.config/imv/config: pictures from yazi and Firefox. Arrows or j/k flip
+# ~/.config/imv/config: pictures from Thunar and Firefox. Arrows or j/k flip
 # through the folder, f is fullscreen, q quits.
 # Colours: Diag.
 [options]

@@ -2,7 +2,7 @@
 # dl: download into ~/Downloads with aria2, 16 connections at a time (settings in
 # ~/.config/aria2/aria2.conf). Run it again after it stops and it carries on.
 # Usage: dl URL...   or just dl to take the link from the clipboard.
-# A notification pops up when it's done, click it to open ~/Downloads in yazi.
+# A notification pops up when it's done, click it to open ~/Downloads in Thunar.
 set -euo pipefail
 (($#)) || set -- "$(wl-paste --no-newline)"
 cd ~/Downloads
@@ -10,7 +10,7 @@ name=${1%%\?*}
 name=${name##*/}
 if aria2c "$@"; then
   { [ "$(notify-send -a Downloads -A open=Open "Download done" "$name")" = open ] &&
-      kitty -e yazi ~/Downloads; } >/dev/null 2>&1 & disown
+      thunar ~/Downloads; } >/dev/null 2>&1 & disown
 else
   notify-send -a Downloads -u critical "Download failed" "$name, run dl again to carry on"
   exit 1

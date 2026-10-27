@@ -336,8 +336,8 @@ hl.bind(mod .. " + I", hl.dsp.exec_cmd("chat"))
 hl.bind(mod .. " + SHIFT + I", hl.dsp.exec_cmd("inbox"))
 -- Music player (rmpc) on SUPER+U, same idea
 hl.bind(mod .. " + U", hl.dsp.exec_cmd("music"))
--- Files: yazi in a kitty (SUPER+E)
-hl.bind(mod .. " + E", hl.dsp.exec_cmd("kitty -e yazi"))
+-- Files: Thunar uses the same GTK Diag palette and tiles normally (SUPER+E).
+hl.bind(mod .. " + E", hl.dsp.exec_cmd("thunar"))
 -- Task manager: btop, same key as on Windows
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("sysmon"))
 -- Emoji picker in fuzzel, types the one you pick

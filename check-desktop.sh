@@ -46,7 +46,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in python3 kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool virsh virt-install virt-viewer mpd rmpc mpd-mpris udiskie yazi aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
+for c in python3 kitty waybar swaync swayosd-server awww fuzzel wlogout hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat aerc w3m protonmail-bridge secret-tool virsh virt-install virt-viewer mpd rmpc mpd-mpris udiskie thunar xfconf-query aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
   check "$c" command -v "$c"
 done
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt
@@ -55,6 +55,8 @@ check "snapshots (snapper or timeshift)" sh -c 'command -v snapper || command -v
 check "zathura PDF plugin" test -e /usr/lib/zathura/libpdf-mupdf.so
 check "PDFs open in zathura" sh -c 'xdg-mime query default application/pdf | grep -q zathura'
 check "adw-gtk3 theme" test -d /usr/share/themes/adw-gtk3-dark
+check "Thunar folder handler" sh -c 'test "$(xdg-mime query default inode/directory)" = thunar.desktop'
+check "thumbnail service" test -f /usr/share/dbus-1/services/org.freedesktop.thumbnails.Thumbnailer1.service
 check "GTK portal" test -x /usr/lib/xdg-desktop-portal-gtk
 check "paccache timer" systemctl is-enabled paccache.timer
 check "fstrim timer" systemctl is-enabled fstrim.timer

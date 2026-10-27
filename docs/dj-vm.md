@@ -1,6 +1,6 @@
 # DJ VM setup (Windows)
 
-Lexicon, rekordbox and Traktor don't run on Linux, so everything DJ lives in a Windows 11 VM, Audacity included. Songs stay on the Arch side in `~/Music/DJ`, which Windows sees as drive `Z:`. Browse for songs in yazi, drop them in there, and they're in Windows straight away. Takes about an hour, once, mostly Windows installing itself.
+Lexicon, rekordbox and Traktor don't run on Linux, so everything DJ lives in a Windows 11 VM, Audacity included. Songs stay on the Arch side in `~/Music/DJ`, which Windows sees as drive `Z:`. Browse for songs in Thunar, drop them in there, and they're in Windows straight away. Takes about an hour, once, mostly Windows installing itself.
 
 ## 1. Install the helper and dependencies
 

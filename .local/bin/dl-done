@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # dl-done: the notification when aria2-rpc finishes a download from Firefox.
 # aria2 calls it with the download's id, its number of files and the file's path.
-# Click it to open the folder in yazi.
+# Click it to open the folder in Thunar.
 path=$3
 [ "$(notify-send -a Downloads -A open=Open "Download done" "${path##*/}")" = open ] &&
-  exec kitty -e yazi "$(dirname "$path")"
+  exec thunar "$(dirname "$path")"

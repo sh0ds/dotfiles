@@ -1,5 +1,0 @@
-# ~/.config/yazi/theme.toml: Diag, the catppuccin-mocha flavor from
-# yazi-rs/flavors recoloured (vendored in flavors/, no `ya pkg add` step).
-[flavor]
-dark  = "diag"
-light = "diag"

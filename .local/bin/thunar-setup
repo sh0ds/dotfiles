@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Apply the Diag defaults once; Thunar keeps later UI changes in xfconf.
+# Run inside your desktop session after installing Thunar and the dotfiles.
+set -euo pipefail
+command -v thunar >/dev/null || { echo 'thunar-setup: install thunar first' >&2; exit 1; }
+command -v xfconf-query >/dev/null || { echo 'thunar-setup: xfconf-query is missing (install xfconf)' >&2; exit 1; }
+set_pref() { xfconf-query --channel thunar --property "/$1" --create --type "$2" --set "$3"; }
+set_pref default-view string void
+set_pref last-view string ThunarIconView
+set_pref last-side-pane string THUNAR_SIDEPANE_TYPE_SHORTCUTS
+set_pref last-location-bar string ThunarLocationEntry
+set_pref last-icon-view-zoom-level string THUNAR_ZOOM_LEVEL_100_PERCENT
+set_pref last-menubar-visible bool false
+set_pref last-statusbar-visible bool true
+set_pref misc-date-style string THUNAR_DATE_STYLE_ISO
+set_pref misc-folders-first bool true
+set_pref misc-single-click bool false
+set_pref misc-thumbnail-mode string THUNAR_THUMBNAIL_MODE_ONLY_LOCAL
+
+# Preserve unrelated Xfce preferred-app settings. This file is not linked into
+# the checkout, so later preference changes cannot modify tracked dotfiles.
+python3 - <<'PY'
+import os
+from pathlib import Path
+import tempfile
+path = Path(os.environ.get('XDG_CONFIG_HOME') or Path.home() / '.config') / 'xfce4/helpers.rc'
+lines = path.read_text().splitlines() if path.exists() else []
+settings = {'TerminalEmulator': 'kitty', 'FileManager': 'thunar'}
+lines = [line for line in lines if line.split('=', 1)[0].strip() not in settings]
+lines.extend(f'{key}={value}' for key, value in settings.items())
+path.parent.mkdir(parents=True, exist_ok=True)
+with tempfile.NamedTemporaryFile(mode='w', dir=path.parent, delete=False) as stream:
+    temporary = Path(stream.name)
+    stream.write('\n'.join(lines) + '\n')
+try:
+    temporary.replace(path)
+finally:
+    temporary.unlink(missing_ok=True)
+PY
+echo 'Thunar defaults applied. Run default-apps for folder associations, then reopen Thunar.'
