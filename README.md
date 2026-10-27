@@ -140,7 +140,7 @@ These predate the current Diag layout.
 Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions) and the multilib repo turned on for Steam. Then these packages:
 
 ```
-sudo pacman -S --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
+sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
   xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux neovim \
   starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
@@ -325,6 +325,7 @@ Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move 
 
 This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours.
 
+- Package downloads return 404, or `thunar-setup` says Thunar is missing? The package transaction did not finish. Refresh the repositories and upgrade with `sudo pacman -Syu --needed` followed by the package names, then rerun `thunar-setup` and `default-apps`. Chain these with `&&` so setup only runs after installation succeeds.
 - `ls` or `ll` still looks like Mocha? Pull and reinstall the dotfiles, then open a new terminal. Bash loads `.config/diag/ls-colors.sh`, which selects `.config/eza/theme.yml` and replaces inherited `LS_COLORS`/`EZA_COLORS` mappings. The installer backs up a previous theme at that path.
 - A keybind for one of the scripts does nothing? Run the install script again, new scripts only get linked into `~/.local/bin` when it runs.
 - `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't come down, `pkill -x rmpc` and press `SUPER+U` again.

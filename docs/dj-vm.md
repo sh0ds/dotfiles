@@ -7,7 +7,7 @@ Lexicon, rekordbox and Traktor don't run on Linux, so everything DJ lives in a W
 Install the VM packages on Arch:
 
 ```sh
-sudo pacman -S --needed python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt
+sudo pacman -Syu --needed python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt
 ```
 
 Update and install the helper from your existing dotfiles checkout:
