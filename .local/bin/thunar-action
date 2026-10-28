@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Thunar actions: pass paths as arguments, never as shell commands."""
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+AUDIO = {'.mp3', '.flac', '.ogg', '.opus', '.wav', '.m4a', '.aac', '.aiff', '.aif', '.wma'}
+
+
+def run(argv, **kwargs):
+    if not shutil.which(argv[0]):
+        raise ValueError(f'{argv[0]} is missing; install it before using this action.')
+    return subprocess.run(argv, check=True, **kwargs)
+
+
+def main():
+    if len(sys.argv) < 3 or sys.argv[1] not in {'edit', 'terminal', 'git', 'queue', 'audacity'}:
+        raise ValueError('Usage: thunar-action {edit|terminal|git|queue|audacity} PATH...')
+    action = sys.argv[1]
+    paths = [Path(path).resolve(strict=True) for path in sys.argv[2:]]
+    if action == 'edit':
+        if any(path.is_dir() for path in paths) and len(paths) != 1:
+            raise ValueError('Select one project folder, or select files to edit together.')
+        directory = paths[0] if paths[0].is_dir() else paths[0].parent
+        run(['kitty', '--directory', str(directory), '-e', 'nvim', '--',
+             *[str(path) for path in paths]])
+    elif action in {'terminal', 'git'}:
+        if len(paths) != 1 or not paths[0].is_dir():
+            raise ValueError('Select one folder for this action.')
+        directory = str(paths[0])
+        if action == 'git':
+            run(['git', '-C', directory, 'rev-parse', '--show-toplevel'],
+                capture_output=True, text=True)
+            run(['kitty', '--directory', directory, '-e', 'lazygit'])
+        else:
+            run(['kitty', '--directory', directory])
+    elif action == 'audacity':
+        if any(not path.is_file() or path.suffix.lower() not in AUDIO for path in paths):
+            raise ValueError('Select audio files to edit in Audacity.')
+        run(['audacity', *map(str, paths)])
+    else:
+        library = (Path.home() / 'Music').resolve()
+        tracks = []
+        seen = set()
+        for path in paths:
+            if not path.is_relative_to(library):
+                raise ValueError('MPD uses ~/Music. Move tracks there first, then queue them.')
+            candidates = sorted(path.rglob('*')) if path.is_dir() else [path]
+            for candidate in candidates:
+                track = candidate.resolve(strict=True)
+                if track.is_file() and track.suffix.lower() in AUDIO:
+                    if not track.is_relative_to(library):
+                        raise ValueError('A selected track links outside ~/Music.')
+                    relative = track.relative_to(library).as_posix()
+                    if '\n' in relative or '\r' in relative:
+                        raise ValueError('MPD paths cannot contain line breaks.')
+                    if relative not in seen:
+                        tracks.append(relative)
+                        seen.add(relative)
+        if not tracks:
+            raise ValueError('No supported audio files found in the selection.')
+        # Match the local daemon in .config/mpd/mpd.conf. Wait for new files
+        # to enter its database; append only, never clear or restart playback.
+        mpc = ['mpc', '--host', '127.0.0.1', '--port', '6600']
+        run([*mpc, '--wait', 'update'], capture_output=True, text=True, timeout=120)
+        # Standard input avoids both argument limits and leading-dash options.
+        run([*mpc, 'add'], input='\n'.join(tracks) + '\n',
+            capture_output=True, text=True, timeout=30)
+        if shutil.which('notify-send'):
+            subprocess.run(['notify-send', '-a', 'Music', 'MPD queue',
+                            f'Added {len(tracks)} track(s).'], check=False)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        detail = getattr(error, 'stderr', None) or str(error)
+        print(f'thunar-action: {detail}', file=sys.stderr)
+        if shutil.which('notify-send'):
+            subprocess.run(['notify-send', '-u', 'normal', '-a', 'Files',
+                            'File action failed', str(detail)], check=False)
+        sys.exit(1)

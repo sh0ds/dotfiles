@@ -35,7 +35,8 @@ set_pref misc-small-toolbar-icons bool true
 set_pref misc-always-show-tabs bool true
 set_pref last-menubar-visible bool false
 set_pref last-statusbar-visible bool true
-set_pref misc-date-style string THUNAR_DATE_STYLE_ISO
+set_pref misc-date-style string THUNAR_DATE_STYLE_CUSTOM
+set_pref misc-date-custom-style string '%Y-%m-%d %H:%M'
 set_pref misc-folders-first bool true
 set_pref misc-single-click bool false
 set_pref misc-thumbnail-mode string THUNAR_THUMBNAIL_MODE_ONLY_LOCAL
@@ -47,6 +48,7 @@ import os
 from pathlib import Path
 import tempfile
 import sys
+import xml.etree.ElementTree as ET
 path = Path(os.environ.get('XDG_CONFIG_HOME') or Path.home() / '.config') / 'xfce4/helpers.rc'
 lines = path.read_text().splitlines() if path.exists() else []
 settings = {'TerminalEmulator': 'kitty', 'FileManager': 'thunar'}
@@ -63,5 +65,60 @@ try:
     temporary.replace(path)
 finally:
     temporary.unlink(missing_ok=True)
+
+# Thunar rewrites custom actions: merge our entries into a writable file,
+# preserving the user's own actions rather than linking it into the checkout.
+config = Path(os.environ.get('XDG_CONFIG_HOME') or Path.home() / '.config')
+actions_path = config / 'Thunar/uca.xml'
+tree = ET.parse(actions_path) if actions_path.exists() else ET.ElementTree(ET.Element('actions'))
+root = tree.getroot()
+if root.tag != 'actions':
+    raise SystemExit(f'thunar-setup: unexpected actions file: {actions_path}')
+actions = [
+    ('diag-neovim', 'Edit in Neovim', 'Open selected files or a project folder in kitty and Neovim',
+     'text-editor-symbolic', 'edit', ['directories', 'text-files']),
+    ('diag-terminal', 'Open Terminal Here', 'Open the selected folder in kitty',
+     'utilities-terminal-symbolic', 'terminal', ['directories']),
+    ('diag-lazygit', 'Git in lazygit', 'Inspect the selected Git project in kitty and lazygit',
+     'vcs-normal-symbolic', 'git', ['directories']),
+    ('diag-mpd-queue', 'Queue in MPD', 'Append tracks or folders from ~/Music; keep the current queue',
+     'media-playlist-append-symbolic', 'queue', ['directories', 'audio-files']),
+    ('diag-audacity', 'Edit in Audacity', 'Open selected audio files in Audacity',
+     'audio-x-generic-symbolic', 'audacity', ['audio-files']),
+]
+owned = {action[0] for action in actions}
+for action in list(root):
+    if action.findtext('unique-id') in owned:
+        root.remove(action)
+for uid, name, description, icon, command, types in actions:
+    # Preserve and use Thunar's stock terminal action when it already exists.
+    if uid == 'diag-terminal' and any('TerminalEmulator' in (item.findtext('command') or '') for item in root):
+        continue
+    action = ET.SubElement(root, 'action')
+    for key, value in [('icon', icon), ('name', name), ('unique-id', uid),
+                       ('command', f'thunar-action {command} %F'),
+                       ('description', description), ('patterns', '*')]:
+        ET.SubElement(action, key).text = value
+    for file_type in types:
+        ET.SubElement(action, file_type)
+actions_path.parent.mkdir(parents=True, exist_ok=True)
+with tempfile.NamedTemporaryFile(mode='wb', dir=actions_path.parent, delete=False) as stream:
+    temporary = Path(stream.name)
+    tree.write(stream, encoding='utf-8', xml_declaration=True)
+try:
+    temporary.replace(actions_path)
+finally:
+    temporary.unlink(missing_ok=True)
+
+# Add existing work/library locations without replacing personal bookmarks.
+bookmarks = config / 'gtk-3.0/bookmarks'
+lines = bookmarks.read_text().splitlines() if bookmarks.exists() else []
+uris = {line.split(' ', 1)[0] for line in lines}
+for folder, label in [('code', 'Code'), ('Music', 'Music')]:
+    location = Path.home() / folder
+    if location.is_dir() and location.as_uri() not in uris:
+        lines.append(f'{location.as_uri()} {label}')
+bookmarks.parent.mkdir(parents=True, exist_ok=True)
+bookmarks.write_text('\n'.join(lines) + ('\n' if lines else ''))
 PY
 echo 'Thunar preferences ready. Run default-apps for folder/archive handlers, then reopen the apps after file operations finish.'

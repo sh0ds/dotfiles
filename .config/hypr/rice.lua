@@ -201,6 +201,15 @@ hl.window_rule({
 	center = true,
 	max_size = { "(monitor_w*0.8)", "(monitor_h*0.8)" },
 })
+-- Properties is deliberately non-modal in Thunar; it still belongs above
+-- the browser rather than taking half of the working grid.
+hl.window_rule({
+	name = "thunar-properties-dialog",
+	match = { class = "(?i)^(thunar|org\\.xfce\\.thunar)$", title = "^(Properties|.* - Properties|Eigenschaften|.* - Eigenschaften)$" },
+	float = true,
+	center = true,
+	max_size = { "(monitor_w*0.8)", "(monitor_h*0.8)" },
+})
 
 -- Xarchiver's extraction window is a dialog but is not always marked modal.
 hl.window_rule({
@@ -341,8 +350,8 @@ hl.on("hyprland.start", function()
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
 			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
-			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font 12'; "
-			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 12'; "
+			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font Mono 13.5'; "
+			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 13.5'; "
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
 	)
 	hl.exec_cmd("udiskie")
