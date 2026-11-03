@@ -16,10 +16,10 @@ case ${1:-start} in
     exec setsid -f quickshell -c afterhours --no-duplicate >/dev/null 2>&1 ;;
   # In the foreground with its log, for debugging.
   debug) exec quickshell -c afterhours --no-duplicate ;;
-  studio|apps|inbox|session) exec quickshell ipc -c afterhours call shell toggle "$1" ;;
+  apps|inbox|session) exec quickshell ipc -c afterhours call shell toggle "$1" ;;
   status) exec quickshell ipc -c afterhours call shell status ;;
   close) exec quickshell ipc -c afterhours call shell close ;;
   bar) exec quickshell ipc -c afterhours call shell toggleBar ;;
   quiet) exec quickshell ipc -c afterhours call shell quietMode "${2:-true}" ;;
-  *) echo 'Usage: afterhours [start|restart|debug|studio|apps|inbox|session|status|close|bar|quiet true|false]' >&2; exit 2 ;;
+  *) echo 'Usage: afterhours [start|restart|debug|apps|inbox|session|status|close|bar|quiet true|false]' >&2; exit 2 ;;
 esac

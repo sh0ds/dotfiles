@@ -42,19 +42,9 @@ ShellRoot {
     function mirrored(n) {
         return /^(kde\s*connect|kdeconnect(d|\.daemon)?)$/i.test(n.appName) && /^whatsapp( business)?$/i.test(n.summary);
     }
-    readonly property var tracks: [
-        { name: "PICO-8", tag: "P / 01–08", detail: "Small games. Finish the cart.", command: ["game-dev", "pico"] },
-        { name: "PICOTRON", tag: "T / 01–04", detail: "Tools, worlds, more room.", command: ["game-dev", "picotron"] },
-        { name: "GODOT", tag: "G / 01–11", detail: "Zelda-like → metroidvania.", command: ["game-dev", "godot"] },
-        { name: "PIXEL ART", tag: "A / 01–02", detail: "Silhouette, palette, motion.", command: ["game-dev", "art"] },
-        { name: "SOUND", tag: "A / 03–04", detail: "PICO-8 tracker first. Your own loops.", command: ["game-dev", "audio"] },
-        { name: "C + LUA", tag: "X / 01–08", detail: "Your engine. Your rules.", command: ["game-dev", "code"] },
-        { name: "DEVLOG", tag: "W + F", detail: "Build the site. Show the work.", command: ["game-dev", "site"] },
-        { name: "THE PLAN", tag: "NEXT STEP", detail: "45 minutes is a whole day. Show up.", command: ["game-dev", "plan"] }
-    ]
     function run(command) { Quickshell.execDetached(command); panel = ""; pendingAction = ""; }
     function toggle(name, screen) {
-        if (!["studio", "apps", "inbox", "session"].includes(name)) return;
+        if (!["apps", "inbox", "session"].includes(name)) return;
         panelScreen = screen ?? Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0];
         panel = panel === name ? "" : name;
         pendingAction = "";
@@ -479,82 +469,14 @@ ShellRoot {
                     Cell { label: "ESC  ×"; onClicked: root.panel = "" }
                 }
                 Text {
-                    text: root.panel === "studio" ? "MAKE. PLAY. SHIP." : root.panel === "apps" ? "OPEN SOMETHING." : root.panel === "inbox" ? "INCOMING." : "END OF SESSION."
+                    text: root.panel === "apps" ? "OPEN SOMETHING." : root.panel === "inbox" ? "INCOMING." : "END OF SESSION."
                     color: Theme.text; font.family: Theme.font; font.pixelSize: sheet.width < 600 ? 32 : 46
                     Layout.fillWidth: true; elide: Text.ElideRight
                 }
                 Rectangle { Layout.fillWidth: true; height: 1; color: Theme.line }
                 StackLayout {
                     Layout.fillWidth: true; Layout.fillHeight: true
-                    currentIndex: ({studio: 0, apps: 1, inbox: 2, session: 3})[root.panel] ?? 0
-                    RowLayout {
-                        spacing: 26
-                        ListView {
-                            id: trackMenu
-                            Layout.minimumWidth: 270; Layout.preferredWidth: 400
-                            Layout.fillWidth: true; Layout.fillHeight: true
-                            clip: true; spacing: 2
-                            model: root.tracks
-                            currentIndex: 0
-                            keyNavigationEnabled: true
-                            Keys.onPressed: event => {
-                                if (event.key === Qt.Key_End) { currentIndex = count - 1; event.accepted = true; }
-                                else if (event.key === Qt.Key_Home) { currentIndex = 0; event.accepted = true; }
-                            }
-                            Keys.onReturnPressed: root.run(root.tracks[currentIndex].command)
-                            Keys.onSpacePressed: root.run(root.tracks[currentIndex].command)
-                            Keys.onEscapePressed: root.panel = ""
-                            delegate: Rectangle {
-                                id: track
-                                required property var modelData
-                                required property int index
-                                width: trackMenu.width; height: 44
-                                readonly property bool chosen: trackMenu.currentIndex === index
-                                color: chosen ? Theme.raised : "transparent"
-                                radius: Theme.radius
-                                Behavior on color { ColorAnimation { duration: Theme.motion } }
-                                Rectangle { x: 4; y: 10; width: 3; height: parent.height - 20; radius: 2; color: Theme.accent; opacity: track.chosen ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
-                                RowLayout {
-                                    anchors.fill: parent; anchors.leftMargin: 14; anchors.rightMargin: 12; spacing: 12
-                                    Text { text: String(track.index + 1).padStart(2, "0"); color: track.chosen ? Theme.accent : Theme.muted; font.family: Theme.font; font.pixelSize: 11 }
-                                    Text { text: track.modelData.name; color: track.chosen ? Theme.accent : Theme.text; font.family: Theme.font; font.pixelSize: 16; font.bold: track.chosen; Layout.fillWidth: true }
-                                    Text { text: track.chosen ? "◂" : "·"; color: track.chosen ? Theme.accent : Theme.line; font.family: Theme.font; font.pixelSize: 18 }
-                                }
-                                MouseArea {
-                                    anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
-                                    onEntered: trackMenu.currentIndex = track.index
-                                    onClicked: root.run(track.modelData.command)
-                                }
-                            }
-                        }
-                        Rectangle { visible: sheet.width > 600; Layout.preferredWidth: 1; Layout.fillHeight: true; color: Theme.line }
-                        ColumnLayout {
-                            visible: sheet.width > 600
-                            Layout.minimumWidth: 0; Layout.preferredWidth: 280; Layout.maximumWidth: 280; Layout.fillHeight: true
-                            spacing: 16
-                            Text { text: "SELECT / 0" + (trackMenu.currentIndex + 1); color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 2 }
-                            Item {
-                                visible: sheet.height > 580
-                                Layout.fillWidth: true; Layout.fillHeight: true
-                                Canvas {
-                                    anchors.centerIn: parent; width: 160; height: 160
-                                    onPaint: {
-                                        const c = getContext("2d");
-                                        c.clearRect(0,0,width,height);
-                                        // A hand-drawn 16×16 dungeon key: the plan's rooms and gates.
-                                        const pixels = ["................","....oooo........","...o....o.......","..o..xx..o......","..o..xx..o......","...o....o.......","....oooo........","......oo........","......oo........","......oooooo....","......oo..oo....","......oo........","......oooo......","......oooo......","................","................"];
-                                        for (let y=0;y<16;y++) for (let x=0;x<16;x++) {
-                                            c.fillStyle = pixels[y][x] === "x" ? Theme.amber : Theme.accent;
-                                            if (pixels[y][x] !== ".") c.fillRect(x*10,y*10,9,9);
-                                        }
-                                    }
-                                }
-                            }
-                            Text { text: root.tracks[trackMenu.currentIndex].tag; color: Theme.accent; font.family: Theme.font; font.pixelSize: 12 }
-                            Text { text: root.tracks[trackMenu.currentIndex].detail; color: Theme.text; font.family: Theme.font; font.pixelSize: 25; wrapMode: Text.WordWrap; Layout.minimumWidth: 0; Layout.fillWidth: true }
-                            Text { text: "↑ ↓  SELECT    ↵  OPEN"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 10 }
-                        }
-                    }
+                    currentIndex: ({apps: 0, inbox: 1, session: 2})[root.panel] ?? 0
                     ColumnLayout {
                         TextField {
                             id: query
@@ -629,7 +551,7 @@ ShellRoot {
                 Text { text: "SHOW UP  <font color=\"" + Theme.accent + "\">◆</font>  SHIP SMALL"; textFormat: Text.StyledText; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 3; Layout.fillWidth: true; Layout.topMargin: 4; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideRight }
             }
         }
-        Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { query.text = ""; query.forceActiveFocus(); } else if (root.panel === "studio") trackMenu.forceActiveFocus(); else sheet.forceActiveFocus(); } }
+        Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { query.text = ""; query.forceActiveFocus(); } else sheet.forceActiveFocus(); } }
         // Capture all unhandled Escape presses, including while a text field is focused.
         Item { anchors.fill: parent; focus: true; Keys.onEscapePressed: root.panel = "" }
     }

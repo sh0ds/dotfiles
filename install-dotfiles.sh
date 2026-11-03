@@ -37,7 +37,7 @@ cd "$src"
 { git ls-files
   printf '%s\n' .config/quickshell/afterhours/{shell,Theme,Cell,Notice,MonthCalendar}.qml \
     .config/quickshell/afterhours/qmldir .local/bin/{afterhours,afterhours-suspend,game-dev} \
-    .local/share/applications/game-dev.desktop .local/share/backgrounds/afterhours.{png,svg}
+    .local/share/backgrounds/afterhours.{png,svg}
 } | sort -u | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/|tests/)' |
   while IFS= read -r rel; do
   target="$target_home/$rel"

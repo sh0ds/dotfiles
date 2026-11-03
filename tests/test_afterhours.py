@@ -41,16 +41,16 @@ class Afterhours(unittest.TestCase):
 
     def test_panels_use_the_named_shell_ipc(self):
         self.stub('quickshell')
-        for panel in ['studio', 'apps', 'inbox', 'session']:
+        for panel in ['apps', 'inbox', 'session']:
             with self.subTest(panel=panel):
                 self.assertEqual(self.run_helper('afterhours', panel).returncode, 0)
                 self.assertEqual(self.calls.read_text().splitlines(), ['ipc', '-c', 'afterhours', 'call', 'shell', 'toggle', panel])
         self.assertEqual(self.run_helper('afterhours', 'unknown').returncode, 2)
 
-    def test_studio_uses_quickshell(self):
-        self.stub('afterhours')
-        self.assertEqual(self.run_helper('game-dev').returncode, 0)
-        self.assertEqual(self.calls.read_text().splitlines(), ['studio'])
+    def test_no_argument_prints_usage(self):
+        result = self.run_helper('game-dev')
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('Usage: game-dev', result.stderr)
 
     def test_code_directory_is_one_literal_argument(self):
         project = self.root / 'cart & source $(touch accidental)'

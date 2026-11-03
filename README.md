@@ -2,8 +2,6 @@
 
 An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Near-black cool charcoal, violet, amber and coral for attention, one font (JetBrains Mono Nerd Font) everywhere, rounded corners and calm eased motion. No blur, no oversized docks.
 
-![Afterhours game studio — real Quickshell render](screenshots/afterhours-studio.png)
-
 The desktop follows the [game development plan](https://github.com/sh0ds/guides/blob/main/gamedev/plan.md): PICO-8 → Picotron → Godot → your own C/Lua engine, with art, sound and devlogs alongside. Making small finished games is the point.
 
 ## The shell
@@ -11,7 +9,6 @@ The desktop follows the [game development plan](https://github.com/sh0ds/guides/
 Written from scratch in `.config/quickshell/afterhours/`, rather than a downloaded shell preset:
 
 - A floating, rounded rail on every monitor: an apps button, numbered workspaces, the focused window's title, a centred clock (click for the month), recording/sharing state, now playing with cava bars, system stats on click, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and session controls.
-- **Make / Play / Ship** launchpad: eight entries tied to the plan, with track identifiers and the motto: show up, ship small.
 - Searchable desktop applications, including keyboard selection and Enter to launch.
 - A D-Bus notification server with plain-text content, actions, quiet mode, passive toasts and a bounded session inbox. Screen-sharing events suppress toasts.
 - Session menu with explicit confirmation for log out/reboot/power off. Suspend waits for a real Hyprlock lock before sleeping. Power actions retain the DJ VM shutdown guard.
@@ -39,7 +36,6 @@ Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), re
 | --- | --- |
 | `Super + Return` | Terminal |
 | `Super + Space` | Quickshell app search |
-| `Super + Ctrl + G` | Make / Play / Ship launchpad |
 | `Super + N` | Quickshell inbox and quiet mode |
 | `Super + Shift + Escape` | Quickshell session controls |
 | `Super + Escape` | Lock |
@@ -64,7 +60,7 @@ Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), re
 | `Super + Shift + M` | DJ VM |
 
 
-Workspaces are plain numbers, free for whatever you are doing. Apps do not get forcibly moved just because you launched them from the studio. Existing gaming and DJ VM rules still apply.
+Workspaces are plain numbers, free for whatever you are doing. Apps are not forcibly moved to a workspace. Existing gaming and DJ VM rules still apply.
 
 ```sh
 game-dev plan              # read the actual plan in a terminal
@@ -73,7 +69,7 @@ game-dev godot             # Godot project manager
 game-dev code ~/code/game  # explicit existing project; never creates one
 game-dev check             # report installed game-plan tools
 afterhours quiet true      # no toast popups; inbox still collects
-afterhours studio          # open/close the studio
+afterhours apps            # open/close the app search
 afterhours start           # start once; safe if already running
 ```
 

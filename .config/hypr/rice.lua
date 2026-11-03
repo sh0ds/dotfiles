@@ -490,7 +490,5 @@ hl.bind(mod .. " + D", hl.dsp.exec_cmd("docs"))
 -- The Windows DJ VM: start it, or jump to it if it's open
 hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("djvm"))
 
--- The game-plan launchpad. Leaves Super+D (docs) and game keys intact.
-hl.bind("SUPER + CTRL + G", hl.dsp.exec_cmd("game-dev"))
 -- Labels describe a working layout; moving applications remains your choice.
 -- 1 code, 2 play/build, 3 art/audio, 4 notes/reference, 5 fullscreen games.

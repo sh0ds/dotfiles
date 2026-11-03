@@ -92,7 +92,7 @@ check "Zed uses Diag" grep -q '"dark": "Diag"' "$HOME/.config/zed/settings.json"
 check "eza has an Afterhours theme" test -r "${XDG_CONFIG_HOME:-$HOME/.config}/eza/theme.yml"
 check "scripts in ~/.local/bin on PATH" command -v app
 check "Afterhours control on PATH" command -v afterhours
-check "game-plan launchpad on PATH" command -v game-dev
+check "game-dev helpers on PATH" command -v game-dev
 check "btop uses Afterhours" grep -q '^color_theme = "diag"' "$HOME/.config/btop/btop.conf"
 check "Qt palette path expanded" sh -c 'test -f "$HOME/.config/qt6ct/qt6ct.conf" && ! grep -q @CONFIG_HOME@ "$HOME/.config/qt6ct/qt6ct.conf"'
 

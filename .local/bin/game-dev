@@ -1,20 +1,16 @@
 #!/usr/bin/env bash
-# Game-plan launchpad. No project creation, uploads, or automatic commits.
-# game-dev [menu|plan|pico|picotron|godot|art|audio|sfx|code [directory]|capture|site|check]
+# Game-plan shortcuts. No project creation, uploads, or automatic commits.
+# game-dev [plan|pico|picotron|godot|art|audio|sfx|code [directory]|capture|site|check]
 set -euo pipefail
 need() {
   command -v "$1" >/dev/null && return 0
   printf 'Missing command: %s. See docs/desktop-rebuild.md.\n' "$1" >&2
   if command -v notify-send >/dev/null; then
-    notify-send -a 'Game studio' 'Tool not installed' "$1 — see docs/desktop-rebuild.md" || true
+    notify-send -a 'Game dev' 'Tool not installed' "$1 — see docs/desktop-rebuild.md" || true
   fi
   return 1
 }
-case ${1:-menu} in
-  menu)
-    need afterhours
-    exec afterhours studio
-    ;;
+case ${1:-} in
   plan)
     for dir in "${GUIDES_DIR:-$HOME/code/guides}" /workspace/guides; do
       if [ -f "$dir/gamedev/plan.md" ]; then
@@ -56,5 +52,5 @@ case ${1:-menu} in
     done
     exit "$missing"
     ;;
-  *) printf 'Usage: game-dev [menu|plan|pico|picotron|godot|art|audio|sfx|code [directory]|capture|site|check]\n' >&2; exit 2 ;;
+  *) printf 'Usage: game-dev [plan|pico|picotron|godot|art|audio|sfx|code [directory]|capture|site|check]\n' >&2; exit 2 ;;
 esac
