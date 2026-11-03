@@ -221,7 +221,8 @@ ShellRoot {
                 ToolTip.delay: 650
                 ToolTip.text: "Calendar"
             }
-            Calendar { id: calendar; target: clockCell }
+            // Not "Calendar": QtQuick.Controls has a singleton by that name.
+            MonthCalendar { id: calendar; target: clockCell }
             RowLayout {
                 anchors.fill: parent
                 anchors.leftMargin: 6; anchors.rightMargin: 6

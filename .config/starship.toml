@@ -1,5 +1,5 @@
-# Afterhours prompt: the folder as a rounded chip on the first line, then
-# the branch and languages; a violet arrow to type after on the second.
+# Afterhours prompt: the folder, the branch and languages on the first
+# line; a violet arrow to type after on the second.
 # Timing and the clock sit on the right.
 # Icons come from kitty's JetBrains Mono Nerd Font.
 "$schema" = 'https://starship.rs/config-schema.json'
@@ -11,8 +11,8 @@ format = """
 right_format = '$cmd_duration$time'
 
 [directory]
-style = 'bold fg:text bg:raised'
-format = '[](fg:raised)[ ](fg:accent bg:raised)[$path]($style)[$read_only](fg:danger bg:raised)[](fg:raised) '
+style = 'bold fg:text'
+format = '[ ](fg:accent)[$path]($style)[$read_only](fg:danger) '
 read_only = ' '
 truncation_length = 3
 truncate_to_repo = true
@@ -93,7 +93,6 @@ vimcmd_replace_symbol = '[R](fg:danger)'
 vimcmd_visual_symbol = '[v](fg:accent)'
 
 [palettes.afterhours]
-raised = '#1b1a22'
 line = '#35323f'
 muted = '#948fa3'
 text = '#e0dde8'
