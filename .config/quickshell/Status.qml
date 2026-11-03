@@ -10,7 +10,6 @@ Singleton {
 	readonly property Script pi: Script { command: ["pi-status"]; interval: 30000 }
 	readonly property Script rec: Script { command: ["rec-status"]; interval: 1000 }
 	readonly property Script live: Script { command: ["live-status"] }
-	readonly property Script notes: Script { command: ["swaync-client", "-swb"] }
 
 	// sys: click opens or closes the readings, then read again at once.
 	function toggleStats() { toggler.running = true; }

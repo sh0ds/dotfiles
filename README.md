@@ -38,7 +38,7 @@ The things I need for a few seconds are normal tiled windows with one key each. 
 
 Desktop:
 
-- **Quickshell** draws the bar and the volume popup, both in QML in `.config/quickshell`. **swaync** does notifications (`SUPER+N` opens the panel), **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
+- **Quickshell** draws the bar, the volume popup and the notifications, all in QML in `.config/quickshell`. `SUPER+N` (or clicking `msg`) opens the notification centre with quiet mode, quick buttons, the player and the volume; right-click `msg` for quiet. **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
 - **hyprlock** locks the screen: black, `user@host`, kernel and uptime, the clock, a `password:` prompt and whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
 - **wlogout** is the power menu, **udiskie** mounts USB sticks when you plug them in (`SUPER+SHIFT+U` unmounts them all), and **awww** draws the background: black with a faint dot grid and a dim pixel Arch logo, 1:1 so it stays sharp.
 
@@ -147,7 +147,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 
 ```
 sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
-  xdg-desktop-portal-gtk hyprpolkitagent quickshell swaync awww fuzzel kitty tmux helix zed \
+  xdg-desktop-portal-gtk hyprpolkitagent quickshell awww fuzzel kitty tmux helix zed \
   starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
@@ -210,13 +210,12 @@ And change a few things to your liking:
   sed -i '/^desktop_notify_\(enabled\|connectivity\|command\)=/d' "$f"
   printf '%s\n' 'desktop_notify_enabled=1' 'desktop_notify_connectivity=0' "desktop_notify_command=chat-notify '%1' '%2'" >> "$f"
   ```
-  When the phone is connected through KDE Connect, SwayNC hides its mirrored
+  When the phone is connected through KDE Connect, the shell hides its mirrored
   WhatsApp notifications and keeps nchat's desktop alerts. Other phone apps
   remain visible. Keep nchat running for PC WhatsApp alerts; this also hides
   phone-only WhatsApp alerts such as calls. To use the phone mirror instead,
-  remove `whatsapp-phone-copy` from SwayNC's `notification-visibility` and disable
-  nchat desktop notifications. After changing SwayNC configuration, reload with
-  `swaync-client -R`.
+  remove the `ignored` check in `.config/quickshell/Notes.qml` and disable
+  nchat desktop notifications. Quickshell reloads on save.
 
 - For music, put your files in `~/Music` and start mpd. It picks up new files on its own after that:
 

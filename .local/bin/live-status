@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # live-status: blue "LIVE" in the bar while the screen is being shared,
-# and do-not-disturb on swaync for the duration, so private notifications
+# and quiet (do-not-disturb) for the duration, so private notifications
 # never pop up on stream. Listens to Hyprland's screencastv2 event
 # ("screencastv2>>1,<type>,<name>" on start, 0 on stop; Hyprland 0.56).
 # A one-frame capture (a grim screenshot) also fires start/stop, so a share
@@ -24,15 +24,15 @@ show() {
 go_live() {
   live=1
   : > "$live_flag"
-  dnd_before=$(swaync-client -D 2>/dev/null || echo false)
-  swaync-client -dn >/dev/null 2>&1 || true
+  dnd_before=$(qs ipc call notes quiet 2>/dev/null || echo false)
+  qs ipc call notes quietOn >/dev/null 2>&1 || true
   show
 }
 
 go_idle() {
   live=0
   rm -f "$live_flag"
-  [[ $dnd_before == false ]] && { swaync-client -df >/dev/null 2>&1 || true; }
+  [[ $dnd_before == false ]] && { qs ipc call notes quietOff >/dev/null 2>&1 || true; }
   show
 }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # chat-notify: nchat's desktop_notify_command. Sends a WhatsApp message to
-# swaync as a notification; clicking it slides WhatsApp in (same as SUPER+I).
+# the desktop as a notification; clicking it slides WhatsApp in (same as SUPER+I).
 # Usage: chat-notify NAME TEXT   (nchat fills in %1 and %2, see the README)
 # Detached, so nchat never waits for the click.
 # shellcheck disable=SC2016  # $1 and $2 are expanded by the inner bash

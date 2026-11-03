@@ -7,7 +7,7 @@
 local mod = "SUPER"
 
 -- Your scripts live in ~/.local/bin. A login through SDDM doesn't read
--- .bashrc, so Hyprland (and everything it starts: keybinds, swaync buttons,
+-- .bashrc, so Hyprland (and everything it starts: keybinds, notification centre buttons,
 -- hyprlock) wouldn't find them. Put the folder on Hyprland's own PATH.
 local bin = os.getenv("HOME") .. "/.local/bin"
 local path = os.getenv("PATH") or "/usr/local/bin:/usr/bin"
@@ -26,7 +26,7 @@ end
 -- Motion is physical: damped springs and eased fades, no bounce (see
 -- MOTION). The focused window is the only thing on screen with colour in
 -- its frame.
--- Palette (the same everywhere: kitty, quickshell, swaync, fuzzel, GTK, Helix):
+-- Palette (the same everywhere: kitty, quickshell, fuzzel, GTK, Helix):
 --   bg #000000  row #161a1f  rule #3f4650  dim #5d6670  mid #8a929c
 --   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
@@ -186,7 +186,7 @@ hl.layer_rule({ name = "osd-pop", match = { namespace = "^diag-osd$" }, animatio
 -- the panels themselves are blurred.
 hl.layer_rule({
 	name = "glass",
-	match = { namespace = "^(diag-bar|diag-osd|launcher|logout_dialog|swaync-control-center|swaync-notification-window)$" },
+	match = { namespace = "^(diag-bar|diag-osd|launcher|logout_dialog|diag-notes|diag-center)$" },
 	blur = true,
 	blur_popups = true,
 	ignore_alpha = 0.3,
@@ -195,7 +195,7 @@ hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpic
 -- Launcher and calculator fade without enlarging the text.
 hl.layer_rule({ name = "launcher-fade", match = { namespace = "^launcher$" }, animation = "fade" })
 -- Notifications and their panel slide in from the right edge.
-hl.layer_rule({ name = "notify-slide", match = { namespace = "^swaync-(control-center|notification-window)$" }, animation = "slide right" })
+hl.layer_rule({ name = "notify-slide", match = { namespace = "^diag-(notes|center)$" }, animation = "slide right" })
 
 ------------------------------------------------
 ---- SMART GAPS: one window fills the screen ----
@@ -465,8 +465,8 @@ hl.bind(mod .. " + SHIFT + U", hl.dsp.exec_cmd('udiskie-umount -ad && notify-sen
 -- Tabbed groups: SUPER+G groups/ungroups, SUPER+Tab cycles the tabs
 hl.bind(mod .. " + G", hl.dsp.group.toggle())
 hl.bind(mod .. " + Tab", hl.dsp.group.next())
--- Notification centre (swaync)
-hl.bind(mod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
+-- Notification centre (Quickshell, Center.qml)
+hl.bind(mod .. " + N", hl.dsp.exec_cmd("qs ipc call notes toggle"))
 -- Floating windows: SUPER+V now floats the window AND puts it in the middle of
 -- the screen (the base config's SUPER+V only floated it where it was).
 -- SUPER+X re-centres the focused floating window after you've dragged it.

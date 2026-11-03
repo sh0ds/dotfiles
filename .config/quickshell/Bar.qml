@@ -55,11 +55,12 @@ PanelWindow {
 		}
 		Volume {}
 		Cell {
-			readonly property string alt: Status.notes.alt
-			text: `<font color='${alt.endsWith("none") ? Theme.mid : Theme.arch}'>${alt.includes("dnd") ? "dnd" : "msg"}</font> ${Theme.esc(Status.notes.text)}`
-			tip: Status.notes.tooltip
-			onClicked: b => Quickshell.execDetached(b === Qt.RightButton
-				? ["swaync-client", "-d", "-sw"] : ["swaync-client", "-t", "-sw"])
+			// msg/dnd in blue while notifications wait, grey when none.
+			// Click: the centre. Right-click: quiet on/off.
+			text: `<font color='${Notes.count > 0 ? Theme.arch : Theme.mid}'>${Notes.quiet ? "dnd" : "msg"}</font> ${Notes.count > 0 ? Notes.count : ""}`
+			tip: Notes.quiet ? "quiet: popups held back" : ""
+			underline: Notes.centerOpen ? Theme.arch : "transparent"
+			onClicked: b => b === Qt.RightButton ? Notes.setQuiet(!Notes.quiet) : (Notes.centerOpen = !Notes.centerOpen)
 		}
 		Tray { bar: bar }
 		Cell {

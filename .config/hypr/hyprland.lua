@@ -47,12 +47,11 @@ local lock = "pidof hyprlock || hyprlock"
 -------------------
 
 hl.on("hyprland.start", function()
-	-- Quickshell: the bar and the volume popup (~/.config/quickshell)
+	-- Quickshell: the bar, the volume popup and notifications (~/.config/quickshell)
 	hl.exec_cmd("qs")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	hl.exec_cmd("wl-paste --watch cliphist store")
-	hl.exec_cmd("swaync")
 	hl.exec_cmd("awww-daemon")
 	-- The Diag background: black, a faint dot grid, a dim pixel Arch logo in
 	-- the middle. Drawn 1:1 (no scaling, so the dots stay sharp) and centred

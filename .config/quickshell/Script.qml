@@ -1,5 +1,5 @@
 // One bar script. interval > 0: run it every interval ms and keep its last
-// line. interval 0: it streams lines (live-status, swaync-client -swb) and is
+// line. interval 0: it streams lines (live-status) and is
 // started again 5 s after it exits.
 import QtQuick
 import Quickshell
