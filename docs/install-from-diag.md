@@ -129,7 +129,6 @@ notify-send "Afterhours" "Notification test"
 | Key | Expected result |
 | --- | --- |
 | Super+Space | Application search; type a name and press Enter |
-| Super+Ctrl+G | Make / Play / Ship selector |
 | Super+N | Inbox containing the notification test |
 | Super+1…0 | Workspace changes |
 | Super+Shift+Escape | Session controls; Escape cancels |

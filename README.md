@@ -1,86 +1,61 @@
-# Afterhours / sh0ds·16
+# Afterhours
 
-An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Near-black cool charcoal, violet, amber and coral for attention, one font (JetBrains Mono Nerd Font) everywhere, rounded corners and calm eased motion. No blur, no oversized docks.
+My Arch + Hyprland desktop for making small games. Near-black charcoal with violet accents, one font (JetBrains Mono Nerd Font), rounded corners and calm motion. The bar, launcher, notifications and power menu are my own Quickshell config, not a preset.
 
-The desktop follows the [game development plan](https://github.com/sh0ds/guides/blob/main/gamedev/plan.md): PICO-8 → Picotron → Godot → your own C/Lua engine, with art, sound and devlogs alongside. Making small finished games is the point.
+![Afterhours with kitty, fastfetch and cava](screenshots/afterhours-desktop.png)
 
-## The shell
+![The rail with system stats and the month calendar open](screenshots/afterhours-calendar.png)
 
-Written from scratch in `.config/quickshell/afterhours/`, rather than a downloaded shell preset:
+## Description
 
-- A floating, rounded rail on every monitor: an apps button, numbered workspaces, the focused window's title, a centred clock (click for the month), recording/sharing state, now playing with cava bars, system stats on click, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and session controls.
-- Searchable desktop applications, including keyboard selection and Enter to launch.
-- A D-Bus notification server with plain-text content, actions, quiet mode, passive toasts and a bounded session inbox. Screen-sharing events suppress toasts.
-- Session menu with explicit confirmation for log out/reboot/power off. Suspend waits for a real Hyprlock lock before sleeping. Power actions retain the DJ VM shutdown guard.
+- **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and the power menu.
+- **Notifications** come from the shell itself: toasts that slide in and out, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
+- **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, hyprlock and the wallpaper.
+- **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
+- **Thunar, Firefox, Obsidian, Zed and Helix** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
+- Unfocused windows dim a little. Games, video and picture-in-picture never do.
+- Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone). PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
+- Plus the DJ VM, a Wi-Fi picker, clipboard history, a calculator, an emoji picker, OCR, screen recording and captioned devlog screenshots.
 
-Hyprlock remains the lock, SwayOSD handles hardware volume feedback, and Fuzzel remains a small dmenu backend for existing clipboard, calculator, Wi-Fi and docs helpers. Waybar, SwayNC, Wlogout and tmux are gone; the old configs live in git history.
+## Getting Started
 
-## Install on the Arch desktop
-
-See [setup, dependencies and migration](docs/desktop-rebuild.md). This cloud checkout is a development environment; installing it here does not change your physical desktop.
-
-```sh
-# First inspect local changes and the setup document.
-bash install-dotfiles.sh --target /tmp/afterhours-preview
-# On your Arch desktop, after dependencies are installed:
-bash install-dotfiles.sh
-```
-
-The installer backs up replaced files under `~/.dotfiles-backup/` and supports repeat installation. It links most configs to this checkout, so edits in `~/.config` usually edit this repository. Qt, btop, nchat and Zed receive writable copies.
-
-Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), retain the NVIDIA environment settings on NVIDIA, then log out and select Hyprland. The keyboard layout is **German**, with Caps Lock as Escape.
-
-## Daily controls
-
-| Key | Action |
-| --- | --- |
-| `Super + Return` | Terminal |
-| `Super + Space` | Quickshell app search |
-| `Super + N` | Quickshell inbox and quiet mode |
-| `Super + Shift + Escape` | Quickshell session controls |
-| `Super + Escape` | Lock |
-| `Super + 1…0` | Workspace |
-| `Super + Shift + 1…0` | Move window to workspace |
-| `Super + arrows / h j k l` | Focus window |
-| `Super + Shift + arrows / h j k l` | Move window |
-| `Super + V` | Toggle floating |
-| `Super + G` | Toggle window group |
-| `Super + B / E / O` | Firefox / files / notes |
-| `Super + D` | Docs search |
-| `Super + F1` | Shortcut reference |
-| `Super + C` | Calculator |
-| `Super + Shift + V` | Clipboard history |
-| `Super + period` | Emoji picker |
-| `Super + Shift + R` | Start / stop a region recording |
-| `Print` | Region screenshot to clipboard |
-| `Ctrl + Print` | Annotated screenshot |
-| `Alt + Print` | Captioned devlog screenshot |
-| `Alt + Tab` | Window switcher |
-| `Super + Shift + B` | Hide / show the rail |
-| `Super + Shift + M` | DJ VM |
-
-
-Workspaces are plain numbers, free for whatever you are doing. Apps are not forcibly moved to a workspace. Existing gaming and DJ VM rules still apply.
+You need Arch, Hyprland 0.56 (the Lua config) and Quickshell 0.3.2 or newer. The full package list is in [docs/desktop-rebuild.md](docs/desktop-rebuild.md). Coming from my old Diag setup? Use [docs/install-from-diag.md](docs/install-from-diag.md).
 
 ```sh
-afterhours quiet true      # no toast popups; inbox still collects
-afterhours apps            # open/close the app search
-afterhours start           # start once; safe if already running
+git clone https://github.com/sh0ds/dotfiles ~/code/dotfiles
+cd ~/code/dotfiles
+bash install-dotfiles.sh        # links the configs, backs up old ones to ~/.dotfiles-backup
+bash system/install-system.sh   # login screen, boot splash, violet folders (needs sudo)
 ```
 
-PICO-8 and Picotron require your licensed Lexaloffle downloads. They are not redistributed here. PICO-8 carts stay in `~/code/pico8`; Picotron keeps its own drive. Godot games and the future engine each get their own repository when their plan steps arrive. The shell neither creates nor publishes game projects.
+Then log out and pick Hyprland. The main monitor is set in `.config/hypr/hyprland.lua` (mine is DP-4). The keyboard is German with Caps Lock as Escape.
 
-## Design and checks
+Run `bash install-dotfiles.sh` again whenever files get added or removed. It cleans up dead links.
 
-[Desktop and WM comparison](docs/desktop-rebuild.md#desktop-and-window-manager-comparison) explains the choice of Hyprland. [Architecture and validation](docs/desktop-rebuild.md#architecture) describe the shell, testing and runtime limits.
+## Keys
+
+- `Super + Return` terminal, `Super + Space` apps, `Super + B` Firefox, `Super + E` files, `Super + O` notes
+- `Super + N` inbox, `Super + Shift + Escape` power menu, `Super + Escape` lock
+- `Super + 1…0` workspace, `Super + Shift + 1…0` move the window there
+- `Super + arrows` or `h j k l` focus, add `Shift` to move the window
+- `Super + V` float and centre, `Super + F` fullscreen, `Super + G` group, `Super + Q` close
+- `Super + C` calculator, `Super + Shift + V` clipboard, `Super + period` emoji, `Super + D` docs
+- `Print` region to clipboard, `Ctrl + Print` draw on it, `Alt + Print` captioned devlog shot
+- `Super + Shift + R` record a region, `Super + Shift + B` hide the rail, `Super + Shift + M` DJ VM
+- `Super + F1` lists all of them
+
+## Help
 
 ```sh
-python3 -m unittest discover -s tests -v
-node tests/test_firefox_pip.js
-lua tests/test_firefox_pip.lua
-bash check-desktop.sh  # on the actual Arch desktop, inside the installed session
+afterhours restart       # restart the shell
+afterhours debug         # run it in the foreground and see errors
+afterhours quiet true    # no toasts, the inbox still collects
+bash check-desktop.sh    # checks the installed session
+python3 -m unittest discover -s tests
 ```
 
-The old screenshots show the previous Diag desktop; the Afterhours captures show this implementation. The [legacy setup reference](docs/legacy-desktop.md) retains the existing audio, VM, Firefox and helper documentation; its appearance and shell instructions describe the old setup.
+The old Diag setup and its screenshots are in [docs/legacy-desktop.md](docs/legacy-desktop.md).
 
-MIT. Some app themes originated in Catppuccin ports; their existing notices remain. The new shell and wallpaper are original to this setup.
+## License
+
+MIT. A few app themes started as Catppuccin ports and keep their notices. The shell and wallpaper are mine.
