@@ -86,14 +86,14 @@ Install tools when their track needs them, so P1 does not become a month of tool
 | P1 | Lua, Lua language server, this config | Change one rule yourself; the shell does not claim this learning step is completed. |
 | P2–P8 | Licensed PICO-8 | Unzip to `~/.local/opt/pico-8`; wrapper keeps carts in `~/code/pico8` and GIFs/screenshots in `~/Pictures/pico-8`. |
 | T1–T4 | Licensed Picotron | Unzip to `~/.local/opt/picotron`; retain its own drive. |
-| A1–A2 | Pixelorama or Aseprite | `game-dev art` prefers `pixelorama`, then `aseprite`; install through your trusted package route. |
-| A3–A4 | PICO-8 tracker, your existing DAW, ChipTone | `game-dev audio` opens PICO-8 first; set `GAME_DAW` to a single executable name for your existing DAW. `game-dev sfx` opens ChipTone. |
+| A1–A2 | Pixelorama or Aseprite | `pixelorama`, or `aseprite` through Steam. |
+| A3–A4 | PICO-8 tracker, your existing DAW, ChipTone | PICO-8 first; `bitwig` for loops; `sfx` opens jsfxr, `sfx chiptone` ChipTone. |
 | G1–G11 | `godot` | Use Godot 4, typed GDScript warnings, one repo per game; download version-matched export templates in the editor. |
 | X1–X8 | `base-devel clang gdb pkgconf sdl3 lua lua-language-server emscripten` | Check `pkg-config --cflags --libs sdl3 lua`; later check `emcc --version`. Keep engine name for X1, not a fabricated placeholder repository. |
 | W / F | C/make, Python, browser devtools, FFmpeg | Website work belongs on the plan's `next` branch. The shell does not switch branches or deploy. |
 | J / I | itch.io, butler when needed | Credentials and uploads remain explicit actions. No automatic publishing or scope generation. |
 
-`game-dev check` reports commands and licensed download directories; it is a prerequisite inventory, not an assertion that games export or play successfully. The existing PICO-8/Picotron wrappers validate the executable when launched. GDScript in Helix connects to Godot's localhost language server (port 6005) while the editor is running. PICO-8's Lua dialect is not standard Lua: do not format or rewrite carts as if it were.
+The PICO-8/Picotron wrappers validate the executable when launched. GDScript in Helix connects to Godot's localhost language server (port 6005) while the editor is running. PICO-8's Lua dialect is not standard Lua: do not format or rewrite carts as if it were.
 
 ## Architecture
 
@@ -103,7 +103,6 @@ Install tools when their track needs them, so P1 does not become a month of tool
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
 - `afterhours`: starts once or sends typed Quickshell IPC calls; no process-name-wide kills.
 - `afterhours-suspend`: waits for logind's locked hint after starting Hyprlock before requesting suspend.
-- `game-dev`: explicit launch commands for the existing tools. No generated game code, invented progress, auto-commits or uploads.
 
 The inbox is session-only, capped at 50 notifications; it is not written to disk. Quiet mode hides toasts, not inbox entries. Critical toasts stay visible until dismissed. Transient notifications expire; ordinary ones leave the toast after a short interval and remain in the inbox. The shell renders notification content as plain text, never HTML. Sharing suppression uses Hyprland `screencastv2` events; a shell started in the middle of an existing share cannot infer an earlier start event. Enable quiet mode before presenting in that case.
 

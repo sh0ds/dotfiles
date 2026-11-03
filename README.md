@@ -63,17 +63,12 @@ Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), re
 Workspaces are plain numbers, free for whatever you are doing. Apps are not forcibly moved to a workspace. Existing gaming and DJ VM rules still apply.
 
 ```sh
-game-dev plan              # read the actual plan in a terminal
-game-dev pico              # the existing pixel-perfect PICO-8 wrapper
-game-dev godot             # Godot project manager
-game-dev code ~/code/game  # explicit existing project; never creates one
-game-dev check             # report installed game-plan tools
 afterhours quiet true      # no toast popups; inbox still collects
 afterhours apps            # open/close the app search
 afterhours start           # start once; safe if already running
 ```
 
-PICO-8 and Picotron require your licensed Lexaloffle downloads. They are not redistributed here. The plan checkout is found at `~/code/guides` or `/workspace/guides`; set `GUIDES_DIR` for another location. PICO-8 carts stay in `~/code/pico8`; Picotron keeps its own drive. Godot games and the future engine each get their own repository when their plan steps arrive. The shell neither creates nor publishes game projects.
+PICO-8 and Picotron require your licensed Lexaloffle downloads. They are not redistributed here. PICO-8 carts stay in `~/code/pico8`; Picotron keeps its own drive. Godot games and the future engine each get their own repository when their plan steps arrive. The shell neither creates nor publishes game projects.
 
 ## Design and checks
 

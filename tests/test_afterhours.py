@@ -47,41 +47,6 @@ class Afterhours(unittest.TestCase):
                 self.assertEqual(self.calls.read_text().splitlines(), ['ipc', '-c', 'afterhours', 'call', 'shell', 'toggle', panel])
         self.assertEqual(self.run_helper('afterhours', 'unknown').returncode, 2)
 
-    def test_no_argument_prints_usage(self):
-        result = self.run_helper('game-dev')
-        self.assertEqual(result.returncode, 2)
-        self.assertIn('Usage: game-dev', result.stderr)
-
-    def test_code_directory_is_one_literal_argument(self):
-        project = self.root / 'cart & source $(touch accidental)'
-        project.mkdir()
-        self.stub('zeditor')
-        result = self.run_helper('game-dev', 'code', str(project))
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(self.calls.read_text().splitlines(), ['--', str(project)])
-        self.assertFalse((self.root / 'accidental').exists())
-        self.assertNotEqual(self.run_helper('game-dev', 'code', str(project / 'absent')).returncode, 0)
-
-    def test_plan_uses_explicit_checkout_without_writing_it(self):
-        guides = self.root / 'my guides'
-        plan = guides / 'gamedev/plan.md'
-        plan.parent.mkdir(parents=True)
-        plan.write_text('P1: change one Lua rule yourself.\n')
-        self.env['GUIDES_DIR'] = str(guides)
-        self.stub('kitty'); self.stub('less')
-        self.assertEqual(self.run_helper('game-dev', 'plan').returncode, 0)
-        self.assertEqual(self.calls.read_text().splitlines(), ['--title', 'Game plan', '-e', 'less', '--', str(plan)])
-        self.assertEqual(plan.read_text(), 'P1: change one Lua rule yourself.\n')
-
-    def test_art_and_audio_follow_the_plan(self):
-        self.stub('pixelorama'); self.stub('aseprite', 'exit 7')
-        self.assertEqual(self.run_helper('game-dev', 'art').returncode, 0)
-        self.stub('pico8')
-        self.assertEqual(self.run_helper('game-dev', 'audio').returncode, 0)
-        self.stub('my-daw')
-        self.env['GAME_DAW'] = 'my-daw'
-        self.assertEqual(self.run_helper('game-dev', 'audio').returncode, 0)
-
     def test_suspend_waits_for_logind_lock(self):
         self.stub('pgrep', 'exit 0')
         self.stub('loginctl', 'echo yes')

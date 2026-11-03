@@ -153,13 +153,11 @@ This includes old optional app/VM checks; a missing optional tool is distinct fr
 
 ## 9. Add game tools when their plan step needs them
 
-`game-dev plan` finds `~/code/guides/gamedev/plan.md`. If that checkout is missing, clone `sh0ds/guides` into `~/code/guides`; use `GUIDES_DIR` if it lives elsewhere.
-
-- PICO-8: your licensed Linux download goes in `~/.local/opt/pico-8`; run `game-dev pico`. Existing carts stay in `~/code/pico8`.
-- Picotron: your licensed download goes in `~/.local/opt/picotron`; run `game-dev picotron`.
-- Art: `game-dev art` prefers Pixelorama, then Aseprite.
-- Sound: `game-dev audio` starts PICO-8 first. Set `GAME_DAW` to your existing DAW executable if desired. `game-dev sfx` opens ChipTone.
-- Godot: install `godot` when reaching G1, then run `game-dev godot`. Install version-matched export templates in Godot when needed.
+- PICO-8: your licensed Linux download goes in `~/.local/opt/pico-8`; run `pico8`. Existing carts stay in `~/code/pico8`.
+- Picotron: your licensed download goes in `~/.local/opt/picotron`; run `picotron`.
+- Art: Pixelorama or `aseprite` (Steam).
+- Sound: the PICO-8 tracker first, `bitwig` for loops, `sfx` opens jsfxr (`sfx chiptone` for ChipTone).
+- Godot: install `godot` when reaching G1. Install version-matched export templates in Godot when needed.
 - C/SDL3/Emscripten: follow the X-track setup when you reach it; the desktop shell does not require that toolchain.
 
 ## Roll back
