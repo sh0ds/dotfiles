@@ -12,4 +12,6 @@ week=$(((day - 1) / 7))
 
 printf '\n## Day %d · week %d\nDid:\nStuck:\nLearned:\nRedo:\nNext:\n' "$day" "$week" >>"$f"
 
-exec zeditor "$f:$(wc -l <"$f")"
+# Open the site folder too, so Zed reuses the website window and its panel
+# layout instead of opening LOG.md alone in a fresh one.
+exec zeditor ~/code/website "$f:$(wc -l <"$f")"

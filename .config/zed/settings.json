@@ -31,7 +31,11 @@
   "inlay_hints": { "enabled": true }, // Haskell types inline
   "toolbar": { "breadcrumbs": true, "quick_actions": false },
   "tab_bar": { "show_nav_history_buttons": false },
-  "project_panel": { "dock": "left", "git_status": true },
+  // Files on the right, git and the outline on the left. Set here because
+  // install-dotfiles.sh copies this file over whatever the UI saved.
+  "project_panel": { "dock": "right", "git_status": true },
+  "git_panel": { "dock": "left" },
+  "outline_panel": { "dock": "left" },
   "terminal": {
     "font_family": "Terminess Nerd Font",
     "blinking": "off",
