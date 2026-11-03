@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=PICO-8
+Comment=Fantasy console: make and play tiny games (carts in ~/code/pico8)
+Exec=pico8
+Icon=applications-games
+Terminal=false
+Categories=Game;Development;

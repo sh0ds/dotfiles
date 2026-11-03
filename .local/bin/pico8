@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# pico8: PICO-8 from ~/.local/opt/pico-8 (the zip from lexaloffle.com, not in
+# this repo). Jumps to it if it's already open. Carts live in ~/code/pico8,
+# screenshots and GIFs (F6, F9) land in ~/Pictures/pico-8.
+set -euo pipefail
+dir=${PICO8_DIR:-$HOME/.local/opt/pico-8}
+bin=
+for b in pico8 pico8_64 pico8_dyn; do
+  [ -x "$dir/$b" ] && { bin=$dir/$b; break; }
+done
+if [ -z "$bin" ]; then
+  notify-send -a PICO-8 "PICO-8 is not installed" "Unzip the Linux download so $dir/pico8 exists."
+  exit 1
+fi
+mkdir -p ~/code/pico8 ~/Pictures/pico-8
+# Windowed so Hyprland tiles it; pixel_perfect keeps whole-number scaling,
+# so the 128x128 screen stays sharp and the rest is Diag black.
+exec app '(?i)^(pico-?8.*)$' "$bin" -windowed 1 -pixel_perfect 1 \
+  -root_path "$HOME/code/pico8" -desktop "$HOME/Pictures/pico-8" "$@"

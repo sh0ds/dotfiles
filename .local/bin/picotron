@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# picotron: Picotron from ~/.local/opt/picotron (the zip from lexaloffle.com,
+# not in this repo). Jumps to it if it's already open. Its own drive is
+# ~/.lexaloffle/Picotron/drive; `folder` inside Picotron opens it in Thunar.
+set -euo pipefail
+dir=${PICOTRON_DIR:-$HOME/.local/opt/picotron}
+if [ ! -x "$dir/picotron" ]; then
+  notify-send -a Picotron "Picotron is not installed" "Unzip the Linux download so $dir/picotron exists."
+  exit 1
+fi
+exec app '(?i)^picotron$' "$dir/picotron" "$@"

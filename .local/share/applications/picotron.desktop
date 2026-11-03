@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Picotron
+Comment=Fantasy workstation: PICO-8's bigger sibling with its own desktop
+Exec=picotron
+Icon=applications-games
+Terminal=false
+Categories=Game;Development;

@@ -295,6 +295,18 @@ hl.window_rule({
 	idle_inhibit = "fullscreen",
 })
 
+-- PICO-8 and Picotron (pico8, picotron, from the launcher) tile where you
+-- start them instead of going to workspace 5: they're as much an editor as a
+-- game. Marked as game content for adaptive sync, the screen stays on while
+-- one is fullscreen, and a single tile gets the whole screen (smart gaps), so
+-- the pixel-perfect picture sits centred on Diag black.
+hl.window_rule({
+	name = "fantasy-consoles",
+	match = { class = "(?i)^(pico-?8.*|picotron)$" },
+	content = "game",
+	idle_inhibit = "fullscreen",
+})
+
 -- GameMode for every game, no Steam launch options needed: when a game's
 -- window opens, gamemoded switches it on for that process, and it switches
 -- off by itself when the game quits. Each process is only asked once, since

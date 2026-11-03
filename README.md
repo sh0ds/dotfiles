@@ -58,6 +58,7 @@ Apps:
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7, and songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`. Setup in [docs/dj-vm.md](docs/dj-vm.md).
 - **Obsidian** for notes on `SUPER+O`, **Proton Pass** for passwords on `SUPER+SHIFT+P`.
+- **PICO-8 and Picotron**, Lexaloffle's fantasy consoles, from the launcher. They tile where I start them, scale pixel-perfect on black, and starting one again jumps to it. PICO-8 keeps carts in `~/code/pico8` and screenshots/GIFs in `~/Pictures/pico-8`.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
 
 Keeping Arch healthy:
@@ -83,6 +84,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `chat-notify`: WhatsApp messages as notifications, click one and it jumps to WhatsApp
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
+- `pico8` / `picotron`: start or jump to the fantasy consoles from `~/.local/opt`, with a notification if one isn't unzipped there yet
 - `thunar-setup`: fills missing Diag preferences, merges coding/music actions and sidebar shortcuts, and sets kitty for Open Terminal Here; `--apply` reapplies the managed layout
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
@@ -216,6 +218,15 @@ And change a few things to your liking:
 - For automatic hiding of a single-tab Firefox source window while its pop-out video is tiled, install the [tab-count add-on](#firefox-picture-in-picture). Tiling works without it; the add-on enables tab-aware hiding and restoration.
 - For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
+- PICO-8 and Picotron are paid downloads from [lexaloffle.com](https://www.lexaloffle.com), so they aren't in this repo. Download the Linux zips from your account page and unzip them into `~/.local/opt`:
+
+  ```
+  mkdir -p ~/.local/opt && cd ~/.local/opt
+  unzip ~/Downloads/pico-8_*_amd64.zip      # gives ~/.local/opt/pico-8/pico8
+  unzip ~/Downloads/picotron_*_linux.zip    # gives ~/.local/opt/picotron/picotron
+  ```
+
+  If a zip unpacks under another folder name, rename it to `pico-8` or `picotron`. Updates are the same: unzip the new version over the old one.
 - For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
 - Apps that keep passwords in the keyring need it running, so start it once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password).
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
