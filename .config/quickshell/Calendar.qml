@@ -1,5 +1,5 @@
 // Month calendar under the clock: week numbers on the left, Monday first,
-// today in blue. Scroll changes the month, click on it closes it.
+// today in blue on a glass card. Scroll changes the month, click on it closes it.
 import QtQuick
 import Quickshell
 
@@ -12,11 +12,12 @@ PopupWindow {
 	anchor.item: target
 	anchor.edges: Edges.Bottom
 	anchor.gravity: Edges.Bottom
+	anchor.margins.top: 8
 	visible: false
 	onVisibleChanged: shift = 0
 	color: "transparent"
-	implicitWidth: grid.implicitWidth + 28
-	implicitHeight: grid.implicitHeight + 24
+	implicitWidth: grid.implicitWidth + 36
+	implicitHeight: grid.implicitHeight + 28
 
 	function isoWeek(d) {
 		const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -48,16 +49,8 @@ PopupWindow {
 		return out;
 	}
 
-	Rectangle {
+	Glass {
 		anchors.fill: parent
-		color: Theme.panel
-		border.color: Theme.rule
-		border.width: 1
-		Rectangle {
-			anchors { left: parent.left; right: parent.right; top: parent.top }
-			height: 2
-			color: Theme.arch
-		}
 		Text {
 			id: grid
 			anchors.centerIn: parent

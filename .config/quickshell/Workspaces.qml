@@ -1,15 +1,20 @@
 // Numbered workspaces of one screen. 1-5 always show on DP-4, even empty.
-// Blue underline for the active one, amber for urgent. Scroll walks through
-// the open ones like Waybar did.
+// A blue pill slides to the active one; urgent ones turn amber. Scroll
+// walks through the open ones.
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 
-Row {
+Item {
 	id: ws
 	required property ShellScreen screen
 	readonly property HyprlandMonitor monitor: Hyprland.monitorFor(screen)
 	readonly property int activeId: monitor?.activeWorkspace?.id ?? -1
+	property real pillX: 0
+	property real pillW: 0
+
+	implicitWidth: row.implicitWidth
+	implicitHeight: Theme.height
 
 	function ids() {
 		const name = monitor?.name ?? "";
@@ -26,20 +31,39 @@ Row {
 		Hyprland.dispatch(`hl.dsp.focus({ workspace = ${target} })`);
 	}
 
-	Repeater {
-		model: ws.ids()
-		Cell {
-			required property int modelData
-			readonly property bool active: modelData === ws.activeId
-			readonly property bool hot: ws.urgent(modelData)
-			text: String(modelData)
-			rule: false
-			pad: 9
-			textColor: hot ? Theme.warn : active ? Theme.ink : Theme.mid
-			restColor: active ? Theme.panel : "transparent"
-			underline: hot ? Theme.warn : active ? Theme.arch : "transparent"
-			onClicked: ws.go(modelData)
-			onScrolled: d => ws.go(d > 0 ? '"e+1"' : '"e-1"')
+	// The pill glides with the same feel as Hyprland's workspace spring.
+	Rectangle {
+		x: ws.pillX + 2
+		width: Math.max(0, ws.pillW - 4)
+		anchors { top: parent.top; bottom: parent.bottom; topMargin: 4; bottomMargin: 4 }
+		radius: 7
+		color: Theme.tint
+		border.color: "#801793d1"
+		border.width: 1
+		visible: ws.pillW > 0
+		Behavior on x { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
+		Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
+	}
+
+	Row {
+		id: row
+		Repeater {
+			model: ws.ids()
+			Cell {
+				id: num
+				required property int modelData
+				readonly property bool active: modelData === ws.activeId
+				readonly property bool hot: ws.urgent(modelData)
+				text: String(modelData)
+				pad: 11
+				textColor: hot ? Theme.warn : active ? Theme.ink : Theme.mid
+				hoverColor: active ? "transparent" : Theme.hover
+				underline: hot ? Theme.warn : "transparent"
+				onClicked: ws.go(modelData)
+				onScrolled: d => ws.go(d > 0 ? '"e+1"' : '"e-1"')
+				Binding { target: ws; property: "pillX"; value: num.x; when: num.active; restoreMode: Binding.RestoreNone }
+				Binding { target: ws; property: "pillW"; value: num.width; when: num.active; restoreMode: Binding.RestoreNone }
+			}
 		}
 	}
 }

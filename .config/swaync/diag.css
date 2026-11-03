@@ -1,4 +1,4 @@
-/* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured and square; colours ease in 200 ms like the bar. Additions live in style.css. */
+/* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, softly rounded glass; colours ease in 200 ms like the bar. Additions live in style.css. */
 * {
   all: unset;
   font-size: 18px;
@@ -18,14 +18,14 @@ scale trough {
   margin: 0;
   min-height: 8px;
   min-width: 70px;
-  border-radius: 0;
+  border-radius: 4px;
 }
 
 trough slider {
   min-width: 14px;
   min-height: 14px;
   margin: -3px;
-  border-radius: 0;
+  border-radius: 999px;
   box-shadow: none;
   transition: none;
   background-color: #1793d1;
@@ -42,16 +42,16 @@ trough {
 /* notifications */
 .notification-background {
   box-shadow: none;
-  border-radius: 0;
+  border-radius: 12px;
   margin: 8px;
-  background: #0d1014;
+  background: rgba(13, 16, 20, 0.85);
   color: #e6e8ea;
   padding: 0;
 }
 
 .notification-background .notification {
   padding: 8px;
-  border-radius: 0;
+  border-radius: 12px;
 }
 
 .notification-background .notification.critical {
@@ -87,7 +87,7 @@ trough {
 .notification-background .close-button {
   margin: 8px;
   padding: 2px;
-  border-radius: 0;
+  border-radius: 999px;
   color: #000000;
   background-color: #e5484d;
 }
@@ -101,7 +101,7 @@ trough {
 }
 
 .notification .notification-action {
-  border-radius: 0;
+  border-radius: 8px;
   color: #e6e8ea;
   box-shadow: none;
   margin: 4px;
@@ -133,27 +133,27 @@ trough {
 .notification progress,
 .notification trough,
 .notification progressbar {
-  border-radius: 0;
+  border-radius: 4px;
   padding: 3px 0;
 }
 
 /* control center */
 .control-center {
   box-shadow: none;
-  border-radius: 0;
-  background-color: #000000;
+  border-radius: 14px;
+  background-color: rgba(8, 10, 13, 0.85);
   color: #e6e8ea;
   padding: 12px;
 }
 
 .control-center .notification-background {
-  border-radius: 0;
+  border-radius: 12px;
   box-shadow: none;
   margin: 4px;
 }
 
 .control-center .notification-background .notification {
-  border-radius: 0;
+  border-radius: 12px;
 }
 
 .control-center .notification-background .notification.low {
@@ -166,7 +166,7 @@ trough {
 }
 
 .control-center .widget-title button {
-  border-radius: 0;
+  border-radius: 8px;
   color: #e6e8ea;
   background-color: #161a1f;
   box-shadow: none;
@@ -201,13 +201,13 @@ scrollbar trough {
 /* dnd */
 .widget-dnd {
   margin: 0 4px;
-  border-radius: 0;
+  border-radius: 8px;
   font-size: 1.1rem;
 }
 
 .widget-dnd > switch {
   font-size: initial;
-  border-radius: 0;
+  border-radius: 999px;
   background: #161a1f;
   box-shadow: none;
 }
@@ -218,7 +218,7 @@ scrollbar trough {
 
 .widget-dnd > switch slider {
   background: #c4c9ce;
-  border-radius: 0;
+  border-radius: 999px;
 }
 
 /* MPRIS styling lives in mpris.css. */

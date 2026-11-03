@@ -16,38 +16,48 @@ if not (":" .. path .. ":"):find(":" .. bin .. ":", 1, true) then
 end
 
 ------------------------------------
----- LOOK: Diag, flat and exact ----
+---- LOOK: Diag, softened ----------
 ------------------------------------
 
--- Diag: the look of sh0ds.dev (Terminess, ruled rows and precise labels) in Arch Linux colours: black, cool greys and one Arch
--- blue. Square corners, 2 px borders like the site's rules, small gaps, no
--- blur, no dimming, one soft shadow for depth. Motion is physical: damped
--- springs and eased fades, no bounce (see MOTION). The focused window is the only thing on
--- screen with colour in its frame.
+-- Diag: the colours and type of sh0ds.dev (Terminess, black, cool greys,
+-- one Arch blue), with softer edges: 10 px squircle corners, a blue
+-- gradient frame on the focused window, roomy gaps, a deep soft shadow and
+-- frosted glass behind the bar, notifications, launcher and terminal.
+-- Motion is physical: damped springs and eased fades, no bounce (see
+-- MOTION). The focused window is the only thing on screen with colour in
+-- its frame.
 -- Palette (the same everywhere: kitty, quickshell, swaync, fuzzel, GTK, Helix):
 --   bg #000000  row #161a1f  rule #3f4650  dim #5d6670  mid #8a929c
 --   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
 	general = {
-		-- A 4 px unit: 8 px between neighbouring tiles and 8 px at the edge.
-		gaps_in = 4,
-		gaps_out = 8,
+		-- 12 px between neighbouring tiles, 14 px at the edge (the bar
+		-- floats 8 px down, so windows line up under its rounded ends).
+		gaps_in = 6,
+		gaps_out = 14,
 		border_size = 2,
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
 		allow_tearing = true,
 		col = {
-			active_border = "rgb(1793d1)",
-			inactive_border = "rgb(3f4650)",
+			-- Arch blue into a lighter sky blue. `frame` swaps the pair for
+			-- amber while recording and grey under do-not-disturb.
+			active_border = { colors = { "rgb(1793d1)", "rgb(6cc4f0)" }, angle = 45 },
+			inactive_border = "rgba(3f465066)",
 		},
 	},
 	decoration = {
-		rounding = 0,
+		rounding = 10,
+		-- Between a circle (2) and a square: the corners curve in smoothly
+		-- instead of starting with a hard edge.
+		rounding_power = 2.6,
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
-		-- A soft shadow, black on black: invisible on tiles, it only shows
-		-- where a floating window or dialog sits over another one.
-		shadow = { enabled = true, range = 18, render_power = 3, color = "rgba(000000b3)" },
-		blur = { enabled = false },
+		-- A wide, soft shadow that falls slightly down, like light from above.
+		shadow = { enabled = true, range = 30, render_power = 2, offset = { 0, 6 }, color = "rgba(000000d0)", color_inactive = "rgba(00000080)" },
+		-- Frosted glass for anything see-through: the bar, notifications,
+		-- launcher and the terminal (kitty is 92 % opaque). Vibrancy keeps
+		-- the blue behind it from turning to grey mush.
+		blur = { enabled = true, size = 7, passes = 3, vibrancy = 0.25, noise = 0.012, contrast = 1.0, brightness = 0.85, popups = true },
 		dim_inactive = false,
 		glow = { enabled = false },
 		motion_blur = { enabled = false },
@@ -77,8 +87,9 @@ hl.config({
 			font_family = "Terminess Nerd Font",
 			font_size = 16,
 			height = 22,
-			gradients = false,
-			rounding = 0,
+			gradients = true,
+			rounding = 6,
+			gradient_rounding = 6,
 			text_color = "rgb(000000)",
 			text_color_inactive = "rgb(8a929c)",
 			col = {
@@ -108,7 +119,7 @@ hl.config({
 -- a flicker at 180 Hz. "glide" (ease-out quint) does most of the change in
 -- the first third and then lands softly; "exit" (ease-in) leaves quickly.
 --
--- Amplitude stays small: windows grow from 94 %, workspaces shift 8 %. The
+-- Amplitude stays small: windows grow from 90 %, workspaces shift 12 %. The
 -- eye reads the direction, nothing travels across the screen. Exits are
 -- faster than entries, so closing never waits.
 --
@@ -116,17 +127,19 @@ hl.config({
 --   120 ms  exits
 --   200 ms  fades, layers and every colour change (bar, menus and
 --           notifications use the same 200 ms ease-out in their CSS)
---   ~130 ms to 90 % / ~220 ms to 99 %   "settle", windows
---   ~160 ms to 90 % / ~270 ms to 99 %   "drift", workspaces
-hl.curve("settle", { type = "spring", mass = 1, stiffness = 900, dampening = 60 })
-hl.curve("drift", { type = "spring", mass = 1, stiffness = 600, dampening = 49 })
+--   ~170 ms to 90 % / ~290 ms to 99 %   "settle", windows
+--   ~200 ms to 90 % / ~340 ms to 99 %   "drift", workspaces
+-- Softer springs than before: still no overshoot, but a longer, calmer
+-- landing that reads as smooth rather than snappy.
+hl.curve("settle", { type = "spring", mass = 1, stiffness = 520, dampening = 46 })
+hl.curve("drift", { type = "spring", mass = 1, stiffness = 380, dampening = 39 })
 hl.curve("glide", { type = "bezier", points = { { 0.22, 1 }, { 0.36, 1 } } })
 hl.curve("exit", { type = "bezier", points = { { 0.4, 0 }, { 1, 1 } } })
 
--- Windows: grow in from 94 % with a fade, shrink to 97 % on the way out.
+-- Windows: grow in from 90 % with a fade, shrink to 95 % on the way out.
 -- Tiles glide to their new place when the layout changes.
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 94%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 97%" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 90%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 95%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "settle" })
 
 -- Fades. Opacity never changes on focus here, so fadeSwitch is off with the
@@ -147,10 +160,10 @@ hl.animation({ leaf = "fadeDpms", enabled = true, speed = 4, bezier = "glide" })
 hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "borderangle", enabled = false })
 
--- Workspaces: an 8 % sideways drift under a cross-fade, so you see which
+-- Workspaces: a 12 % sideways drift under a cross-fade, so you see which
 -- way you went without the whole screen sliding past. A softer spring than
 -- windows, because the whole screen changes.
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefade 8%" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefade 12%" })
 
 -- Layers fade in 200 ms. The launcher keeps its pixel font at native size
 -- (scaling blurs Terminess); notifications slide in from the edge they
@@ -166,8 +179,18 @@ hl.animation({ leaf = "monitorAdded", enabled = false })
 -- screenshot selection (slurp) and the colour picker, which have to be
 -- there the instant you press the key.
 hl.layer_rule({ name = "still-bar", match = { namespace = "^diag-bar$" }, no_anim = true })
--- The volume popup just appears and goes, like the bar.
-hl.layer_rule({ name = "still-osd", match = { namespace = "^diag-osd$" }, no_anim = true })
+-- The volume popup grows in a little, like a window.
+hl.layer_rule({ name = "osd-pop", match = { namespace = "^diag-osd$" }, animation = "popin 92%" })
+-- Frosted glass behind the see-through panels. ignore_alpha skips the
+-- fully clear parts (the gap around the floating bar, shadows), so only
+-- the panels themselves are blurred.
+hl.layer_rule({
+	name = "glass",
+	match = { namespace = "^(diag-bar|diag-osd|launcher|logout_dialog|swaync-control-center|swaync-notification-window)$" },
+	blur = true,
+	blur_popups = true,
+	ignore_alpha = 0.3,
+})
 hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpicker)$" }, no_anim = true })
 -- Launcher and calculator fade without enlarging the text.
 hl.layer_rule({ name = "launcher-fade", match = { namespace = "^launcher$" }, animation = "fade" })

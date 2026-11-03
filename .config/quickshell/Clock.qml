@@ -1,5 +1,5 @@
-// The clock in the middle: big, bold, on the panel colour with a blue
-// underline. Hover gives the date, click opens the month calendar.
+// The clock in the middle, large and bright. Hover gives the date, click
+// opens the month calendar.
 import QtQuick
 import Quickshell
 
@@ -12,10 +12,8 @@ Cell {
 	size: 22
 	bold: true
 	pad: 14
-	ruleRight: true
 	textColor: Theme.ink
-	restColor: Theme.panel
-	underline: Theme.arch
+	underline: cal.visible ? Theme.arch : "transparent"
 	onClicked: cal.visible = !cal.visible
 
 	Calendar { id: cal; target: clock; today: time.date }

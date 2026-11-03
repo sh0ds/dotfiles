@@ -1,19 +1,18 @@
-// A bar cell: a 1 px rule on the left, the row colour on hover, Terminess
-// text. clicked(button) and scrolled(delta) for the actions.
+// A bar cell: Terminess text on a rounded hover pill. A short rounded line
+// under the text marks state (the clock, hot readings). clicked(button) and
+// scrolled(delta) for the actions.
 import QtQuick
 
-Rectangle {
+Item {
 	id: cell
 	property string text: ""
 	property color textColor: Theme.fg
 	property color hoverText: Theme.ink
-	property color hoverColor: Theme.row
+	property color hoverColor: Theme.hover
 	property color restColor: "transparent"
-	property bool rule: true
-	property bool ruleRight: false
+	property int pad: 10
 	property int size: Theme.size
 	property bool bold: false
-	property int pad: 8
 	property string tip: ""
 	property color underline: "transparent"
 	readonly property bool hovered: mouse.containsMouse
@@ -21,25 +20,19 @@ Rectangle {
 	signal scrolled(int delta)
 
 	implicitWidth: label.implicitWidth + 2 * pad
-	implicitHeight: Theme.height - 1
-	color: hovered ? hoverColor : restColor
-	Behavior on color { ColorAnimation { duration: Theme.ease; easing.type: Easing.OutQuint } }
+	implicitHeight: Theme.height
 
 	Rectangle {
-		visible: cell.rule
-		width: 1
-		anchors { left: parent.left; top: parent.top; bottom: parent.bottom; topMargin: 3; bottomMargin: 3 }
-		color: Theme.rule
+		anchors { fill: parent; topMargin: 4; bottomMargin: 4; leftMargin: 2; rightMargin: 2 }
+		radius: 7
+		color: cell.hovered ? cell.hoverColor : cell.restColor
+		Behavior on color { ColorAnimation { duration: Theme.ease; easing.type: Easing.OutQuint } }
 	}
 	Rectangle {
-		visible: cell.ruleRight
-		width: 1
-		anchors { right: parent.right; top: parent.top; bottom: parent.bottom; topMargin: 3; bottomMargin: 3 }
-		color: Theme.rule
-	}
-	Rectangle {
-		anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+		anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 5 }
+		width: label.implicitWidth * 0.6
 		height: 2
+		radius: 1
 		color: cell.underline
 		Behavior on color { ColorAnimation { duration: Theme.ease; easing.type: Easing.OutQuint } }
 	}

@@ -1,33 +1,27 @@
-// Tray icons at 14 px. Click activates the app, right-click opens its menu.
+// Tray icons at 16 px. Click activates the app, right-click opens its menu.
 import QtQuick
 import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.SystemTray
 
-Rectangle {
+Item {
 	id: tray
 	required property QsWindow bar
 	visible: SystemTray.items.values.length > 0
-	implicitWidth: icons.implicitWidth + 16
-	implicitHeight: Theme.height - 1
-	color: "transparent"
+	implicitWidth: icons.implicitWidth + 20
+	implicitHeight: Theme.height
 
-	Rectangle {
-		width: 1
-		anchors { left: parent.left; top: parent.top; bottom: parent.bottom; topMargin: 3; bottomMargin: 3 }
-		color: Theme.rule
-	}
 	Row {
 		id: icons
 		anchors.centerIn: parent
-		spacing: 6
+		spacing: 8
 		Repeater {
 			model: SystemTray.items.values
 			IconImage {
 				id: icon
 				required property SystemTrayItem modelData
 				source: modelData.icon
-				implicitSize: 14
+				implicitSize: 16
 				MouseArea {
 					anchors.fill: parent
 					acceptedButtons: Qt.LeftButton | Qt.RightButton

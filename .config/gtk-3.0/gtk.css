@@ -38,7 +38,7 @@
    overrides selected rows, suggested actions and destructive buttons. */
 button, entry, spinbutton, combobox button, dropdown button, popover,
 menu, menuitem, tooltip, scale trough, scale highlight, scale slider {
-  border-radius: 0;
+  border-radius: 6px;
 }
 entry, spinbutton {
   background-color: @view_bg_color;
@@ -62,9 +62,9 @@ button:focus, entry:focus, switch:focus {
   outline: 2px solid @accent_bg_color;
   outline-offset: 2px;
 }
-switch { border-radius: 0; background-color: #3f4650; }
+switch { border-radius: 999px; background-color: #3f4650; }
 switch:checked { background-color: @accent_bg_color; }
-switch slider { border-radius: 0; background-color: #c4c9ce; }
+switch slider { border-radius: 999px; background-color: #c4c9ce; }
 switch:checked slider { background-color: #000000; }
 scale slider { background-color: #c4c9ce; }
 
@@ -92,7 +92,7 @@ scale slider { background-color: #c4c9ce; }
   border-bottom: 1px solid #3f4650;
 }
 .thunar notebook > header tabs > tab {
-  border-radius: 0;
+  border-radius: 6px;
   border-bottom: 2px solid transparent;
   padding: 4px 12px;
 }
@@ -108,7 +108,7 @@ scale slider { background-color: #c4c9ce; }
 @define-color theme_selected_bg_color #0e3d5c;
 @define-color theme_selected_fg_color #f4f6f8;
 .view, .view:selected, .thunar .view:selected {
-  border-radius: 0;
+  border-radius: 6px;
   -gtk-icon-effect: none;
 }
 .view:selected, .view:selected:focus {
@@ -124,7 +124,7 @@ treeview.view header button {
   color: #c4c9ce;
   background-color: #0d1014;
   border-bottom: 1px solid #3f4650;
-  border-radius: 0;
+  border-radius: 6px;
   padding: 4px 8px;
 }
 .thunar toolbar button { padding: 4px; min-width: 24px; min-height: 24px; }

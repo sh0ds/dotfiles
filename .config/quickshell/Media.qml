@@ -15,6 +15,7 @@ Cell {
 
 	visible: player !== null
 	pad: 12
+	restColor: player?.isPlaying ? Theme.hover : "transparent"
 	textColor: player?.isPlaying ? Theme.fg : Theme.mid
 	text: !player ? "" :
 		(player.isPlaying ? `<font color='${Theme.arch}'>play</font>` : `<font color='${Theme.mid}'>hold</font>`)

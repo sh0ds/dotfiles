@@ -1,5 +1,5 @@
-// Hover text under a bar cell, in the old Waybar tooltip style: panel
-// colour, a rule border and a blue top edge. Shows after 400 ms of hover.
+// Hover text under a bar cell: a small glass card. Shows after 400 ms of
+// hover and fades in.
 import QtQuick
 import Quickshell
 
@@ -12,24 +12,19 @@ PopupWindow {
 	anchor.item: target
 	anchor.edges: Edges.Bottom
 	anchor.gravity: Edges.Bottom
+	anchor.margins.top: 6
 	visible: wait.done && hovered && text !== ""
 	color: "transparent"
-	implicitWidth: body.implicitWidth + 14
-	implicitHeight: body.implicitHeight + 14
+	implicitWidth: body.implicitWidth + 24
+	implicitHeight: body.implicitHeight + 16
 
 	onHoveredChanged: { wait.done = false; if (hovered) wait.restart(); }
 	Timer { id: wait; property bool done: false; interval: 400; onTriggered: done = true }
 
-	Rectangle {
+	Glass {
 		anchors.fill: parent
-		color: Theme.panel
-		border.color: Theme.rule
-		border.width: 1
-		Rectangle {
-			anchors { left: parent.left; right: parent.right; top: parent.top }
-			height: 2
-			color: Theme.arch
-		}
+		opacity: tip.visible ? 1 : 0
+		Behavior on opacity { NumberAnimation { duration: Theme.ease; easing.type: Easing.OutQuint } }
 		Text {
 			id: body
 			anchors.centerIn: parent

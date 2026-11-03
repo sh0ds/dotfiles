@@ -1,4 +1,4 @@
-/* Diag session console: text only, numbered rows, no images or logos. */
+/* Diag session console: text only, numbered rows on rounded glass, no images or logos. */
 * {
   background-image: none;
   box-shadow: none;
@@ -6,21 +6,20 @@
   font-family: "Terminess Nerd Font", monospace;
   font-size: 18px;
 }
-window { background-color: #000000; }
+window { background-color: rgba(0, 0, 0, 0.6); }
 button {
-  margin: 2px 0;
+  margin: 3px 0;
   padding: 10px 20px;
-  border-radius: 0;
-  border: 1px solid #3f4650;
-  border-left: 3px solid #3f4650;
-  background-color: #0d1014;
+  border-radius: 10px;
+  border: 1px solid rgba(63, 70, 80, 0.5);
+  background-color: rgba(13, 16, 20, 0.85);
   color: #c4c9ce;
   transition: background-color 200ms ease-out, border-color 200ms ease-out, color 200ms ease-out;
 }
 button label { padding: 0; margin: 0; }
 button:hover, button:focus {
-  background-color: #161a1f;
-  border-color: #1793d1;
+  background-color: rgba(23, 147, 209, 0.18);
+  border-color: rgba(23, 147, 209, 0.6);
   color: #e6e8ea;
   outline-style: none;
 }
@@ -28,8 +27,6 @@ button:active {
   background-color: #1793d1;
   color: #000000;
 }
-#lock { border-top: 3px solid #3f4650; }
-#shutdown { border-bottom: 3px solid #3f4650; }
 #reboot:hover, #reboot:focus, #shutdown:hover, #shutdown:focus {
   border-color: #ffb000;
   color: #ffb000;

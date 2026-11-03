@@ -1,5 +1,6 @@
 pragma Singleton
-// The Diag palette and type, the same values as rice.lua, kitty and the CSS.
+// The Diag palette and type, the same values as rice.lua, kitty and the CSS,
+// plus the soft shapes: rounded glass panels over a Hyprland blur.
 import QtQuick
 import Quickshell
 
@@ -14,12 +15,21 @@ Singleton {
 	readonly property color arch: "#1793d1"
 	readonly property color warn: "#ffb000"
 	readonly property color error: "#e5484d"
+	readonly property color sky: "#6cc4f0"
+	// Glass: the panel colour at 82 %, blurred by Hyprland (rice.lua "glass").
+	readonly property color glass: "#d10d1014"
+	readonly property color edge: "#663f4650"
+	readonly property color hover: "#14ffffff"
+	readonly property color tint: "#401793d1"
+	readonly property int radius: 10
 
 	readonly property string font: "Terminess Nerd Font"
 	readonly property int size: 18
 	readonly property int height: 32
-	// Colour changes take the same 200 ms ease-out as Hyprland and the CSS.
+	// Colour changes take the same ease-out as Hyprland and the CSS; things
+	// that move take a little longer so they glide.
 	readonly property int ease: 200
+	readonly property int glide: 320
 
 	property bool barShown: true
 
