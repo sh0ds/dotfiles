@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # site-dev: open (or reattach to) the tmux session for the sh0ds.dev overhaul.
 # Four windows, all starting at the site repo:
-#   1 edit   Helix at the repo root
+#   1 edit   opens Zed on the repo, then stays a shell
 #   2 build  make, 3sgc, md, the `site` command, git
 #   3 repl   whatever the season needs: sqlite3, ghci, rebar3 shell (Pharo has its own window)
 #   4 pi     ssh to raspberry-pizian (staging builds, `pi visits`, live)
@@ -20,7 +20,7 @@ if ! tmux has-session -t "$session" 2>/dev/null; then
   # Detached sessions otherwise start at 80x24. Match the calling terminal
   # before SSH/fastfetch prints, so attaching does not reflow the greeting.
   tmux new-session -d -x - -y - -s "$session" -n edit -c "$repo"
-  tmux send-keys -t "$session:edit" "helix ." Enter
+  tmux send-keys -t "$session:edit" "zeditor ." Enter
   tmux new-window -t "$session" -n build -c "$repo"
   tmux new-window -t "$session" -n repl -c "$repo"
   tmux new-window -t "$session" -n pi -c "$repo"

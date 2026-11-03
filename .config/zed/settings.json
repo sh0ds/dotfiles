@@ -1,0 +1,55 @@
+// ~/.config/zed/settings.json: Zed in Diag. install-dotfiles.sh copies this
+// file instead of linking it, because Zed rewrites it when you change a
+// setting in its UI. Edit it here and rerun the installer, or copy your UI
+// changes back into the repo.
+{
+  "theme": { "mode": "dark", "dark": "Diag", "light": "Diag" },
+  "icon_theme": "Zed (Default)",
+  "ui_font_family": "Terminess Nerd Font",
+  "ui_font_size": 16,
+  "buffer_font_family": "Terminess Nerd Font",
+  "buffer_font_size": 16,
+  "buffer_line_height": "standard",
+
+  // Quiet: no blinking, no scrollbars, no minimap, no AI.
+  "cursor_blink": false,
+  "scrollbar": { "show": "never" },
+  "minimap": { "show": "never" },
+  "disable_ai": true,
+  "features": { "edit_prediction_provider": "none" },
+  "collaboration_panel": { "button": false },
+  "notification_panel": { "button": false },
+  "telemetry": { "diagnostics": false, "metrics": false },
+  "auto_update": false, // pacman updates it
+
+  // Same habits as the terminal editor.
+  "relative_line_numbers": true,
+  "vertical_scroll_margin": 8,
+  "show_wrap_guides": true,
+  "wrap_guides": [100],
+  "current_line_highlight": "line",
+  "inlay_hints": { "enabled": true }, // Haskell types inline
+  "toolbar": { "breadcrumbs": true, "quick_actions": false },
+  "tab_bar": { "show_nav_history_buttons": false },
+  "project_panel": { "dock": "left", "git_status": true },
+  "terminal": {
+    "font_family": "Terminess Nerd Font",
+    "blinking": "off",
+    "shell": "system"
+  },
+
+  // Language servers for the stack. Haskell uses GHCup's
+  // haskell-language-server-wrapper from PATH; Erlang uses ELP from
+  // ~/.local/bin instead of erlang_ls; C and Bash work as shipped.
+  "auto_install_extensions": {
+    "haskell": true,
+    "erlang": true,
+    "html": true,
+    "lua": true,
+    "toml": true,
+    "make": true
+  },
+  "languages": {
+    "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] }
+  }
+}

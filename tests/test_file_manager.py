@@ -128,7 +128,7 @@ with open(os.environ['CALLS'], 'a') as stream:
         self.assertNotIn('diag-terminal', [entry.findtext('unique-id') for entry in entries])
 
     def test_editor_receives_literal_paths_and_project_directory(self):
-        self.recorder('kitty')
+        self.recorder('zeditor')
         project = self.home / 'code' / '$(touch nope) & project'
         project.mkdir()
         self.helper('thunar-action', 'edit', project)
@@ -136,7 +136,7 @@ with open(os.environ['CALLS'], 'a') as stream:
         file.touch()
         self.helper('thunar-action', 'edit', file)
         calls = self.calls()
-        self.assertEqual(calls[0][1], ['--directory', str(project), '-e', 'helix', '--', str(project)])
+        self.assertEqual(calls[0][1], ['--', str(project)])
         self.assertEqual(calls[1][1][-2:], ['--', str(file)])
 
     def test_queue_recurses_deduplicates_and_never_changes_playback(self):

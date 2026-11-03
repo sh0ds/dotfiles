@@ -79,6 +79,8 @@ for c in tmux starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
 done
 check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server
 check "helix" command -v helix
+check "zed (zeditor)" command -v zeditor
+check "Zed uses Diag" grep -q '"dark": "Diag"' "$HOME/.config/zed/settings.json"
 check "eza has a Diag theme" test -r "${XDG_CONFIG_HOME:-$HOME/.config}/eza/theme.yml"
 check "scripts in ~/.local/bin on PATH" command -v app
 check "responsive power menu on PATH" command -v power-menu

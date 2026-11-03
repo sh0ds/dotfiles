@@ -58,7 +58,7 @@ class Helpers(unittest.TestCase):
         self.env.pop("TMUX", None)
         self.stub("tmux", 'exec "$REAL_TMUX" -S "$TEST_SOCKET" -f "$TEST_CONFIG" "$@"')
         self.stub("ssh", 'stty size > "$SSH_SIZE_FILE"')
-        self.stub("helix", "exit 0")
+        self.stub("zeditor", "exit 0")
         master, slave = pty.openpty()
         fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 55, 137, 0, 0))
         process = subprocess.Popen(["bash", str(REPO / ".local/bin/site-dev")],

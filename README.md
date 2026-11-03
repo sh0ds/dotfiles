@@ -46,13 +46,13 @@ Terminal:
 
 - **kitty + tmux**, both in the same colours. kitty sends a notification when a long command finishes while I'm looking elsewhere. The tmux prefix is `Ctrl+A`.
 - **bash** with a two-line [Starship](https://starship.rs) prompt: directory, Git state, language, elapsed time and clock above a blue input marker. A few Nerd Font icons provide landmarks; a failed command turns the marker red. eza replaces ls, fzf handles `Ctrl+R`, and zoxide gives you `z`. New terminals greet you with fastfetch.
-- **Helix** as the editor: language servers for Haskell, Erlang, C and Bash, no plugins, Diag colours. My cheat sheet for it is in [docs/helix.md](docs/helix.md).
+- **Zed** for projects and **Helix** for quick edits in the terminal (git commits, `v file`). Both have language servers for Haskell, Erlang, C and Bash and the Diag colours, and Zed has its AI features, telemetry and scrollbars turned off. My Helix cheat sheet is in [docs/helix.md](docs/helix.md).
 - **eza** for `ls`, `ll` and `lt`: blue directories, grey files/metadata, green executables and red broken links. Its own Diag theme and shell colour mappings replace inherited file-listing palettes while keeping the icons.
 - **lazygit** (`lg`), **bat** instead of cat and **tldr** instead of man pages for quick examples.
 
 Apps:
 
-- **Thunar** is the graphical file manager on `SUPER+E`: compact details, readable long filenames, a places sidebar and editable paths in Diag. Folder links, completed-download notifications and USB Browse actions open it too. `Ctrl+L` edits the path, `Ctrl+H` toggles hidden files, `Ctrl+T` opens a tab, and `F3` opens split view. Right-click projects or text files to **Edit in Helix**, library tracks/folders to **Queue in MPD**, or audio files to **Edit in Audacity**. Existing `~/code` and `~/Music` folders get sidebar shortcuts.
+- **Thunar** is the graphical file manager on `SUPER+E`: compact details, readable long filenames, a places sidebar and editable paths in Diag. Folder links, completed-download notifications and USB Browse actions open it too. `Ctrl+L` edits the path, `Ctrl+H` toggles hidden files, `Ctrl+T` opens a tab, and `F3` opens split view. Right-click projects or text files to **Edit in Zed**, library tracks/folders to **Queue in MPD**, or audio files to **Edit in Audacity**. Existing `~/code` and `~/Music` folders get sidebar shortcuts.
 - **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays every song at its own sample rate and [Easy Effects](https://github.com/wwmm/easyeffects) corrects my Corsair Virtuoso XT to the Harman curve without clipping, setup in [docs/audio.md](docs/audio.md).
 - **Firefox Picture-in-Picture** joins the normal tiled window grid. Move and resize it with the usual window keys; `SUPER+V` can float it manually. With the optional tab-count add-on below, a source window with one tab is hidden until the video closes or another tab opens.
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
@@ -139,7 +139,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 
 ```
 sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
-  xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux helix \
+  xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux helix zed \
   starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
@@ -177,7 +177,7 @@ And change a few things to your liking:
 - Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
 - For Thunar, finish any running copy/extraction operations and close Thunar before running `thunar-setup` after installing the packages and linking the dotfiles. Then run `default-apps` for folder and archive handlers, and reopen the apps to pick up GTK changes. Setup uses details with filename/size/date columns, local thumbnails, a text path bar, dates without seconds and double-click navigation; the menu remains available with `Alt`. Existing preferences are preserved; run `thunar-setup --apply` to adopt the current Diag layout. Your own custom actions and bookmarks are preserved too.
 - Archives: right-click **Extract Here** or **Extract To** through `thunar-archive-plugin`. Double-clicking opens Xarchiver to browse contents; `Ctrl+E` opens its extraction dialog. The browsers stay tiled; rename, properties and extraction dialogs float. `zip` and `unzip` support ZIP creation/extraction, and `7zip` handles additional archive formats.
-- Coding/music: **Edit in Helix** opens a project folder or selected text files in kitty. **Open Terminal Here** opens a selected folder in kitty, and **Git in lazygit** opens an existing Git project. **Queue in MPD** scans selected library folders recursively, waits for the local MPD database to update, then appends audio without clearing the queue or changing playback. Files must be inside `~/Music`; use `SUPER+U` to play from rmpc. **Edit in Audacity** requires `audacity` (`sudo pacman -Syu --needed audacity`); it leaves the MPD queue untouched.
+- Coding/music: **Edit in Zed** opens a project folder or selected text files in Zed. **Open Terminal Here** opens a selected folder in kitty, and **Git in lazygit** opens an existing Git project. **Queue in MPD** scans selected library folders recursively, waits for the local MPD database to update, then appends audio without clearing the queue or changing playback. Files must be inside `~/Music`; use `SUPER+U` to play from rmpc. **Edit in Audacity** requires `audacity` (`sudo pacman -Syu --needed audacity`); it leaves the MPD queue untouched.
 - For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
 - For the Diag look in Firefox (black toolbars, Terminess, the selected tab marked in blue, a plain black new tab), close Firefox and run `firefox-style` once. It links `~/.config/firefox` into your profile.
 - For the login screen and boot splash in the same look, run `bash ~/code/dotfiles/system/install-system.sh` (it asks for sudo). Preview the login screen with `sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/diag`.

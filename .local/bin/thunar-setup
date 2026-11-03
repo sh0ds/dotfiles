@@ -75,7 +75,7 @@ root = tree.getroot()
 if root.tag != 'actions':
     raise SystemExit(f'thunar-setup: unexpected actions file: {actions_path}')
 actions = [
-    ('diag-edit', 'Edit in Helix', 'Open selected files or a project folder in kitty and Helix',
+    ('diag-edit', 'Edit in Zed', 'Open selected files or a project folder in Zed',
      'text-editor-symbolic', 'edit', ['directories', 'text-files']),
     ('diag-terminal', 'Open Terminal Here', 'Open the selected folder in kitty',
      'utilities-terminal-symbolic', 'terminal', ['directories']),

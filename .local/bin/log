@@ -12,4 +12,4 @@ week=$(((day - 1) / 7))
 
 printf '\n## Day %d · week %d\nDid:\nStuck:\nLearned:\nRedo:\nNext:\n' "$day" "$week" >>"$f"
 
-exec helix "$f:$(wc -l <"$f")"
+exec zeditor "$f:$(wc -l <"$f")"
