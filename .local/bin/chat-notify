@@ -2,9 +2,16 @@
 # chat-notify: nchat's desktop_notify_command. Sends a WhatsApp message to
 # the desktop as a notification; clicking it slides WhatsApp in (same as SUPER+I).
 # Usage: chat-notify NAME TEXT   (nchat fills in %1 and %2, see the README)
-# Detached, so nchat never waits for the click.
+# Detached, so nchat never waits for the click. notify-send waits until the
+# notification is clicked or dismissed, which can be hours, so the inner
+# bash first closes every file nchat handed down: otherwise the waiting
+# copies keep nchat's config lock and a restarted nchat refuses to start.
 # shellcheck disable=SC2016  # $1 and $2 are expanded by the inner bash
 setsid -f bash -c '
+  for fd in /proc/$$/fd/*; do
+    fd=${fd##*/}
+    [ "$fd" -gt 2 ] && eval "exec $fd>&-"
+  done 2>/dev/null
   action=$(notify-send -a WhatsApp --action=default=Open "$1" "$2")
   [ "$action" = default ] && chat
 ' _ "${1:-WhatsApp}" "${2:-}" >/dev/null 2>&1 </dev/null
