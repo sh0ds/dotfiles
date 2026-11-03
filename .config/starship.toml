@@ -1,15 +1,16 @@
-# Afterhours prompt. Line one: the path with the repo's own folder bright
-# and everything above it dim, the branch in violet, changes in amber, the
-# language versions quiet; a thin dotted rule runs to the right edge where
-# a slow command's time and the clock sit. Line two: just the violet arrow
-# (coral after a failed command). No boxes, no backgrounds.
+# Afterhours prompt, drawn like the rail. A thin bracket in the line colour
+# holds two lines. Line one: the Arch mark in violet, the path with the
+# repo's own folder bright and everything above it dim, "on" and the branch
+# in violet, changes in amber, language versions quiet, then a dotted rule
+# to the right edge where a slow command's time and the clock sit, split by
+# a hairline. Line two: the violet arrow (coral after a failed command).
 # Icons come from kitty's JetBrains Mono Nerd Font.
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
 palette = 'afterhours'
 format = """
-$username$hostname$directory$git_branch$git_status$c$lua$python$fill $cmd_duration$time
-$character"""
+[╭─](fg:line) [](fg:accent) $username$hostname$directory$git_branch$git_status$c$lua$python$fill $cmd_duration$time
+[╰─](fg:line)$character"""
 
 [fill]
 symbol = '·'
@@ -71,7 +72,7 @@ version_format = '${major}.${minor}'
 min_time = 2000
 show_milliseconds = false
 style = 'fg:amber'
-format = '[$duration]($style) '
+format = '[$duration]($style) [│](fg:line) '
 
 [time]
 disabled = false
