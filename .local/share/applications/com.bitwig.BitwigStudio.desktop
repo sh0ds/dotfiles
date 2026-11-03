@@ -1,0 +1,6 @@
+[Desktop Entry]
+# Hides the package's own Bitwig entry: bitwig.desktop next to this file
+# starts it through ~/.local/bin/bitwig (low latency, jump-to if open).
+Type=Application
+Name=Bitwig Studio
+Hidden=true
