@@ -55,6 +55,7 @@ PanelWindow {
 			color: Theme.mid
 			font.family: Theme.font
 			font.pixelSize: Theme.size
+			font.hintingPreference: Font.PreferFullHinting
 		}
 		Rectangle {
 			id: trough
@@ -84,6 +85,7 @@ PanelWindow {
 			color: osd.muted ? Theme.mid : Theme.ink
 			font.family: Theme.font
 			font.pixelSize: Theme.size
+			font.hintingPreference: Font.PreferFullHinting
 		}
 	}
 }

@@ -38,6 +38,7 @@ PopupWindow {
 			color: Theme.ink
 			font.family: Theme.font
 			font.pixelSize: 16
+			font.hintingPreference: Font.PreferFullHinting
 		}
 	}
 }

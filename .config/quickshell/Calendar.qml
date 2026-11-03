@@ -65,6 +65,7 @@ PopupWindow {
 			textFormat: Text.StyledText
 			font.family: Theme.font
 			font.pixelSize: 16
+			font.hintingPreference: Font.PreferFullHinting
 		}
 		MouseArea {
 			anchors.fill: parent

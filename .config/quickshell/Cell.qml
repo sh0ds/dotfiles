@@ -52,6 +52,7 @@ Rectangle {
 		color: cell.hovered ? cell.hoverText : cell.textColor
 		font.family: Theme.font
 		font.pixelSize: cell.size
+		font.hintingPreference: Font.PreferFullHinting
 		font.bold: cell.bold
 		Behavior on color { ColorAnimation { duration: Theme.ease; easing.type: Easing.OutQuint } }
 	}

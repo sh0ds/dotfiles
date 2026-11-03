@@ -20,6 +20,7 @@ Item {
 			color: "#000000"
 			font.family: Theme.font
 			font.pixelSize: Theme.size
+			font.hintingPreference: Font.PreferFullHinting
 			font.bold: true
 		}
 		MouseArea { anchors.fill: parent; onClicked: badge.clicked() }
