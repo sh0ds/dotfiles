@@ -1,58 +1,58 @@
 /* Diag for GTK 3 apps: blue accent, black and dark grey backgrounds.
    Works on top of the adw-gtk3-dark theme. */
-@define-color accent_color #1793d1;
-@define-color accent_bg_color #1793d1;
-@define-color accent_fg_color #000000;
-@define-color destructive_color #e5484d;
-@define-color destructive_bg_color #e5484d;
-@define-color destructive_fg_color #000000;
-@define-color success_color #75c94d;
-@define-color success_bg_color #75c94d;
-@define-color success_fg_color #000000;
-@define-color warning_color #ffb000;
-@define-color warning_bg_color #ffb000;
-@define-color warning_fg_color #000000;
-@define-color error_color #e5484d;
-@define-color error_bg_color #e5484d;
-@define-color error_fg_color #000000;
-@define-color window_bg_color #000000;
-@define-color window_fg_color #e6e8ea;
-@define-color view_bg_color #0d1014;
-@define-color view_fg_color #e6e8ea;
-@define-color headerbar_bg_color #000000;
-@define-color headerbar_fg_color #e6e8ea;
-@define-color headerbar_backdrop_color #000000;
-@define-color sidebar_bg_color #0d1014;
-@define-color sidebar_fg_color #e6e8ea;
-@define-color sidebar_backdrop_color #000000;
-@define-color card_bg_color #161a1f;
-@define-color card_fg_color #e6e8ea;
-@define-color dialog_bg_color #000000;
-@define-color dialog_fg_color #e6e8ea;
-@define-color popover_bg_color #000000;
-@define-color popover_fg_color #e6e8ea;
-@define-color thumbnail_bg_color #161a1f;
-@define-color thumbnail_fg_color #e6e8ea;
+@define-color accent_color #c6db91;
+@define-color accent_bg_color #c6db91;
+@define-color accent_fg_color #141613;
+@define-color destructive_color #e78a7e;
+@define-color destructive_bg_color #e78a7e;
+@define-color destructive_fg_color #141613;
+@define-color success_color #95c7a1;
+@define-color success_bg_color #95c7a1;
+@define-color success_fg_color #141613;
+@define-color warning_color #e9b078;
+@define-color warning_bg_color #e9b078;
+@define-color warning_fg_color #141613;
+@define-color error_color #e78a7e;
+@define-color error_bg_color #e78a7e;
+@define-color error_fg_color #141613;
+@define-color window_bg_color #141613;
+@define-color window_fg_color #ecf0e5;
+@define-color view_bg_color #1c201c;
+@define-color view_fg_color #ecf0e5;
+@define-color headerbar_bg_color #141613;
+@define-color headerbar_fg_color #ecf0e5;
+@define-color headerbar_backdrop_color #141613;
+@define-color sidebar_bg_color #1c201c;
+@define-color sidebar_fg_color #ecf0e5;
+@define-color sidebar_backdrop_color #141613;
+@define-color card_bg_color #272d26;
+@define-color card_fg_color #ecf0e5;
+@define-color dialog_bg_color #141613;
+@define-color dialog_fg_color #ecf0e5;
+@define-color popover_bg_color #141613;
+@define-color popover_fg_color #ecf0e5;
+@define-color thumbnail_bg_color #272d26;
+@define-color thumbnail_fg_color #ecf0e5;
 
 /* Preserve semantic foregrounds from the base theme: a global label colour
    overrides selected rows, suggested actions and destructive buttons. */
 button, entry, spinbutton, combobox button, dropdown button, popover,
 menu, menuitem, tooltip, scale trough, scale highlight, scale slider {
-  border-radius: 6px;
+  border-radius: 4px;
 }
 entry, spinbutton {
   background-color: @view_bg_color;
   color: @view_fg_color;
-  border: 1px solid #3f4650;
+  border: 1px solid #485344;
 }
 entry:focus, spinbutton:focus {
   border-color: @accent_bg_color;
 }
 selection {
-  background-color: #0e3d5c;
-  color: #e6e8ea;
+  background-color: #38452c;
+  color: #ecf0e5;
 }
-scale trough { min-height: 5px; background-color: #3f4650; }
+scale trough { min-height: 5px; background-color: #485344; }
 scale highlight { background-color: @accent_bg_color; }
 scale slider { min-width: 14px; min-height: 14px; }
 
@@ -62,58 +62,58 @@ button:focus, entry:focus, switch:focus {
   outline: 2px solid @accent_bg_color;
   outline-offset: 2px;
 }
-switch { border-radius: 999px; background-color: #3f4650; }
+switch { border-radius: 4px; background-color: #485344; }
 switch:checked { background-color: @accent_bg_color; }
-switch slider { border-radius: 999px; background-color: #c4c9ce; }
-switch:checked slider { background-color: #000000; }
-scale slider { background-color: #c4c9ce; }
+switch slider { border-radius: 4px; background-color: #d8dfd0; }
+switch:checked slider { background-color: #141613; }
+scale slider { background-color: #d8dfd0; }
 
 /* Thunar: a tiled file browser with the same rails as the editor and shell. */
 .thunar {
   font-family: "Terminess Nerd Font Mono";
   font-size: 18px;
-  background-color: #000000;
-  color: #c4c9ce;
+  background-color: #141613;
+  color: #d8dfd0;
 }
 .thunar toolbar, .thunar menubar {
-  background-color: #0d1014;
-  border-bottom: 1px solid #3f4650;
+  background-color: #1c201c;
+  border-bottom: 1px solid #485344;
   padding: 4px;
 }
-.thunar .view { background-color: #000000; color: #c4c9ce; }
-.thunar .sidebar, .thunar .sidebar .view { background-color: #0d1014; }
+.thunar .view { background-color: #141613; color: #d8dfd0; }
+.thunar .sidebar, .thunar .sidebar .view { background-color: #1c201c; }
 .thunar .view:selected, .thunar .sidebar .view:selected {
-  background-color: #0e3d5c;
-  color: #f4f6f8;
+  background-color: #38452c;
+  color: #f5f7ef;
 }
-.thunar paned > separator { background-color: #3f4650; min-width: 1px; min-height: 1px; }
+.thunar paned > separator { background-color: #485344; min-width: 1px; min-height: 1px; }
 .thunar notebook > header {
-  background-color: #0d1014;
-  border-bottom: 1px solid #3f4650;
+  background-color: #1c201c;
+  border-bottom: 1px solid #485344;
 }
 .thunar notebook > header tabs > tab {
-  border-radius: 6px;
+  border-radius: 4px;
   border-bottom: 2px solid transparent;
   padding: 4px 12px;
 }
 .thunar notebook > header tabs > tab:checked {
-  background-color: #161a1f;
-  border-bottom-color: #1793d1;
-  color: #5fb8e8;
+  background-color: #272d26;
+  border-bottom-color: #c6db91;
+  color: #deecb9;
 }
-.thunar statusbar { background-color: #000000; color: #8a929c; border-top: 1px solid #3f4650; padding: 4px 8px; }
+.thunar statusbar { background-color: #141613; color: #aab5a2; border-top: 1px solid #485344; padding: 4px 8px; }
 
 /* Selection is a flat row, not a rounded accent button. Keep actual icons
    and artwork un-tinted so selected folders and archives cannot turn black. */
-@define-color theme_selected_bg_color #0e3d5c;
-@define-color theme_selected_fg_color #f4f6f8;
+@define-color theme_selected_bg_color #38452c;
+@define-color theme_selected_fg_color #f5f7ef;
 .view, .view:selected, .thunar .view:selected {
-  border-radius: 6px;
+  border-radius: 4px;
   -gtk-icon-effect: none;
 }
 .view:selected, .view:selected:focus {
-  background-color: #0e3d5c;
-  color: #f4f6f8;
+  background-color: #38452c;
+  color: #f5f7ef;
 }
 .thunar .sidebar .view { font-size: 16px; }
 .thunar statusbar { font-size: 16px; }
@@ -121,21 +121,21 @@ treeview.view header button {
   font-family: "Terminess Nerd Font Mono";
   font-size: 16px;
   font-weight: normal;
-  color: #c4c9ce;
-  background-color: #0d1014;
-  border-bottom: 1px solid #3f4650;
-  border-radius: 6px;
+  color: #d8dfd0;
+  background-color: #1c201c;
+  border-bottom: 1px solid #485344;
+  border-radius: 4px;
   padding: 4px 8px;
 }
 .thunar toolbar button { padding: 4px; min-width: 24px; min-height: 24px; }
 
 /* File and archive dialogs inherit the same palette and readable typography. */
 window.dialog {
-  background-color: #000000;
-  color: #e6e8ea;
+  background-color: #141613;
+  color: #ecf0e5;
 }
 window.dialog .dialog-action-area { padding: 8px; }
 window.dialog .dialog-action-area button { min-height: 28px; padding: 4px 12px; }
 treeview.view { font-size: 18px; }
 /* This is a cell-renderer view in archive browsers as well as file pickers. */
-treeview.view:selected { background-color: #0e3d5c; color: #f4f6f8; }
+treeview.view:selected { background-color: #38452c; color: #f5f7ef; }

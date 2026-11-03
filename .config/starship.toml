@@ -106,7 +106,7 @@ vimcmd_replace_symbol = '[R](fg:error)'
 vimcmd_visual_symbol = '[v](fg:arch)'
 
 [palettes.diag]
-mid = '#8a929c'
-bright = '#e6e8ea'
-arch = '#1793d1'
-error = '#e5484d'
+mid = '#aab5a2'
+bright = '#ecf0e5'
+arch = '#c6db91'
+error = '#e78a7e'

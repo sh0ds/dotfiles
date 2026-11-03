@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Game Studio
+Comment=PICO-8, Picotron, Godot, art, audio and the game development plan
+Exec=game-dev
+Icon=applications-development
+Terminal=false
+Categories=Development;Game;

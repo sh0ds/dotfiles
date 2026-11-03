@@ -1,371 +1,95 @@
-# dotfiles
+# Afterhours / sh0ds·16
 
-My Arch + Hyprland desktop in Diag, the look of [sh0ds.dev](https://sh0ds.dev) in Arch Linux blue.
+An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Warm charcoal, phosphor green, a little of the old Arch blue, pixel display type and quiet, readable tools. No glass, gradients or oversized docks.
 
-![Diag desktop with Firefox, kitty and Obsidian](screenshots/apps.png)
+![Afterhours game studio — real Quickshell render](screenshots/afterhours-studio.png)
 
-## Description
+The desktop follows the [game development plan](https://github.com/sh0ds/guides/blob/main/gamedev/plan.md): PICO-8 → Picotron → Godot → your own C/Lua engine, with art, sound and devlogs alongside. Making small finished games is the point.
 
-These are the configs I use every day. It runs Hyprland 0.56 with the new Lua config: `hyprland.lua` is a plain base config and `rice.lua` has the look, the window rules and my extra keybinds on top. If something in `rice.lua` breaks, the base still works.
+## The shell
 
-### Look
+Written from scratch in `.config/quickshell/afterhours/`, rather than a downloaded shell preset:
 
-Black, cool greys and Arch blue (`#1793d1`). Terminess for the interface, square corners and small, regular gaps. A 4 px spacing unit keeps the shell tidy: 8 px between tiles and at the screen edge, 1 px separators inside apps and a 2 px focus marker. One tiled window still gets the whole workspace.
+- A slim rail on every monitor: workspace selection, media, sound, recording/sharing state, system tray, inbox, date and session controls.
+- **Make / Play / Ship** launchpad: eight entries tied to the plan, with track identifiers and a reminder that 45 minutes counts.
+- Searchable desktop applications, including keyboard selection and Enter to launch.
+- A D-Bus notification server with plain-text content, actions, quiet mode, passive toasts and a bounded session inbox. Screen-sharing events suppress toasts.
+- Session menu with explicit confirmation for log out/reboot/power off. Suspend waits for a real Hyprlock lock before sleeping. Power actions retain the DJ VM shutdown guard.
 
-The active thing gets the colour. Tabs use a blue label or underline on a quiet row; text selection uses blue-grey with light text. Buttons and mode indicators can invert to blue with black text. Amber means attention, red means an error, green means success. The Pi label is the exception: red `pi`, green `:`, neutral `up` or red `down`.
+Hyprlock remains the lock, SwayOSD handles hardware volume feedback, and Fuzzel remains a small dmenu backend for existing clipboard, calculator, Wi-Fi and docs helpers. Waybar, SwayNC and Wlogout no longer autostart or own the new shell's normal controls. Their older files remain available for rollback; they are not the new interface.
 
-Corners are softly rounded (10 px, a squircle curve) and the focused window gets a blue gradient frame. The bar floats as a rounded glass strip, and notifications, the launcher, the power menu and the terminal are slightly see-through over a blur. A wide soft shadow falls a little downwards. Windows grow in on a calm spring without bouncing, workspaces drift a little sideways, and notifications slide in from the right. Every fade and colour change uses the same 200 ms ease-out, from the window frame to the bar, menus, Firefox tabs and the lock screen, and the terminal cursor leaves a short trail when it jumps. The bar stays still apart from the workspace pill, which glides to the active workspace, and there are no scrolling titles or decorative loops.
+## Install on the Arch desktop
 
-GTK, Qt, browser chrome, terminal tools and Electron apps share the same hierarchy as far as their theme support allows. Websites, documents, pictures and video keep their own content colours and typography. The lock screen, login screen and boot splash retain the Diag identity.
-
-### Bar
-
-A slim instrument rail across the top. Numbered workspaces and a bounded `play` reading sit on the left, the clock holds the centre, and separated `sys`, `pi`, volume, messages, tray and `[exit]` controls sit on the right. A blue underline marks the active workspace; amber marks a recording or an urgent window. Hover changes colour without moving the layout.
-
-Click `sys` to expand CPU, memory and temperature; its tooltip holds GPU and network detail. Right-click opens btop. The centred clock shows the date on hover; click opens the month with week numbers, scroll changes month. LIVE and REC appear beside the workspaces. `[exit]` opens a compact, text-only session console with numbered actions and visible hotkeys. No logos or power icons.
-
-The notification centre uses a matching flat music transport: a solid black-grey surface, small real artwork when available, and framed playback controls. It never puts blurred artwork or an application logo behind the track title.
-
-### Quick apps
-
-The things I need for a few seconds are normal tiled windows with one key each. The key starts the app next to what I'm doing, pressing it again hides it, and the next press brings it back tiled wherever I am now.
-
-- `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
-- `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat))
-- `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
-
-### What's in it
-
-Desktop:
-
-- **Quickshell** draws the bar, the volume popup and the notifications, all in QML in `.config/quickshell`. `SUPER+N` (or clicking `msg`) opens the notification centre with quiet mode, quick buttons, the player and the volume; right-click `msg` for quiet. **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
-- **hyprlock** locks the screen: black, `user@host`, kernel and uptime, the clock, a `password:` prompt and whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
-- **wlogout** is the power menu, **udiskie** mounts USB sticks when you plug them in (`SUPER+SHIFT+U` unmounts them all), and **awww** draws the background: black with a faint dot grid and a dim pixel Arch logo, 1:1 so it stays sharp.
-
-Terminal:
-
-- **kitty + tmux**, both in the same colours. kitty sends a notification when a long command finishes while I'm looking elsewhere. The tmux prefix is `Ctrl+A`.
-- **bash** with a two-line [Starship](https://starship.rs) prompt: directory, Git state, language, elapsed time and clock above a blue input marker. A few Nerd Font icons provide landmarks; a failed command turns the marker red. eza replaces ls, fzf handles `Ctrl+R`, and zoxide gives you `z`. New terminals greet you with fastfetch.
-- **Zed** for projects and **Helix** for quick edits in the terminal (git commits, `v file`). Both have language servers for Haskell, Erlang, C and Bash and the Diag colours, and Zed has its AI features, telemetry and scrollbars turned off. My Helix cheat sheet is in [docs/helix.md](docs/helix.md).
-- **eza** for `ls`, `ll` and `lt`: blue directories, grey files/metadata, green executables and red broken links. Its own Diag theme and shell colour mappings replace inherited file-listing palettes while keeping the icons.
-- **lazygit** (`lg`), **bat** instead of cat and **tldr** instead of man pages for quick examples.
-
-Apps:
-
-- **Thunar** is the graphical file manager on `SUPER+E`: compact details, readable long filenames, a places sidebar and editable paths in Diag. Folder links, completed-download notifications and USB Browse actions open it too. `Ctrl+L` edits the path, `Ctrl+H` toggles hidden files, `Ctrl+T` opens a tab, and `F3` opens split view. Right-click projects or text files to **Edit in Zed**, library tracks/folders to **Queue in MPD**, or audio files to **Edit in Audacity**. Existing `~/code` and `~/Music` folders get sidebar shortcuts.
-- **mpd + rmpc** for my own music in `~/Music`. The bar, the media keys and the lock screen pick it up just like SoundCloud. PipeWire plays every song at its own sample rate and [Easy Effects](https://github.com/wwmm/easyeffects) corrects my Corsair Virtuoso XT to the Harman curve without clipping, setup in [docs/audio.md](docs/audio.md).
-- **Firefox Picture-in-Picture** joins the normal tiled window grid. Move and resize it with the usual window keys; `SUPER+V` can float it manually. With the optional tab-count add-on below, a source window with one tab is hidden until the video closes or another tab opens.
-- **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
-- **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7, and songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`. Setup in [docs/dj-vm.md](docs/dj-vm.md).
-- **Obsidian** for notes on `SUPER+O`, **Proton Pass** for passwords on `SUPER+SHIFT+P`.
-- **PICO-8 and Picotron**, Lexaloffle's fantasy consoles, from the launcher. They tile where I start them, scale pixel-perfect on black, and starting one again jumps to it. PICO-8 keeps carts in `~/code/pico8` and screenshots/GIFs in `~/Pictures/pico-8`.
-- **Game dev**: Godot (its test runs float over the editor), Aseprite from Steam, Bitwig Studio for music, jsfxr and ChipTone for sound effects, and SDL3, Lua and Emscripten for my own engine. `butler` uploads to itch.io. Setup and the reasons are in [docs/gamedev.md](docs/gamedev.md).
-- **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
-
-Keeping Arch healthy:
-
-- A notification shows up when 20 or more updates are waiting, with a button that runs the update (AUR included). It tells you when one needs a reboot too.
-- snapper takes a snapshot before and after every update, so a broken one can be rolled back. Weekly timers clear out old packages, trim the SSD and refresh the mirror list.
-
-### Scripts
-
-Small scripts in `.local/bin` for things I kept needing. Each one has a short comment at the top.
-
-- `app`: the start, hide and bring back logic behind `chat`, `music`, `sysmon`, `notes` and SoundCloud
-- `wifi`: the notification panel’s Wi-Fi button opens a network picker; choose Network settings or run `wifi settings` for nmtui
-- `winswitch`: ALT+Tab through all windows, most recent first
-- `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
-- `emoji`: the emoji you pick gets typed and copied
-- `docs`: `h` for Hoogle, `p` for Hackage, `w` for the Arch Wiki, `m` for man pages, anything else goes to DuckDuckGo
-- `site-dev`: my tmux session for working on sh0ds.dev, with windows for the editor, builds, a REPL and the Pi. The Pharo IDE (`~/pharo`, for the site's `site` command) is "Pharo" in the launcher
-- `ocr`: drag a box around any text on screen and it's copied to your clipboard
-- `rec-toggle`: record a part of the screen to `~/Videos`
-- `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
-- `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
-- `chat-notify`: WhatsApp messages as notifications, click one and it jumps to WhatsApp
-- `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
-- `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
-- `bitwig`, `aseprite`, `sfx`: Bitwig with low audio latency, Aseprite through Steam (`aseprite -b ...` runs its batch CLI for build scripts), and the browser sound-effect makers
-- `wall-streak`: lights a grid dot on the wallpaper for every day a commit touched the site's LOG.md (27 weeks, Monday on top) and prints `log: N/7` under it; redraws when the repo changes
-- `readout`: five dim lines bottom left on the wallpaper (uptime, Pi, now playing, the Next line of my last LOG.md entry, `log N/7`), in a kitty panel behind the windows
-- `frame`: the focused window's border turns amber while recording or sharing the screen and grey on do-not-disturb, so the desktop's state is always in view
-- `shot`: a region screenshot in a Diag frame (rule, blue marker, caption, date, sh0ds.dev) for devlogs, saved and copied (`ALT+Print`)
-- `pico8` / `picotron`: start or jump to the fantasy consoles from `~/.local/opt`, with a notification if one isn't unzipped there yet
-- `thunar-setup`: fills missing Diag preferences, merges coding/music actions and sidebar shortcuts, and sets kitty for Open Terminal Here; `--apply` reapplies the managed layout
-- `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
-- `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
-- `djvm`: starts or shows the Windows DJ VM; `djvm off` shuts it down cleanly. `djvm setup` keeps installer ISOs in `~/.local/share/djvm/isos` and repairs old CD-ROM paths; [setup and recovery](docs/dj-vm.md)
-- `power-menu`: a text-only session console that adapts to HiDPI and portrait screens
-- `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first
-- `update-check`, `default-apps`, `nightlight`, and the helpers behind the bar and the lock screen (`bar-stats`, `pi-status`, `rec-status`, `np-title`)
-
-## Screenshots
-
-Current desktop captures from 2026-10-23, kept at their original resolution. The app overview above shows Firefox, kitty and Obsidian with the top rail and focused window frame.
-
-### Desktop
-
-The dot-grid wallpaper, pixel Arch mark and slim Waybar on an empty workspace. Under the mark, the grid doubles as my learning log, and the readout sits bottom left.
-
-![Diag wallpaper and top rail](screenshots/desktop.png)
-
-### Terminal and editor
-
-Helix beside a Pi SSH session and the local terminal prompt. The remote Pi shell has its own separate configuration.
-
-![Helix, local terminal and Pi SSH session](screenshots/terminal.png)
-
-### Session console
-
-Five numbered text actions with visible hotkeys. No logos or power icons.
-
-![Text-only Diag session console](screenshots/power.png)
-
-### Music and notifications
-
-rmpc playing alongside the SwayNC panel, with real track artwork, framed playback controls, quick settings and volume. The Waybar rail shows the current track.
-
-![rmpc playing with the Diag notification and music panel](screenshots/notifications.png)
-
-<details>
-<summary>Historical captures — earlier rice</summary>
-
-These predate the current Diag layout.
-
-![Previous desktop](screenshots/archive/desktop.png)
-![Previous quick apps](screenshots/archive/popups.png)
-![Previous power menu](screenshots/archive/power.png)
-![Previous lock screen](screenshots/archive/lock.png)
-
-</details>
-
-## Getting Started
-
-### Dependencies
-
-Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions) and the multilib repo turned on for Steam. Then these packages:
-
-```
-sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
-  xdg-desktop-portal-gtk hyprpolkitagent quickshell awww fuzzel kitty tmux helix zed \
-  starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
-  grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
-  libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
-  thunar thunar-archive-plugin xarchiver zip unzip tumbler ffmpegthumbnailer gvfs gvfs-mtp gvfs-smb fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  gnome-keyring libsecret mpd mpc rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
-  python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
-  ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector kdeconnect
-yay -S wlogout nchat proton-pass-bin
-```
-
-The cursor is [Posy's Cursor Black](https://github.com/simtrami/posy-improved-cursor-linux), installed system-wide so the login screen uses it too:
-
-```
-git clone --depth 1 https://github.com/simtrami/posy-improved-cursor-linux /tmp/posy
-sudo cp -r /tmp/posy/Posy_Cursor_Black /usr/share/icons/ && rm -rf /tmp/posy
-```
-
-For game dev, also these (details in [docs/gamedev.md](docs/gamedev.md)):
-
-```
-sudo pacman -S --needed godot sdl3 lua emscripten gdb pkgconf pipewire-jack realtime-privileges kdenlive
-yay -S bitwig-studio
-```
-
-### Installing
-
-Clone the repo and run the install script. It links the tracked configs into your home folder and moves replaced files to `~/.dotfiles-backup/` first, so nothing gets lost.
-
-```
-git clone https://github.com/sh0ds/dotfiles.git ~/code/dotfiles
-bash ~/code/dotfiles/install-dotfiles.sh
-```
-
-The installer renders the Qt palette path for your home directory and copies btop’s and nchat’s writable configurations; other theme files remain linked. Close btop and nchat before installing.
-
-Then run these once. They set the default apps, let games use GameMode, turn on the weekly timers and the firewall (Arch doesn't come with one, so anything listening is open to the whole network), with the ports KDE Connect needs to find your phone:
-
-```
-default-apps
-sudo usermod -aG gamemode $USER
-sudo systemctl enable --now paccache.timer fstrim.timer reflector.timer
-sudo ufw default deny incoming && sudo ufw enable && sudo systemctl enable ufw
-sudo ufw allow 1714:1764/udp && sudo ufw allow 1714:1764/tcp
-```
-
-And change a few things to your liking:
-
-- Replace `/home/sh0ds` with your own home folder in `hypr/xdph.conf` (the Qt palette path is generated by the installer).
-- Set your country in `/etc/xdg/reflector/reflector.conf` (e.g. `--country Germany`) so it picks mirrors close to you.
-- For Thunar, finish any running copy/extraction operations and close Thunar before running `thunar-setup` after installing the packages and linking the dotfiles. Then run `default-apps` for folder and archive handlers, and reopen the apps to pick up GTK changes. Setup uses details with filename/size/date columns, local thumbnails, a text path bar, dates without seconds and double-click navigation; the menu remains available with `Alt`. Existing preferences are preserved; run `thunar-setup --apply` to adopt the current Diag layout. Your own custom actions and bookmarks are preserved too.
-- Archives: right-click **Extract Here** or **Extract To** through `thunar-archive-plugin`. Double-clicking opens Xarchiver to browse contents; `Ctrl+E` opens its extraction dialog. The browsers stay tiled; rename, properties and extraction dialogs float. `zip` and `unzip` support ZIP creation/extraction, and `7zip` handles additional archive formats.
-- Coding/music: **Edit in Zed** opens a project folder or selected text files in Zed. **Open Terminal Here** opens a selected folder in kitty, and **Git in lazygit** opens an existing Git project. **Queue in MPD** scans selected library folders recursively, waits for the local MPD database to update, then appends audio without clearing the queue or changing playback. Files must be inside `~/Music`; use `SUPER+U` to play from rmpc. **Edit in Audacity** requires `audacity` (`sudo pacman -Syu --needed audacity`); it leaves the MPD queue untouched.
-- For SoundCloud, install it as an app with PWAsForFirefox and put your ID from `firefoxpwa profile list` in the `soundcloud` line in `rice.lua`.
-- For the Diag look in Firefox (black toolbars, Terminess, the selected tab marked in blue, a plain black new tab), close Firefox and run `firefox-style` once. It links `~/.config/firefox` into your profile.
-- For the login screen and boot splash in the same look, run `bash ~/code/dotfiles/system/install-system.sh` (it asks for sudo). Preview the login screen with `sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/diag`.
-- For WhatsApp, run `nchat --setup` once, pick WhatsApp and scan the QR code with your phone. For notifications, quit nchat and run:
-
-  ```
-  f=~/.config/nchat/ui.conf
-  sed -i '/^desktop_notify_\(enabled\|connectivity\|command\)=/d' "$f"
-  printf '%s\n' 'desktop_notify_enabled=1' 'desktop_notify_connectivity=0' "desktop_notify_command=chat-notify '%1' '%2'" >> "$f"
-  ```
-  When the phone is connected through KDE Connect, the shell hides its mirrored
-  WhatsApp notifications and keeps nchat's desktop alerts. Other phone apps
-  remain visible. Keep nchat running for PC WhatsApp alerts; this also hides
-  phone-only WhatsApp alerts such as calls. To use the phone mirror instead,
-  remove the `ignored` check in `.config/quickshell/Notes.qml` and disable
-  nchat desktop notifications. Quickshell reloads on save.
-
-- For music, put your files in `~/Music` and start mpd. It picks up new files on its own after that:
-
-  ```
-  mkdir -p ~/Music ~/.local/share/mpd/playlists
-  systemctl --user enable --now mpd.service mpd-mpris.service
-  ```
-- For snapshots, check that `/` is btrfs (`findmnt -no FSTYPE /` says `btrfs`), then:
-
-  ```
-  sudo pacman -S snapper snap-pac
-  sudo snapper -c root create-config /
-  sudo snapper -c root set-config TIMELINE_CREATE=no NUMBER_LIMIT=10
-  sudo systemctl enable --now snapper-cleanup.timer
-  ```
-
-  If `create-config` says `.snapshots` already exists (archinstall makes one), run `sudo umount /.snapshots && sudo rmdir /.snapshots` before it and `sudo btrfs subvolume delete /.snapshots && sudo mkdir /.snapshots && sudo mount -a` after it. `sudo snapper list` shows your snapshots and `sudo snapper undochange 41..42` undoes everything between two of them. On ext4 use `yay -S timeshift-autosnap` instead.
-- For notes, press `SUPER+O` once and pick "Open folder as vault" with `~/notes` (your old `inbox.md` is already in there). For the look, pick the dark base theme under Settings > Appearance and turn on the `diag` CSS snippet there (`notes` links it in).
-- For automatic hiding of a single-tab Firefox source window while its pop-out video is tiled, install the [tab-count add-on](#firefox-picture-in-picture). Tiling works without it; the add-on enables tab-aware hiding and restoration.
-- For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
-- In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
-- PICO-8 and Picotron are paid downloads from [lexaloffle.com](https://www.lexaloffle.com), so they aren't in this repo. Download the Linux zips from your account page and unzip them into `~/.local/opt`:
-
-  ```
-  mkdir -p ~/.local/opt && cd ~/.local/opt
-  unzip ~/Downloads/pico-8_*_amd64.zip      # gives ~/.local/opt/pico-8/pico8
-  unzip ~/Downloads/picotron_*_linux.zip    # gives ~/.local/opt/picotron/picotron
-  ```
-
-  If a zip unpacks under another folder name, rename it to `pico-8` or `picotron`. Updates are the same: unzip the new version over the old one.
-- For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
-- Apps that keep passwords in the keyring need it running, so start it once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password).
-- The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
-- Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
-- The `pi up` reading and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
-
-### Firefox Picture-in-Picture
-
-The tab-count add-on puts a count in Firefox's window title. It does not read URLs
-or page content, request extra permissions, or collect/transmit data. Hyprland
-hides a single-tab source window while its video is tiled, and restores it when
-the video closes or another tab opens. Reloading Hyprland also restores it.
-
-For a temporary trial, open `about:debugging#/runtime/this-firefox`, choose
-**Load Temporary Add-on**, and select
-`~/code/dotfiles/.config/firefox/pip-tabs/manifest.json`. This lasts until Firefox
-restarts.
-
-For permanent installation in regular Firefox, sign the add-on with Mozilla:
+See [setup, dependencies and migration](docs/desktop-rebuild.md). This cloud checkout is a development environment; installing it here does not change your physical desktop.
 
 ```sh
-cd ~/code/dotfiles/.config/firefox/pip-tabs
-mkdir -p ~/.local/share/firefox-addons
-python -m zipfile -c ~/.local/share/firefox-addons/diag-pip-tabs.zip manifest.json background.js
+# First inspect local changes and the setup document.
+bash install-dotfiles.sh --target /tmp/afterhours-preview
+# On your Arch desktop, after dependencies are installed:
+bash install-dotfiles.sh
 ```
 
-Sign in to the [Mozilla Add-on Developer Hub](https://addons.mozilla.org/developers/),
-choose **Submit a New Add-on**, then **On your own** (unlisted distribution), and
-upload that ZIP. It does not need a public listing. Follow the validation/signing
-steps and download Mozilla's **signed `.xpi`** when available; renaming the ZIP
-to `.xpi` does not sign it.
+The installer backs up replaced files under `~/.dotfiles-backup/` and supports repeat installation. It links most configs to this checkout, so edits in `~/.config` usually edit this repository. Qt, btop, nchat and Zed receive writable copies.
 
-Remove the temporary copy in `about:debugging` if loaded. In `about:addons`, open
-the gear menu, choose **Install Add-on From File**, and select the signed XPI.
-It now survives browser restarts. Future code changes need a new version number
-and another signed package; pulling the repo does not update an installed XPI.
+Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), retain the NVIDIA environment settings on NVIDIA, then log out and select Hyprland. The keyboard layout is **German**, with Caps Lock as Escape.
 
-### Updating an existing installation
+## Daily controls
 
-Close btop and nchat first. Check `git status --short`; preserve any local edits before pulling. Then, on the branch you use:
-
-```sh
-git pull --ff-only && bash install-dotfiles.sh
-```
-
-Log out and back in to load the full shell. The prompt updates at the next command. The installer removes its own dangling launcher links; this retires the old Proton Calendar helper. If the Calendar PWA is still installed in your Firefox profile, remove it separately through PWAsForFirefox. The clock now uses only its built-in month/year view.
-
-### Executing program
-
-Log out and back into Hyprland (duh). To see if anything is missing, run this. It lists everything with OK or FAIL:
-
-```
-bash ~/code/dotfiles/check-desktop.sh
-```
-
-### Keybinds
-
-| Key | What it does |
+| Key | Action |
 | --- | --- |
-| `SUPER+F1` | This list, searchable |
-| `SUPER+Return` | Terminal |
-| `SUPER+Space` | Launcher |
-| `SUPER+B` | Firefox |
-| `SUPER+E` | Files (Thunar) |
-| `SUPER+O` | Notes (Obsidian, opens or jumps to it) |
-| `SUPER+S` / `SUPER+U` | SoundCloud / music player |
-| `SUPER+I` | WhatsApp |
-| `CTRL+SHIFT+Escape` | btop |
-| `SUPER+SHIFT+M` | Windows DJ VM |
-| `SUPER+SHIFT+P` | Proton Pass |
-| `SUPER+A` | My tmux session for the site |
-| `ALT+Tab` | Switch windows |
-| `SUPER+C` | Calculator |
-| `SUPER+.` | Emoji picker |
-| `SUPER+D` | Search docs |
-| `SUPER+SHIFT+V` | Clipboard history |
-| `SUPER+SHIFT+T` | Copy text from the screen |
-| `SUPER+SHIFT+C` | Colour picker |
-| `Print` or `SUPER+SHIFT+S` / `SHIFT+Print` | Screenshot a region to the clipboard / the screen you're on to `~/Pictures` |
-| `CTRL+Print` | Screenshot and draw on it |
-| `ALT+Print` | Screenshot a region in a Diag frame with a caption |
-| `SUPER+SHIFT+R` | Start or stop recording |
-| `SUPER+N` | Notifications |
-| `SUPER+SHIFT+N` | Night light |
-| `SUPER+SHIFT+B` | Hide or show the bar |
-| `SUPER+SHIFT+U` | Unmount USB sticks |
-| `SUPER+Q` | Close window |
-| `SUPER+F` / `SUPER+M` | Fullscreen / maximise |
-| `SUPER+V` / `SUPER+X` | Float and center / center again |
-| `SUPER+T` | Flip the split between two windows |
-| `SUPER+G` / `SUPER+Tab` | Group windows into tabs / next tab |
-| `SUPER+Escape` | Lock |
-| `SUPER+SHIFT+Escape` | Power menu (lock, log out, suspend, reboot, shut down) |
+| `Super + Return` | Terminal |
+| `Super + Space` | Quickshell app search |
+| `Super + Ctrl + G` | Make / Play / Ship launchpad |
+| `Super + N` | Quickshell inbox and quiet mode |
+| `Super + Shift + Escape` | Quickshell session controls |
+| `Super + Escape` | Lock |
+| `Super + 1…0` | Workspace |
+| `Super + Shift + 1…0` | Move window to workspace |
+| `Super + arrows / h j k l` | Focus window |
+| `Super + Shift + arrows / h j k l` | Move window |
+| `Super + V` | Toggle floating |
+| `Super + G` | Toggle window group |
+| `Super + B / E / O` | Firefox / files / notes |
+| `Super + A` | Website tmux session |
+| `Super + D` | Docs search |
+| `Super + F1` | Shortcut reference |
+| `Super + C` | Calculator |
+| `Super + Shift + V` | Clipboard history |
+| `Super + period` | Emoji picker |
+| `Super + Shift + R` | Start / stop a region recording |
+| `Print` | Region screenshot to clipboard |
+| `Ctrl + Print` | Annotated screenshot |
+| `Alt + Tab` | Window switcher |
+| `Super + Shift + B` | Hide / show the rail |
+| `Super + Shift + M` | DJ VM |
 
-Moving around works with `SUPER` + arrow keys or `h j k l`, add `SHIFT` to move the window and `CTRL` to resize it. `SUPER+1-0` switches workspace, `SUPER+SHIFT+1-0` sends the window there. The media and volume keys work too, even on the lock screen.
 
-## Help
+The first five workspace labels are a working convention: **code / play / craft / notes / games**. Apps do not get forcibly moved just because you launched them from the studio. Existing gaming and DJ VM rules still apply.
 
-This is set up for my machine (NVIDIA, two 1080p monitors), so some things might need changing on yours.
+```sh
+game-dev plan              # read the actual plan in a terminal
+game-dev pico              # the existing pixel-perfect PICO-8 wrapper
+game-dev godot             # Godot project manager
+game-dev code ~/code/game  # explicit existing project; never creates one
+game-dev check             # report installed game-plan tools
+afterhours quiet true      # no toast popups; inbox still collects
+afterhours studio          # open/close the studio
+afterhours start           # start once; safe if already running
+```
 
-- Package downloads return 404, or `thunar-setup` says Thunar is missing? The package transaction did not finish. Refresh the repositories and upgrade with `sudo pacman -Syu --needed` followed by the package names, then rerun `thunar-setup` and `default-apps`. Chain these with `&&` so setup only runs after installation succeeds.
-- `ls` or `ll` still looks like Mocha? Pull and reinstall the dotfiles, then open a new terminal. Bash loads `.config/diag/ls-colors.sh`, which selects `.config/eza/theme.yml` and replaces inherited `LS_COLORS`/`EZA_COLORS` mappings. The installer backs up a previous theme at that path.
-- A keybind for one of the scripts does nothing? Run the install script again, new scripts only get linked into `~/.local/bin` when it runs.
-- `q` in rmpc quits it instead of hiding it, use `SUPER+U` to hide it. If it ever won't come down, `pkill -x rmpc` and press `SUPER+U` again.
-- WhatsApp notifications don't show up? Make sure nchat was closed when you edited `ui.conf`, it overwrites the file when it quits.
-- KDE Connect can't find your phone? The firewall blocks it, let it through with `sudo ufw allow 1714:1764/udp && sudo ufw allow 1714:1764/tcp`.
-- Steam Remote Play or downloads from another PC on the network can't find this one? The firewall blocks them, allow Steam's ports with `sudo ufw allow 27031:27036/udp && sudo ufw allow 27036:27037/tcp`.
-- A GTK app is still light? Log out and back in once, the dark mode gets set at login.
-- The screen-share picker doesn't show up? Restart the portal:
+PICO-8 and Picotron require your licensed Lexaloffle downloads. They are not redistributed here. The plan checkout is found at `~/code/guides` or `/workspace/guides`; set `GUIDES_DIR` for another location. PICO-8 carts stay in `~/code/pico8`; Picotron keeps its own drive. Godot games and the future engine each get their own repository when their plan steps arrive. The shell neither creates nor publishes game projects.
 
-  ```
-  systemctl --user restart xdg-desktop-portal-hyprland
-  ```
+## Design and checks
 
-## Credits
+[Desktop and WM comparison](docs/desktop-rebuild.md#desktop-and-window-manager-comparison) explains the choice of Hyprland. [Architecture and validation](docs/desktop-rebuild.md#architecture) describe the shell, testing and runtime limits.
 
-The cursor is Michiel de Boer's (Posy) design, ported to Linux by simtrami, under CC BY-NC 4.0.
+```sh
+python3 -m unittest discover -s tests -v
+node tests/test_firefox_pip.js
+lua tests/test_firefox_pip.lua
+bash check-desktop.sh  # on the actual Arch desktop, inside the installed session
+```
 
-The Diag look is mine (from my site), but the swaync, btop, lazygit, rmpc, zathura and qt6ct theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured.
+The old screenshots show the previous Diag desktop; the Afterhours captures show this implementation. The [legacy setup reference](docs/legacy-desktop.md) retains the existing audio, VM, Firefox and helper documentation; its appearance and shell instructions describe the old setup.
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details
+MIT. Some app themes originated in Catppuccin ports; their existing notices remain. The new shell and wallpaper are original to this setup.

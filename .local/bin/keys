@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# keys: every keybind in a searchable fuzzel list (SUPER+F1). Read straight
-# from the table in the dotfiles README, so the two never disagree.
+# keys: desktop shortcuts in a searchable fuzzel list (SUPER+F1). Read straight
+# from the main shortcut table in the dotfiles README, so the two never disagree.
 set -euo pipefail
 repo=$(dirname "$(dirname "$(dirname "$(readlink -f ~/.config/hypr/rice.lua)")")")
 # shellcheck disable=SC2016  # the backticks are literal Markdown

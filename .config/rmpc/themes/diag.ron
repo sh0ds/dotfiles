@@ -4,13 +4,13 @@
 #![enable(unwrap_newtypes)]
 #![enable(unwrap_variant_newtypes)]
 (
-    text_color: "#e6e8ea",
-    preview_label_style: (fg: "#8a929c"),
-    preview_metadata_group_style: (fg: "#1793d1", modifiers: "Bold"),
-    highlighted_item_style: (fg: "#1793d1", modifiers: "Bold"),
-    current_item_style: (fg: "#000000", bg: "#1793d1", modifiers: "Bold"),
-    borders_style: (fg: "#3f4650"),
-    highlight_border_style: (fg: "#1793d1"),
+    text_color: "#ecf0e5",
+    preview_label_style: (fg: "#aab5a2"),
+    preview_metadata_group_style: (fg: "#c6db91", modifiers: "Bold"),
+    highlighted_item_style: (fg: "#c6db91", modifiers: "Bold"),
+    current_item_style: (fg: "#141613", bg: "#c6db91", modifiers: "Bold"),
+    borders_style: (fg: "#485344"),
+    highlight_border_style: (fg: "#c6db91"),
     symbols: (
         song: "󰎈",
         dir: "",
@@ -20,18 +20,18 @@
     ),
     progress_bar: (
         symbols: ["─", "─", "█", "─", "─"],
-        track_style: (fg: "#161a1f"),
-        elapsed_style: (fg: "#1793d1"),
-        thumb_style: (fg: "#1793d1"),
+        track_style: (fg: "#272d26"),
+        elapsed_style: (fg: "#c6db91"),
+        thumb_style: (fg: "#c6db91"),
     ),
     scrollbar: (
         symbols: ["│", "█", "▲", "▼"],
-        track_style: (fg: "#161a1f"),
-        ends_style: (fg: "#2e353d"),
-        thumb_style: (fg: "#1793d1"),
+        track_style: (fg: "#272d26"),
+        ends_style: (fg: "#333c32"),
+        thumb_style: (fg: "#c6db91"),
     ),
     tab_bar: (
-        active_style: (fg: "#1793d1", bg: "#0d1014", modifiers: "Bold"),
-        inactive_style: (fg: "#a3aab2"),
+        active_style: (fg: "#c6db91", bg: "#1c201c", modifiers: "Bold"),
+        inactive_style: (fg: "#bdc7b5"),
     ),
 )

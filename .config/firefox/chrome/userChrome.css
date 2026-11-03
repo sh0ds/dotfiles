@@ -1,21 +1,21 @@
-/* Firefox in Diag: the sh0ds.dev look in Arch blue, like the rest of the
+/* Firefox in Diag: the sh0ds.dev look in phosphor green, like the rest of the
    desktop. Black toolbars, Terminess for tabs, the address bar and menus,
-   square corners, 2 px rules, the selected tab marked with an Arch blue rule. Mostly Firefox's
+   square corners, 2 px rules, the selected tab marked with an phosphor green rule. Mostly Firefox's
    own theme variables, so it survives updates; `firefox-style` links this
    into your profile. */
 
 /* :root[lwtheme] too: a leftover theme add-on (Catppuccin) sets these on
    the root element, and this makes sure ours still win. */
 :root, :root[lwtheme] {
-  --diag-bg: #000000;
-  --diag-row: #161a1f;
-  --diag-panel: #0d1014;
-  --diag-rule: #3f4650;
-  --diag-dim: #8a929c;
-  --diag-fg: #c4c9ce;
-  --diag-ink: #e6e8ea;
-  --diag-arch: #1793d1;
-  --diag-sel: #0e3d5c;
+  --diag-bg: #141613;
+  --diag-row: #272d26;
+  --diag-panel: #1c201c;
+  --diag-rule: #485344;
+  --diag-dim: #aab5a2;
+  --diag-fg: #d8dfd0;
+  --diag-ink: #ecf0e5;
+  --diag-arch: #c6db91;
+  --diag-sel: #38452c;
 
   /* frame, toolbars, tabs */
   --lwt-accent-color: var(--diag-bg) !important;
@@ -45,7 +45,7 @@
   --urlbar-box-hover-bgcolor: var(--diag-row) !important;
   --urlbar-box-text-color: var(--diag-ink) !important;
   --urlbarView-highlight-background: var(--diag-arch) !important;
-  --urlbarView-highlight-color: #000000 !important;
+  --urlbarView-highlight-color: #141613 !important;
   --urlbarView-hover-background: var(--diag-row) !important;
 
   /* buttons, menus, panels, sidebar */
@@ -64,7 +64,7 @@
   --menu-color: var(--diag-ink) !important;
   --menu-border-color: var(--diag-rule) !important;
   --menuitem-hover-background-color: var(--diag-arch) !important;
-  --menuitem-hover-color: #000000 !important;
+  --menuitem-hover-color: #141613 !important;
   --sidebar-background-color: var(--diag-bg) !important;
   --sidebar-text-color: var(--diag-fg) !important;
   --sidebar-border-color: var(--diag-rule) !important;
@@ -80,28 +80,28 @@
   /* Firefox's accent (toggles, checkboxes, primary buttons, focus rings,
      the loading bar). A theme puts its own colour here, Mocha's mauve. */
   --color-accent-primary: var(--diag-arch) !important;
-  --color-accent-primary-hover: #5fb8e8 !important;
-  --color-accent-primary-active: #5fb8e8 !important;
+  --color-accent-primary-hover: #deecb9 !important;
+  --color-accent-primary-active: #deecb9 !important;
   --button-primary-bgcolor: var(--diag-arch) !important;
-  --button-primary-hover-bgcolor: #5fb8e8 !important;
-  --button-primary-active-bgcolor: #5fb8e8 !important;
-  --button-primary-color: #000000 !important;
+  --button-primary-hover-bgcolor: #deecb9 !important;
+  --button-primary-active-bgcolor: #deecb9 !important;
+  --button-primary-color: #141613 !important;
   --attention-dot-color: var(--diag-arch) !important;
   --tab-attention-icon-color: var(--diag-arch) !important;
   --lwt-tab-line-color: var(--diag-arch) !important;
   --lwt-toolbar-field-highlight: var(--diag-arch) !important;
-  --lwt-toolbar-field-highlight-text: #000000 !important;
+  --lwt-toolbar-field-highlight-text: #141613 !important;
   --lwt-sidebar-background-color: var(--diag-bg) !important;
   --lwt-sidebar-text-color: var(--diag-fg) !important;
   --lwt-sidebar-highlight-background-color: var(--diag-arch) !important;
-  --lwt-sidebar-highlight-text-color: #000000 !important;
+  --lwt-sidebar-highlight-text-color: #141613 !important;
   --lwt-toolbarbutton-icon-fill-attention: var(--diag-arch) !important;
   --lwt-frame: var(--diag-bg) !important;
   --lwt-text-color-inactive: var(--diag-dim) !important;
   accent-color: var(--diag-arch) !important;
 }
 
-/* The selected tab: a row with a 2 px Arch blue rule on its edge and white
+/* The selected tab: a row with a 2 px phosphor green rule on its edge and white
    text, like a code block on the site. Painted on the tab itself, not only
    .tab-background, so vertical tabs get it too; the text stays readable even
    if a theme repaints the background. */
@@ -113,7 +113,7 @@
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-label { color: #ffffff !important; }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--diag-arch) !important; }
 .tabbrowser-tab:not([selected]):hover .tab-background { background: var(--diag-row) !important; }
-::selection { background: var(--diag-sel, #0e3d5c) !important; color: #f4f6f8 !important; }
+::selection { background: var(--diag-sel, #38452c) !important; color: #f5f7ef !important; }
 
 /* Terminess around the page, like the rest of the desktop (16 px is one
    of its native sizes). The page itself keeps its fonts. */

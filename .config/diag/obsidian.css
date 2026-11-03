@@ -1,55 +1,55 @@
 /* Diag for Obsidian: app chrome shares the desktop palette; documents keep
    their own readable typography. Enable the snippet in Appearance. */
 .theme-dark {
-  --background-primary: #000000;
-  --background-primary-alt: #0d1014;
-  --background-secondary: #0d1014;
-  --background-secondary-alt: #000000;
-  --background-modifier-border: #3f4650;
-  --background-modifier-border-focus: #1793d1;
-  --background-modifier-hover: #161a1f;
-  --background-modifier-form-field: #0d1014;
-  --background-modifier-error: #e5484d;
-  --background-modifier-success: #75c94d;
-  --text-normal: #c4c9ce;
-  --text-muted: #8a929c;
-  --text-faint: #8a929c;
-  --text-on-accent: #000000;
-  --text-accent: #1793d1;
-  --text-accent-hover: #5fb8e8;
-  --text-error: #e5484d;
-  --text-success: #75c94d;
-  --text-warning: #ffb000;
-  --text-selection: #0e3d5c;
-  --interactive-normal: #161a1f;
-  --interactive-hover: #3f4650;
-  --interactive-accent: #1793d1;
+  --background-primary: #141613;
+  --background-primary-alt: #1c201c;
+  --background-secondary: #1c201c;
+  --background-secondary-alt: #141613;
+  --background-modifier-border: #485344;
+  --background-modifier-border-focus: #c6db91;
+  --background-modifier-hover: #272d26;
+  --background-modifier-form-field: #1c201c;
+  --background-modifier-error: #e78a7e;
+  --background-modifier-success: #95c7a1;
+  --text-normal: #d8dfd0;
+  --text-muted: #aab5a2;
+  --text-faint: #aab5a2;
+  --text-on-accent: #141613;
+  --text-accent: #c6db91;
+  --text-accent-hover: #deecb9;
+  --text-error: #e78a7e;
+  --text-success: #95c7a1;
+  --text-warning: #e9b078;
+  --text-selection: #38452c;
+  --interactive-normal: #272d26;
+  --interactive-hover: #485344;
+  --interactive-accent: #c6db91;
   --interactive-accent-rgb: 23, 147, 209;
-  --checkbox-color: #1793d1;
-  --checkbox-marker-color: #000000;
-  --nav-item-color-active: #e6e8ea;
-  --interactive-accent-hover: #5fb8e8;
-  --color-accent: #1793d1;
-  --color-accent-1: #1793d1;
-  --color-accent-2: #5fb8e8;
-  --link-color: #1793d1;
-  --link-color-hover: #5fb8e8;
-  --code-background: #0d1014;
-  --code-normal: #c4c9ce;
-  --blockquote-border-color: #1793d1;
-  --table-border-color: #3f4650;
-  --divider-color: #3f4650;
-  --divider-color-hover: #1793d1;
-  --icon-color: #8a929c;
-  --icon-color-hover: #e6e8ea;
-  --icon-color-focused: #1793d1;
-  --nav-item-background-selected: #0e3d5c;
+  --checkbox-color: #c6db91;
+  --checkbox-marker-color: #141613;
+  --nav-item-color-active: #ecf0e5;
+  --interactive-accent-hover: #deecb9;
+  --color-accent: #c6db91;
+  --color-accent-1: #c6db91;
+  --color-accent-2: #deecb9;
+  --link-color: #c6db91;
+  --link-color-hover: #deecb9;
+  --code-background: #1c201c;
+  --code-normal: #d8dfd0;
+  --blockquote-border-color: #c6db91;
+  --table-border-color: #485344;
+  --divider-color: #485344;
+  --divider-color-hover: #c6db91;
+  --icon-color: #aab5a2;
+  --icon-color-hover: #ecf0e5;
+  --icon-color-focused: #c6db91;
+  --nav-item-background-selected: #38452c;
   --font-interface-theme: "Terminess Nerd Font", monospace;
   --font-monospace-theme: "Terminess Nerd Font Mono", monospace;
   --tab-radius-active: 0px;
   --tab-radius: 0px;
   --tab-curve: 0px;
-  --tab-outline-color: #3f4650;
+  --tab-outline-color: #485344;
   --radius-s: 0px;
   --radius-m: 0px;
   --radius-l: 0px;
@@ -59,26 +59,26 @@
   --menu-radius: 0px;
 }
 .theme-dark .workspace-tab-header-container {
-  border-bottom: 1px solid #3f4650;
+  border-bottom: 1px solid #485344;
 }
-.theme-dark .workspace-tab-header { background: #000000; box-shadow: none; }
+.theme-dark .workspace-tab-header { background: #141613; box-shadow: none; }
 .theme-dark .workspace-tab-header.is-active {
-  background: #161a1f;
-  color: #e6e8ea;
-  box-shadow: inset 0 -2px 0 #1793d1;
+  background: #272d26;
+  color: #ecf0e5;
+  box-shadow: inset 0 -2px 0 #c6db91;
 }
 .theme-dark .workspace-tab-header::before,
 .theme-dark .workspace-tab-header::after { display: none; }
 .theme-dark .nav-file-title.is-active {
-  color: #e6e8ea;
-  box-shadow: inset 2px 0 0 #1793d1;
+  color: #ecf0e5;
+  box-shadow: inset 2px 0 0 #c6db91;
 }
 .theme-dark .markdown-rendered table { border-collapse: collapse; }
 .theme-dark .markdown-rendered th,
 .theme-dark .markdown-rendered td { padding: 6px 10px; }
 .theme-dark .markdown-rendered a { text-decoration: underline; text-underline-offset: 2px; }
 .theme-dark :is(button, input, textarea):focus-visible {
-  outline: 2px solid #1793d1;
+  outline: 2px solid #c6db91;
   outline-offset: 2px;
 }
 @media (prefers-reduced-motion: no-preference) {

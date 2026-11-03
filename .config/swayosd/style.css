@@ -1,12 +1,12 @@
 /* swayosd: volume popup in Diag, drawn like the meters on sh0ds.dev: a
-   framed bar with the level as Arch blue blocks. No rounding. Class names
+   framed bar with the level as phosphor green blocks. No rounding. Class names
    from SwayOSD's style.scss. */
-* { font-family: "Terminess Nerd Font"; font-size: 18px; }
+* { font-family: "Noto Sans"; font-size: 13px; }
 window#osd {
-  border-radius: 0;
-  border: 1px solid #3f4650;
-  border-left: 2px solid #1793d1;
-  background: #000000;
+  border-radius: 4px;
+  border: 1px solid #485344;
+  border-left: 2px solid #c6db91;
+  background: #141613;
 }
 
 window#osd #container {
@@ -15,7 +15,7 @@ window#osd #container {
 
 window#osd image,
 window#osd label {
-  color: #e6e8ea;
+  color: #ecf0e5;
 }
 
 window#osd progressbar:disabled,
@@ -26,7 +26,7 @@ window#osd image:disabled {
 window#osd progressbar,
 window#osd segmentedprogress {
   min-height: 12px;
-  border-radius: 0;
+  border-radius: 4px;
   background: transparent;
   border: none;
 }
@@ -34,18 +34,18 @@ window#osd segmentedprogress {
 window#osd trough,
 window#osd segment {
   min-height: inherit;
-  border-radius: 0;
-  border: 2px solid #8a929c;
-  background: #000000;
+  border-radius: 4px;
+  border: 2px solid #aab5a2;
+  background: #141613;
 }
 
 window#osd progress,
 window#osd segment.active {
   min-height: inherit;
-  border-radius: 0;
+  border-radius: 4px;
   border: none;
   margin: 2px;
-  background: #1793d1;
+  background: #c6db91;
 }
 
 window#osd segment {

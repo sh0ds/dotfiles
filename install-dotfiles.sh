@@ -32,8 +32,13 @@ while IFS= read -r line || [ -n "$line" ]; do
 done <"$src/.config/qt6ct/qt6ct.conf" >"$qt_config"
 
 cd "$src"
-# Only files git tracks, so nothing local or half-finished gets linked.
-git ls-files | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/|tests/)' |
+# Tracked files plus the explicit new shell assets, also installable before commit.
+# Never glob unrelated untracked files into the user's home.
+{ git ls-files
+  printf '%s\n' .config/quickshell/afterhours/{shell,Theme,Cell,Notice}.qml \
+    .config/quickshell/afterhours/qmldir .local/bin/{afterhours,afterhours-suspend,game-dev} \
+    .local/share/applications/game-dev.desktop .local/share/backgrounds/afterhours.{png,svg}
+} | sort -u | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/|tests/)' |
   while IFS= read -r rel; do
   target="$target_home/$rel"
   config_source=$src/$rel

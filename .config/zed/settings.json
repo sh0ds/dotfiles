@@ -5,10 +5,10 @@
 {
   "theme": { "mode": "dark", "dark": "Diag", "light": "Diag" },
   "icon_theme": "Zed (Default)",
-  "ui_font_family": "Terminess Nerd Font",
-  "ui_font_size": 16,
-  "buffer_font_family": "Terminess Nerd Font",
-  "buffer_font_size": 16,
+  "ui_font_family": "Noto Sans",
+  "ui_font_size": 14,
+  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_size": 14,
   "buffer_line_height": "standard",
 
   // Quiet: no blinking, no scrollbars, no minimap, no AI.
@@ -28,7 +28,7 @@
   "show_wrap_guides": true,
   "wrap_guides": [100],
   "current_line_highlight": "line",
-  "inlay_hints": { "enabled": true }, // Haskell types inline
+  "inlay_hints": { "enabled": true }, // Types and diagnostics inline
   "toolbar": { "breadcrumbs": true, "quick_actions": false },
   "tab_bar": { "show_nav_history_buttons": false },
   // Files on the right, git and the outline on the left. Set here because
@@ -37,24 +37,19 @@
   "git_panel": { "dock": "left" },
   "outline_panel": { "dock": "left" },
   "terminal": {
-    "font_family": "Terminess Nerd Font",
+    "font_family": "JetBrains Mono",
     "blinking": "off",
     "shell": "system"
   },
 
-  // Godot: GDScript completion comes from the running Godot editor's language
-  // server (port 6005), so keep Godot open while you write scripts here.
-  // Language servers for the stack. Haskell uses GHCup's
-  // haskell-language-server-wrapper from PATH; Erlang uses ELP from
-  // ~/.local/bin instead of erlang_ls; C and Bash work as shipped.
+  // Game plan: Lua, typed GDScript, C and the web. Existing optional
+  // language overrides remain available for older projects.
   "auto_install_extensions": {
-    "haskell": true,
-    "erlang": true,
+    "gdscript": true,
     "html": true,
     "lua": true,
     "toml": true,
-    "make": true,
-    "gdscript": true
+    "make": true
   },
   "languages": {
     "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] }

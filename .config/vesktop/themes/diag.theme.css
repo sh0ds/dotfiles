@@ -9,54 +9,54 @@
 .theme-dark,
 .visual-refresh,
 .visual-refresh.theme-dark {
-  --background-primary: #000000 !important;
-  --background-secondary: #0d1014 !important;
-  --background-secondary-alt: #0d1014 !important;
-  --background-tertiary: #000000 !important;
-  --background-floating: #0d1014 !important;
+  --background-primary: #141613 !important;
+  --background-secondary: #1c201c !important;
+  --background-secondary-alt: #1c201c !important;
+  --background-tertiary: #141613 !important;
+  --background-floating: #1c201c !important;
 
-  --background-base-lowest: #000000 !important;
-  --background-base-lower: #000000 !important;
-  --background-base-low: #0d1014 !important;
-  --background-surface-high: #0d1014 !important;
-  --background-surface-higher: #161a1f !important;
-  --background-surface-highest: #161a1f !important;
+  --background-base-lowest: #141613 !important;
+  --background-base-lower: #141613 !important;
+  --background-base-low: #1c201c !important;
+  --background-surface-high: #1c201c !important;
+  --background-surface-higher: #272d26 !important;
+  --background-surface-highest: #272d26 !important;
 
-  --background-modifier-hover: #161a1f !important;
-  --background-modifier-active: #161a1f !important;
-  --background-modifier-selected: #0e3d5c !important;
+  --background-modifier-hover: #272d26 !important;
+  --background-modifier-active: #272d26 !important;
+  --background-modifier-selected: #38452c !important;
 
-  --text-normal: #c4c9ce !important;
-  --text-muted: #8a929c !important;
-  --text-link: #1793d1 !important;
+  --text-normal: #d8dfd0 !important;
+  --text-muted: #aab5a2 !important;
+  --text-link: #c6db91 !important;
 
-  --interactive-normal: #8a929c !important;
-  --interactive-hover: #c4c9ce !important;
-  --interactive-active: #e6e8ea !important;
+  --interactive-normal: #aab5a2 !important;
+  --interactive-hover: #d8dfd0 !important;
+  --interactive-active: #ecf0e5 !important;
 
-  --brand-experiment: #1793d1 !important;
-  --brand-500: #1793d1 !important;
+  --brand-experiment: #c6db91 !important;
+  --brand-500: #c6db91 !important;
 
-  --button-filled-brand-background: #1793d1 !important;
-  --button-filled-brand-background-hover: #5fb8e8 !important;
-  --button-filled-brand-text: #000000 !important;
-  --button-filled-brand-text-hover: #000000 !important;
-  --status-danger: #e5484d !important;
-  --status-warning: #ffb000 !important;
-  --status-positive: #75c94d !important;
-  --background-mentioned: #161a1f !important;
-  --background-mentioned-hover: #161a1f !important;
-  --mention-foreground: #5fb8e8 !important;
-  --mention-background: #0e3d5c !important;
-  --input-background: #0d1014 !important;
-  --input-border: #3f4650 !important;
-  --border-subtle: #3f4650 !important;
-  --border-normal: #3f4650 !important;
+  --button-filled-brand-background: #c6db91 !important;
+  --button-filled-brand-background-hover: #deecb9 !important;
+  --button-filled-brand-text: #141613 !important;
+  --button-filled-brand-text-hover: #141613 !important;
+  --status-danger: #e78a7e !important;
+  --status-warning: #e9b078 !important;
+  --status-positive: #95c7a1 !important;
+  --background-mentioned: #272d26 !important;
+  --background-mentioned-hover: #272d26 !important;
+  --mention-foreground: #deecb9 !important;
+  --mention-background: #38452c !important;
+  --input-background: #1c201c !important;
+  --input-border: #485344 !important;
+  --border-subtle: #485344 !important;
+  --border-normal: #485344 !important;
   --font-code: "Terminess Nerd Font Mono", monospace !important;
 
-  --scrollbar-thin-thumb: #3f4650 !important;
-  --scrollbar-auto-thumb: #3f4650 !important;
-  --scrollbar-auto-track: #000000 !important;
+  --scrollbar-thin-thumb: #485344 !important;
+  --scrollbar-auto-thumb: #485344 !important;
+  --scrollbar-auto-track: #141613 !important;
 
   --font-primary: "Terminess Nerd Font", monospace !important;
   --font-display: "Terminess Nerd Font", monospace !important;
@@ -78,7 +78,7 @@
 .theme-dark [class*="gradientContainer"],
 .theme-dark [class*="videoGrid"],
 .theme-dark [class*="scroller"][class*="call"] {
-  background: #000000 !important;
+  background: #141613 !important;
   background-image: none !important;
 }
 
@@ -86,35 +86,35 @@
 .theme-dark [class*="sidebarList"],
 .theme-dark [class*="sidebarRegion"],
 .theme-dark [class*="privateChannels"] {
-  background: #0d1014 !important;
+  background: #1c201c !important;
 }
 
 /* Restrained selected-channel state */
 .theme-dark [class*="modeSelected"] [class*="link"] {
-  background: #161a1f !important;
-  box-shadow: inset 2px 0 0 #1793d1 !important;
+  background: #272d26 !important;
+  box-shadow: inset 2px 0 0 #c6db91 !important;
 }
 
 /* Text and input surfaces */
 .theme-dark [class*="channelTextArea"],
 .theme-dark [class*="themedBackground"] {
-  background: #0d1014 !important;
+  background: #1c201c !important;
   border-radius: 0 !important;
 }
 
 /* Thin structural separators */
 .theme-dark [class*="sidebar"] {
-  border-color: #3f4650 !important;
+  border-color: #485344 !important;
 }
 
 /* Consistent selection */
 .theme-dark ::selection {
-  background: #0e3d5c !important;
-  color: #e6e8ea !important;
+  background: #38452c !important;
+  color: #ecf0e5 !important;
 }
 
 /* Keep keyboard focus visible; do not animate layout or resize content. */
 .theme-dark :is(button, input, textarea, [role="button"]):focus-visible {
-  outline: 2px solid #1793d1 !important;
+  outline: 2px solid #c6db91 !important;
   outline-offset: 2px;
 }

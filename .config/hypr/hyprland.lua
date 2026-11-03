@@ -8,7 +8,7 @@
 ------------------
 
 -- `hyprctl monitors` lists names, e.g. "DP-1".
--- DP-4 is the main screen: it sits at 0x0, gets workspaces 1-5 (the bar keeps
+-- DP-4 is the main screen: it sits at 0x0, gets workspaces 1-5 (the shell keeps
 -- those five on it), the cursor at login, and is XWayland's primary output, so
 -- games open there. It stands on the right of the desk, so any other screen
 -- goes to its left (left of 0x0 is fine, Hyprland handles negative positions).
@@ -38,7 +38,7 @@ end)
 -----------------
 
 local terminal = "kitty"
-local menu = "fuzzel"
+local menu = "afterhours apps"
 local browser = "firefox"
 local lock = "pidof hyprlock || hyprlock"
 
@@ -47,26 +47,22 @@ local lock = "pidof hyprlock || hyprlock"
 -------------------
 
 hl.on("hyprland.start", function()
-	-- Quickshell: the bar, the volume popup and notifications (~/.config/quickshell)
-	hl.exec_cmd("qs")
+	hl.exec_cmd("afterhours start")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	hl.exec_cmd("wl-paste --watch cliphist store")
+	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
-	-- The Diag background: black, a faint dot grid, a dim pixel Arch logo in
-	-- the middle. Drawn 1:1 (no scaling, so the dots stay sharp) and centred
-	-- on every screen.
-	hl.exec_cmd("sleep 1 && awww img --resize no --fill-color 000000 --transition-type none ~/.local/share/backgrounds/diag.png")
+	-- Afterhours: quiet contour bands; fill each display without distortion.
+	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 141613 --transition-type none ~/.local/share/backgrounds/afterhours.png")
 end)
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
--- Posy's Cursor Black: a sharp, pixel-drawn black arrow with a white edge,
--- the cursor that matches Terminess. Its smallest size is 32 (README).
-hl.env("XCURSOR_THEME", "Posy_Cursor_Black")
-hl.env("XCURSOR_SIZE", "32")
-hl.env("HYPRCURSOR_SIZE", "32")
+hl.env("XCURSOR_THEME", "Adwaita")
+hl.env("XCURSOR_SIZE", "24")
+hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Diag (~/.config/qt6ct)
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
@@ -87,8 +83,8 @@ hl.config({
 		gaps_out = 0,
 		border_size = 1,
 		col = {
-			active_border = "rgb(1793d1)",
-			inactive_border = "rgb(2e353d)",
+			active_border = "rgb(c6db91)",
+			inactive_border = "rgb(333c32)",
 		},
 		resize_on_border = true,
 		allow_tearing = false,
@@ -200,10 +196,9 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- Media keys (work on the lock screen too). No brightness keys: a desktop
 -- monitor's brightness is set on the monitor itself.
 local media = { locked = true, repeating = true }
--- The volume popup comes from Quickshell, which sees every volume change.
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), media)
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), media)
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), media)
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("swayosd-client --output-volume raise"), media)
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("swayosd-client --output-volume lower"), media)
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"), media)
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
@@ -234,5 +229,5 @@ hl.window_rule({
 -- Keep the base config usable, but do not silently swallow theme failures.
 local rice_ok, rice_error = pcall(require, "rice")
 if not rice_ok then
-	io.stderr:write("Diag rice failed to load: " .. tostring(rice_error) .. "\n")
+	io.stderr:write("Afterhours rules failed to load: " .. tostring(rice_error) .. "\n")
 end

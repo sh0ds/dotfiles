@@ -2,7 +2,7 @@
 # through the folder, f is fullscreen, q quits.
 # Colours: Diag.
 [options]
-background=000000
-overlay_text_color=e6e8ea
-overlay_background_color=000000
+background=141613
+overlay_text_color=ecf0e5
+overlay_background_color=141613
 overlay_font=Terminess Nerd Font:11

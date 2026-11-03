@@ -1,8 +1,8 @@
 [Desktop Entry]
-Type=Application
 Name=Aseprite
-Comment=Pixel art and animation (Steam)
-Exec=aseprite
-Icon=applications-graphics
+Comment=Play this game on Steam
+Exec=steam steam://rungameid/431730
+Icon=steam_icon_431730
 Terminal=false
-Categories=Graphics;Development;
+Type=Application
+Categories=Game;

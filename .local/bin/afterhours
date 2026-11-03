@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Afterhours shell control. Quickshell handles IPC and duplicate-instance checks.
+set -euo pipefail
+if ! command -v quickshell >/dev/null; then
+  printf 'Afterhours needs Quickshell 0.3.2 or newer. Install quickshell on Arch.\n' >&2
+  exit 1
+fi
+case ${1:-start} in
+  start) exec quickshell -c afterhours --no-duplicate ;;
+  studio|apps|inbox|session) exec quickshell ipc -c afterhours call shell toggle "$1" ;;
+  status) exec quickshell ipc -c afterhours call shell status ;;
+  close) exec quickshell ipc -c afterhours call shell close ;;
+  bar) exec quickshell ipc -c afterhours call shell toggleBar ;;
+  quiet) exec quickshell ipc -c afterhours call shell quietMode "${2:-true}" ;;
+  *) echo 'Usage: afterhours [start|studio|apps|inbox|session|status|close|bar|quiet true|false]' >&2; exit 2 ;;
+esac

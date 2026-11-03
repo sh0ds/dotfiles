@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# A suspend request must first acquire the session lock. Never suspend unlocked.
+set -euo pipefail
+if ! pgrep -x hyprlock >/dev/null; then
+  hyprlock --immediate &
+fi
+for attempt in {1..50}; do
+  if loginctl show-session "${XDG_SESSION_ID:?No login session}" -p LockedHint --value | grep -qx yes; then
+    exec systemctl suspend
+  fi
+  sleep 0.1
+done
+notify-send -a Afterhours 'Suspend cancelled' 'The session lock did not become ready.' || true
+exit 1
