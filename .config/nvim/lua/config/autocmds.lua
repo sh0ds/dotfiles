@@ -1,2 +1,0 @@
--- Your own autocommands. LazyVim's: https://lazyvim.org/configuration/general
--- Per-language settings live in after/ftplugin/<filetype>.lua (see asm.lua).

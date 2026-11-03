@@ -1,5 +1,5 @@
 # ~/.config/lazygit/config.yml: Diag, square borders, blue on the
-# focused panel. Run `lg`, or SPACE g g inside Neovim.
+# focused panel. Run `lg`, or Ctrl+G inside Helix.
 gui:
   nerdFontsVersion: "3"
   border: single

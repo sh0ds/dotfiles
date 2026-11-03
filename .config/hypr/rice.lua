@@ -24,7 +24,7 @@ end
 -- shadows, no blur, no dimming. Motion is small and physical: damped
 -- springs, no bounce (see MOTION). The focused window is the only thing on
 -- screen with colour in its frame.
--- Palette (the same everywhere: kitty, waybar, swaync, fuzzel, GTK, nvim):
+-- Palette (the same everywhere: kitty, waybar, swaync, fuzzel, GTK, Helix):
 --   bg #000000  row #161a1f  rule #3f4650  dim #5d6670  mid #8a929c
 --   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
@@ -164,7 +164,7 @@ hl.layer_rule({ name = "notify-fade", match = { namespace = "^swaync-(control-ce
 ---- SMART GAPS: one window fills the screen ----
 ------------------------------------------------
 
--- A workspace with a single tiled window drops its gaps and border, so nvim
+-- A workspace with a single tiled window drops its gaps and border, so the editor
 -- alone gets every pixel. Open a second window and they come back.
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 hl.window_rule({

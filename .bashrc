@@ -5,9 +5,10 @@
 export PATH="$HOME/.local/bin:$PATH"
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 
-export EDITOR=nvim
-export VISUAL=nvim
-export MANPAGER="nvim +Man!"
+export EDITOR=helix
+export VISUAL=helix
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"   # man pages in bat's colours
+export MANROFFOPT="-c"
 
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
@@ -28,13 +29,14 @@ alias ls='eza --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first --git'
 alias lt='eza --tree --level=2 --icons --git-ignore'
 alias grep='grep --color=auto'
-alias v='nvim'
+alias hx='helix'
+alias v='helix'
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate -20'
 alias ta='site-dev'                                            # sh0ds.dev tmux session
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
-alias lg='lazygit'                                              # git TUI (SPACE g g in Neovim)
+alias lg='lazygit'                                              # git TUI (Ctrl+G in Helix)
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
 # fzf in Diag: blue matches and pointer, blue-grey selection, square border
@@ -79,8 +81,8 @@ command_not_found_handle() {
   esac
 }
 
-# System info on new terminals, but not in every tmux pane or nvim terminal
-if [[ -z $TMUX && -z $NVIM ]] && command -v fastfetch >/dev/null; then
+# System info on new terminals, but not in every tmux pane
+if [[ -z $TMUX ]] && command -v fastfetch >/dev/null; then
   fastfetch
   case $(date +%m-%d) in
     01-01)       printf '\e[35mhappy new year. same bugs as last year though.\e[0m\n' ;;

@@ -128,7 +128,7 @@ hl.config({
 		-- German layout. Change to "us" if you type on US.
 		kb_layout = "de",
 		kb_variant = "",
-		-- Caps Lock becomes Escape: you'll press Escape constantly in nvim and tmux copy mode.
+		-- Caps Lock becomes Escape: you'll press Escape constantly in Helix and tmux copy mode.
 		kb_options = "caps:escape",
 		follow_mouse = 1,
 		sensitivity = 0,

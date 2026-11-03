@@ -75,7 +75,7 @@ root = tree.getroot()
 if root.tag != 'actions':
     raise SystemExit(f'thunar-setup: unexpected actions file: {actions_path}')
 actions = [
-    ('diag-neovim', 'Edit in Neovim', 'Open selected files or a project folder in kitty and Neovim',
+    ('diag-edit', 'Edit in Helix', 'Open selected files or a project folder in kitty and Helix',
      'text-editor-symbolic', 'edit', ['directories', 'text-files']),
     ('diag-terminal', 'Open Terminal Here', 'Open the selected folder in kitty',
      'utilities-terminal-symbolic', 'terminal', ['directories']),
@@ -86,7 +86,7 @@ actions = [
     ('diag-audacity', 'Edit in Audacity', 'Open selected audio files in Audacity',
      'audio-x-generic-symbolic', 'audacity', ['audio-files']),
 ]
-owned = {action[0] for action in actions}
+owned = {action[0] for action in actions} | {'diag-neovim'}  # old name of diag-edit
 for action in list(root):
     if action.findtext('unique-id') in owned:
         root.remove(action)

@@ -1,0 +1,92 @@
+# Diag: nearly monochrome. Code is grey, keywords are bright, strings and
+# numbers are blue, comments are dim. Errors are the only red. The background
+# stays kitty's black.
+
+"ui.background" = {}
+"ui.text" = "fg"
+"ui.text.focus" = "bright"
+"ui.text.inactive" = "dim"
+"ui.cursor" = { fg = "black", bg = "arch" }
+"ui.cursor.primary" = { fg = "black", bg = "arch" }
+"ui.cursor.match" = { fg = "arch", modifiers = ["bold"] }
+"ui.cursorline.primary" = { bg = "panel" }
+"ui.selection" = { bg = "sel" }
+"ui.selection.primary" = { bg = "sel" }
+"ui.linenr" = "dim"
+"ui.linenr.selected" = "arch"
+"ui.gutter" = {}
+"ui.statusline" = { fg = "fg", bg = "panel" }
+"ui.statusline.inactive" = { fg = "dim", bg = "panel" }
+"ui.bufferline" = { fg = "mid", bg = "panel" }
+"ui.bufferline.active" = { fg = "bright", bg = "black" }
+"ui.bufferline.background" = { bg = "panel" }
+"ui.window" = "line"
+"ui.popup" = { fg = "fg", bg = "panel" }
+"ui.help" = { fg = "fg", bg = "panel" }
+"ui.menu" = { fg = "fg", bg = "panel" }
+"ui.menu.selected" = { fg = "bright", bg = "sel" }
+"ui.menu.scroll" = { fg = "line", bg = "panel" }
+"ui.picker.header" = { fg = "bright", modifiers = ["bold"] }
+"ui.virtual.ruler" = { bg = "panel" }
+"ui.virtual.whitespace" = "line"
+"ui.virtual.indent-guide" = "line"
+"ui.virtual.inlay-hint" = "dim"
+"ui.virtual.jump-label" = { fg = "warn", modifiers = ["bold"] }
+
+"comment" = "dim"
+"constant" = "soft"
+"constant.numeric" = "arch"
+"constant.character" = "arch"
+"constant.builtin.boolean" = "arch"
+"string" = "arch"
+"variable" = "fg"
+"variable.builtin" = "mid"
+"variable.other.member" = "fg"
+"function" = "bright"
+"keyword" = { fg = "bright", modifiers = ["bold"] }
+"operator" = "mid"
+"punctuation" = "mid"
+"type" = "bright"
+"constructor" = "bright"
+"namespace" = "fg"
+"attribute" = "mid"
+"label" = "soft"
+"special" = "soft"
+"tag" = "bright"
+
+"markup.heading" = { fg = "bright", modifiers = ["bold"] }
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+"markup.link.url" = { fg = "arch", modifiers = ["underlined"] }
+"markup.link.text" = "arch"
+"markup.raw" = "soft"
+"markup.list" = "mid"
+"markup.quote" = "mid"
+
+"diff.plus" = "ok"
+"diff.delta" = "warn"
+"diff.minus" = "error"
+
+"error" = "error"
+"warning" = "warn"
+"info" = "mid"
+"hint" = "dim"
+"diagnostic.error" = { underline = { color = "error", style = "curl" } }
+"diagnostic.warning" = { underline = { color = "warn", style = "curl" } }
+"diagnostic.info" = { underline = { color = "mid", style = "curl" } }
+"diagnostic.hint" = { underline = { color = "dim", style = "curl" } }
+
+[palette]
+black = "#000000"
+panel = "#0d1014"
+sel = "#0e3d5c"
+line = "#3f4650"
+dim = "#8a929c"
+mid = "#8a929c"
+fg = "#c4c9ce"
+bright = "#f4f6f8"
+arch = "#1793d1"
+soft = "#5fb8e8"
+error = "#e5484d"
+warn = "#ffb000"
+ok = "#75c94d"

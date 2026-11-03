@@ -1,0 +1,44 @@
+# ~/.config/helix/config.toml: Helix in Diag. No plugins; language servers
+# are in languages.toml, colours in themes/diag.toml. `helix --health` checks
+# which servers it can find.
+theme = "diag"
+
+[editor]
+mouse = true
+line-number = "relative"
+scrolloff = 8
+rulers = [100]
+cursorline = true
+bufferline = "multiple"
+true-color = true
+color-modes = false        # mode stays text in the status line, no coloured block
+idle-timeout = 250
+completion-timeout = 250
+
+[editor.cursor-shape]
+normal = "block"
+insert = "bar"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name", "file-modification-indicator"]
+center = []
+right = ["diagnostics", "selections", "position", "file-type"]
+separator = " "
+mode.normal = "NOR"
+mode.insert = "INS"
+mode.select = "SEL"
+
+[editor.lsp]
+display-inlay-hints = true # Haskell types inline
+
+[editor.indent-guides]
+render = true
+character = "│"
+
+[editor.file-picker]
+hidden = false             # show dotfiles in Space f
+
+# lazygit on Ctrl+G, back where you were when you quit it.
+[keys.normal]
+C-g = [":write-all", ":new", ":insert-output lazygit", ":buffer-close!", ":redraw", ":reload-all"]

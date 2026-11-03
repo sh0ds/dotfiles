@@ -1,0 +1,12 @@
+# ~/.config/helix/languages.toml: only what differs from Helix's defaults.
+# Haskell (haskell-language-server-wrapper from GHCup), C (clangd) and Bash
+# (bash-language-server) work as shipped. Erlang uses ELP, the binary in
+# ~/.local/bin from the install guide, instead of erlang_ls.
+
+[language-server.elp]
+command = "elp"
+args = ["server"]
+
+[[language]]
+name = "erlang"
+language-servers = ["elp"]
