@@ -584,10 +584,8 @@ ShellRoot {
                         Item { Layout.fillHeight: true }
                     }
                 }
-                RowLayout {
-                    Text { text: "SHOW UP  <font color=\"" + Theme.accent + "\">◆</font>  SHIP SMALL"; textFormat: Text.StyledText; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 3; Layout.fillWidth: true; elide: Text.ElideRight }
-                    Cell { label: "ALL APPS →"; onClicked: root.panel = "apps" }
-                }
+                // The motto alone in the footer; apps have the rail button and Super+Space.
+                Text { text: "SHOW UP  <font color=\"" + Theme.accent + "\">◆</font>  SHIP SMALL"; textFormat: Text.StyledText; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 3; Layout.fillWidth: true; Layout.topMargin: 4; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideRight }
             }
         }
         Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { query.text = ""; query.forceActiveFocus(); } else if (root.panel === "studio") trackMenu.forceActiveFocus(); else sheet.forceActiveFocus(); } }
