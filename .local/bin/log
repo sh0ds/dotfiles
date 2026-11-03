@@ -4,14 +4,15 @@ set -euo pipefail
 
 f=~/code/website/LOG.md
 
-last_day=$(grep -oP '^## Day \K[0-9]+' "$f" | tail -n1)
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied - usage: log <step>"
+    exit 1
+fi
 
-day=$((last_day + 1))
+if ! grep "^## $1 ·" "$f"
+  then
+    printf '\n## %s ·\nDid:\nStuck:\nLearned:\nRedo:\nNext:\n' "$1" >>"$f"
+fi
 
-week=$(((day - 1) / 7))
-
-printf '\n## Day %d · week %d\nDid:\nStuck:\nLearned:\nRedo:\nNext:\n' "$day" "$week" >>"$f"
-
-# Open the site folder too, so Zed reuses the website window and its panel
-# layout instead of opening LOG.md alone in a fresh one.
 exec zeditor ~/code/website "$f:$(wc -l <"$f")"
