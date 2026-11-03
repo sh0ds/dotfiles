@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# wifi: Wi-Fi picker in fuzzel (click "wifi" in the bar).
+# wifi: Wi-Fi picker in fuzzel (click the network icon on the rail).
 # Strongest networks first, the one you're on is marked. Pick one to connect;
 # new secured networks ask for the password. "wifi settings" (right-click)
 # opens nmtui in Afterhours colours for everything else (VPN, ethernet, DNS).
 set -euo pipefail
 
 settings() {
-  # nmtui's colours, mapped onto kitty's 16 colours (magenta = Arch blue, black = panel).
+  # nmtui's colours, mapped onto kitty's 16 colours (magenta = violet, black = panel).
   NEWT_COLORS='root=white,black border=magenta,black window=white,black shadow=black,black
 title=magenta,black button=black,white actbutton=black,magenta compactbutton=white,black
 checkbox=white,black actcheckbox=black,magenta entry=white,black disentry=gray,black

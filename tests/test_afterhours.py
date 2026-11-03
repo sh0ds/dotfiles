@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import time
 import unittest
 
 REPO = Path(__file__).resolve().parents[1]
@@ -31,6 +32,11 @@ class Afterhours(unittest.TestCase):
     def test_start_is_scoped_and_duplicate_safe(self):
         self.stub('quickshell')
         self.assertEqual(self.run_helper('afterhours', 'start').returncode, 0)
+        # start detaches (setsid -f), so the stub may finish a moment later.
+        for _ in range(50):
+            if self.calls.exists() and self.calls.read_text().endswith('\n'):
+                break
+            time.sleep(0.05)
         self.assertEqual(self.calls.read_text().splitlines(), ['-c', 'afterhours', '--no-duplicate'])
 
     def test_panels_use_the_named_shell_ipc(self):

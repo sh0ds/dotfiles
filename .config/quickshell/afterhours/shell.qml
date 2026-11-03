@@ -122,6 +122,29 @@ ShellRoot {
         } }
     }
     Timer { interval: 2000; repeat: true; triggeredOnStart: true; running: root.statsOpen; onTriggered: if (!statsRead.running) statsRead.running = true }
+    // Network for the rail: "wifi:<ssid>", "ethernet" or "offline", every 10 s.
+    property string net: ""
+    Process {
+        id: netRead
+        command: ["nmcli", "-t", "-f", "TYPE,STATE,CONNECTION", "device"]
+        stdout: StdioCollector { onStreamFinished: {
+            let out = "offline";
+            for (const line of text.trim().split("\n")) {
+                const [type, state, ...name] = line.split(":");
+                if (state !== "connected") continue;
+                if (type === "ethernet") { out = "ethernet"; break; }
+                if (type === "wifi") out = "wifi:" + name.join(":");
+            }
+            root.net = out;
+        } }
+    }
+    Timer { interval: 10000; repeat: true; running: true; triggeredOnStart: true; onTriggered: if (!netRead.running) netRead.running = true }
+    // Keep awake: holds a systemd idle inhibitor (hypridle respects it) while on.
+    property bool awake: false
+    Process {
+        running: root.awake
+        command: ["systemd-inhibit", "--what=idle", "--who=Afterhours", "--why=Keep awake from the rail", "sleep", "infinity"]
+    }
     Process { id: piPing; command: ["ping", "-c", "1", "-W", "1", root.piHost]; onExited: code => root.piUp = code === 0 }
     Timer { interval: 30000; repeat: true; running: true; triggeredOnStart: true; onTriggered: if (!piPing.running) piPing.running = true }
     Process { id: captureRead; command: ["pgrep", "-x", "wf-recorder"]; onExited: (code) => root.recording = code === 0 }
@@ -358,6 +381,24 @@ ShellRoot {
                     ink: root.piUp ? Theme.accent : Theme.danger
                     hint: "Raspberry Pi " + root.piHost + (root.piUp ? " is up · click: ssh" : " is not answering")
                     onClicked: root.run(["kitty", "-e", "ssh", "pi"])
+                }
+                Cell {
+                    visible: rail.width > 900
+                    label: root.net === "ethernet" ? "\uf0e8" : root.net.startsWith("wifi:") ? "\uf1eb" : "\uf127"
+                    size: 14
+                    ink: root.net === "offline" ? Theme.danger : Theme.text
+                    hint: root.net === "offline" ? "Offline · click: Wi-Fi" : root.net === "ethernet" ? "Wired · click: Wi-Fi · right-click: settings" : root.net.slice(5) + " · right-click: settings"
+                    onClicked: root.run(["wifi"])
+                    onRightClicked: root.run(["wifi", "settings"])
+                }
+                Cell {
+                    visible: rail.width > 900
+                    label: "\uf0f4"   // nf-fa-coffee
+                    size: 14
+                    selected: root.awake
+                    ink: Theme.muted
+                    hint: root.awake ? "Keeping the screen awake · click to stop" : "Keep the screen awake (no dim, lock or sleep)"
+                    onClicked: root.awake = !root.awake
                 }
                 Cell { label: (rail.width > 900 ? "vol " : "") + root.volume; hint: "Sound controls"; onClicked: root.run(["pavucontrol"]) }
                 Cell {
@@ -619,7 +660,15 @@ ShellRoot {
                     Timer {
                         interval: Math.max(1000, toast.life)
                         running: toast.modelData.urgency !== NotificationUrgency.Critical && !toast.hovered
-                        onTriggered: { if (toast.modelData.transient) toast.modelData.expire(); else root.dropToast(toast.modelData); }
+                        onTriggered: leave.start()
+                    }
+                    SequentialAnimation {
+                        id: leave
+                        ParallelAnimation {
+                            NumberAnimation { target: slide; property: "x"; to: 48; duration: Theme.glide; easing.type: Easing.InCubic }
+                            NumberAnimation { target: toast; property: "opacity"; to: 0; duration: Theme.motion; easing.type: Easing.InCubic }
+                        }
+                        ScriptAction { script: { if (toast.modelData.transient) toast.modelData.expire(); else root.dropToast(toast.modelData); } }
                     }
                     transform: Translate { id: slide }
                     Component.onCompleted: enter.start()

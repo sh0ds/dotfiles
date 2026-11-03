@@ -73,5 +73,14 @@ else
   echo "Plymouth isn't installed, skipped the boot splash"
 fi
 
+# ---- Icons: Papirus with violet folders (papirus-folders recolours the
+# installed theme in place, so it needs root and survives until the next
+# papirus-icon-theme update; run this script again after one) ----
+if command -v papirus-folders >/dev/null; then
+  sudo papirus-folders -C violet --theme Papirus-Dark && echo "Icons: Papirus folders are violet"
+else
+  echo "papirus-folders isn't installed (yay -S papirus-folders), folders keep Papirus blue"
+fi
+
 echo "Done. The login screen and splash show on the next boot."
 echo "Preview the login screen without rebooting: sddm-greeter-qt6 --test-mode --theme $t"

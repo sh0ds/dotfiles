@@ -45,7 +45,11 @@ hl.config({
 		-- A wide, soft shadow that falls slightly down, like light from above.
 		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(060508d0)", color_inactive = "rgba(06050880)" },
 		blur = { enabled = false },
-		dim_inactive = false,
+		-- Unfocused windows sink back a touch (8 %), so the one you type
+		-- into stands out without a heavier border. Games, fantasy consoles,
+		-- video, pixel art and Firefox's PiP are never dimmed (rules below).
+		dim_inactive = true,
+		dim_strength = 0.08,
 		glow = { enabled = false },
 		motion_blur = { enabled = false },
 	},
@@ -128,13 +132,13 @@ hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle",
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 96%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "settle" })
 
--- Fades. Opacity never changes on focus here, so fadeSwitch is off with the
--- dim and glow fades (both disabled in LOOK). The shadow fades with its
+-- Fades. Opacity never changes on focus here, so fadeSwitch is off; the
+-- inactive dim eases with the same curve as everything else. The shadow fades with its
 -- window. Screen off/on (DPMS) gets a slow 400 ms fade instead of a hard cut.
 hl.animation({ leaf = "fadeIn", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.2, bezier = "exit" })
 hl.animation({ leaf = "fadeSwitch", enabled = false })
-hl.animation({ leaf = "fadeDim", enabled = false })
+hl.animation({ leaf = "fadeDim", enabled = true, speed = 3, bezier = "glide" })
 hl.animation({ leaf = "fadeShadow", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "fadeGlow", enabled = false })
 hl.animation({ leaf = "fadePopupsIn", enabled = true, speed = 2, bezier = "glide" })
@@ -291,6 +295,7 @@ hl.window_rule({
 	content = "game",
 	immediate = true,
 	idle_inhibit = "fullscreen",
+	no_dim = true,
 })
 
 -- PICO-8 and Picotron (pico8, picotron, from the launcher) tile where you
@@ -303,6 +308,18 @@ hl.window_rule({
 	match = { class = "(?i)^(pico-?8.*|picotron)$" },
 	content = "game",
 	idle_inhibit = "fullscreen",
+	no_dim = true,
+})
+-- Video and art keep their true colours even when not focused.
+hl.window_rule({
+	name = "no-dim-media",
+	match = { class = "(?i)^(mpv|imv|aseprite|pixelorama)$" },
+	no_dim = true,
+})
+hl.window_rule({
+	name = "no-dim-pip",
+	match = { title = "^Picture-in-Picture$" },
+	no_dim = true,
 })
 -- Godot's running game (F5) floats centred over the editor instead of
 -- splitting the grid; its title ends in "(DEBUG)".
@@ -390,7 +407,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd(
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
-			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
+			.. "gsettings set org.gnome.desktop.interface accent-color purple; "
+			.. "gsettings set org.gnome.desktop.interface icon-theme Papirus-Dark; "
 			.. "gsettings set org.gnome.desktop.interface font-name 'JetBrainsMono Nerd Font 10'; "
 			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10'; "
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Posy_Cursor_Black; "

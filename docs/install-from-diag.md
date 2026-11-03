@@ -22,7 +22,7 @@ In your current desktop terminal, run a normal full Arch update with the new dep
 ```sh
 sudo pacman -Syu --needed \
   quickshell qt6-wayland qt6-declarative \
-  noto-fonts ttf-jetbrains-mono-nerd cava
+  noto-fonts ttf-jetbrains-mono-nerd cava papirus-icon-theme
 ```
 
 This is the package delta from the existing Diag setup. Keep the existing Hyprland, Hyprlock, Hypridle, portals, SwayOSD, awww, Kitty, audio and other helper dependencies. Keep Fuzzel: clipboard, Wi-Fi and calculator helpers still use it. Waybar, SwayNC, Wlogout and tmux are no longer used and can be uninstalled.

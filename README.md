@@ -10,7 +10,7 @@ The desktop follows the [game development plan](https://github.com/sh0ds/guides/
 
 Written from scratch in `.config/quickshell/afterhours/`, rather than a downloaded shell preset:
 
-- A floating, rounded rail on every monitor: workspace selection, media, sound, recording/sharing state, system tray, inbox, date, the Pi and session controls.
+- A floating, rounded rail on every monitor: an apps button, numbered workspaces, the focused window's title, a centred clock (click for the month), recording/sharing state, now playing with cava bars, system stats on click, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and session controls.
 - **Make / Play / Ship** launchpad: eight entries tied to the plan, with track identifiers and the motto: show up, ship small.
 - Searchable desktop applications, including keyboard selection and Enter to launch.
 - A D-Bus notification server with plain-text content, actions, quiet mode, passive toasts and a bounded session inbox. Screen-sharing events suppress toasts.

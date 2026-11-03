@@ -68,43 +68,102 @@ switch slider { border-radius: 999px; background-color: #c9c5d4; }
 switch:checked slider { background-color: #0d0c10; }
 scale slider { background-color: #c9c5d4; }
 
-/* Thunar: a tiled file browser with the same rails as the editor and shell. */
+/* Thunar in Afterhours: the shell's look in a file manager. A charcoal
+   view, the sidebar on a panel with rounded rows, the path as a row of
+   pills with the current folder in violet, rounded tabs, and Papirus icons
+   with violet folders (gtk-icon-theme-name in settings.ini). */
 .thunar {
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 18px;
+  font-size: 13px;
   background-color: #0d0c10;
   color: #c9c5d4;
 }
 .thunar toolbar, .thunar menubar {
-  background-color: #131218;
-  border-bottom: 1px solid #35323f;
+  background-color: #0d0c10;
+  border-bottom: 1px solid #25232d;
+  padding: 6px 8px;
+}
+.thunar toolbar button {
+  border-radius: 8px;
   padding: 4px;
+  min-width: 26px;
+  min-height: 26px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  transition: background-color 200ms ease-out;
 }
-.thunar .view { background-color: #0d0c10; color: #c9c5d4; }
-.thunar .sidebar, .thunar .sidebar .view { background-color: #131218; }
-.thunar .view:selected, .thunar .sidebar .view:selected {
-  background-color: #2b2540;
-  color: #ecebf2;
-}
-.thunar paned > separator { background-color: #35323f; min-width: 1px; min-height: 1px; }
-.thunar notebook > header {
+.thunar toolbar button:hover { background-color: #1b1a22; }
+
+/* Location bar: a rounded field, or path pills */
+.thunar toolbar entry {
+  border-radius: 10px;
   background-color: #131218;
-  border-bottom: 1px solid #35323f;
+  border: 1px solid #35323f;
+  min-height: 30px;
+  padding: 0 10px;
+}
+.thunar toolbar entry:focus { border-color: #b49cf0; box-shadow: 0 0 0 3px alpha(#b49cf0, 0.14); }
+.thunar .path-bar button, .thunar .location-button {
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin: 0 2px;
+  background-color: #131218;
+  border: 1px solid #25232d;
+  color: #948fa3;
+  box-shadow: none;
+  transition: background-color 200ms ease-out, color 200ms ease-out;
+}
+.thunar .path-bar button:hover, .thunar .location-button:hover { background-color: #1b1a22; color: #e0dde8; }
+.thunar .path-bar button:checked, .thunar .location-button:checked {
+  background-color: #2a2340;
+  border-color: #b49cf0;
+  color: #cdbcf7;
+}
+
+/* The view and the sidebar */
+.thunar .view { background-color: #0d0c10; color: #c9c5d4; }
+.thunar .sidebar, .thunar .sidebar .view, .thunar .shortcuts-pane {
+  background-color: #131218;
+  font-size: 13px;
+}
+.thunar .sidebar .view { padding: 4px 6px; }
+.thunar .sidebar .view:selected, .thunar .shortcuts-pane .view:selected {
+  background-color: #2a2340;
+  color: #cdbcf7;
+}
+.thunar paned > separator { background-color: #25232d; min-width: 1px; min-height: 1px; }
+
+/* Tabs */
+.thunar notebook > header {
+  background-color: #0d0c10;
+  border-bottom: 1px solid #25232d;
+  padding: 2px 6px;
 }
 .thunar notebook > header tabs > tab {
   border-radius: 8px;
-  border-bottom: 2px solid transparent;
   padding: 4px 12px;
+  margin: 4px 2px;
+  color: #948fa3;
+  border: none;
+  transition: background-color 200ms ease-out, color 200ms ease-out;
 }
+.thunar notebook > header tabs > tab:hover { background-color: #131218; color: #e0dde8; }
 .thunar notebook > header tabs > tab:checked {
   background-color: #1b1a22;
-  border-bottom-color: #b49cf0;
-  color: #cdbcf7;
+  box-shadow: inset 0 0 0 1px #35323f;
+  color: #e0dde8;
 }
-.thunar statusbar { background-color: #0d0c10; color: #948fa3; border-top: 1px solid #35323f; padding: 4px 8px; }
+.thunar statusbar {
+  background-color: #0d0c10;
+  color: #948fa3;
+  border-top: 1px solid #25232d;
+  padding: 4px 10px;
+  font-size: 12px;
+}
 
-/* Selection is a flat row, not a rounded accent button. Keep actual icons
-   and artwork un-tinted so selected folders and archives cannot turn black. */
+/* Selection: a soft violet pill. Icons and artwork stay un-tinted, so
+   selected folders and images keep their colours. */
 @define-color theme_selected_bg_color #2b2540;
 @define-color theme_selected_fg_color #ecebf2;
 .view, .view:selected, .thunar .view:selected {
@@ -115,19 +174,23 @@ scale slider { background-color: #c9c5d4; }
   background-color: #2b2540;
   color: #ecebf2;
 }
-.thunar .sidebar .view { font-size: 16px; }
-.thunar statusbar { font-size: 16px; }
+.thunar .view:hover { background-color: #131218; }
+/* Rubber-band selection while dragging */
+.thunar .view rubberband, .thunar rubberband {
+  background-color: alpha(#b49cf0, 0.12);
+  border: 1px solid alpha(#b49cf0, 0.6);
+  border-radius: 6px;
+}
 treeview.view header button {
   font-family: "JetBrainsMono Nerd Font";
-  font-size: 16px;
+  font-size: 12px;
   font-weight: normal;
-  color: #c9c5d4;
-  background-color: #131218;
-  border-bottom: 1px solid #35323f;
-  border-radius: 8px;
+  color: #948fa3;
+  background-color: #0d0c10;
+  border: none;
+  border-bottom: 1px solid #25232d;
   padding: 4px 8px;
 }
-.thunar toolbar button { padding: 4px; min-width: 24px; min-height: 24px; }
 
 /* File and archive dialogs inherit the same palette and readable typography. */
 window.dialog {
@@ -136,6 +199,6 @@ window.dialog {
 }
 window.dialog .dialog-action-area { padding: 8px; }
 window.dialog .dialog-action-area button { min-height: 28px; padding: 4px 12px; }
-treeview.view { font-size: 18px; }
+treeview.view { font-size: 13px; }
 /* This is a cell-renderer view in archive browsers as well as file pickers. */
 treeview.view:selected { background-color: #2b2540; color: #ecebf2; }
