@@ -4,6 +4,10 @@
 # PATH: your scripts, then GHCup (Haskell)
 export PATH="$HOME/.local/bin:$PATH"
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
+# Emscripten (emcc) and itch.io's butler: Arch's emscripten only adds itself
+# to PATH in login shells, and butler lives in its own folder.
+[ -d /usr/lib/emscripten ] && PATH="$PATH:/usr/lib/emscripten"
+[ -d "$HOME/.local/opt/butler" ] && PATH="$PATH:$HOME/.local/opt/butler"
 
 export EDITOR=helix
 export VISUAL=helix

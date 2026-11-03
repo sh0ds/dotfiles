@@ -307,6 +307,23 @@ hl.window_rule({
 	idle_inhibit = "fullscreen",
 })
 
+-- Game dev (docs/gamedev.md). A game started from the Godot editor (F5)
+-- floats centred at its own size over the editor instead of squeezing it
+-- into half a tile; Godot titles that window "<project> (DEBUG)".
+hl.window_rule({
+	name = "godot-run",
+	match = { title = "\\(DEBUG\\)$" },
+	float = true,
+	center = true,
+})
+-- Bitwig keeps the screen awake while it has focus: listening back to a
+-- mix for ten minutes without touching anything is normal.
+hl.window_rule({
+	name = "bitwig",
+	match = { class = "(?i)bitwig" },
+	idle_inhibit = "focus",
+})
+
 -- GameMode for every game, no Steam launch options needed: when a game's
 -- window opens, gamemoded switches it on for that process, and it switches
 -- off by itself when the game quits. Each process is only asked once, since

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# sfx: the sound-effect makers from the craft track, in Firefox.
+#   sfx           jsfxr (sfxr.me): presets, one click, export WAV
+#   sfx chiptone  ChipTone: more control, same idea
+set -euo pipefail
+case ${1:-jsfxr} in
+  jsfxr) exec xdg-open https://sfxr.me ;;
+  chiptone) exec xdg-open https://sfbgames.itch.io/chiptone ;;
+  *) echo "usage: sfx [jsfxr|chiptone]" >&2; exit 2 ;;
+esac

@@ -59,6 +59,7 @@ Apps:
 - **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7, and songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`. Setup in [docs/dj-vm.md](docs/dj-vm.md).
 - **Obsidian** for notes on `SUPER+O`, **Proton Pass** for passwords on `SUPER+SHIFT+P`.
 - **PICO-8 and Picotron**, Lexaloffle's fantasy consoles, from the launcher. They tile where I start them, scale pixel-perfect on black, and starting one again jumps to it. PICO-8 keeps carts in `~/code/pico8` and screenshots/GIFs in `~/Pictures/pico-8`.
+- **Game dev**: Godot (its test runs float over the editor), Aseprite from Steam, Bitwig Studio for music, jsfxr and ChipTone for sound effects, and SDL3, Lua and Emscripten for my own engine. `butler` uploads to itch.io. Setup and the reasons are in [docs/gamedev.md](docs/gamedev.md).
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
 
 Keeping Arch healthy:
@@ -84,6 +85,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `chat-notify`: WhatsApp messages as notifications, click one and it jumps to WhatsApp
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
+- `bitwig`, `aseprite`, `sfx`: Bitwig with low audio latency, Aseprite through Steam (`aseprite -b ...` runs its batch CLI for build scripts), and the browser sound-effect makers
 - `pico8` / `picotron`: start or jump to the fantasy consoles from `~/.local/opt`, with a notification if one isn't unzipped there yet
 - `thunar-setup`: fills missing Diag preferences, merges coding/music actions and sidebar shortcuts, and sets kitty for Open Terminal Here; `--apply` reapplies the managed layout
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
@@ -150,6 +152,13 @@ sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-d
   python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector kdeconnect
 yay -S wlogout nchat proton-pass-bin
+```
+
+For game dev, also these (details in [docs/gamedev.md](docs/gamedev.md)):
+
+```
+sudo pacman -S --needed godot sdl3 lua emscripten gdb pkgconf pipewire-jack realtime-privileges kdenlive
+yay -S bitwig-studio
 ```
 
 ### Installing

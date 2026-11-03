@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ChipTone
+Comment=Sound effects in the browser, more control than jsfxr
+Exec=sfx chiptone
+Icon=audio-x-generic
+Terminal=false
+Categories=Audio;Development;

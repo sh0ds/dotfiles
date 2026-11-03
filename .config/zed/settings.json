@@ -42,6 +42,8 @@
     "shell": "system"
   },
 
+  // Godot: GDScript completion comes from the running Godot editor's language
+  // server (port 6005), so keep Godot open while you write scripts here.
   // Language servers for the stack. Haskell uses GHCup's
   // haskell-language-server-wrapper from PATH; Erlang uses ELP from
   // ~/.local/bin instead of erlang_ls; C and Bash work as shipped.
@@ -51,7 +53,8 @@
     "html": true,
     "lua": true,
     "toml": true,
-    "make": true
+    "make": true,
+    "gdscript": true
   },
   "languages": {
     "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] }

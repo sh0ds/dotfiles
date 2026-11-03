@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Bitwig Studio
+Comment=Music and game soundtracks, low-latency through PipeWire JACK
+Exec=bitwig
+Icon=bitwig-studio
+Terminal=false
+Categories=AudioVideo;Audio;

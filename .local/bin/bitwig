@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# bitwig: Bitwig Studio (AUR bitwig-studio), started or jumped to.
+# PIPEWIRE_LATENCY asks PipeWire's JACK layer for 128 frames at 48 kHz
+# (~2.7 ms), low enough to play a MIDI keyboard live. Raise it to 256 if
+# you hear crackles.
+set -euo pipefail
+if ! command -v bitwig-studio >/dev/null; then
+  notify-send -a Bitwig "Bitwig Studio is not installed" "yay -S bitwig-studio"
+  exit 1
+fi
+export PIPEWIRE_LATENCY=${PIPEWIRE_LATENCY:-128/48000}
+exec app '(?i)bitwig' bitwig-studio "$@"

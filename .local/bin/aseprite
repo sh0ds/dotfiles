@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# aseprite: Aseprite from Steam (app 431730).
+#   aseprite                  open it (through Steam), or jump to it
+#   aseprite -b sprite.aseprite --sheet out.png ...
+#                             with arguments, run the binary directly: the
+#                             batch CLI for exporting sheets in build scripts
+set -euo pipefail
+bin=${ASEPRITE_BIN:-$HOME/.local/share/Steam/steamapps/common/Aseprite/aseprite}
+if [ "$#" -gt 0 ]; then
+  [ -x "$bin" ] || { echo "aseprite: not installed in Steam ($bin)" >&2; exit 1; }
+  exec "$bin" "$@"
+fi
+if [ ! -x "$bin" ]; then
+  notify-send -a Aseprite "Aseprite is not installed" "Install it in Steam, then try again."
+  exit 1
+fi
+exec app '(?i)^aseprite$' steam -silent steam://rungameid/431730

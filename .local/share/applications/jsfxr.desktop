@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=jsfxr
+Comment=Retro sound effects in the browser, export WAV
+Exec=sfx jsfxr
+Icon=audio-x-generic
+Terminal=false
+Categories=Audio;Development;

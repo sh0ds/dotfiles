@@ -87,5 +87,16 @@ check "responsive power menu on PATH" command -v power-menu
 check "btop uses Diag" grep -q '^color_theme = "diag"' "$HOME/.config/btop/btop.conf"
 check "Qt palette path expanded" sh -c 'test -f "$HOME/.config/qt6ct/qt6ct.conf" && ! grep -q @CONFIG_HOME@ "$HOME/.config/qt6ct/qt6ct.conf"'
 
+section "Game dev (docs/gamedev.md)"
+check "pico8 unzipped in ~/.local/opt" test -x "$HOME/.local/opt/pico-8/pico8"
+check "picotron unzipped in ~/.local/opt" test -x "$HOME/.local/opt/picotron/picotron"
+check "godot" command -v godot
+check "sdl3 and lua for the engine" pkg-config --exists sdl3 lua
+check "emcc on PATH" command -v emcc
+check "butler on PATH" command -v butler
+check "aseprite in Steam" test -x "$HOME/.local/share/Steam/steamapps/common/Aseprite/aseprite"
+check "bitwig-studio" command -v bitwig-studio
+check "PipeWire JACK (pipewire-jack)" pacman -Q pipewire-jack
+
 printf '\n%d OK, %d FAIL\n' "$pass" "$fail"
 exit "$fail"
