@@ -86,6 +86,8 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
 - `bitwig`, `aseprite`, `sfx`: Bitwig with low audio latency, Aseprite through Steam (`aseprite -b ...` runs its batch CLI for build scripts), and the browser sound-effect makers
+- `wall-streak`: lights a grid dot on the wallpaper for every day a commit touched the site's LOG.md (27 weeks, Monday on top) and prints `log: N/7` under it; redraws when the repo changes
+- `readout`: five dim lines bottom left on the wallpaper (uptime, Pi, now playing, the Next line of my last LOG.md entry, `log N/7`), in a kitty panel behind the windows
 - `frame`: the focused window's border turns amber while recording or sharing the screen and grey on do-not-disturb, so the desktop's state is always in view
 - `shot`: a region screenshot in a Diag frame (rule, blue marker, caption, date, sh0ds.dev) for devlogs, saved and copied (`ALT+Print`)
 - `pico8` / `picotron`: start or jump to the fantasy consoles from `~/.local/opt`, with a notification if one isn't unzipped there yet
@@ -103,7 +105,7 @@ Current desktop captures from 2026-10-23, kept at their original resolution. The
 
 ### Desktop
 
-The dot-grid wallpaper, pixel Arch mark and slim Waybar on an empty workspace.
+The dot-grid wallpaper, pixel Arch mark and slim Waybar on an empty workspace. Under the mark, the grid doubles as my learning log, and the readout sits bottom left.
 
 ![Diag wallpaper and top rail](screenshots/desktop.png)
 

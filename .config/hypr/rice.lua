@@ -402,6 +402,16 @@ hl.on("hyprland.start", function()
 	-- The focus frame turns amber while recording or sharing, grey on
 	-- do-not-disturb (~/.local/bin/frame).
 	hl.exec_cmd("frame")
+	-- The wallpaper's dot grid shows your LOG.md days (wall-streak), and
+	-- five diagnostic lines sit bottom left on the main screen (readout,
+	-- in a kitty panel on the background layer: windows cover it, and it
+	-- reserves no space).
+	hl.exec_cmd("sleep 2 && wall-streak --watch")
+	hl.exec_cmd(
+		"kitty +kitten panel --edge=bottom --layer=background --lines=5 "
+			.. "--margin-left=40 --margin-bottom=32 --exclusive-zone=0 --override-exclusive-zone "
+			.. "--output-name=DP-4 -o background_opacity=0 readout"
+	)
 	hl.exec_cmd("udiskie")
 	hl.exec_cmd("playerctld daemon")
 	hl.exec_cmd("update-check --watch")

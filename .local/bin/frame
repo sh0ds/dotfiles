@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# frame: the focused window's border says what the desktop is doing.
+#   Arch blue  normal
+#   amber      recording (rec-toggle) or sharing the screen (live-status)
+#   grey       do-not-disturb: notifications are being held back
+# rice.lua starts it once. It checks every second and only touches the
+# border when the state changes; the change eases in like any other.
+set -uo pipefail
+live_flag=${XDG_RUNTIME_DIR:-/tmp}/diag-live
+last=""
+while :; do
+  if pgrep -x wf-recorder >/dev/null || [ -e "$live_flag" ]; then
+    c=ffb000
+  elif [ "$(swaync-client -D 2>/dev/null)" = true ]; then
+    c=8a929c
+  else
+    c=1793d1
+  fi
+  if [ "$c" != "$last" ] &&
+     hyprctl eval "hl.config({ general = { col = { active_border = \"rgb($c)\" } } })" >/dev/null; then
+    last=$c
+  fi
+  sleep 1
+done

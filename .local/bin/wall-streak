@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# wall-streak: the wallpaper's dot grid as your log. Below the Arch mark,
+# 27 weeks of grid dots (columns, Monday on top) light up Arch blue on every
+# day a commit touched LOG.md in ~/code/website, any branch. Under them:
+# "log: N/7" in the same quiet colours as "boot: ok": the days of the last
+# seven that count for your 4-of-7.
+#   wall-streak          render once and set it
+#   wall-streak --watch  re-render whenever the site repo changes (rice.lua)
+set -euo pipefail
+base=~/.local/share/backgrounds/diag.png
+out=${XDG_CACHE_HOME:-$HOME/.cache}/diag-wall.png
+repo=${SITE_REPO:-$HOME/code/website}
+weeks=27
+
+render() {
+  local days="" font today monday x0 y0 w d row x y n=0 im=magick
+  local -a draw=()
+  [ -d "$repo/.git" ] && days=$(git -C "$repo" log --all --format=%cs -- LOG.md 2>/dev/null | sort -u)
+  font=$(fc-match -f '%{file}' 'Terminess Nerd Font Mono')
+  today=$(date +%F)
+  # Grid points sit at x = 20 + 25k, y = 5 + 25k (3840x2160 wallpaper).
+  # Column 76 is the centre (x = 1920); row 50 (y = 1255) is just under
+  # the "boot: ok" label.
+  x0=$((20 + 25 * (76 - weeks / 2))) y0=1255
+  monday=$(date -d "$today -$(( $(date +%u) - 1 )) days" +%F)
+  for (( w = 0; w < weeks; w++ )); do
+    for (( row = 0; row < 7; row++ )); do
+      d=$(date -d "$monday -$(( (weeks - 1 - w) * 7 - row )) days" +%F)
+      [[ $d > $today ]] && continue
+      x=$((x0 + 25 * w)) y=$((y0 + 25 * row))
+      if grep -qx "$d" <<<"$days"; then
+        draw+=(-fill '#1793d1' -draw "rectangle $((x - 1)),$((y - 1)) $((x + 1)),$((y + 1))")
+      else
+        draw+=(-fill '#3f4650' -draw "point $x,$y")
+      fi
+    done
+  done
+  for (( row = 0; row < 7; row++ )); do
+    grep -qx "$(date -d "$today -$row days" +%F)" <<<"$days" && n=$((n + 1))
+  done
+  mkdir -p "$(dirname "$out")"
+  command -v magick >/dev/null || im=convert
+  "$im" "$base" "${draw[@]}" -font "$font" -pointsize 20 -gravity north \
+    -fill '#0e3d5c' -annotate "-20+$((y0 + 7 * 25 + 8))" 'log:' \
+    -fill '#3f4650' -annotate "+25+$((y0 + 7 * 25 + 8))" "$n/7" \
+    "$out.tmp.png"
+  mv "$out.tmp.png" "$out"
+  echo "$n" > "$(dirname "$out")/diag-log-days"   # readout shows it too
+  awww img --resize no --fill-color 000000 --transition-type none "$out" 2>/dev/null || true
+}
+
+render
+if [ "${1:-}" = --watch ]; then
+  last=$(git -C "$repo" for-each-ref --format='%(objectname)' 2>/dev/null | md5sum)
+  while sleep 60; do
+    now=$(git -C "$repo" for-each-ref --format='%(objectname)' 2>/dev/null | md5sum)
+    # a new commit, or midnight (the grid shifts by a day)
+    if [ "$now" != "$last" ] || [ "$(date +%H%M)" = 0000 ]; then
+      last=$now
+      render
+    fi
+  done
+fi
