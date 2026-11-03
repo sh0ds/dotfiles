@@ -21,8 +21,8 @@ end
 
 -- Diag: the look of sh0ds.dev (Terminess, ruled rows and precise labels) in Arch Linux colours: black, cool greys and one Arch
 -- blue. Square corners, 2 px borders like the site's rules, small gaps, no
--- shadows, no blur, no dimming. Motion is small and physical: damped
--- springs, no bounce (see MOTION). The focused window is the only thing on
+-- blur, no dimming, one soft shadow for depth. Motion is physical: damped
+-- springs and eased fades, no bounce (see MOTION). The focused window is the only thing on
 -- screen with colour in its frame.
 -- Palette (the same everywhere: kitty, waybar, swaync, fuzzel, GTK, Helix):
 --   bg #000000  row #161a1f  rule #3f4650  dim #5d6670  mid #8a929c
@@ -44,7 +44,9 @@ hl.config({
 		rounding = 0,
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
-		shadow = { enabled = false },
+		-- A soft shadow, black on black: invisible on tiles, it only shows
+		-- where a floating window or dialog sits over another one.
+		shadow = { enabled = true, range = 18, render_power = 3, color = "rgba(000000b3)" },
 		blur = { enabled = false },
 		dim_inactive = false,
 		glow = { enabled = false },
@@ -88,65 +90,75 @@ hl.config({
 })
 
 ------------------------------------
----- MOTION: measured, not decorated ----
+---- MOTION: smooth, never slow ----
 ------------------------------------
 
 -- Two rules. Anything that moves is a critically damped spring; anything
--- that only appears or disappears is a short linear fade.
+-- that only appears, disappears or changes colour is an eased fade.
 --
 -- Why springs: Hyprland steps them with the exact solution of the spring
 -- equation, so the motion is the same at any frame rate, and when a move is
 -- interrupted (SUPER+arrow twice, fast) the window keeps its velocity and
 -- bends towards the new target instead of restarting. Critically damped
--- (damping = 2 * sqrt(stiffness * mass)) is the fastest a spring can settle
--- without overshooting: no bounce, ever. speed is ignored for springs, the
--- physics sets the duration.
+-- (dampening = 2 * sqrt(stiffness * mass)) is the fastest a spring can
+-- settle without overshooting: no bounce, ever. speed is ignored for
+-- springs, the physics sets the duration.
 --
--- Amplitude stays tiny: windows scale 2 %, workspaces shift 4 %. The eye
--- reads the direction, nothing travels across the screen.
--- Exits are about twice as fast as entries, so closing never waits.
+-- Why eased fades: a linear fade starts and stops abruptly, which reads as
+-- a flicker at 180 Hz. "glide" (ease-out quint) does most of the change in
+-- the first third and then lands softly; "exit" (ease-in) leaves quickly.
 --
--- Three timings, nothing else (bezier speed is in 100 ms steps):
---   80 ms   popups, menus and exits
---   120 ms  window entry fade and focus frame
---   ~97 ms to 90 % / ~166 ms to 99 %, every spring
-hl.curve("settle", { type = "spring", mass = 1, stiffness = 1600, dampening = 80 })
-hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
+-- Amplitude stays small: windows grow from 94 %, workspaces shift 8 %. The
+-- eye reads the direction, nothing travels across the screen. Exits are
+-- faster than entries, so closing never waits.
+--
+-- Timings (bezier speed is in 100 ms steps):
+--   120 ms  exits
+--   200 ms  fades, layers and every colour change (bar, menus and
+--           notifications use the same 200 ms ease-out in their CSS)
+--   ~130 ms to 90 % / ~220 ms to 99 %   "settle", windows
+--   ~160 ms to 90 % / ~270 ms to 99 %   "drift", workspaces
+hl.curve("settle", { type = "spring", mass = 1, stiffness = 900, dampening = 60 })
+hl.curve("drift", { type = "spring", mass = 1, stiffness = 600, dampening = 49 })
+hl.curve("glide", { type = "bezier", points = { { 0.22, 1 }, { 0.36, 1 } } })
+hl.curve("exit", { type = "bezier", points = { { 0.4, 0 }, { 1, 1 } } })
 
--- Windows: open from 98 % with a fade, close to 99 % in 80 ms. Tiles
--- glide to their new place when the layout changes.
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 98%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 0.8, bezier = "linear", style = "popin 99%" })
+-- Windows: grow in from 94 % with a fade, shrink to 97 % on the way out.
+-- Tiles glide to their new place when the layout changes.
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 94%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 97%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "settle" })
 
 -- Fades. Opacity never changes on focus here, so fadeSwitch is off with the
--- dim, shadow and glow fades (all of those are disabled in LOOK). Screen
--- off/on (DPMS) gets a slow 400 ms fade instead of a hard cut.
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.2, bezier = "linear" })
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 0.8, bezier = "linear" })
+-- dim and glow fades (both disabled in LOOK). The shadow fades with its
+-- window. Screen off/on (DPMS) gets a slow 400 ms fade instead of a hard cut.
+hl.animation({ leaf = "fadeIn", enabled = true, speed = 2, bezier = "glide" })
+hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.2, bezier = "exit" })
 hl.animation({ leaf = "fadeSwitch", enabled = false })
 hl.animation({ leaf = "fadeDim", enabled = false })
-hl.animation({ leaf = "fadeShadow", enabled = false })
+hl.animation({ leaf = "fadeShadow", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "fadeGlow", enabled = false })
-hl.animation({ leaf = "fadePopupsIn", enabled = true, speed = 0.8, bezier = "linear" })
-hl.animation({ leaf = "fadePopupsOut", enabled = true, speed = 0.8, bezier = "linear" })
-hl.animation({ leaf = "fadeDpms", enabled = true, speed = 4, bezier = "linear" })
+hl.animation({ leaf = "fadePopupsIn", enabled = true, speed = 2, bezier = "glide" })
+hl.animation({ leaf = "fadePopupsOut", enabled = true, speed = 1.2, bezier = "exit" })
+hl.animation({ leaf = "fadeDpms", enabled = true, speed = 4, bezier = "glide" })
 
--- The focus frame changes colour in 120 ms, the same time the bar's
+-- The focus frame changes colour in 200 ms, the same time the bar's
 -- workspace marker takes (waybar style.css), so both land together.
-hl.animation({ leaf = "border", enabled = true, speed = 1.2, bezier = "linear" })
+hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "borderangle", enabled = false })
 
--- Workspaces: a 4 % sideways shift under a cross-fade, so you see which
--- way you went without the whole screen sliding past.
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "settle", style = "slidefade 4%" })
+-- Workspaces: an 8 % sideways drift under a cross-fade, so you see which
+-- way you went without the whole screen sliding past. A softer spring than
+-- windows, because the whole screen changes.
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefade 8%" })
 
--- Layers share an 80 ms fade. Keep launcher/notification text at its
--- native size instead of scaling the pixel font or sliding a whole panel.
-hl.animation({ leaf = "layersIn", enabled = true, speed = 0.8, bezier = "linear", style = "fade" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 0.8, bezier = "linear", style = "fade" })
-hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 0.8, bezier = "linear" })
-hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 0.8, bezier = "linear" })
+-- Layers fade in 200 ms. The launcher keeps its pixel font at native size
+-- (scaling blurs Terminess); notifications slide in from the edge they
+-- live on.
+hl.animation({ leaf = "layersIn", enabled = true, speed = 2, bezier = "glide", style = "fade" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = 1.2, bezier = "exit", style = "fade" })
+hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 2, bezier = "glide" })
+hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.2, bezier = "exit" })
 -- A new monitor just appears.
 hl.animation({ leaf = "monitorAdded", enabled = false })
 
@@ -157,8 +169,8 @@ hl.layer_rule({ name = "still-bar", match = { namespace = "^waybar$" }, no_anim 
 hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpicker)$" }, no_anim = true })
 -- Launcher and calculator fade without enlarging the text.
 hl.layer_rule({ name = "launcher-fade", match = { namespace = "^launcher$" }, animation = "fade" })
--- Notifications use the same quiet entrance as the launcher.
-hl.layer_rule({ name = "notify-fade", match = { namespace = "^swaync-(control-center|notification-window)$" }, animation = "fade" })
+-- Notifications and their panel slide in from the right edge.
+hl.layer_rule({ name = "notify-slide", match = { namespace = "^swaync-(control-center|notification-window)$" }, animation = "slide right" })
 
 ------------------------------------------------
 ---- SMART GAPS: one window fills the screen ----

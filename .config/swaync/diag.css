@@ -1,9 +1,9 @@
-/* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured, square and still. Additions live in style.css. */
+/* Diag for swaync: the structure of github.com/catppuccin/swaync (MIT), recoloured and square; colours ease in 200 ms like the bar. Additions live in style.css. */
 * {
   all: unset;
   font-size: 18px;
   font-family: "Terminess Nerd Font";
-  transition: none;
+  transition: background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out;
 }
 
 trough highlight {

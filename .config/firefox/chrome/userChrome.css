@@ -168,7 +168,7 @@ panel, menupopup {
 
 @media (prefers-reduced-motion: no-preference) {
   .tab-background {
-    transition: background-color 120ms linear !important;
+    transition: background-color 200ms ease-out !important;
   }
 }
 

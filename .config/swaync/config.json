@@ -8,7 +8,7 @@
   "control-center-width": 400,
   "notification-window-width": 384,
   "timeout": 6,
-  "transition-time": 120,
+  "transition-time": 200,
   "timeout-low": 3,
   "timeout-critical": 0,
   "fit-to-screen": true,

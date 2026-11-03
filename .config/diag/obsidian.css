@@ -83,5 +83,5 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .theme-dark .workspace-tab-header,
-  .theme-dark .nav-file-title { transition: background-color 120ms linear; }
+  .theme-dark .nav-file-title { transition: background-color 200ms ease-out; }
 }

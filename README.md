@@ -14,7 +14,7 @@ Black, cool greys and Arch blue (`#1793d1`). Terminess for the interface, square
 
 The active thing gets the colour. Tabs use a blue label or underline on a quiet row; text selection uses blue-grey with light text. Buttons and mode indicators can invert to blue with black text. Amber means attention, red means an error, green means success. The Pi label is the exception: red `pi`, green `:`, neutral `up` or red `down`.
 
-The surfaces are opaque. No blur, glow or shadows. Windows settle on a spring without bouncing, and short fades handle menus and popups without scaling their text. Workspace travel is small, the bar stays still, and there are no scrolling titles or decorative loops.
+The surfaces are opaque. No blur or glow, only a soft black shadow that shows where a floating window overlaps another. Windows grow in on a spring without bouncing, workspaces drift a little sideways, and notifications slide in from the right. Every fade and colour change uses the same 200 ms ease-out, from the window frame to the bar, menus, Firefox tabs and the lock screen, and the terminal cursor leaves a short trail when it jumps. The bar stays still, and there are no scrolling titles or decorative loops.
 
 GTK, Qt, browser chrome, terminal tools and Electron apps share the same hierarchy as far as their theme support allows. Websites, documents, pictures and video keep their own content colours and typography. The lock screen, login screen and boot splash retain the Diag identity.
 
