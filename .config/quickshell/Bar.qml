@@ -1,4 +1,4 @@
-// The bar on one screen: a rounded glass strip floating 8 px under the top
+// The bar on one screen: a rounded glass strip floating 6 px under the top
 // edge, lined up with the windows' outer gap. Workspaces, LIVE/REC and
 // media on the left, the clock in the middle, sys, pi, volume, msg, tray
 // and exit on the right.
@@ -11,7 +11,7 @@ PanelWindow {
 	required property ShellScreen modelData
 	screen: modelData
 	anchors { top: true; left: true; right: true }
-	margins { top: 8; left: 14; right: 14 }
+	margins { top: 6; left: 10; right: 10 }
 	implicitHeight: Theme.height + 2
 	color: "transparent"
 	visible: Theme.barShown

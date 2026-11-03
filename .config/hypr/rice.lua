@@ -31,10 +31,10 @@ end
 --   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
 	general = {
-		-- 12 px between neighbouring tiles, 14 px at the edge (the bar
-		-- floats 8 px down, so windows line up under its rounded ends).
-		gaps_in = 6,
-		gaps_out = 14,
+		-- 8 px between neighbouring tiles, 10 px at the edge (the bar
+		-- floats 6 px down and 10 px in, so windows line up under its ends).
+		gaps_in = 4,
+		gaps_out = 10,
 		border_size = 2,
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
 		allow_tearing = true,
