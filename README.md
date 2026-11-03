@@ -22,7 +22,7 @@ GTK, Qt, browser chrome, terminal tools and Electron apps share the same hierarc
 
 A slim instrument rail across the top. Numbered workspaces and a bounded `play` reading sit on the left, the clock holds the centre, and separated `sys`, `pi`, volume, messages, tray and `[exit]` controls sit on the right. A blue underline marks the active workspace; amber marks a recording or an urgent window. Hover changes colour without moving the layout.
 
-Click `sys` to expand CPU, memory and temperature; its tooltip holds GPU and network detail. Right-click opens btop. The centred clock shows the date/calendar on hover; click switches between month and year. LIVE and REC appear beside the workspaces. `[exit]` opens a compact, text-only session console with numbered actions and visible hotkeys. No logos or power icons.
+Click `sys` to expand CPU, memory and temperature; its tooltip holds GPU and network detail. Right-click opens btop. The centred clock shows the date on hover; click opens the month with week numbers, scroll changes month. LIVE and REC appear beside the workspaces. `[exit]` opens a compact, text-only session console with numbered actions and visible hotkeys. No logos or power icons.
 
 The notification centre uses a matching flat music transport: a solid black-grey surface, small real artwork when available, and framed playback controls. It never puts blurred artwork or an application logo behind the track title.
 
@@ -38,7 +38,7 @@ The things I need for a few seconds are normal tiled windows with one key each. 
 
 Desktop:
 
-- **swaync** for notifications (`SUPER+N` opens the panel), **swayosd** for the volume bar, **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
+- **Quickshell** draws the bar and the volume popup, both in QML in `.config/quickshell`. **swaync** does notifications (`SUPER+N` opens the panel), **fuzzel** as the launcher. fuzzel also runs the calculator, emoji picker, docs search, clipboard history, window switcher and Wi-Fi menu.
 - **hyprlock** locks the screen: black, `user@host`, kernel and uptime, the clock, a `password:` prompt and whatever is playing. **hypridle** locks after 10 minutes, turns the screens off after 11 and suspends after an hour.
 - **wlogout** is the power menu, **udiskie** mounts USB sticks when you plug them in (`SUPER+SHIFT+U` unmounts them all), and **awww** draws the background: black with a faint dot grid and a dim pixel Arch logo, 1:1 so it stays sharp.
 
@@ -147,7 +147,7 @@ Arch with Hyprland 0.56 or newer (the Lua config doesn't work on older versions)
 
 ```
 sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
-  xdg-desktop-portal-gtk hyprpolkitagent waybar swaync swayosd awww fuzzel kitty tmux helix zed \
+  xdg-desktop-portal-gtk hyprpolkitagent quickshell swaync awww fuzzel kitty tmux helix zed \
   starship eza fzf zoxide fastfetch sl ttf-terminus-nerd xorg-xrandr noto-fonts-emoji \
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \

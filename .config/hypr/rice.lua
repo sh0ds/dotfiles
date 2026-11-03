@@ -24,7 +24,7 @@ end
 -- blur, no dimming, one soft shadow for depth. Motion is physical: damped
 -- springs and eased fades, no bounce (see MOTION). The focused window is the only thing on
 -- screen with colour in its frame.
--- Palette (the same everywhere: kitty, waybar, swaync, fuzzel, GTK, Helix):
+-- Palette (the same everywhere: kitty, quickshell, swaync, fuzzel, GTK, Helix):
 --   bg #000000  row #161a1f  rule #3f4650  dim #5d6670  mid #8a929c
 --   fg #c4c9ce  ink #e6e8ea  arch #1793d1  warn #ffb000  error #e5484d
 hl.config({
@@ -143,7 +143,7 @@ hl.animation({ leaf = "fadePopupsOut", enabled = true, speed = 1.2, bezier = "ex
 hl.animation({ leaf = "fadeDpms", enabled = true, speed = 4, bezier = "glide" })
 
 -- The focus frame changes colour in 200 ms, the same time the bar's
--- workspace marker takes (waybar style.css), so both land together.
+-- workspace marker takes (the bar, quickshell/Workspaces.qml), so both land together.
 hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "borderangle", enabled = false })
 
@@ -165,7 +165,9 @@ hl.animation({ leaf = "monitorAdded", enabled = false })
 -- The bar is the fixed frame of the screen: it never animates. Neither do
 -- screenshot selection (slurp) and the colour picker, which have to be
 -- there the instant you press the key.
-hl.layer_rule({ name = "still-bar", match = { namespace = "^waybar$" }, no_anim = true })
+hl.layer_rule({ name = "still-bar", match = { namespace = "^diag-bar$" }, no_anim = true })
+-- The volume popup just appears and goes, like the bar.
+hl.layer_rule({ name = "still-osd", match = { namespace = "^diag-osd$" }, no_anim = true })
 hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpicker)$" }, no_anim = true })
 -- Launcher and calculator fade without enlarging the text.
 hl.layer_rule({ name = "launcher-fade", match = { namespace = "^launcher$" }, animation = "fade" })
@@ -469,12 +471,12 @@ hl.bind(
 hl.bind(mod .. " + C", hl.dsp.exec_cmd("calc"))
 -- Night light on/off
 hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd("nightlight"))
--- Record a region to ~/Videos (press again to stop); waybar shows REC in blue
+-- Record a region to ~/Videos (press again to stop); the bar shows REC in amber
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("rec-toggle"))
 -- Window switcher: every open window in a fuzzel list, Enter jumps to it
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))
 -- Hide or show the bar, for a clean screen while reading or sharing
-hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
+hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("qs ipc call bar toggle"))
 -- Copy the text inside a screen region (OCR): error messages in videos, PDFs, screenshots
 hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd("ocr"))
 -- Notes: Obsidian as a normal window, started or focused

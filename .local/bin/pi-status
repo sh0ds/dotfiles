@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pi-status: waybar module. Prints JSON saying whether the Pi answers a ping,
+# pi-status: bar module. Prints JSON saying whether the Pi answers a ping,
 # as a diagnostic line: "pi: up", or "pi: down" with down in red.
 pi=${PI_HOST:-192.168.178.36}
 key="<span color='#e5484d'>pi</span><span color='#75c94d'>:</span>"
