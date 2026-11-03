@@ -86,6 +86,8 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
 - `bitwig`, `aseprite`, `sfx`: Bitwig with low audio latency, Aseprite through Steam (`aseprite -b ...` runs its batch CLI for build scripts), and the browser sound-effect makers
+- `frame`: the focused window's border turns amber while recording or sharing the screen and grey on do-not-disturb, so the desktop's state is always in view
+- `shot`: a region screenshot in a Diag frame (rule, blue marker, caption, date, sh0ds.dev) for devlogs, saved and copied (`ALT+Print`)
 - `pico8` / `picotron`: start or jump to the fantasy consoles from `~/.local/opt`, with a notification if one isn't unzipped there yet
 - `thunar-setup`: fills missing Diag preferences, merges coding/music actions and sidebar shortcuts, and sets kitty for Open Terminal Here; `--apply` reapplies the managed layout
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
@@ -323,6 +325,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+SHIFT+C` | Colour picker |
 | `Print` or `SUPER+SHIFT+S` / `SHIFT+Print` | Screenshot a region to the clipboard / the screen you're on to `~/Pictures` |
 | `CTRL+Print` | Screenshot and draw on it |
+| `ALT+Print` | Screenshot a region in a Diag frame with a caption |
 | `SUPER+SHIFT+R` | Start or stop recording |
 | `SUPER+N` | Notifications |
 | `SUPER+SHIFT+N` | Night light |

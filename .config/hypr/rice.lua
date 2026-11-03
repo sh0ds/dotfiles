@@ -399,6 +399,9 @@ hl.on("hyprland.start", function()
 	-- Hyprland draws its own cursor and can start with the default one even
 	-- with XCURSOR_THEME set, so name the theme once it's running.
 	hl.exec_cmd("hyprctl setcursor Posy_Cursor_Black 32")
+	-- The focus frame turns amber while recording or sharing, grey on
+	-- do-not-disturb (~/.local/bin/frame).
+	hl.exec_cmd("frame")
 	hl.exec_cmd("udiskie")
 	hl.exec_cmd("playerctld daemon")
 	hl.exec_cmd("update-check --watch")
@@ -443,6 +446,8 @@ hl.bind(mod .. " + X", hl.dsp.window.center())
 hl.bind(mod .. " + SHIFT + Escape", hl.dsp.exec_cmd("power-menu"))
 -- Colour picker: click anywhere, hex code lands in the clipboard
 hl.bind(mod .. " + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
+-- Screenshot a region in a Diag frame with a caption, for devlogs (shot)
+hl.bind("ALT + Print", hl.dsp.exec_cmd("shot"))
 -- Screenshot a region and draw on it before saving (satty)
 hl.bind(
 	"CTRL + Print",

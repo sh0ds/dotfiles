@@ -9,6 +9,9 @@ set -uo pipefail
 
 sock="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 active=0 live=0 name="" dnd_before=""
+# frame turns the focused border amber while this file exists.
+live_flag=${XDG_RUNTIME_DIR:-/tmp}/diag-live
+rm -f "$live_flag"; trap 'rm -f "$live_flag"' EXIT
 
 show() {
   if (( live )); then
@@ -20,6 +23,7 @@ show() {
 
 go_live() {
   live=1
+  : > "$live_flag"
   dnd_before=$(swaync-client -D 2>/dev/null || echo false)
   swaync-client -dn >/dev/null 2>&1 || true
   show
@@ -27,6 +31,7 @@ go_live() {
 
 go_idle() {
   live=0
+  rm -f "$live_flag"
   [[ $dnd_before == false ]] && { swaync-client -df >/dev/null 2>&1 || true; }
   show
 }
