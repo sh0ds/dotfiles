@@ -19,7 +19,7 @@ end
 ---- LOOK: Afterhours ----
 ------------------------------------
 
--- Afterhours: dark warm charcoal, phosphor green on the focused window,
+-- Afterhours: dark cool charcoal, violet on the focused window,
 -- amber for attention, coral for recording and errors. Opaque surfaces with
 -- 10 px squircle corners, 8 px between tiles, 12 px at the screen edge.
 -- Blur stays off: text stays crisp and NVIDIA has less compositing work.
@@ -32,8 +32,8 @@ hl.config({
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
 		allow_tearing = true,
 		col = {
-			active_border = { colors = { "rgb(b4c97f)", "rgb(83b48f)" }, angle = 45 },
-			inactive_border = "rgb(242a23)",
+			active_border = { colors = { "rgb(b49cf0)", "rgb(8f7ad9)" }, angle = 45 },
+			inactive_border = "rgb(25232d)",
 		},
 	},
 	decoration = {
@@ -43,7 +43,7 @@ hl.config({
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
 		-- A wide, soft shadow that falls slightly down, like light from above.
-		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(050605d0)", color_inactive = "rgba(05060580)" },
+		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(060508d0)", color_inactive = "rgba(06050880)" },
 		blur = { enabled = false },
 		dim_inactive = false,
 		glow = { enabled = false },
@@ -67,8 +67,8 @@ hl.config({
 	-- Tabbed groups (SUPER+G): a flat tab strip, blue for the active tab.
 	group = {
 		col = {
-			border_active = "rgb(b4c97f)",
-			border_inactive = "rgb(343c31)",
+			border_active = "rgb(b49cf0)",
+			border_inactive = "rgb(35323f)",
 		},
 		groupbar = {
 			font_family = "JetBrainsMono Nerd Font",
@@ -76,11 +76,11 @@ hl.config({
 			height = 26,
 			gradients = false,
 			rounding = 4,
-			text_color = "rgb(0c0d0b)",
-			text_color_inactive = "rgb(929c8a)",
+			text_color = "rgb(0d0c10)",
+			text_color_inactive = "rgb(948fa3)",
 			col = {
-				active = "rgb(b4c97f)",
-				inactive = "rgb(121411)",
+				active = "rgb(b49cf0)",
+				inactive = "rgb(131218)",
 			},
 		},
 	},
@@ -385,7 +385,7 @@ require("firefox-pip")
 -- The cursor is Posy's Cursor Black at 32 (Adwaita looked out of place);
 -- hyprctl setcursor applies it to Hyprland itself, which ignores the env.
 -- frame recolours the focused border: coral while recording or sharing,
--- amber in quiet mode, phosphor otherwise.
+-- amber in quiet mode, violet otherwise.
 hl.on("hyprland.start", function()
 	hl.exec_cmd(
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "

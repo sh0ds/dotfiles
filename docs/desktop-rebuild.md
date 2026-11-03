@@ -2,9 +2,9 @@
 
 ## Direction
 
-Keep the useful DNA: Lua, a pixel-console identity, numbered workspaces, a little blue, keyboard access and the Pi/site connection. Replace the old diagnostic dashboard with a game-making workbench. Charcoal has a slightly warm green cast; phosphor is reserved for focus. Blue marks track metadata and media, amber means attention, coral marks recording and errors. Artwork and games retain their own palette.
+Keep the useful DNA: Lua, a pixel-console identity, numbered workspaces, keyboard access and the Pi/site connection. Replace the old diagnostic dashboard with a game-making workbench. Charcoal has a slight violet cast; violet is reserved for focus. Status dots are violet when fine, amber means attention, coral marks recording and errors. Artwork and games retain their own palette.
 
-The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a phosphor gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling, glow or large animated background. One font everywhere: JetBrains Mono Nerd Font.
+The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a violet gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling, glow or large animated background. One font everywhere: JetBrains Mono Nerd Font.
 
 `Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, Helix, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
 
@@ -54,7 +54,7 @@ On Arch, update normally and install the shell prerequisites using the signed pa
 ```sh
 sudo pacman -Syu --needed hyprland quickshell qt6-wayland qt6-declarative \
   hyprlock hypridle hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
-  kitty noto-fonts ttf-jetbrains-mono-nerd \
+  kitty noto-fonts ttf-jetbrains-mono-nerd cava \
   swayosd awww fuzzel wl-clipboard cliphist jq socat playerctl pavucontrol \
   wireplumber pipewire-pulse libnotify grim slurp satty wf-recorder wtype \
   less zed helix thunar adw-gtk-theme qt6ct
@@ -105,7 +105,7 @@ Install tools when their track needs them, so P1 does not become a month of tool
 
 The inbox is session-only, capped at 50 notifications; it is not written to disk. Quiet mode hides toasts, not inbox entries. Critical toasts stay visible until dismissed. Transient notifications expire; ordinary ones leave the toast after a short interval and remain in the inbox. The shell renders notification content as plain text, never HTML. Sharing suppression uses Hyprland `screencastv2` events; a shell started in the middle of an existing share cannot infer an earlier start event. Enable quiet mode before presenting in that case.
 
-The layer-shell names are `afterhours-rail`, `afterhours-overlay`, and `afterhours-toast`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Narrow rails collapse workspace names to numbers, shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
+The layer-shell names are `afterhours-rail`, `afterhours-overlay`, and `afterhours-toast`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a rounded track: the active one is a violet pill, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
 
 Utilities such as clipboard search, docs and Wi-Fi still use their existing Fuzzel dmenu helpers. Old app and VM scripts remain maintained independently. There is no fake progress counter, permanent timer pressure, app-per-workspace cage or telemetry.
 

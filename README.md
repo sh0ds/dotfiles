@@ -1,6 +1,6 @@
 # Afterhours / sh0ds·16
 
-An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Near-black warm charcoal, phosphor green, a little blue, one font (JetBrains Mono Nerd Font) everywhere, rounded corners and calm eased motion. No blur, no oversized docks.
+An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Near-black cool charcoal, violet, amber and coral for attention, one font (JetBrains Mono Nerd Font) everywhere, rounded corners and calm eased motion. No blur, no oversized docks.
 
 ![Afterhours game studio — real Quickshell render](screenshots/afterhours-studio.png)
 
@@ -11,7 +11,7 @@ The desktop follows the [game development plan](https://github.com/sh0ds/guides/
 Written from scratch in `.config/quickshell/afterhours/`, rather than a downloaded shell preset:
 
 - A floating, rounded rail on every monitor: workspace selection, media, sound, recording/sharing state, system tray, inbox, date, the Pi and session controls.
-- **Make / Play / Ship** launchpad: eight entries tied to the plan, with track identifiers and a reminder that 45 minutes counts.
+- **Make / Play / Ship** launchpad: eight entries tied to the plan, with track identifiers and the motto: show up, ship small.
 - Searchable desktop applications, including keyboard selection and Enter to launch.
 - A D-Bus notification server with plain-text content, actions, quiet mode, passive toasts and a bounded session inbox. Screen-sharing events suppress toasts.
 - Session menu with explicit confirmation for log out/reboot/power off. Suspend waits for a real Hyprlock lock before sleeping. Power actions retain the DJ VM shutdown guard.
@@ -64,7 +64,7 @@ Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), re
 | `Super + Shift + M` | DJ VM |
 
 
-The first five workspace labels are a working convention: **CODE / PLAY / CRAFT / NOTES / GAMES**. Apps do not get forcibly moved just because you launched them from the studio. Existing gaming and DJ VM rules still apply.
+Workspaces are plain numbers, free for whatever you are doing. Apps do not get forcibly moved just because you launched them from the studio. Existing gaming and DJ VM rules still apply.
 
 ```sh
 game-dev plan              # read the actual plan in a terminal

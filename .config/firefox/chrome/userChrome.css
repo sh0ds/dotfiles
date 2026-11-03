@@ -1,179 +1,175 @@
-/* Firefox in Afterhours: the sh0ds.dev look in phosphor green, like the rest of the
-   desktop. Black toolbars, JetBrains Mono for tabs, the address bar and menus,
-   square corners, 2 px rules, the selected tab marked with an phosphor green rule. Mostly Firefox's
-   own theme variables, so it survives updates; `firefox-style` links this
-   into your profile. */
+/* Firefox in Afterhours, like the rest of the desktop: charcoal toolbars,
+   JetBrains Mono Nerd Font around the page, tabs as rounded pills with the
+   selected one raised with a violet close button, a rounded address bar
+   that rings violet while you type, rounded menus with a soft shadow.
+   Mostly Firefox's own theme variables, so it survives updates;
+   `firefox-style` links this into your profile. Pages keep their fonts. */
 
 /* :root[lwtheme] too: a leftover theme add-on (Catppuccin) sets these on
    the root element, and this makes sure ours still win. */
 :root, :root[lwtheme] {
-  --diag-bg: #0c0d0b;
-  --diag-row: #1a1e19;
-  --diag-panel: #121411;
-  --diag-rule: #343c31;
-  --diag-dim: #929c8a;
-  --diag-fg: #c9d0c1;
-  --diag-ink: #dfe3d8;
-  --diag-arch: #b4c97f;
-  --diag-sel: #26301e;
+  --ah-bg: #0d0c10;
+  --ah-panel: #131218;
+  --ah-raised: #1b1a22;
+  --ah-line: #35323f;
+  --ah-muted: #948fa3;
+  --ah-fg: #c9c5d4;
+  --ah-text: #e0dde8;
+  --ah-accent: #b49cf0;
+  --ah-accent-hi: #cdbcf7;
+  --ah-sel: #2b2540;
+  --ah-radius: 8px;
+  --ah-radius-large: 14px;
 
   /* frame, toolbars, tabs */
-  --lwt-accent-color: var(--diag-bg) !important;
-  --lwt-accent-color-inactive: var(--diag-bg) !important;
-  --lwt-text-color: var(--diag-fg) !important;
-  --toolbox-bgcolor: var(--diag-bg) !important;
-  --toolbox-bgcolor-inactive: var(--diag-bg) !important;
-  --toolbox-textcolor: var(--diag-fg) !important;
-  --toolbar-bgcolor: var(--diag-bg) !important;
-  --toolbar-color: var(--diag-ink) !important;
-  --tab-selected-bgcolor: var(--diag-row) !important;
-  --tab-selected-textcolor: #ffffff !important;
-  --tab-hover-background-color: var(--diag-row) !important;
-  --tab-loading-fill: var(--diag-arch) !important;
-  --tab-border-radius: 0 !important;
-  --tab-min-height: 30px !important;
-  --tab-block-margin: 3px !important;
+  --lwt-accent-color: var(--ah-bg) !important;
+  --lwt-accent-color-inactive: var(--ah-bg) !important;
+  --lwt-text-color: var(--ah-fg) !important;
+  --lwt-text-color-inactive: var(--ah-muted) !important;
+  --lwt-frame: var(--ah-bg) !important;
+  --toolbox-bgcolor: var(--ah-bg) !important;
+  --toolbox-bgcolor-inactive: var(--ah-bg) !important;
+  --toolbox-textcolor: var(--ah-fg) !important;
+  --toolbar-bgcolor: var(--ah-bg) !important;
+  --toolbar-color: var(--ah-text) !important;
+  --tab-selected-bgcolor: var(--ah-raised) !important;
+  --tab-selected-textcolor: var(--ah-text) !important;
+  --tab-hover-background-color: var(--ah-panel) !important;
+  --tab-loading-fill: var(--ah-accent) !important;
+  --tab-border-radius: var(--ah-radius) !important;
+  --tab-min-height: 32px !important;
+  --tab-block-margin: 5px !important;
+  --tab-selected-shadow: none !important;
 
   /* address bar */
-  --toolbar-field-background-color: var(--diag-panel) !important;
-  --toolbar-field-color: var(--diag-ink) !important;
-  --toolbar-field-border-color: var(--diag-rule) !important;
-  --toolbar-field-focus-background-color: var(--diag-bg) !important;
-  --toolbar-field-focus-color: #ffffff !important;
-  --toolbar-field-focus-border-color: var(--diag-arch) !important;
-  --urlbar-box-bgcolor: var(--diag-row) !important;
-  --urlbar-box-hover-bgcolor: var(--diag-row) !important;
-  --urlbar-box-text-color: var(--diag-ink) !important;
-  --urlbarView-highlight-background: var(--diag-arch) !important;
-  --urlbarView-highlight-color: #0c0d0b !important;
-  --urlbarView-hover-background: var(--diag-row) !important;
+  --toolbar-field-background-color: var(--ah-panel) !important;
+  --toolbar-field-color: var(--ah-text) !important;
+  --toolbar-field-border-color: var(--ah-line) !important;
+  --toolbar-field-focus-background-color: var(--ah-panel) !important;
+  --toolbar-field-focus-color: var(--ah-text) !important;
+  --toolbar-field-focus-border-color: var(--ah-accent) !important;
+  --urlbar-box-bgcolor: var(--ah-raised) !important;
+  --urlbar-box-hover-bgcolor: var(--ah-raised) !important;
+  --urlbar-box-text-color: var(--ah-text) !important;
+  --urlbarView-highlight-background: var(--ah-sel) !important;
+  --urlbarView-highlight-color: var(--ah-text) !important;
+  --urlbarView-hover-background: var(--ah-raised) !important;
 
   /* buttons, menus, panels, sidebar */
-  --toolbarbutton-border-radius: 0 !important;
-  --toolbarbutton-hover-background: var(--diag-row) !important;
-  --toolbarbutton-active-background: var(--diag-rule) !important;
-  --toolbarbutton-icon-fill: var(--diag-fg) !important;
-  --toolbarbutton-icon-fill-attention: var(--diag-arch) !important;
-  --arrowpanel-background: var(--diag-panel) !important;
-  --arrowpanel-color: var(--diag-ink) !important;
-  --arrowpanel-border-color: var(--diag-rule) !important;
-  --arrowpanel-border-radius: 0 !important;
-  --arrowpanel-dimmed: var(--diag-row) !important;
-  --panel-separator-color: var(--diag-rule) !important;
-  --menu-background-color: var(--diag-panel) !important;
-  --menu-color: var(--diag-ink) !important;
-  --menu-border-color: var(--diag-rule) !important;
-  --menuitem-hover-background-color: var(--diag-arch) !important;
-  --menuitem-hover-color: #0c0d0b !important;
-  --sidebar-background-color: var(--diag-bg) !important;
-  --sidebar-text-color: var(--diag-fg) !important;
-  --sidebar-border-color: var(--diag-rule) !important;
-  --chrome-content-separator-color: var(--diag-rule) !important;
-  --focus-outline-color: var(--diag-arch) !important;
-  --border-radius-small: 0 !important;
-  --border-radius-medium: 0 !important;
-  --border-radius-large: 0 !important;
-  --border-radius-circle: 0 !important;
-  --button-border-radius: 0 !important;
-  --identity-icon-color: var(--diag-dim) !important;
+  --toolbarbutton-border-radius: var(--ah-radius) !important;
+  --toolbarbutton-hover-background: var(--ah-raised) !important;
+  --toolbarbutton-active-background: var(--ah-line) !important;
+  --toolbarbutton-icon-fill: var(--ah-fg) !important;
+  --toolbarbutton-icon-fill-attention: var(--ah-accent) !important;
+  --arrowpanel-background: var(--ah-panel) !important;
+  --arrowpanel-color: var(--ah-text) !important;
+  --arrowpanel-border-color: var(--ah-line) !important;
+  --arrowpanel-border-radius: var(--ah-radius-large) !important;
+  --arrowpanel-dimmed: var(--ah-raised) !important;
+  --panel-separator-color: var(--ah-line) !important;
+  --menu-background-color: var(--ah-panel) !important;
+  --menu-color: var(--ah-text) !important;
+  --menu-border-color: var(--ah-line) !important;
+  --menuitem-hover-background-color: var(--ah-raised) !important;
+  --menuitem-hover-color: var(--ah-text) !important;
+  --sidebar-background-color: var(--ah-bg) !important;
+  --sidebar-text-color: var(--ah-fg) !important;
+  --sidebar-border-color: var(--ah-line) !important;
+  --chrome-content-separator-color: var(--ah-line) !important;
+  --focus-outline-color: var(--ah-accent) !important;
+  --border-radius-small: 6px !important;
+  --border-radius-medium: var(--ah-radius) !important;
+  --border-radius-large: var(--ah-radius-large) !important;
+  --button-border-radius: var(--ah-radius) !important;
+  --identity-icon-color: var(--ah-muted) !important;
 
   /* Firefox's accent (toggles, checkboxes, primary buttons, focus rings,
-     the loading bar). A theme puts its own colour here, Mocha's mauve. */
-  --color-accent-primary: var(--diag-arch) !important;
-  --color-accent-primary-hover: #cadba3 !important;
-  --color-accent-primary-active: #cadba3 !important;
-  --button-primary-bgcolor: var(--diag-arch) !important;
-  --button-primary-hover-bgcolor: #cadba3 !important;
-  --button-primary-active-bgcolor: #cadba3 !important;
-  --button-primary-color: #0c0d0b !important;
-  --attention-dot-color: var(--diag-arch) !important;
-  --tab-attention-icon-color: var(--diag-arch) !important;
-  --lwt-tab-line-color: var(--diag-arch) !important;
-  --lwt-toolbar-field-highlight: var(--diag-arch) !important;
-  --lwt-toolbar-field-highlight-text: #0c0d0b !important;
-  --lwt-sidebar-background-color: var(--diag-bg) !important;
-  --lwt-sidebar-text-color: var(--diag-fg) !important;
-  --lwt-sidebar-highlight-background-color: var(--diag-arch) !important;
-  --lwt-sidebar-highlight-text-color: #0c0d0b !important;
-  --lwt-toolbarbutton-icon-fill-attention: var(--diag-arch) !important;
-  --lwt-frame: var(--diag-bg) !important;
-  --lwt-text-color-inactive: var(--diag-dim) !important;
-  accent-color: var(--diag-arch) !important;
+     the loading bar). A theme puts its own colour here; ours wins. */
+  --color-accent-primary: var(--ah-accent) !important;
+  --color-accent-primary-hover: var(--ah-accent-hi) !important;
+  --color-accent-primary-active: var(--ah-accent-hi) !important;
+  --button-primary-bgcolor: var(--ah-accent) !important;
+  --button-primary-hover-bgcolor: var(--ah-accent-hi) !important;
+  --button-primary-active-bgcolor: var(--ah-accent-hi) !important;
+  --button-primary-color: var(--ah-bg) !important;
+  --attention-dot-color: var(--ah-accent) !important;
+  --tab-attention-icon-color: var(--ah-accent) !important;
+  --lwt-tab-line-color: var(--ah-accent) !important;
+  --lwt-toolbar-field-highlight: var(--ah-sel) !important;
+  --lwt-toolbar-field-highlight-text: var(--ah-text) !important;
+  --lwt-sidebar-background-color: var(--ah-bg) !important;
+  --lwt-sidebar-text-color: var(--ah-fg) !important;
+  --lwt-sidebar-highlight-background-color: var(--ah-sel) !important;
+  --lwt-sidebar-highlight-text-color: var(--ah-text) !important;
+  --lwt-toolbarbutton-icon-fill-attention: var(--ah-accent) !important;
+  accent-color: var(--ah-accent) !important;
 }
 
-/* The selected tab: a row with a 2 px phosphor green rule on its edge and white
-   text, like a code block on the site. Painted on the tab itself, not only
-   .tab-background, so vertical tabs get it too; the text stays readable even
-   if a theme repaints the background. */
-.tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
-  background: var(--diag-row) !important;
-  background-image: none !important;
-  box-shadow: inset 0 -2px 0 var(--diag-arch) !important;
-}
-.tabbrowser-tab:is([selected], [visuallyselected]) .tab-label { color: #ffffff !important; }
-.tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--diag-arch) !important; }
-.tabbrowser-tab:not([selected]):hover .tab-background { background: var(--diag-row) !important; }
-::selection { background: var(--diag-sel, #26301e) !important; color: #ecefe5 !important; }
+::selection { background: var(--ah-sel) !important; color: #ecebf2 !important; }
 
-/* JetBrains Mono around the page, like the rest of the desktop (16 px is one
-   of its native sizes). The page itself keeps its fonts. */
+/* One font around the page, at the desktop's size. */
 #navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
   font-family: "JetBrainsMono Nerd Font", monospace !important;
-  font-size: 16px !important;
+  font-size: 13px !important;
 }
 
-/* One structural rule: emphasis belongs to the selected tab. */
-#navigator-toolbox {
-  border-bottom: 1px solid var(--diag-rule) !important;
-}
+#navigator-toolbox { border-bottom: 1px solid var(--ah-line) !important; }
 
-/* Tabs: a quiet row and a blue selection marker. */
+/* Tabs: quiet pills. The selected one is raised with a thin outline; the
+   others are muted until hovered. */
 .tabbrowser-tab .tab-background {
-  border-radius: 0 !important;
+  border-radius: var(--ah-radius) !important;
   outline: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
 }
-.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-label { color: var(--diag-dim) !important; }
-.tabbrowser-tab:not([selected]):hover .tab-label { color: #ffffff !important; }
+.tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
+  background-color: var(--ah-raised) !important;
+  box-shadow: inset 0 0 0 1px var(--ah-line) !important;
+}
+.tabbrowser-tab:not([selected]):not([visuallyselected]):hover .tab-background {
+  background-color: var(--ah-panel) !important;
+}
+.tabbrowser-tab .tab-label { color: var(--ah-muted) !important; }
+.tabbrowser-tab:is(:hover, [selected], [visuallyselected]) .tab-label { color: var(--ah-text) !important; }
+.tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--ah-accent) !important; }
+.tab-close-button { border-radius: 6px !important; }
 
-/* Address bar: square, 2 px frame, blue while typing */
+/* Address bar: a rounded field that rings violet while you type */
 #urlbar-background, #searchbar {
-  border-radius: 0 !important;
-  border-width: 2px !important;
+  border-radius: 10px !important;
+  border-width: 1px !important;
   box-shadow: none !important;
 }
 #urlbar[focused] > #urlbar-background {
-  outline: 2px solid var(--diag-arch) !important;
-  outline-offset: -2px !important;
+  outline: 1px solid var(--ah-accent) !important;
+  outline-offset: -1px !important;
+  box-shadow: 0 0 0 4px rgba(180, 156, 240, 0.14) !important;
 }
+#urlbar[open] > #urlbar-background {
+  border-radius: var(--ah-radius-large) !important;
+  box-shadow: 0 12px 32px rgba(5, 6, 5, 0.6) !important;
+}
+.urlbarView-row { border-radius: var(--ah-radius) !important; }
 
-/* Vertical tabs: the sidebar strip gets a rule on its edge, like the site's key column */
-#sidebar-main {
-  border-inline-end: 2px solid var(--diag-rule) !important;
-}
+/* Vertical tabs: the strip ends in a thin line, like a split in kitty */
+#sidebar-main { border-inline-end: 1px solid var(--ah-line) !important; }
 
-/* No rounded corners or soft shadows anywhere in the chrome */
-* {
-  --panel-shadow-margin: 0px !important;
-}
+/* Menus and panels: rounded, with the same soft shadow as floating windows */
 panel, menupopup {
-  --panel-border-radius: 0 !important;
-  --panel-shadow: none !important;
+  --panel-border-radius: var(--ah-radius-large) !important;
+  --panel-shadow: 0 8px 24px rgba(5, 6, 5, 0.6) !important;
 }
-
-/* Keep the entire selected surface visible. A clipped background also clips
-   multiselection and focus feedback. Vertical tabs use a leading rule. */
-#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:is([selected], [visuallyselected], [multiselected]) .tab-background {
-  box-shadow: inset 2px 0 0 var(--diag-arch) !important;
-}
+menupopup menuitem, menupopup menu { border-radius: 6px !important; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .tab-background {
-    transition: background-color 200ms ease-out !important;
+  .tab-background, .tab-label, #urlbar-background, .urlbarView-row {
+    transition: background-color 200ms ease-out, color 200ms ease-out, box-shadow 200ms ease-out !important;
   }
 }
 
 /* Selection and keyboard focus are separate states. */
 .tabbrowser-tab:focus-visible .tab-background {
-  outline: 2px solid var(--diag-arch) !important;
-  outline-offset: -2px !important;
+  outline: 1px solid var(--ah-accent) !important;
+  outline-offset: -1px !important;
 }

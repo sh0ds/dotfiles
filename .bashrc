@@ -43,8 +43,8 @@ alias qa='qemu-aarch64'                                        # run ARM64 binar
 alias lg='lazygit'                                              # git TUI (Ctrl+G in Helix)
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
-# fzf in Afterhours: phosphor matches and pointer, soft selection, rounded border
-export FZF_DEFAULT_OPTS="--border=rounded --color=fg:#c9d0c1,bg:-1,hl:#b4c97f,fg+:#ecefe5,bg+:#1a1e19,hl+:#5e9bb4,info:#929c8a,prompt:#929c8a,pointer:#b4c97f,marker:#b4c97f,spinner:#b4c97f,header:#929c8a,border:#242a23,gutter:-1"
+# fzf in Afterhours: violet matches and pointer, soft selection, rounded border
+export FZF_DEFAULT_OPTS="--border=rounded --color=fg:#c9c5d4,bg:-1,hl:#b49cf0,fg+:#ecebf2,bg+:#1b1a22,hl+:#5e9bb4,info:#948fa3,prompt:#948fa3,pointer:#b49cf0,marker:#b49cf0,spinner:#b49cf0,header:#948fa3,border:#25232d,gutter:-1"
 
 please() {
   local c

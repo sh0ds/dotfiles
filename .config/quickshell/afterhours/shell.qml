@@ -50,7 +50,7 @@ ShellRoot {
         { name: "SOUND", tag: "A / 03–04", detail: "PICO-8 tracker first. Your own loops.", command: ["game-dev", "audio"] },
         { name: "C + LUA", tag: "X / 01–08", detail: "Your engine. Your rules.", command: ["game-dev", "code"] },
         { name: "DEVLOG", tag: "W + F", detail: "Build the site. Show the work.", command: ["game-dev", "site"] },
-        { name: "THE PLAN", tag: "NEXT STEP", detail: "45 minutes counts. Make it small.", command: ["game-dev", "plan"] }
+        { name: "THE PLAN", tag: "NEXT STEP", detail: "45 minutes is a whole day. Show up.", command: ["game-dev", "plan"] }
     ]
     function run(command) { Quickshell.execDetached(command); panel = ""; pendingAction = ""; }
     function toggle(name, screen) {
@@ -94,6 +94,34 @@ ShellRoot {
             root.volume = match ? (text.includes("MUTED") ? "mute" : Math.round(Number(match[1]) * 100) + "%") : "—";
         } }
     }
+    // cava, only while something plays: eight bars, 0-7 each, one line per
+    // frame (.config/cava/rail). Without cava the bars just stay flat.
+    property var cavaBars: [0, 0, 0, 0, 0, 0, 0, 0]
+    Process {
+        id: cava
+        running: root.player?.isPlaying ?? false
+        command: ["cava", "-p", Quickshell.env("HOME") + "/.config/cava/rail"]
+        stdout: SplitParser {
+            onRead: line => {
+                const bars = line.split(";").filter(v => v !== "").map(Number);
+                if (bars.length === 8) root.cavaBars = bars;
+            }
+        }
+        onRunningChanged: if (!running) root.cavaBars = [0, 0, 0, 0, 0, 0, 0, 0]
+    }
+    // System readings for the rail's sys cell (sys-stats), sampled every 2 s
+    // only while the cell is unfolded.
+    property bool statsOpen: false
+    property var stats: null
+    Process {
+        id: statsRead
+        command: ["sys-stats"]
+        stdout: StdioCollector { onStreamFinished: {
+            const v = text.trim().split(/\s+/);
+            if (v.length === 4) root.stats = { cpu: v[0], mem: v[1], temp: v[2], gpu: v[3] };
+        } }
+    }
+    Timer { interval: 2000; repeat: true; triggeredOnStart: true; running: root.statsOpen; onTriggered: if (!statsRead.running) statsRead.running = true }
     Process { id: piPing; command: ["ping", "-c", "1", "-W", "1", root.piHost]; onExited: code => root.piUp = code === 0 }
     Timer { interval: 30000; repeat: true; running: true; triggeredOnStart: true; onTriggered: if (!piPing.running) piPing.running = true }
     Process { id: captureRead; command: ["pgrep", "-x", "wf-recorder"]; onExited: (code) => root.recording = code === 0 }
@@ -146,50 +174,141 @@ ShellRoot {
                 border.width: 1
                 border.color: Theme.line
             }
+            // The clock island in the middle of the rail: a raised pill with
+            // the time large (its colon breathes in violet, once a second),
+            // a hairline, then the weekday over the date. Click: calendar.
+            Rectangle {
+                id: clockCell
+                z: 1
+                anchors.centerIn: parent
+                height: 34
+                width: clockRow.implicitWidth + 28
+                radius: height / 2
+                color: calendar.visible ? Theme.accentSoft : clockHover.hovered ? Theme.raised : Theme.background
+                border.width: 1
+                border.color: calendar.visible ? Theme.accent : Theme.line
+                Behavior on color { ColorAnimation { duration: Theme.motion } }
+                Behavior on border.color { ColorAnimation { duration: Theme.motion } }
+                Row {
+                    id: clockRow
+                    anchors.centerIn: parent
+                    spacing: 12
+                    Row {
+                        anchors.verticalCenter: parent.verticalCenter
+                        Text { text: Qt.formatDateTime(clock.date, "HH"); color: Theme.text; font.family: Theme.font; font.pixelSize: 18; font.bold: true }
+                        Text {
+                            text: ":"; color: Theme.accent; font.family: Theme.font; font.pixelSize: 18; font.bold: true
+                            SequentialAnimation on opacity {
+                                loops: Animation.Infinite
+                                NumberAnimation { to: 0.25; duration: 500; easing.type: Easing.InOutSine }
+                                NumberAnimation { to: 1; duration: 500; easing.type: Easing.InOutSine }
+                            }
+                        }
+                        Text { text: Qt.formatDateTime(clock.date, "mm"); color: Theme.text; font.family: Theme.font; font.pixelSize: 18; font.bold: true }
+                    }
+                    Rectangle { visible: rail.width > 900; anchors.verticalCenter: parent.verticalCenter; width: 1; height: 18; color: Theme.line }
+                    Column {
+                        visible: rail.width > 900
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: -1
+                        Text { text: Qt.formatDateTime(clock.date, "dddd").toUpperCase(); color: Theme.accent; font.family: Theme.font; font.pixelSize: 9; font.letterSpacing: 2; font.bold: true }
+                        Text { text: Qt.formatDateTime(clock.date, "d MMMM"); color: Theme.muted; font.family: Theme.font; font.pixelSize: 12 }
+                    }
+                }
+                HoverHandler { id: clockHover; cursorShape: Qt.PointingHandCursor }
+                TapHandler { onTapped: calendar.visible = !calendar.visible }
+                ToolTip.visible: clockHover.hovered && !calendar.visible
+                ToolTip.delay: 650
+                ToolTip.text: "Calendar"
+            }
+            Calendar { id: calendar; target: clockCell }
             RowLayout {
                 anchors.fill: parent
                 anchors.leftMargin: 6; anchors.rightMargin: 6
                 spacing: 4
-                Cell { label: rail.width < 900 ? "▦" : "▦  sh0ds·16"; ink: Theme.accent; hint: "Make / Play / Ship · Super+Ctrl+G"; onClicked: root.toggle("studio", rail.screen) }
-                Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: 20; color: Theme.line }
+                Cell { label: "\uf303"; size: 16; implicitWidth: 38; ink: Theme.accent; hint: "Apps · Super+Space"; onClicked: root.toggle("apps", rail.screen) }
+                // Workspaces: plain numbers in a soft track. The active one is a
+                // wider violet pill that glides over; numbers with windows on
+                // them are bright, empty ones dim, urgent ones amber. Hover lifts
+                // a number, the wheel steps through them.
                 Item {
                     id: spaces
                     readonly property int active: Hyprland.monitorFor(rail.screen)?.activeWorkspace?.id ?? -1
                     readonly property var ids: root.workspaceIds(rail.screen).slice(0, rail.width > 650 ? 10 : 3)
                     property real markX: 0
                     property real markW: 0
-                    implicitWidth: spaceRow.implicitWidth
-                    implicitHeight: 32
-                    // The phosphor marker glides to the active workspace.
+                    implicitWidth: spaceRow.implicitWidth + 8
+                    implicitHeight: 30
                     Rectangle {
-                        x: spaces.markX; width: spaces.markW; height: 32
+                        anchors.fill: parent
+                        radius: height / 2
+                        color: Theme.background
+                        border.width: 1
+                        border.color: Theme.line
+                    }
+                    Rectangle {
+                        x: spaces.markX + 4; y: 4
+                        width: spaces.markW; height: parent.height - 8
                         visible: spaces.markW > 0
-                        radius: Theme.radius
+                        radius: height / 2
                         color: Theme.accent
                         Behavior on x { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
                         Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
                     }
                     Row {
                         id: spaceRow
+                        x: 4
+                        anchors.verticalCenter: parent.verticalCenter
                         Repeater {
                             model: spaces.ids
-                            Cell {
+                            Item {
                                 id: space
                                 required property int modelData
                                 readonly property bool here: modelData === spaces.active
-                                readonly property var names: ({1: "CODE", 2: "PLAY", 3: "CRAFT", 4: "NOTES", 5: "GAMES"})
-                                label: String(modelData).padStart(2, "0") + (rail.width > 1050 && names[modelData] ? " " + names[modelData] : "")
-                                ink: here ? Theme.background : (Hyprland.workspaces.values.find(w => w.id === modelData)?.urgent ? Theme.amber : Theme.muted)
-                                fill: "transparent"
-                                color: here ? "transparent" : (pointerHover.hovered ? Theme.raised : "transparent")
-                                HoverHandler { id: pointerHover }
-                                onClicked: root.workspace(modelData)
+                                readonly property var ws: Hyprland.workspaces.values.find(w => w.id === modelData) ?? null
+                                readonly property bool used: (ws?.toplevels?.values?.length ?? 0) > 0
+                                width: here ? 38 : 24
+                                height: 22
+                                Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
+                                Rectangle {
+                                    anchors.centerIn: parent
+                                    width: 22; height: 22; radius: 11
+                                    color: Theme.raised
+                                    opacity: !space.here && pointerHover.hovered ? 1 : 0
+                                    Behavior on opacity { NumberAnimation { duration: Theme.motion } }
+                                }
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: space.modelData
+                                    font.family: Theme.font
+                                    font.pixelSize: 12
+                                    font.bold: space.here || space.used
+                                    color: space.here ? Theme.background
+                                        : space.ws?.urgent ? Theme.amber
+                                        : space.used || pointerHover.hovered ? Theme.text : Theme.muted
+                                    opacity: space.here || space.used || pointerHover.hovered || space.ws?.urgent ? 1 : 0.5
+                                    Behavior on color { ColorAnimation { duration: Theme.motion } }
+                                }
+                                HoverHandler { id: pointerHover; cursorShape: Qt.PointingHandCursor }
+                                TapHandler { onTapped: root.workspace(space.modelData) }
                                 Binding { target: spaces; property: "markX"; value: space.x; when: space.here; restoreMode: Binding.RestoreNone }
                                 Binding { target: spaces; property: "markW"; value: space.width; when: space.here; restoreMode: Binding.RestoreNone }
                             }
                         }
                     }
                     WheelHandler { onWheel: e => root.workspace(e.angleDelta.y > 0 ? '"e-1"' : '"e+1"') }
+                }
+                Text {
+                    id: windowTitle
+                    Layout.fillWidth: true
+                    Layout.leftMargin: 10
+                    Layout.maximumWidth: Math.max(0, clockCell.x - windowTitle.x - 24)
+                    visible: rail.width > 1050
+                    text: Hyprland.activeToplevel?.title ?? ""
+                    color: Theme.muted
+                    elide: Text.ElideRight
+                    textFormat: Text.PlainText
+                    font.family: Theme.font; font.pixelSize: 12
                 }
                 Item { Layout.fillWidth: true }
                 Cell {
@@ -200,15 +319,42 @@ ShellRoot {
                 }
                 Cell {
                     visible: rail.width > 1350 && root.player !== null
-                    label: root.player ? (root.player.isPlaying ? "▶ " : "Ⅱ ") + root.player.trackTitle.slice(0, 22) : ""
-                    ink: Theme.blue
+                    label: root.player ? root.player.trackTitle.slice(0, 26) : ""
+                    ink: root.player?.isPlaying ? Theme.text : Theme.muted
+                    // cava's bars in violet, flat while paused.
+                    Repeater {
+                        model: root.cavaBars
+                        Rectangle {
+                            required property int modelData
+                            anchors.bottom: parent.bottom
+                            width: 3; radius: 1.5
+                            height: 3 + modelData * 2
+                            color: Theme.accent
+                            opacity: root.player?.isPlaying ? 0.95 : 0.35
+                            Behavior on height { NumberAnimation { duration: 60 } }
+                        }
+                    }
                     hint: "Play / pause"
                     onClicked: { if (root.player?.canTogglePlaying) root.player.togglePlaying(); }
                 }
+                // sys: click unfolds cpu, memory, temperature and gpu; right-click opens btop.
                 Cell {
                     visible: rail.width > 900
-                    label: root.piUp ? "pi" : "pi down"
-                    ink: root.piUp ? Theme.blue : Theme.danger
+                    readonly property var s: root.stats
+                    label: !root.statsOpen ? "sys"
+                        : !s ? "…"
+                        : "cpu " + s.cpu + "%  mem " + s.mem + "G" + (s.temp !== "-" ? "  " + s.temp + "°" : "") + (s.gpu !== "-" ? "  gpu " + s.gpu + "%" : "")
+                    ink: !root.statsOpen ? Theme.muted
+                        : s && (Number(s.cpu) >= 90 || Number(s.temp) >= 85) ? Theme.amber : Theme.text
+                    hint: root.statsOpen ? "Click to fold · right-click: btop" : "Click: cpu, memory, temperature, gpu · right-click: btop"
+                    onClicked: { root.statsOpen = !root.statsOpen; if (!root.statsOpen) root.stats = null; }
+                    onRightClicked: root.run(["sysmon"])
+                }
+                Cell {
+                    visible: rail.width > 900
+                    label: "\uf315"   // nf-linux-raspberry_pi
+                    size: 16
+                    ink: root.piUp ? Theme.accent : Theme.danger
                     hint: "Raspberry Pi " + root.piHost + (root.piUp ? " is up · click: ssh" : " is not answering")
                     onClicked: root.run(["kitty", "-e", "ssh", "pi"])
                 }
@@ -244,7 +390,6 @@ ShellRoot {
                         ToolTip.text: modelData.tooltipTitle || modelData.title
                     }
                 }
-                Text { Layout.leftMargin: 6; Layout.rightMargin: 4; text: Qt.formatDateTime(clock.date, rail.width > 1050 ? "ddd dd MMM  HH:mm" : "HH:mm"); color: Theme.text; font.family: Theme.font; font.pixelSize: 13; font.bold: true }
                 Cell { label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
             }
         }
@@ -345,7 +490,7 @@ ShellRoot {
                             visible: sheet.width > 600
                             Layout.minimumWidth: 0; Layout.preferredWidth: 280; Layout.maximumWidth: 280; Layout.fillHeight: true
                             spacing: 16
-                            Text { text: "SELECT / 0" + (trackMenu.currentIndex + 1); color: Theme.blue; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 2 }
+                            Text { text: "SELECT / 0" + (trackMenu.currentIndex + 1); color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 2 }
                             Item {
                                 visible: sheet.height > 580
                                 Layout.fillWidth: true; Layout.fillHeight: true
@@ -357,13 +502,13 @@ ShellRoot {
                                         // A hand-drawn 16×16 dungeon key: the plan's rooms and gates.
                                         const pixels = ["................","....oooo........","...o....o.......","..o..xx..o......","..o..xx..o......","...o....o.......","....oooo........","......oo........","......oo........","......oooooo....","......oo..oo....","......oo........","......oooo......","......oooo......","................","................"];
                                         for (let y=0;y<16;y++) for (let x=0;x<16;x++) {
-                                            c.fillStyle = pixels[y][x] === "x" ? Theme.blue : Theme.accent;
+                                            c.fillStyle = pixels[y][x] === "x" ? Theme.amber : Theme.accent;
                                             if (pixels[y][x] !== ".") c.fillRect(x*10,y*10,9,9);
                                         }
                                     }
                                 }
                             }
-                            Text { text: root.tracks[trackMenu.currentIndex].tag; color: Theme.blue; font.family: Theme.font; font.pixelSize: 12 }
+                            Text { text: root.tracks[trackMenu.currentIndex].tag; color: Theme.accent; font.family: Theme.font; font.pixelSize: 12 }
                             Text { text: root.tracks[trackMenu.currentIndex].detail; color: Theme.text; font.family: Theme.font; font.pixelSize: 25; wrapMode: Text.WordWrap; Layout.minimumWidth: 0; Layout.fillWidth: true }
                             Text { text: "↑ ↓  SELECT    ↵  OPEN"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 10 }
                         }
@@ -439,7 +584,7 @@ ShellRoot {
                     }
                 }
                 RowLayout {
-                    Text { text: "45 MINUTES COUNTS / FINISHED BEATS BIG"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 10; Layout.fillWidth: true; elide: Text.ElideRight }
+                    Text { text: "SHOW UP  <font color=\"" + Theme.accent + "\">◆</font>  SHIP SMALL"; textFormat: Text.StyledText; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 3; Layout.fillWidth: true; elide: Text.ElideRight }
                     Cell { label: "ALL APPS →"; onClicked: root.panel = "apps" }
                 }
             }

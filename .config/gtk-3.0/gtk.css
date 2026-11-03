@@ -1,38 +1,38 @@
-/* Afterhours for GTK 3 apps: phosphor accent, charcoal backgrounds, rounded controls.
+/* Afterhours for GTK 3 apps: violet accent, charcoal backgrounds, rounded controls.
    Works on top of the adw-gtk3-dark theme. */
-@define-color accent_color #b4c97f;
-@define-color accent_bg_color #b4c97f;
-@define-color accent_fg_color #0c0d0b;
+@define-color accent_color #b49cf0;
+@define-color accent_bg_color #b49cf0;
+@define-color accent_fg_color #0d0c10;
 @define-color destructive_color #d9786c;
 @define-color destructive_bg_color #d9786c;
-@define-color destructive_fg_color #0c0d0b;
+@define-color destructive_fg_color #0d0c10;
 @define-color success_color #83b48f;
 @define-color success_bg_color #83b48f;
-@define-color success_fg_color #0c0d0b;
+@define-color success_fg_color #0d0c10;
 @define-color warning_color #d99f66;
 @define-color warning_bg_color #d99f66;
-@define-color warning_fg_color #0c0d0b;
+@define-color warning_fg_color #0d0c10;
 @define-color error_color #d9786c;
 @define-color error_bg_color #d9786c;
-@define-color error_fg_color #0c0d0b;
-@define-color window_bg_color #0c0d0b;
-@define-color window_fg_color #dfe3d8;
-@define-color view_bg_color #121411;
-@define-color view_fg_color #dfe3d8;
-@define-color headerbar_bg_color #0c0d0b;
-@define-color headerbar_fg_color #dfe3d8;
-@define-color headerbar_backdrop_color #0c0d0b;
-@define-color sidebar_bg_color #121411;
-@define-color sidebar_fg_color #dfe3d8;
-@define-color sidebar_backdrop_color #0c0d0b;
-@define-color card_bg_color #1a1e19;
-@define-color card_fg_color #dfe3d8;
-@define-color dialog_bg_color #0c0d0b;
-@define-color dialog_fg_color #dfe3d8;
-@define-color popover_bg_color #0c0d0b;
-@define-color popover_fg_color #dfe3d8;
-@define-color thumbnail_bg_color #1a1e19;
-@define-color thumbnail_fg_color #dfe3d8;
+@define-color error_fg_color #0d0c10;
+@define-color window_bg_color #0d0c10;
+@define-color window_fg_color #e0dde8;
+@define-color view_bg_color #131218;
+@define-color view_fg_color #e0dde8;
+@define-color headerbar_bg_color #0d0c10;
+@define-color headerbar_fg_color #e0dde8;
+@define-color headerbar_backdrop_color #0d0c10;
+@define-color sidebar_bg_color #131218;
+@define-color sidebar_fg_color #e0dde8;
+@define-color sidebar_backdrop_color #0d0c10;
+@define-color card_bg_color #1b1a22;
+@define-color card_fg_color #e0dde8;
+@define-color dialog_bg_color #0d0c10;
+@define-color dialog_fg_color #e0dde8;
+@define-color popover_bg_color #0d0c10;
+@define-color popover_fg_color #e0dde8;
+@define-color thumbnail_bg_color #1b1a22;
+@define-color thumbnail_fg_color #e0dde8;
 
 /* Preserve semantic foregrounds from the base theme: a global label colour
    overrides selected rows, suggested actions and destructive buttons. */
@@ -43,16 +43,16 @@ menu, menuitem, tooltip, scale trough, scale highlight, scale slider {
 entry, spinbutton {
   background-color: @view_bg_color;
   color: @view_fg_color;
-  border: 1px solid #343c31;
+  border: 1px solid #35323f;
 }
 entry:focus, spinbutton:focus {
   border-color: @accent_bg_color;
 }
 selection {
-  background-color: #26301e;
-  color: #dfe3d8;
+  background-color: #2b2540;
+  color: #e0dde8;
 }
-scale trough { min-height: 5px; background-color: #343c31; }
+scale trough { min-height: 5px; background-color: #35323f; }
 scale highlight { background-color: @accent_bg_color; }
 scale slider { min-width: 14px; min-height: 14px; }
 
@@ -62,34 +62,34 @@ button:focus, entry:focus, switch:focus {
   outline: 2px solid @accent_bg_color;
   outline-offset: 2px;
 }
-switch { border-radius: 999px; background-color: #343c31; }
+switch { border-radius: 999px; background-color: #35323f; }
 switch:checked { background-color: @accent_bg_color; }
-switch slider { border-radius: 999px; background-color: #c9d0c1; }
-switch:checked slider { background-color: #0c0d0b; }
-scale slider { background-color: #c9d0c1; }
+switch slider { border-radius: 999px; background-color: #c9c5d4; }
+switch:checked slider { background-color: #0d0c10; }
+scale slider { background-color: #c9c5d4; }
 
 /* Thunar: a tiled file browser with the same rails as the editor and shell. */
 .thunar {
   font-family: "JetBrainsMono Nerd Font";
   font-size: 18px;
-  background-color: #0c0d0b;
-  color: #c9d0c1;
+  background-color: #0d0c10;
+  color: #c9c5d4;
 }
 .thunar toolbar, .thunar menubar {
-  background-color: #121411;
-  border-bottom: 1px solid #343c31;
+  background-color: #131218;
+  border-bottom: 1px solid #35323f;
   padding: 4px;
 }
-.thunar .view { background-color: #0c0d0b; color: #c9d0c1; }
-.thunar .sidebar, .thunar .sidebar .view { background-color: #121411; }
+.thunar .view { background-color: #0d0c10; color: #c9c5d4; }
+.thunar .sidebar, .thunar .sidebar .view { background-color: #131218; }
 .thunar .view:selected, .thunar .sidebar .view:selected {
-  background-color: #26301e;
-  color: #ecefe5;
+  background-color: #2b2540;
+  color: #ecebf2;
 }
-.thunar paned > separator { background-color: #343c31; min-width: 1px; min-height: 1px; }
+.thunar paned > separator { background-color: #35323f; min-width: 1px; min-height: 1px; }
 .thunar notebook > header {
-  background-color: #121411;
-  border-bottom: 1px solid #343c31;
+  background-color: #131218;
+  border-bottom: 1px solid #35323f;
 }
 .thunar notebook > header tabs > tab {
   border-radius: 8px;
@@ -97,23 +97,23 @@ scale slider { background-color: #c9d0c1; }
   padding: 4px 12px;
 }
 .thunar notebook > header tabs > tab:checked {
-  background-color: #1a1e19;
-  border-bottom-color: #b4c97f;
-  color: #cadba3;
+  background-color: #1b1a22;
+  border-bottom-color: #b49cf0;
+  color: #cdbcf7;
 }
-.thunar statusbar { background-color: #0c0d0b; color: #929c8a; border-top: 1px solid #343c31; padding: 4px 8px; }
+.thunar statusbar { background-color: #0d0c10; color: #948fa3; border-top: 1px solid #35323f; padding: 4px 8px; }
 
 /* Selection is a flat row, not a rounded accent button. Keep actual icons
    and artwork un-tinted so selected folders and archives cannot turn black. */
-@define-color theme_selected_bg_color #26301e;
-@define-color theme_selected_fg_color #ecefe5;
+@define-color theme_selected_bg_color #2b2540;
+@define-color theme_selected_fg_color #ecebf2;
 .view, .view:selected, .thunar .view:selected {
   border-radius: 8px;
   -gtk-icon-effect: none;
 }
 .view:selected, .view:selected:focus {
-  background-color: #26301e;
-  color: #ecefe5;
+  background-color: #2b2540;
+  color: #ecebf2;
 }
 .thunar .sidebar .view { font-size: 16px; }
 .thunar statusbar { font-size: 16px; }
@@ -121,9 +121,9 @@ treeview.view header button {
   font-family: "JetBrainsMono Nerd Font";
   font-size: 16px;
   font-weight: normal;
-  color: #c9d0c1;
-  background-color: #121411;
-  border-bottom: 1px solid #343c31;
+  color: #c9c5d4;
+  background-color: #131218;
+  border-bottom: 1px solid #35323f;
   border-radius: 8px;
   padding: 4px 8px;
 }
@@ -131,11 +131,11 @@ treeview.view header button {
 
 /* File and archive dialogs inherit the same palette and readable typography. */
 window.dialog {
-  background-color: #0c0d0b;
-  color: #dfe3d8;
+  background-color: #0d0c10;
+  color: #e0dde8;
 }
 window.dialog .dialog-action-area { padding: 8px; }
 window.dialog .dialog-action-area button { min-height: 28px; padding: 4px 12px; }
 treeview.view { font-size: 18px; }
 /* This is a cell-renderer view in archive browsers as well as file pickers. */
-treeview.view:selected { background-color: #26301e; color: #ecefe5; }
+treeview.view:selected { background-color: #2b2540; color: #ecebf2; }

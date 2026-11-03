@@ -28,7 +28,7 @@ Rectangle {
         anchors { top: parent.top; left: parent.left; right: parent.right; margins: 14 }
         spacing: 6
         RowLayout {
-            Text { text: (card.notification?.appName ?? "").toLowerCase(); color: Theme.blue; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; Layout.fillWidth: true; elide: Text.ElideRight }
+            Text { text: (card.notification?.appName ?? "").toLowerCase(); color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; Layout.fillWidth: true; elide: Text.ElideRight }
             Cell { label: "×"; implicitWidth: 26; implicitHeight: 24; onClicked: card.notification?.dismiss() }
         }
         Text { text: card.notification?.summary ?? ""; color: Theme.text; font.family: Theme.font; font.pixelSize: 14; font.bold: true; textFormat: Text.PlainText; wrapMode: Text.WordWrap; Layout.fillWidth: true }

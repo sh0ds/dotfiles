@@ -1,12 +1,12 @@
 [SddmGreeterTheme]
-Name=Diag
-Description=The sh0ds.dev look in Arch blue, like the lock screen
+Name=Afterhours
+Description=The Afterhours login: wallpaper, clock and one rounded password pill, like the lock screen
 Author=sh0ds
 Type=sddm-theme
-Version=1.0
+Version=2.0
 Website=https://github.com/sh0ds/dotfiles
 MainScript=Main.qml
 ConfigFile=theme.conf
-Theme-Id=diag
+Theme-Id=afterhours
 Theme-API=2.0
 QtVersion=6

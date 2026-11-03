@@ -2,7 +2,7 @@
 # through the folder, f is fullscreen, q quits.
 # Colours: Afterhours.
 [options]
-background=0c0d0b
-overlay_text_color=dfe3d8
-overlay_background_color=0c0d0b
+background=0d0c10
+overlay_text_color=e0dde8
+overlay_background_color=0d0c10
 overlay_font=JetBrainsMono Nerd Font:10

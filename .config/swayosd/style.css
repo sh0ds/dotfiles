@@ -1,11 +1,11 @@
 /* swayosd: the volume popup as an Afterhours card: a rounded panel with a
-   thin phosphor bar, same radius and colours as the shell. Class names from
+   thin violet bar, same radius and colours as the shell. Class names from
    SwayOSD's style.scss. */
 * { font-family: "JetBrainsMono Nerd Font"; font-size: 13px; }
 window#osd {
   border-radius: 14px;
-  border: 1px solid #343c31;
-  background: #121411;
+  border: 1px solid #35323f;
+  background: #131218;
 }
 
 window#osd #container {
@@ -14,7 +14,7 @@ window#osd #container {
 
 window#osd image,
 window#osd label {
-  color: #dfe3d8;
+  color: #e0dde8;
 }
 
 window#osd progressbar:disabled,
@@ -35,7 +35,7 @@ window#osd segment {
   min-height: inherit;
   border-radius: 999px;
   border: none;
-  background: #1a1e19;
+  background: #1b1a22;
 }
 
 window#osd progress,
@@ -43,7 +43,7 @@ window#osd segment.active {
   min-height: inherit;
   border-radius: 999px;
   border: none;
-  background: #b4c97f;
+  background: #b49cf0;
 }
 
 window#osd segment {

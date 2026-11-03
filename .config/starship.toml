@@ -1,5 +1,6 @@
-# Afterhours prompt: where you are and what branch on the first line, a
-# phosphor arrow to type after. Timing and the clock sit on the right.
+# Afterhours prompt: the folder as a rounded chip on the first line, then
+# the branch and languages; a violet arrow to type after on the second.
+# Timing and the clock sit on the right.
 # Icons come from kitty's JetBrains Mono Nerd Font.
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
@@ -10,8 +11,8 @@ format = """
 right_format = '$cmd_duration$time'
 
 [directory]
-style = 'bold fg:text'
-format = '[ ](fg:accent)[$path]($style)[$read_only](fg:danger) '
+style = 'bold fg:text bg:raised'
+format = '[](fg:raised)[ ](fg:accent bg:raised)[$path]($style)[$read_only](fg:danger bg:raised)[](fg:raised) '
 read_only = ' '
 truncation_length = 3
 truncate_to_repo = true
@@ -19,8 +20,8 @@ truncation_symbol = '…/'
 
 [git_branch]
 symbol = ' '
-style = 'fg:blue'
-format = '[$symbol$branch]($style) '
+style = 'fg:muted'
+format = '[$symbol](fg:accent)[$branch]($style) '
 
 [git_status]
 style = 'fg:amber'
@@ -79,7 +80,7 @@ format = '[$user]($style) '
 
 [hostname]
 ssh_only = true
-style = 'fg:blue'
+style = 'fg:accent'
 format = '[󰒋 $hostname]($style) '
 
 [character]
@@ -92,10 +93,11 @@ vimcmd_replace_symbol = '[R](fg:danger)'
 vimcmd_visual_symbol = '[v](fg:accent)'
 
 [palettes.afterhours]
-line = '#343c31'
-muted = '#929c8a'
-text = '#dfe3d8'
-accent = '#b4c97f'
+raised = '#1b1a22'
+line = '#35323f'
+muted = '#948fa3'
+text = '#e0dde8'
+accent = '#b49cf0'
 blue = '#5e9bb4'
 amber = '#d99f66'
 danger = '#d9786c'

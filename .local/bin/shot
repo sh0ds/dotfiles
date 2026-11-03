@@ -16,13 +16,13 @@ font=$(fc-match -f '%{file}' 'JetBrainsMono Nerd Font')
 im=magick; command -v magick >/dev/null || im=convert
 w=$("$im" identify -format %w "$raw" 2>/dev/null || identify -format %w "$raw")
 W=$((w + 52))
-"$im" "$raw" -bordercolor '#343c31' -border 2 -bordercolor '#0c0d0b' -border 24 \
-  \( -size "${W}x60" xc:'#0c0d0b' \
-     -fill '#343c31' -draw "rectangle 26,0 $((W - 27)),0" \
-     -fill '#b4c97f' -draw "rectangle 26,25 33,32" \
+"$im" "$raw" -bordercolor '#35323f' -border 2 -bordercolor '#0d0c10' -border 24 \
+  \( -size "${W}x60" xc:'#0d0c10' \
+     -fill '#35323f' -draw "rectangle 26,0 $((W - 27)),0" \
+     -fill '#b49cf0' -draw "rectangle 26,25 33,32" \
      -font "$font" -pointsize 20 -gravity west \
-     -fill '#dfe3d8' -annotate +42+0 "$title" \
-     -gravity east -fill '#929c8a' -annotate +26+0 "$(date +%F) · sh0ds.dev" \) \
+     -fill '#e0dde8' -annotate +42+0 "$title" \
+     -gravity east -fill '#948fa3' -annotate +26+0 "$(date +%F) · sh0ds.dev" \) \
   -gravity center -append "$out"
 wl-copy <"$out"
 notify-send -a shot "Screenshot framed" "$out"

@@ -9,21 +9,25 @@ here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repo=$(dirname "$here")
 
 # ---- SDDM: the Afterhours theme (Qt 6, runs on weston like before) ----
-t=/usr/share/sddm/themes/diag
+# The greeter runs as the sddm user and can't read $HOME, so the wallpaper
+# is copied in as background.png.
+t=/usr/share/sddm/themes/afterhours
 sudo install -d "$t"
-sudo install -m 644 "$here"/sddm/diag/{Main.qml,metadata.desktop,theme.conf} "$t/"
-sudo install -m 644 "$repo/.config/hypr/arch-logo.png" "$t/"
+sudo install -m 644 "$here"/sddm/afterhours/{Main.qml,metadata.desktop,theme.conf} "$t/"
+sudo install -m 644 "$repo/.local/share/backgrounds/afterhours.png" "$t/background.png"
+# The old Diag theme is gone from the repo; drop its installed copy too.
+sudo rm -rf /usr/share/sddm/themes/diag
 sudo install -d /etc/sddm.conf.d
 for old in /etc/sddm.conf.d/*.conf; do
   [ -e "$old" ] || continue
-  [ "$old" = /etc/sddm.conf.d/10-diag.conf ] && continue
+  [ "$old" = /etc/sddm.conf.d/10-afterhours.conf ] && continue
   if grep -q '^Current=' "$old"; then
     sudo install -d /etc/sddm.conf.d/old
     sudo mv "$old" /etc/sddm.conf.d/old/
     echo "moved $old to /etc/sddm.conf.d/old/"
   fi
 done
-sudo tee /etc/sddm.conf.d/10-diag.conf >/dev/null <<'CONF'
+sudo tee /etc/sddm.conf.d/10-afterhours.conf >/dev/null <<'CONF'
 # Written by dotfiles/system/install-system.sh
 [General]
 DisplayServer=wayland
@@ -32,11 +36,11 @@ DisplayServer=wayland
 CompositorCommand=weston --shell=kiosk
 
 [Theme]
-Current=diag
+Current=afterhours
 CursorTheme=Posy_Cursor_Black
 CursorSize=32
 CONF
-echo "SDDM: diag theme installed"
+echo "SDDM: afterhours theme installed"
 
 # weston's kiosk shell puts the greeter on whichever screen it finds first
 # (DP-3 here), so switch every other connected screen off while it runs. The
@@ -59,11 +63,12 @@ rm "$ini"
 
 # ---- Plymouth: the Afterhours boot splash ----
 if command -v plymouth-set-default-theme >/dev/null; then
-  p=/usr/share/plymouth/themes/diag
+  p=/usr/share/plymouth/themes/afterhours
   sudo install -d "$p"
-  sudo install -m 644 "$here"/plymouth/diag/* "$p/"
-  sudo plymouth-set-default-theme -R diag    # -R rebuilds the initramfs
-  echo "Plymouth: diag splash installed"
+  sudo install -m 644 "$here"/plymouth/afterhours/* "$p/"
+  sudo plymouth-set-default-theme -R afterhours    # -R rebuilds the initramfs
+  sudo rm -rf /usr/share/plymouth/themes/diag
+  echo "Plymouth: afterhours splash installed"
 else
   echo "Plymouth isn't installed, skipped the boot splash"
 fi

@@ -1,0 +1,82 @@
+# Afterhours boot splash: the charcoal of the desktop, the Afterhours mark
+# breathing slowly in violet, and under it a thin rounded bar that fills
+# as the boot goes. The disk password prompt (if any) shows as dots under
+# the bar, in the same colours as the login screen.
+
+Window.SetBackgroundTopColor(0.051, 0.047, 0.063);      # #0d0c10
+Window.SetBackgroundBottomColor(0.051, 0.047, 0.063);
+
+cx = Window.GetX() + Window.GetWidth() / 2;
+cy = Window.GetY() + Window.GetHeight() / 2;
+
+logo.image = Image("logo.png");
+logo.sprite = Sprite(logo.image);
+logo.sprite.SetPosition(cx - logo.image.GetWidth() / 2, cy - logo.image.GetHeight() - 24, 1);
+
+track.image = Image("track.png");
+track.x = cx - track.image.GetWidth() / 2;
+track.y = cy + 36;
+track.sprite = Sprite(track.image);
+track.sprite.SetPosition(track.x, track.y, 1);
+
+fill.image = Image("fill.png");
+fill.sprite = Sprite();
+fill.sprite.SetPosition(track.x + 4, track.y + 4, 2);
+fill.width = 0;
+
+# The mark breathes between 55 % and 100 % (about 3 s per breath at 50 fps),
+# and the bar eases towards the real progress instead of jumping.
+target = 0;
+tick = 0;
+fun refresh_callback() {
+  tick++;
+  logo.sprite.SetOpacity(0.775 + 0.225 * Math.Sin(tick / 24));
+  want = target * fill.image.GetWidth();
+  fill.width += (want - fill.width) * 0.12;
+  if (fill.width >= 6) {
+    fill.sprite.SetImage(fill.image.Scale(Math.Int(fill.width), fill.image.GetHeight()));
+    fill.sprite.SetOpacity(1);
+  } else {
+    fill.sprite.SetOpacity(0);
+  }
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+fun progress_callback(duration, progress) {
+  if (progress > target) target = progress;
+  if (target > 1) target = 1;
+}
+Plymouth.SetBootProgressFunction(progress_callback);
+
+line.sprite = Sprite();
+fun show_line(text, r, g, b) {
+  img = Image.Text(text, r, g, b);
+  line.sprite.SetImage(img);
+  line.sprite.SetPosition(cx - img.GetWidth() / 2, track.y + 40, 3);
+  line.sprite.SetOpacity(1);
+}
+
+fun password_callback(prompt, bullets) {
+  dots = "";
+  for (i = 0; i < bullets; i++) dots += "• ";
+  if (bullets == 0) dots = "disk password";
+  show_line(dots, 0.706, 0.612, 0.941);                  # #b49cf0
+}
+Plymouth.SetDisplayPasswordFunction(password_callback);
+
+fun normal_callback() {
+  line.sprite.SetOpacity(0);
+}
+Plymouth.SetDisplayNormalFunction(normal_callback);
+
+fun message_callback(text) {
+  show_line(text, 0.580, 0.561, 0.639);                  # #948fa3
+}
+Plymouth.SetMessageFunction(message_callback);
+
+fun quit_callback() {
+  target = 1;
+  fill.sprite.SetImage(fill.image);
+  fill.sprite.SetOpacity(1);
+}
+Plymouth.SetQuitFunction(quit_callback);

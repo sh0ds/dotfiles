@@ -2,3 +2,4 @@ module Afterhours
 singleton Theme 1.0 Theme.qml
 Cell 1.0 Cell.qml
 Notice 1.0 Notice.qml
+Calendar 1.0 Calendar.qml

@@ -9,54 +9,54 @@
 .theme-dark,
 .visual-refresh,
 .visual-refresh.theme-dark {
-  --background-primary: #0c0d0b !important;
-  --background-secondary: #121411 !important;
-  --background-secondary-alt: #121411 !important;
-  --background-tertiary: #0c0d0b !important;
-  --background-floating: #121411 !important;
+  --background-primary: #0d0c10 !important;
+  --background-secondary: #131218 !important;
+  --background-secondary-alt: #131218 !important;
+  --background-tertiary: #0d0c10 !important;
+  --background-floating: #131218 !important;
 
-  --background-base-lowest: #0c0d0b !important;
-  --background-base-lower: #0c0d0b !important;
-  --background-base-low: #121411 !important;
-  --background-surface-high: #121411 !important;
-  --background-surface-higher: #1a1e19 !important;
-  --background-surface-highest: #1a1e19 !important;
+  --background-base-lowest: #0d0c10 !important;
+  --background-base-lower: #0d0c10 !important;
+  --background-base-low: #131218 !important;
+  --background-surface-high: #131218 !important;
+  --background-surface-higher: #1b1a22 !important;
+  --background-surface-highest: #1b1a22 !important;
 
-  --background-modifier-hover: #1a1e19 !important;
-  --background-modifier-active: #1a1e19 !important;
-  --background-modifier-selected: #26301e !important;
+  --background-modifier-hover: #1b1a22 !important;
+  --background-modifier-active: #1b1a22 !important;
+  --background-modifier-selected: #2b2540 !important;
 
-  --text-normal: #c9d0c1 !important;
-  --text-muted: #929c8a !important;
-  --text-link: #b4c97f !important;
+  --text-normal: #c9c5d4 !important;
+  --text-muted: #948fa3 !important;
+  --text-link: #b49cf0 !important;
 
-  --interactive-normal: #929c8a !important;
-  --interactive-hover: #c9d0c1 !important;
-  --interactive-active: #dfe3d8 !important;
+  --interactive-normal: #948fa3 !important;
+  --interactive-hover: #c9c5d4 !important;
+  --interactive-active: #e0dde8 !important;
 
-  --brand-experiment: #b4c97f !important;
-  --brand-500: #b4c97f !important;
+  --brand-experiment: #b49cf0 !important;
+  --brand-500: #b49cf0 !important;
 
-  --button-filled-brand-background: #b4c97f !important;
-  --button-filled-brand-background-hover: #cadba3 !important;
-  --button-filled-brand-text: #0c0d0b !important;
-  --button-filled-brand-text-hover: #0c0d0b !important;
+  --button-filled-brand-background: #b49cf0 !important;
+  --button-filled-brand-background-hover: #cdbcf7 !important;
+  --button-filled-brand-text: #0d0c10 !important;
+  --button-filled-brand-text-hover: #0d0c10 !important;
   --status-danger: #d9786c !important;
   --status-warning: #d99f66 !important;
   --status-positive: #83b48f !important;
-  --background-mentioned: #1a1e19 !important;
-  --background-mentioned-hover: #1a1e19 !important;
-  --mention-foreground: #cadba3 !important;
-  --mention-background: #26301e !important;
-  --input-background: #121411 !important;
-  --input-border: #343c31 !important;
-  --border-subtle: #343c31 !important;
-  --border-normal: #343c31 !important;
+  --background-mentioned: #1b1a22 !important;
+  --background-mentioned-hover: #1b1a22 !important;
+  --mention-foreground: #cdbcf7 !important;
+  --mention-background: #2b2540 !important;
+  --input-background: #131218 !important;
+  --input-border: #35323f !important;
+  --border-subtle: #35323f !important;
+  --border-normal: #35323f !important;
   --font-code: "JetBrainsMono Nerd Font", monospace !important;
 
-  --scrollbar-thin-thumb: #343c31 !important;
-  --scrollbar-auto-thumb: #343c31 !important;
-  --scrollbar-auto-track: #0c0d0b !important;
+  --scrollbar-thin-thumb: #35323f !important;
+  --scrollbar-auto-thumb: #35323f !important;
+  --scrollbar-auto-track: #0d0c10 !important;
 
   --font-primary: "JetBrainsMono Nerd Font", monospace !important;
   --font-display: "JetBrainsMono Nerd Font", monospace !important;
@@ -78,7 +78,7 @@
 .theme-dark [class*="gradientContainer"],
 .theme-dark [class*="videoGrid"],
 .theme-dark [class*="scroller"][class*="call"] {
-  background: #0c0d0b !important;
+  background: #0d0c10 !important;
   background-image: none !important;
 }
 
@@ -86,35 +86,35 @@
 .theme-dark [class*="sidebarList"],
 .theme-dark [class*="sidebarRegion"],
 .theme-dark [class*="privateChannels"] {
-  background: #121411 !important;
+  background: #131218 !important;
 }
 
 /* Restrained selected-channel state */
 .theme-dark [class*="modeSelected"] [class*="link"] {
-  background: #1a1e19 !important;
-  box-shadow: inset 2px 0 0 #b4c97f !important;
+  background: #1b1a22 !important;
+  box-shadow: inset 2px 0 0 #b49cf0 !important;
 }
 
 /* Text and input surfaces */
 .theme-dark [class*="channelTextArea"],
 .theme-dark [class*="themedBackground"] {
-  background: #121411 !important;
+  background: #131218 !important;
   border-radius: 0 !important;
 }
 
 /* Thin structural separators */
 .theme-dark [class*="sidebar"] {
-  border-color: #343c31 !important;
+  border-color: #35323f !important;
 }
 
 /* Consistent selection */
 .theme-dark ::selection {
-  background: #26301e !important;
-  color: #dfe3d8 !important;
+  background: #2b2540 !important;
+  color: #e0dde8 !important;
 }
 
 /* Keep keyboard focus visible; do not animate layout or resize content. */
 .theme-dark :is(button, input, textarea, [role="button"]):focus-visible {
-  outline: 2px solid #b4c97f !important;
+  outline: 2px solid #b49cf0 !important;
   outline-offset: 2px;
 }

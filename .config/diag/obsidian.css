@@ -1,87 +1,138 @@
-/* Afterhours for Obsidian: app chrome shares the desktop palette; documents keep
-   their own readable typography. Enable the snippet in Appearance. */
+/* Afterhours for Obsidian: the desktop's palette, font and rounded shapes
+   in the app chrome; notes keep a calm reading layout with violet links,
+   soft code blocks and rounded callouts. Enable the snippet in Appearance. */
 .theme-dark {
-  --background-primary: #0c0d0b;
-  --background-primary-alt: #121411;
-  --background-secondary: #121411;
-  --background-secondary-alt: #0c0d0b;
-  --background-modifier-border: #343c31;
-  --background-modifier-border-focus: #b4c97f;
-  --background-modifier-hover: #1a1e19;
-  --background-modifier-form-field: #121411;
+  --background-primary: #0d0c10;
+  --background-primary-alt: #131218;
+  --background-secondary: #131218;
+  --background-secondary-alt: #0d0c10;
+  --background-modifier-border: #35323f;
+  --background-modifier-border-hover: #5d596b;
+  --background-modifier-border-focus: #b49cf0;
+  --background-modifier-hover: #1b1a22;
+  --background-modifier-active-hover: #2b2540;
+  --background-modifier-form-field: #131218;
   --background-modifier-error: #d9786c;
   --background-modifier-success: #83b48f;
-  --text-normal: #c9d0c1;
-  --text-muted: #929c8a;
-  --text-faint: #929c8a;
-  --text-on-accent: #0c0d0b;
-  --text-accent: #b4c97f;
-  --text-accent-hover: #cadba3;
+  --text-normal: #c9c5d4;
+  --text-muted: #948fa3;
+  --text-faint: #6d687c;
+  --text-on-accent: #0d0c10;
+  --text-accent: #b49cf0;
+  --text-accent-hover: #cdbcf7;
   --text-error: #d9786c;
   --text-success: #83b48f;
   --text-warning: #d99f66;
-  --text-selection: #26301e;
-  --interactive-normal: #1a1e19;
-  --interactive-hover: #343c31;
-  --interactive-accent: #b4c97f;
-  --interactive-accent-rgb: 23, 147, 209;
-  --checkbox-color: #b4c97f;
-  --checkbox-marker-color: #0c0d0b;
-  --nav-item-color-active: #dfe3d8;
-  --interactive-accent-hover: #cadba3;
-  --color-accent: #b4c97f;
-  --color-accent-1: #b4c97f;
-  --color-accent-2: #cadba3;
-  --link-color: #b4c97f;
-  --link-color-hover: #cadba3;
-  --code-background: #121411;
-  --code-normal: #c9d0c1;
-  --blockquote-border-color: #b4c97f;
-  --table-border-color: #343c31;
-  --divider-color: #343c31;
-  --divider-color-hover: #b4c97f;
-  --icon-color: #929c8a;
-  --icon-color-hover: #dfe3d8;
-  --icon-color-focused: #b4c97f;
-  --nav-item-background-selected: #26301e;
+  --text-selection: #2b2540;
+  --text-highlight-bg: rgba(217, 159, 102, 0.22);
+  --interactive-normal: #1b1a22;
+  --interactive-hover: #25232d;
+  --interactive-accent: #b49cf0;
+  --interactive-accent-hsl: 258, 73%, 78%;
+  --interactive-accent-hover: #cdbcf7;
+  --accent-h: 258;
+  --accent-s: 73%;
+  --accent-l: 78%;
+  --checkbox-color: #b49cf0;
+  --checkbox-color-hover: #cdbcf7;
+  --checkbox-marker-color: #0d0c10;
+  --checkbox-radius: 5px;
+  --nav-item-color-active: #e0dde8;
+  --nav-item-background-active: #2b2540;
+  --nav-item-background-hover: #1b1a22;
+  --nav-item-radius: 8px;
+  --color-accent: #b49cf0;
+  --color-accent-1: #b49cf0;
+  --color-accent-2: #cdbcf7;
+  --link-color: #b49cf0;
+  --link-color-hover: #cdbcf7;
+  --link-external-color: #b49cf0;
+  --link-unresolved-color: #948fa3;
+  --code-background: #131218;
+  --code-normal: #c9c5d4;
+  --code-radius: 8px;
+  --blockquote-border-color: #b49cf0;
+  --blockquote-border-thickness: 2px;
+  --callout-radius: 14px;
+  --table-border-color: #35323f;
+  --hr-color: #35323f;
+  --divider-color: #35323f;
+  --divider-color-hover: #b49cf0;
+  --icon-color: #948fa3;
+  --icon-color-hover: #e0dde8;
+  --icon-color-focused: #b49cf0;
+  --nav-item-background-selected: #2b2540;
+  --tag-color: #b49cf0;
+  --tag-background: #1b1a22;
+  --tag-border-color: #35323f;
+  --tag-radius: 999px;
+  --h1-color: #e0dde8;
+  --h2-color: #e0dde8;
+  --h3-color: #e0dde8;
+  --h4-color: #c9c5d4;
   --font-interface-theme: "JetBrainsMono Nerd Font", monospace;
+  --font-text-theme: "JetBrainsMono Nerd Font", monospace;
   --font-monospace-theme: "JetBrainsMono Nerd Font", monospace;
-  --tab-radius-active: 0px;
-  --tab-radius: 0px;
+  --tab-radius-active: 8px;
+  --tab-radius: 8px;
   --tab-curve: 0px;
-  --tab-outline-color: #343c31;
-  --radius-s: 0px;
-  --radius-m: 0px;
-  --radius-l: 0px;
-  --radius-xl: 0px;
-  --input-radius: 0px;
-  --modal-radius: 0px;
-  --menu-radius: 0px;
+  --tab-outline-color: transparent;
+  --radius-s: 6px;
+  --radius-m: 8px;
+  --radius-l: 14px;
+  --radius-xl: 18px;
+  --input-radius: 8px;
+  --modal-radius: 14px;
+  --menu-radius: 10px;
+  --shadow-s: 0 4px 12px rgba(5, 6, 5, 0.45);
+  --shadow-l: 0 12px 32px rgba(5, 6, 5, 0.6);
+  --file-line-width: 46rem;
 }
-.theme-dark .workspace-tab-header-container {
-  border-bottom: 1px solid #343c31;
-}
-.theme-dark .workspace-tab-header { background: #0c0d0b; box-shadow: none; }
-.theme-dark .workspace-tab-header.is-active {
-  background: #1a1e19;
-  color: #dfe3d8;
-  box-shadow: inset 0 -2px 0 #b4c97f;
-}
+
+/* Tabs: pills like Firefox and kitty. The active one is raised. */
+.theme-dark .workspace-tab-header-container { border-bottom: 1px solid #35323f; }
+.theme-dark .workspace-tab-header { background: transparent; box-shadow: none; }
+.theme-dark .workspace-tab-header .workspace-tab-header-inner { border-radius: 8px; }
 .theme-dark .workspace-tab-header::before,
 .theme-dark .workspace-tab-header::after { display: none; }
-.theme-dark .nav-file-title.is-active {
-  color: #dfe3d8;
-  box-shadow: inset 2px 0 0 #b4c97f;
+.theme-dark .workspace-tab-header.is-active .workspace-tab-header-inner {
+  background: #1b1a22;
+  box-shadow: inset 0 0 0 1px #35323f;
+  color: #e0dde8;
 }
-.theme-dark .markdown-rendered table { border-collapse: collapse; }
-.theme-dark .markdown-rendered th,
-.theme-dark .markdown-rendered td { padding: 6px 10px; }
-.theme-dark .markdown-rendered a { text-decoration: underline; text-underline-offset: 2px; }
-.theme-dark :is(button, input, textarea):focus-visible {
-  outline: 2px solid #b4c97f;
-  outline-offset: 2px;
+
+/* File list: the open note is a soft violet-tinted pill */
+.theme-dark .nav-file-title, .theme-dark .nav-folder-title { border-radius: 8px; }
+.theme-dark .nav-file-title.is-active { color: #e0dde8; background: #2b2540; }
+
+/* Reading: links without heavy underlines, headings with air, rounded
+   tables, code blocks and quotes on raised panels. */
+.theme-dark .markdown-rendered a { text-decoration: none; border-bottom: 1px solid rgba(180, 156, 240, 0.35); }
+.theme-dark .markdown-rendered a:hover { border-bottom-color: #b49cf0; }
+.theme-dark .markdown-rendered :is(h1, h2) { letter-spacing: -0.01em; margin-top: 1.6em; }
+.theme-dark .markdown-rendered h2 { padding-bottom: 6px; border-bottom: 1px solid #25232d; }
+.theme-dark .markdown-rendered table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #35323f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.theme-dark .markdown-rendered th { background: #131218; color: #e0dde8; }
+.theme-dark .markdown-rendered :is(th, td) { padding: 6px 12px; border-color: #25232d; }
+.theme-dark .markdown-rendered pre { border: 1px solid #25232d; }
+.theme-dark .markdown-rendered blockquote {
+  background: #131218;
+  border-radius: 0 8px 8px 0;
+  padding: 8px 16px;
+}
+.theme-dark :is(button, input, textarea, select):focus-visible {
+  outline: 1px solid #b49cf0;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px rgba(180, 156, 240, 0.14);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .theme-dark .workspace-tab-header,
-  .theme-dark .nav-file-title { transition: background-color 200ms ease-out; }
+  .theme-dark :is(.workspace-tab-header-inner, .nav-file-title, .nav-folder-title, .markdown-rendered a) {
+    transition: background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out;
+  }
 }

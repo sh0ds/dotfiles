@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# sys-stats: one line for the Afterhours rail's sys cell:
+#   <cpu %> <used memory GiB> <cpu °C or -> <gpu % or ->
+# CPU is measured over half a second, so the shell can call it every 2 s
+# without keeping state anywhere.
+set -uo pipefail
+read -r _ u n s i w q sq st _ </proc/stat
+b1=$((u + n + s + q + sq + st)); t1=$((b1 + i + w))
+sleep 0.5
+read -r _ u n s i w q sq st _ </proc/stat
+b2=$((u + n + s + q + sq + st)); t2=$((b2 + i + w))
+cpu=0
+[ "$t2" -gt "$t1" ] && cpu=$(( (b2 - b1) * 100 / (t2 - t1) ))
+mem=$(awk '/^MemTotal/{t=$2} /^MemAvailable/{a=$2} END{printf "%.1f", (t-a)/1048576}' /proc/meminfo)
+temp=-
+for h in /sys/class/hwmon/hwmon*; do
+  case $(cat "$h/name" 2>/dev/null) in
+    coretemp|k10temp)
+      value=$(cat "$h/temp1_input" 2>/dev/null) || continue
+      [[ $value =~ ^[0-9]+$ ]] && { temp=$((value / 1000)); break; } ;;
+  esac
+done
+gpu=-
+if command -v nvidia-smi >/dev/null; then
+  value=$(timeout 1 nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -n1)
+  [[ $value =~ ^[0-9]+$ ]] && gpu=$value
+fi
+printf '%s %s %s %s\n' "$cpu" "$mem" "$temp" "$gpu"

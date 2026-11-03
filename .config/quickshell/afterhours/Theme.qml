@@ -1,17 +1,18 @@
 pragma Singleton
-// Afterhours tokens: dark warm charcoal, phosphor green for focus, blue for
-// media and metadata, amber for attention, coral for recording and errors.
+// Afterhours tokens: dark cool charcoal, violet for focus and the active
+// thing, amber for attention, coral for recording and errors. Blue is kept
+// for the terminal's ANSI colours only.
 // One font for everything (JetBrains Mono, Nerd Font build for the icons).
 import QtQuick
 QtObject {
-    readonly property color background: "#0c0d0b"
-    readonly property color panel: "#121411"
-    readonly property color raised: "#1a1e19"
-    readonly property color line: "#343c31"
-    readonly property color muted: "#929c8a"
-    readonly property color text: "#dfe3d8"
-    readonly property color accent: "#b4c97f"
-    readonly property color accentSoft: "#2a3320"
+    readonly property color background: "#0d0c10"
+    readonly property color panel: "#131218"
+    readonly property color raised: "#1b1a22"
+    readonly property color line: "#35323f"
+    readonly property color muted: "#948fa3"
+    readonly property color text: "#e0dde8"
+    readonly property color accent: "#b49cf0"
+    readonly property color accentSoft: "#2a2340"
     readonly property color blue: "#5e9bb4"
     readonly property color danger: "#d9786c"
     readonly property color amber: "#d99f66"

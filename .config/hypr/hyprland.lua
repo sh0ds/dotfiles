@@ -54,7 +54,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
 	-- Afterhours: quiet contour bands; fill each display without distortion.
-	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 0c0d0b --transition-type none ~/.local/share/backgrounds/afterhours.png")
+	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 0d0c10 --transition-type none ~/.local/share/backgrounds/afterhours.png")
 end)
 
 -------------------------------
@@ -85,8 +85,8 @@ hl.config({
 		gaps_out = 0,
 		border_size = 1,
 		col = {
-			active_border = "rgb(b4c97f)",
-			inactive_border = "rgb(242a23)",
+			active_border = "rgb(b49cf0)",
+			inactive_border = "rgb(25232d)",
 		},
 		resize_on_border = true,
 		allow_tearing = false,

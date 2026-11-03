@@ -2,12 +2,12 @@
 # Environment mappings are reset by diag/ls-colors.sh to avoid inherited themes.
 filekinds:
   normal:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   directory:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
     is_bold: true
   symlink:
-    foreground: '#cadba3'
+    foreground: '#cdbcf7'
   pipe:
     foreground: '#d99f66'
   block_device:
@@ -15,33 +15,33 @@ filekinds:
   char_device:
     foreground: '#d99f66'
   socket:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
   special:
     foreground: '#d99f66'
   executable:
     foreground: '#83b48f'
   mount_point:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
     is_bold: true
 perms:
   user_read:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   user_write:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   user_execute_file:
     foreground: '#83b48f'
   user_execute_other:
     foreground: '#83b48f'
   group_read:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   group_write:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   group_execute:
     foreground: '#83b48f'
   other_read:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   other_write:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   other_execute:
     foreground: '#83b48f'
   special_user_file:
@@ -49,50 +49,50 @@ perms:
   special_other:
     foreground: '#d99f66'
   attribute:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
 size:
   major:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   minor:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   number_byte:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   number_kilo:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   number_mega:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   number_giga:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   number_huge:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   unit_byte:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   unit_kilo:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   unit_mega:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   unit_giga:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   unit_huge:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
 users:
   user_you:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   user_root:
     foreground: '#d9786c'
   user_other:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   group_yours:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   group_other:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   group_root:
     foreground: '#d9786c'
 links:
   normal:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   multi_link_file:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
 git:
   new:
     foreground: '#83b48f'
@@ -101,61 +101,61 @@ git:
   deleted:
     foreground: '#d9786c'
   renamed:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
   typechange:
     foreground: '#d99f66'
   ignored:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   conflicted:
     foreground: '#d9786c'
 git_repo:
   branch_main:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
   branch_other:
-    foreground: '#b4c97f'
+    foreground: '#b49cf0'
   git_clean:
-    foreground: '#929c8a'
+    foreground: '#948fa3'
   git_dirty:
     foreground: '#d99f66'
 file_type:
   image:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   video:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   music:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   lossless:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   crypto:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   document:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   compressed:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   temp:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   compiled:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   build:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
   source:
-    foreground: '#c9d0c1'
+    foreground: '#c9c5d4'
 punctuation:
-  foreground: '#929c8a'
+  foreground: '#948fa3'
 date:
-  foreground: '#929c8a'
+  foreground: '#948fa3'
 inode:
-  foreground: '#929c8a'
+  foreground: '#948fa3'
 blocks:
-  foreground: '#929c8a'
+  foreground: '#948fa3'
 header:
-  foreground: '#dfe3d8'
+  foreground: '#e0dde8'
 octal:
-  foreground: '#929c8a'
+  foreground: '#948fa3'
 flags:
-  foreground: '#929c8a'
+  foreground: '#948fa3'
 symlink_path:
-  foreground: '#cadba3'
+  foreground: '#cdbcf7'
 control_char:
   foreground: '#d9786c'
 broken_symlink:

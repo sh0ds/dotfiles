@@ -35,7 +35,7 @@ cd "$src"
 # Tracked files plus the explicit new shell assets, also installable before commit.
 # Never glob unrelated untracked files into the user's home.
 { git ls-files
-  printf '%s\n' .config/quickshell/afterhours/{shell,Theme,Cell,Notice}.qml \
+  printf '%s\n' .config/quickshell/afterhours/{shell,Theme,Cell,Notice,Calendar}.qml \
     .config/quickshell/afterhours/qmldir .local/bin/{afterhours,afterhours-suspend,game-dev} \
     .local/share/applications/game-dev.desktop .local/share/backgrounds/afterhours.{png,svg}
 } | sort -u | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/|tests/)' |

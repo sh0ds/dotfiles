@@ -2,7 +2,7 @@
 # frame: the focused window's border says what the desktop is doing.
 #   coral     recording (rec-toggle) or sharing the screen
 #   amber     quiet mode: notifications are held back
-#   phosphor  normal (the same gradient as rice.lua)
+#   violet  normal (the same gradient as rice.lua)
 # rice.lua starts it once. It checks every second and only touches the
 # border when the state changes; the change eases in like any other.
 # The Afterhours shell keeps the two flag files.
@@ -15,7 +15,7 @@ while :; do
   elif [ -e "$run/diag-dnd" ]; then
     c="d99f66 e3c299"
   else
-    c="b4c97f 83b48f"
+    c="b49cf0 8f7ad9"
   fi
   if [ "$c" != "$last" ] &&
      hyprctl eval "hl.config({ general = { col = { active_border = { colors = { \"rgb(${c% *})\", \"rgb(${c#* })\" }, angle = 45 } } } })" >/dev/null; then

@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Afterhours
+Description=The Afterhours mark breathing in violet over charcoal, with a thin rounded progress bar
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/afterhours
+ScriptFile=/usr/share/plymouth/themes/afterhours/afterhours.script

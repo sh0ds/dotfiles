@@ -18,5 +18,5 @@ user_pref("browser.newtabpage.activity-stream.showSponsored", false);
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 user_pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 user_pref("browser.newtabpage.activity-stream.showWeather", false);
-// Native Wayland popups and menus look like the rest when they're square
-user_pref("widget.gtk.rounded-bottom-corners.enabled", false);
+// Native Wayland popups get rounded bottom corners, like the rest
+user_pref("widget.gtk.rounded-bottom-corners.enabled", true);
