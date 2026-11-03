@@ -7,7 +7,7 @@
 local mod = "SUPER"
 
 -- Your scripts live in ~/.local/bin. A login through SDDM doesn't read
--- .bashrc, so Hyprland (and everything it starts: keybinds, swaync buttons,
+-- .bashrc, so Hyprland (and everything it starts: keybinds, shell buttons,
 -- hyprlock) wouldn't find them. Put the folder on Hyprland's own PATH.
 local bin = os.getenv("HOME") .. "/.local/bin"
 local path = os.getenv("PATH") or "/usr/local/bin:/usr/bin"
@@ -19,30 +19,31 @@ end
 ---- LOOK: Afterhours ----
 ------------------------------------
 
--- Afterhours: opaque charcoal, lavender focus, mint success and warm alerts.
--- 4 px window radii, 12 px between tiles and 12 px outer breathing room.
--- Keep blur off: text stays crisp and NVIDIA has less compositing work.
--- Application rules, key bindings and the existing motion curves follow below.
+-- Afterhours: dark warm charcoal, phosphor green on the focused window,
+-- amber for attention, coral for recording and errors. Opaque surfaces with
+-- 10 px squircle corners, 8 px between tiles, 12 px at the screen edge.
+-- Blur stays off: text stays crisp and NVIDIA has less compositing work.
+-- `frame` recolours the focused border while recording or in quiet mode.
 hl.config({
 	general = {
-		-- A 4 px unit: 8 px between neighbouring tiles and 8 px at the edge.
-		gaps_in = 6,
+		gaps_in = 4,
 		gaps_out = 12,
 		border_size = 2,
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
 		allow_tearing = true,
 		col = {
-			active_border = "rgb(c6db91)",
-			inactive_border = "rgb(485344)",
+			active_border = { colors = { "rgb(b4c97f)", "rgb(83b48f)" }, angle = 45 },
+			inactive_border = "rgb(242a23)",
 		},
 	},
 	decoration = {
-		rounding = 4,
+		rounding = 10,
+		-- Between a circle (2) and a square: corners curve in smoothly.
+		rounding_power = 2.6,
 		active_opacity = 1.0,
 		inactive_opacity = 1.0,
-		-- A soft shadow, black on black: invisible on tiles, it only shows
-		-- where a floating window or dialog sits over another one.
-		shadow = { enabled = true, range = 18, render_power = 3, color = "rgba(141613b3)" },
+		-- A wide, soft shadow that falls slightly down, like light from above.
+		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(050605d0)", color_inactive = "rgba(05060580)" },
 		blur = { enabled = false },
 		dim_inactive = false,
 		glow = { enabled = false },
@@ -66,20 +67,20 @@ hl.config({
 	-- Tabbed groups (SUPER+G): a flat tab strip, blue for the active tab.
 	group = {
 		col = {
-			border_active = "rgb(c6db91)",
-			border_inactive = "rgb(485344)",
+			border_active = "rgb(b4c97f)",
+			border_inactive = "rgb(343c31)",
 		},
 		groupbar = {
-			font_family = "Noto Sans",
+			font_family = "JetBrainsMono Nerd Font",
 			font_size = 12,
 			height = 26,
 			gradients = false,
 			rounding = 4,
-			text_color = "rgb(141613)",
-			text_color_inactive = "rgb(aab5a2)",
+			text_color = "rgb(0c0d0b)",
+			text_color_inactive = "rgb(929c8a)",
 			col = {
-				active = "rgb(c6db91)",
-				inactive = "rgb(1c201c)",
+				active = "rgb(b4c97f)",
+				inactive = "rgb(121411)",
 			},
 		},
 	},
@@ -104,7 +105,7 @@ hl.config({
 -- a flicker at 180 Hz. "glide" (ease-out quint) does most of the change in
 -- the first third and then lands softly; "exit" (ease-in) leaves quickly.
 --
--- Amplitude stays small: windows grow from 94 %, workspaces shift 8 %. The
+-- Amplitude stays small: windows grow from 92 %, workspaces shift 10 %. The
 -- eye reads the direction, nothing travels across the screen. Exits are
 -- faster than entries, so closing never waits.
 --
@@ -112,17 +113,19 @@ hl.config({
 --   120 ms  exits
 --   200 ms  fades, layers and every colour change (bar, menus and
 --           notifications use the same 200 ms ease-out in their CSS)
---   ~130 ms to 90 % / ~220 ms to 99 %   "settle", windows
---   ~160 ms to 90 % / ~270 ms to 99 %   "drift", workspaces
-hl.curve("settle", { type = "spring", mass = 1, stiffness = 900, dampening = 60 })
-hl.curve("drift", { type = "spring", mass = 1, stiffness = 600, dampening = 49 })
+--   ~170 ms to 90 % / ~290 ms to 99 %   "settle", windows
+--   ~200 ms to 90 % / ~340 ms to 99 %   "drift", workspaces
+-- Calm, still no overshoot. The shell's own motion matches (Theme.qml:
+-- 200 ms colour, 320 ms movement, ease-out).
+hl.curve("settle", { type = "spring", mass = 1, stiffness = 520, dampening = 46 })
+hl.curve("drift", { type = "spring", mass = 1, stiffness = 380, dampening = 39 })
 hl.curve("glide", { type = "bezier", points = { { 0.22, 1 }, { 0.36, 1 } } })
 hl.curve("exit", { type = "bezier", points = { { 0.4, 0 }, { 1, 1 } } })
 
--- Windows: grow in from 94 % with a fade, shrink to 97 % on the way out.
+-- Windows: grow in from 92 % with a fade, shrink to 96 % on the way out.
 -- Tiles glide to their new place when the layout changes.
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 94%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 97%" })
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 92%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 96%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "settle" })
 
 -- Fades. Opacity never changes on focus here, so fadeSwitch is off with the
@@ -138,19 +141,18 @@ hl.animation({ leaf = "fadePopupsIn", enabled = true, speed = 2, bezier = "glide
 hl.animation({ leaf = "fadePopupsOut", enabled = true, speed = 1.2, bezier = "exit" })
 hl.animation({ leaf = "fadeDpms", enabled = true, speed = 4, bezier = "glide" })
 
--- The focus frame changes colour in 200 ms, the same time the bar's
--- workspace marker takes (waybar style.css), so both land together.
+-- The focus frame changes colour in 200 ms, like every colour change in the
+-- shell, so frame and rail land together.
 hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "borderangle", enabled = false })
 
--- Workspaces: an 8 % sideways drift under a cross-fade, so you see which
+-- Workspaces: a 10 % sideways drift under a cross-fade, so you see which
 -- way you went without the whole screen sliding past. A softer spring than
 -- windows, because the whole screen changes.
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefade 8%" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefade 10%" })
 
--- Layers fade in 200 ms. The launcher keeps its pixel font at native size
--- (scaling blurs Terminess); notifications slide in from the edge they
--- live on.
+-- Layers fade in 200 ms without scaling (scaling blurs text);
+-- notifications slide in from the edge they live on.
 hl.animation({ leaf = "layersIn", enabled = true, speed = 2, bezier = "glide", style = "fade" })
 hl.animation({ leaf = "layersOut", enabled = true, speed = 1.2, bezier = "exit", style = "fade" })
 hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 2, bezier = "glide" })
@@ -295,12 +297,27 @@ hl.window_rule({
 -- start them instead of going to workspace 5: they're as much an editor as a
 -- game. Marked as game content for adaptive sync, the screen stays on while
 -- one is fullscreen, and a single tile gets the whole screen (smart gaps), so
--- the pixel-perfect picture sits centred on Diag black.
+-- the pixel-perfect picture sits centred on Afterhours black.
 hl.window_rule({
 	name = "fantasy-consoles",
 	match = { class = "(?i)^(pico-?8.*|picotron)$" },
 	content = "game",
 	idle_inhibit = "fullscreen",
+})
+-- Godot's running game (F5) floats centred over the editor instead of
+-- splitting the grid; its title ends in "(DEBUG)".
+hl.window_rule({
+	name = "godot-run",
+	match = { title = "\\(DEBUG\\)$" },
+	float = true,
+	center = true,
+})
+-- Bitwig keeps the screen awake while it has focus: listening back to a
+-- mix for ten minutes without touching anything is normal.
+hl.window_rule({
+	name = "bitwig",
+	match = { class = "(?i)bitwig" },
+	idle_inhibit = "focus",
 })
 
 -- GameMode for every game, no Steam launch options needed: when a game's
@@ -364,16 +381,23 @@ require("firefox-pip")
 -- and the lock screen follow rmpc or SoundCloud, whichever is playing,
 -- instead of always grabbing the first one.
 -- update-check sends a notification when Arch updates pile up.
--- gsettings: GTK apps and file pickers go dark (adw-gtk3 + Diag gtk.css).
+-- gsettings: GTK apps and file pickers go dark (adw-gtk3 + Afterhours gtk.css).
+-- The cursor is Posy's Cursor Black at 32 (Adwaita looked out of place);
+-- hyprctl setcursor applies it to Hyprland itself, which ignores the env.
+-- frame recolours the focused border: coral while recording or sharing,
+-- amber in quiet mode, phosphor otherwise.
 hl.on("hyprland.start", function()
 	hl.exec_cmd(
 		"gsettings set org.gnome.desktop.interface color-scheme prefer-dark; "
 			.. "gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark; "
 			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
-			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font Mono 13.5'; "
-			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 13.5'; "
-			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
+			.. "gsettings set org.gnome.desktop.interface font-name 'JetBrainsMono Nerd Font 10'; "
+			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrainsMono Nerd Font 10'; "
+			.. "gsettings set org.gnome.desktop.interface cursor-theme Posy_Cursor_Black; "
+			.. "gsettings set org.gnome.desktop.interface cursor-size 32"
 	)
+	hl.exec_cmd("hyprctl setcursor Posy_Cursor_Black 32")
+	hl.exec_cmd("frame")
 	hl.exec_cmd("udiskie")
 	hl.exec_cmd("playerctld daemon")
 	hl.exec_cmd("update-check --watch")
@@ -389,7 +413,7 @@ end)
 hl.bind(mod .. " + I", hl.dsp.exec_cmd("chat"))
 -- Music player (rmpc) on SUPER+U, same idea
 hl.bind(mod .. " + U", hl.dsp.exec_cmd("music"))
--- Files: Thunar uses the same GTK Diag palette and tiles normally (SUPER+E).
+-- Files: Thunar uses the same GTK Afterhours palette and tiles normally (SUPER+E).
 hl.bind(mod .. " + E", hl.dsp.exec_cmd("thunar"))
 -- Task manager: btop, same key as on Windows
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("sysmon"))
@@ -418,6 +442,8 @@ hl.bind(mod .. " + X", hl.dsp.window.center())
 hl.bind(mod .. " + SHIFT + Escape", hl.dsp.exec_cmd("afterhours session"))
 -- Colour picker: click anywhere, hex code lands in the clipboard
 hl.bind(mod .. " + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"))
+-- Screenshot a region with a caption in an Afterhours frame, for devlogs (shot)
+hl.bind("ALT + Print", hl.dsp.exec_cmd("shot"))
 -- Screenshot a region and draw on it before saving (satty)
 hl.bind(
 	"CTRL + Print",
@@ -425,11 +451,11 @@ hl.bind(
 		'grim -g "$(slurp)" - | satty --filename - --output-filename ~/Pictures/shot-%Y%m%d-%H%M%S.png --copy-command wl-copy'
 	)
 )
--- Calculator in fuzzel (qalc): "15% of 89", "300 EUR to USD"
+-- Calculator (fuzzel + qalc): "15% of 89", "300 EUR to USD"
 hl.bind(mod .. " + C", hl.dsp.exec_cmd("calc"))
 -- Night light on/off
 hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd("nightlight"))
--- Record a region to ~/Videos (press again to stop); waybar shows REC in blue
+-- Record a region to ~/Videos (press again to stop); the rail shows REC in coral
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("rec-toggle"))
 -- Window switcher: every open window in a fuzzel list, Enter jumps to it
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))

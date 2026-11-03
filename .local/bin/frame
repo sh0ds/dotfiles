@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 # frame: the focused window's border says what the desktop is doing.
-#   blue       normal (Arch blue into sky blue, like rice.lua)
-#   amber      recording (rec-toggle) or sharing the screen (live-status)
-#   grey       do-not-disturb: notifications are being held back
+#   coral     recording (rec-toggle) or sharing the screen
+#   amber     quiet mode: notifications are held back
+#   phosphor  normal (the same gradient as rice.lua)
 # rice.lua starts it once. It checks every second and only touches the
 # border when the state changes; the change eases in like any other.
+# The Afterhours shell keeps the two flag files.
 set -uo pipefail
-live_flag=${XDG_RUNTIME_DIR:-/tmp}/diag-live
-dnd_flag=${XDG_RUNTIME_DIR:-/tmp}/diag-dnd  # the shell keeps it while quiet is on
+run=${XDG_RUNTIME_DIR:-/tmp}
 last=""
 while :; do
-  if pgrep -x wf-recorder >/dev/null || [ -e "$live_flag" ]; then
-    c="ffb000 ff7a45"
-  elif [ -e "$dnd_flag" ]; then
-    c="8a929c 5d6670"
+  if pgrep -x wf-recorder >/dev/null || [ -e "$run/diag-live" ]; then
+    c="d9786c dca598"
+  elif [ -e "$run/diag-dnd" ]; then
+    c="d99f66 e3c299"
   else
-    c="1793d1 6cc4f0"
+    c="b4c97f 83b48f"
   fi
   if [ "$c" != "$last" ] &&
      hyprctl eval "hl.config({ general = { col = { active_border = { colors = { \"rgb(${c% *})\", \"rgb(${c#* })\" }, angle = 45 } } } })" >/dev/null; then

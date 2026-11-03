@@ -1,33 +1,33 @@
-# ~/.config/lazygit/config.yml: Diag, square borders, blue on the
+# ~/.config/lazygit/config.yml: Afterhours, rounded borders, blue on the
 # focused panel. Run `lg`, or Ctrl+G inside Helix.
 gui:
   nerdFontsVersion: "3"
-  border: single
+  border: rounded
   theme:
     activeBorderColor:
-      - '#c6db91'
+      - '#b4c97f'
       - bold
     inactiveBorderColor:
-      - '#485344'
+      - '#343c31'
     searchingActiveBorderColor:
-      - '#e9b078'
+      - '#d99f66'
     optionsTextColor:
-      - '#c6db91'
+      - '#b4c97f'
     selectedLineBgColor:
-      - '#38452c'
+      - '#26301e'
     inactiveViewSelectedLineBgColor:
-      - '#1c201c'
+      - '#121411'
     cherryPickedCommitFgColor:
-      - '#c6db91'
+      - '#b4c97f'
     cherryPickedCommitBgColor:
-      - '#333c32'
+      - '#242a23'
     markedBaseCommitFgColor:
-      - '#141613'
+      - '#0c0d0b'
     markedBaseCommitBgColor:
-      - '#e9b078'
+      - '#d99f66'
     unstagedChangesColor:
-      - '#e78a7e'
+      - '#d9786c'
     defaultFgColor:
-      - '#ecf0e5'
+      - '#dfe3d8'
     authorColors:
-      '*': '#deecb9'
+      '*': '#cadba3'

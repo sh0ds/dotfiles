@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">
-<rect width="2560" height="1440" fill="#141613"/>
-<g fill="none" stroke="#242c23" stroke-width="2">
+<rect width="2560" height="1440" fill="#0c0d0b"/>
+<g fill="none" stroke="#191e18" stroke-width="2">
 <path d="M1696 320h148l16 16v108l-16 16h-148l-16 -16v-108z"/>
 <path d="M1976 300h188l16 16v148l-16 16h-188l-16 -16v-148z"/>
 <path d="M2236 570h168l16 16v188l-16 16h-168l-16 -16v-188z"/>
@@ -9,10 +9,10 @@
 <path d="M2116 1020h128l16 16v128l-16 16h-128l-16 -16v-128z"/>
 <path d="M1860 390h100m220 0h140v180m0 220v100h-260m-120-20v130h-250m-90 110v100h580v-30"/>
 </g>
-<g fill="#35432d"><rect x="2060" y="382" width="16" height="16"/><rect x="1928" y="770" width="16" height="16"/><rect x="1592" y="1012" width="16" height="16"/></g>
-<g fill="#6babc5"><rect x="1768" y="382" width="6" height="6"/></g>
-<path d="M2228 1092h8v-8h8v8h8v8h-8v8h-8v-8h-8z" fill="#c6db91" opacity=".45"/>
-<path d="M72 1300v-20h20m0 60H72v-20m20-40h28v20h-28v20h28v20h-28" fill="none" stroke="#485344" stroke-width="3"/>
-<text x="148" y="1305" fill="#6c7866" font-family="monospace" font-size="18" letter-spacing="4">AFTERHOURS</text>
-<text x="148" y="1332" fill="#485344" font-family="monospace" font-size="12" letter-spacing="3">SH0DS / 16   •   MAKE. PLAY. SHIP.</text>
+<g fill="#24301f"><rect x="2060" y="382" width="16" height="16"/><rect x="1928" y="770" width="16" height="16"/><rect x="1592" y="1012" width="16" height="16"/></g>
+<g fill="#5e9bb4"><rect x="1768" y="382" width="6" height="6"/></g>
+<path d="M2228 1092h8v-8h8v8h8v8h-8v8h-8v-8h-8z" fill="#b4c97f" opacity=".45"/>
+<path d="M72 1300v-20h20m0 60H72v-20m20-40h28v20h-28v20h28v20h-28" fill="none" stroke="#343c31" stroke-width="3"/>
+<text x="148" y="1305" fill="#59634f" font-family="JetBrainsMono Nerd Font, monospace" font-size="18" letter-spacing="4">AFTERHOURS</text>
+<text x="148" y="1332" fill="#343c31" font-family="JetBrainsMono Nerd Font, monospace" font-size="12" letter-spacing="3">SH0DS / 16   •   MAKE. PLAY. SHIP.</text>
 </svg>

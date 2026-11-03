@@ -1,6 +1,6 @@
 # Afterhours / sh0ds·16
 
-An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Warm charcoal, phosphor green, a little of the old Arch blue, pixel display type and quiet, readable tools. No glass, gradients or oversized docks.
+An Arch + NVIDIA game-making desktop, built around **Hyprland and a custom Quickshell shell**. Near-black warm charcoal, phosphor green, a little blue, one font (JetBrains Mono Nerd Font) everywhere, rounded corners and calm eased motion. No blur, no oversized docks.
 
 ![Afterhours game studio — real Quickshell render](screenshots/afterhours-studio.png)
 
@@ -10,13 +10,13 @@ The desktop follows the [game development plan](https://github.com/sh0ds/guides/
 
 Written from scratch in `.config/quickshell/afterhours/`, rather than a downloaded shell preset:
 
-- A slim rail on every monitor: workspace selection, media, sound, recording/sharing state, system tray, inbox, date and session controls.
+- A floating, rounded rail on every monitor: workspace selection, media, sound, recording/sharing state, system tray, inbox, date, the Pi and session controls.
 - **Make / Play / Ship** launchpad: eight entries tied to the plan, with track identifiers and a reminder that 45 minutes counts.
 - Searchable desktop applications, including keyboard selection and Enter to launch.
 - A D-Bus notification server with plain-text content, actions, quiet mode, passive toasts and a bounded session inbox. Screen-sharing events suppress toasts.
 - Session menu with explicit confirmation for log out/reboot/power off. Suspend waits for a real Hyprlock lock before sleeping. Power actions retain the DJ VM shutdown guard.
 
-Hyprlock remains the lock, SwayOSD handles hardware volume feedback, and Fuzzel remains a small dmenu backend for existing clipboard, calculator, Wi-Fi and docs helpers. Waybar, SwayNC and Wlogout no longer autostart or own the new shell's normal controls. Their older files remain available for rollback; they are not the new interface.
+Hyprlock remains the lock, SwayOSD handles hardware volume feedback, and Fuzzel remains a small dmenu backend for existing clipboard, calculator, Wi-Fi and docs helpers. Waybar, SwayNC, Wlogout and tmux are gone; the old configs live in git history.
 
 ## Install on the Arch desktop
 
@@ -50,7 +50,6 @@ Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), re
 | `Super + V` | Toggle floating |
 | `Super + G` | Toggle window group |
 | `Super + B / E / O` | Firefox / files / notes |
-| `Super + A` | Website tmux session |
 | `Super + D` | Docs search |
 | `Super + F1` | Shortcut reference |
 | `Super + C` | Calculator |
@@ -59,12 +58,13 @@ Choose your main display in `.config/hypr/hyprland.lua` (currently **DP-4**), re
 | `Super + Shift + R` | Start / stop a region recording |
 | `Print` | Region screenshot to clipboard |
 | `Ctrl + Print` | Annotated screenshot |
+| `Alt + Print` | Captioned devlog screenshot |
 | `Alt + Tab` | Window switcher |
 | `Super + Shift + B` | Hide / show the rail |
 | `Super + Shift + M` | DJ VM |
 
 
-The first five workspace labels are a working convention: **code / play / craft / notes / games**. Apps do not get forcibly moved just because you launched them from the studio. Existing gaming and DJ VM rules still apply.
+The first five workspace labels are a working convention: **CODE / PLAY / CRAFT / NOTES / GAMES**. Apps do not get forcibly moved just because you launched them from the studio. Existing gaming and DJ VM rules still apply.
 
 ```sh
 game-dev plan              # read the actual plan in a terminal

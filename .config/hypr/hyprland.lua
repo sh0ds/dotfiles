@@ -54,17 +54,19 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
 	-- Afterhours: quiet contour bands; fill each display without distortion.
-	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 141613 --transition-type none ~/.local/share/backgrounds/afterhours.png")
+	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 0c0d0b --transition-type none ~/.local/share/backgrounds/afterhours.png")
 end)
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
-hl.env("XCURSOR_THEME", "Adwaita")
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
+-- Posy's Cursor Black: a sharp black arrow with a white edge. Its smallest
+-- size is 32.
+hl.env("XCURSOR_THEME", "Posy_Cursor_Black")
+hl.env("XCURSOR_SIZE", "32")
+hl.env("HYPRCURSOR_SIZE", "32")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
-hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Diag (~/.config/qt6ct)
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Afterhours (~/.config/qt6ct)
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 
 -- NVIDIA only. Delete these two lines on AMD or Intel.
@@ -75,7 +77,7 @@ hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 ---- LOOK AND FEEL ----
 -----------------------
 
--- Plain defaults here, no animations; the Diag look (colours, gaps,
+-- Plain defaults here, no animations; the Afterhours look (colours, gaps,
 -- borders, animations) is set in rice.lua and overrides these.
 hl.config({
 	general = {
@@ -83,8 +85,8 @@ hl.config({
 		gaps_out = 0,
 		border_size = 1,
 		col = {
-			active_border = "rgb(c6db91)",
-			inactive_border = "rgb(333c32)",
+			active_border = "rgb(b4c97f)",
+			inactive_border = "rgb(242a23)",
 		},
 		resize_on_border = true,
 		allow_tearing = false,
@@ -125,7 +127,7 @@ hl.config({
 		-- German layout. Change to "us" if you type on US.
 		kb_layout = "de",
 		kb_variant = "",
-		-- Caps Lock becomes Escape: you'll press Escape constantly in Helix and tmux copy mode.
+		-- Caps Lock becomes Escape: you'll press Escape constantly in Helix.
 		kb_options = "caps:escape",
 		follow_mouse = 1,
 		sensitivity = 0,
@@ -140,7 +142,6 @@ local mod = "SUPER"
 
 -- Apps
 hl.bind(mod .. " + Return", hl.dsp.exec_cmd(terminal))
-hl.bind(mod .. " + A", hl.dsp.exec_cmd(terminal .. " -e site-dev")) -- sh0ds.dev tmux session
 hl.bind(mod .. " + Space", hl.dsp.exec_cmd(menu))
 hl.bind(mod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mod .. " + Escape", hl.dsp.exec_cmd(lock))

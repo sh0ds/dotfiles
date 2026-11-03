@@ -14,6 +14,6 @@ if [ -z "$bin" ]; then
 fi
 mkdir -p ~/code/pico8 ~/Pictures/pico-8
 # Windowed so Hyprland tiles it; pixel_perfect keeps whole-number scaling,
-# so the 128x128 screen stays sharp and the rest is Diag black.
+# so the 128x128 screen stays sharp and the rest is Afterhours black.
 exec app '(?i)^(pico-?8.*)$' "$bin" -windowed 1 -pixel_perfect 1 \
   -root_path "$HOME/code/pico8" -desktop "$HOME/Pictures/pico-8" "$@"

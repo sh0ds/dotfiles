@@ -4,9 +4,9 @@
 
 Keep the useful DNA: Lua, a pixel-console identity, numbered workspaces, a little blue, keyboard access and the Pi/site connection. Replace the old diagnostic dashboard with a game-making workbench. Charcoal has a slightly warm green cast; phosphor is reserved for focus. Blue marks track metadata and media, amber means attention, coral marks recording and errors. Artwork and games retain their own palette.
 
-The new shell is Quickshell QML. It uses opaque surfaces, small corner cuts represented by 3–4 px radii, fine separators and 160 ms hover/reveal transitions. Hyprland supplies the existing damped window motion. There is no wallpaper blur, colour cycling, glow or large animated background. Pixel headings recall the old desktop; body text uses Noto Sans, code uses JetBrains Mono.
+The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a phosphor gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling, glow or large animated background. One font everywhere: JetBrains Mono Nerd Font.
 
-`Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, Helix, tmux, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
+`Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, Helix, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
 
 ## Desktop and window manager comparison
 
@@ -54,10 +54,10 @@ On Arch, update normally and install the shell prerequisites using the signed pa
 ```sh
 sudo pacman -Syu --needed hyprland quickshell qt6-wayland qt6-declarative \
   hyprlock hypridle hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
-  kitty noto-fonts ttf-jetbrains-mono ttf-terminus-nerd ttf-nerd-fonts-symbols-mono \
+  kitty noto-fonts ttf-jetbrains-mono-nerd \
   swayosd awww fuzzel wl-clipboard cliphist jq socat playerctl pavucontrol \
   wireplumber pipewire-pulse libnotify grim slurp satty wf-recorder wtype \
-  tmux less zed helix thunar adw-gtk-theme qt6ct
+  less zed helix thunar adw-gtk-theme qt6ct
 ```
 
 Use **Quickshell 0.3.2+**, and the **Hyprland 0.56 Lua API** used by this checkout. Do not blindly upgrade into an incompatible config format. Check `quickshell --version` and `Hyprland --version` before migrating. Package names are Arch-specific; availability can change with repository packaging.
@@ -70,7 +70,7 @@ Before installing:
 2. Review DP-4, monitor position, German keyboard layout and NVIDIA environment variables in `hyprland.lua`. Keep the GPU settings for this machine; remove them if migrating to a different GPU.
 3. Check the isolated install with `bash install-dotfiles.sh --target /tmp/afterhours-preview`.
 4. On the physical desktop, run `bash install-dotfiles.sh`. Do not run the system installer just to change the theme.
-5. Log out and select Hyprland. Existing Waybar/SwayNC/Wlogout processes from an old session must exit; the new session does not start them. Do not run another notification daemon alongside Afterhours.
+5. Log out and select Hyprland. Waybar, SwayNC and Wlogout were removed; if an old session still runs them, they must exit. Do not run another notification daemon alongside Afterhours.
 6. Run `bash check-desktop.sh`, test both monitors, a game, sound, screen sharing, lock/unlock and suspend/resume. Inspect `hyprctl configerrors`.
 
 The installer backs up overwritten targets. To roll back, exit the new session, restore the affected files from the timestamped backup and use the prior Git revision for the old shell. Configuration links point into the checkout: changing Git revisions also changes linked configs. Saved writable copies (Qt, Zed, btop, nchat) need reinstalling or restoring too. No automatic live rollback or remote logout is attempted.
@@ -105,7 +105,7 @@ Install tools when their track needs them, so P1 does not become a month of tool
 
 The inbox is session-only, capped at 50 notifications; it is not written to disk. Quiet mode hides toasts, not inbox entries. Critical toasts stay visible until dismissed. Transient notifications expire; ordinary ones leave the toast after a short interval and remain in the inbox. The shell renders notification content as plain text, never HTML. Sharing suppression uses Hyprland `screencastv2` events; a shell started in the middle of an existing share cannot infer an earlier start event. Enable quiet mode before presenting in that case.
 
-The layer-shell names are `afterhours-rail`, `afterhours-overlay`, and `afterhours-toast`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Narrow rails collapse workspace names to numbers, shorten the clock and hide optional media/tray content; below 650 logical pixels they show three workspace buttons. All ten workspaces remain keyboard-accessible.
+The layer-shell names are `afterhours-rail`, `afterhours-overlay`, and `afterhours-toast`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Narrow rails collapse workspace names to numbers, shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
 
 Utilities such as clipboard search, docs and Wi-Fi still use their existing Fuzzel dmenu helpers. Old app and VM scripts remain maintained independently. There is no fake progress counter, permanent timer pressure, app-per-workspace cage or telemetry.
 
@@ -120,7 +120,7 @@ Headless software Wayland does not prove physical NVIDIA operation, real Hyprlan
 - Built Quickshell 0.3.2 from upstream commit `9b0f339b19057f4731bf3b48293307d7ef241671` against Qt 6.8.2. Required newer protocol definitions came from the upstream Wayland protocols mirror at `b9edf66597586c914b5b1ff3d964d7ed201adab9`. Dependencies were downloaded through the session proxy with Debian signature verification intact and extracted into a workspace-local sysroot. No verification was disabled.
 - Cold-started the actual QML under isolated, software-rendered Wayland and D-Bus. Ran functional checks for keyboard dismissal, real desktop-entry search/launch with a literal argument containing spaces and `&`, rail toggling, notifications, quiet mode, inbox removal and session-menu cancellation.
 - Rendered at 1600×1000, 800×600 and 600×900. The committed Afterhours screenshots are actual Wayland captures. The small menu scrolls; the portrait menu drops the optional key artwork column.
-- **38 Python tests passed**, including the real tmux PTY test and eight new shell/helper regressions. Existing JavaScript add-on and Lua PiP suites passed. Hyprland Lua syntax and TOML files parsed successfully.
+- **38 Python tests passed**, including eight new shell/helper regressions. Existing JavaScript add-on and Lua PiP suites passed. Hyprland Lua syntax and TOML files parsed successfully.
 - The actual checkout installed into an isolated home, preserved a pre-existing config, included every new shell asset and repeated without creating an extra backup.
 - Both C site generators built with their default ASan/UBSan flags. Each generated three posts; checked indexes, ordering, static copies and seven HTTP routes. Their existing path-truncation compiler warning is unchanged.
 

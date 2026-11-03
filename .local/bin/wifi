@@ -2,7 +2,7 @@
 # wifi: Wi-Fi picker in fuzzel (click "wifi" in the bar).
 # Strongest networks first, the one you're on is marked. Pick one to connect;
 # new secured networks ask for the password. "wifi settings" (right-click)
-# opens nmtui in Diag colours for everything else (VPN, ethernet, DNS).
+# opens nmtui in Afterhours colours for everything else (VPN, ethernet, DNS).
 set -euo pipefail
 
 settings() {

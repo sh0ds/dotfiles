@@ -1,4 +1,4 @@
-# Diag: nearly monochrome. Code is grey, keywords are bright, strings and
+# Afterhours: nearly monochrome. Code is grey, keywords are bright, strings and
 # numbers are blue, comments are dim. Errors are the only red. The background
 # stays kitty's black.
 
@@ -77,16 +77,16 @@
 "diagnostic.hint" = { underline = { color = "dim", style = "curl" } }
 
 [palette]
-black = "#141613"
-panel = "#1c201c"
-sel = "#38452c"
-line = "#485344"
-dim = "#aab5a2"
-mid = "#aab5a2"
-fg = "#d8dfd0"
-bright = "#f5f7ef"
-arch = "#c6db91"
-soft = "#deecb9"
-error = "#e78a7e"
-warn = "#e9b078"
-ok = "#95c7a1"
+black = "#0c0d0b"
+panel = "#121411"
+sel = "#26301e"
+line = "#343c31"
+dim = "#929c8a"
+mid = "#929c8a"
+fg = "#c9d0c1"
+bright = "#ecefe5"
+arch = "#b4c97f"
+soft = "#cadba3"
+error = "#d9786c"
+warn = "#d99f66"
+ok = "#83b48f"

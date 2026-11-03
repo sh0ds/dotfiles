@@ -73,7 +73,6 @@ check "KVM (DJ VM)" test -w /dev/kvm
 check "virtiofsd (DJ VM shared folder)" test -x /usr/lib/virtiofsd
 check "Music/DJ shared folder" test -d "$HOME/Music/DJ"
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
-check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "aria2 running for Firefox (aria2-rpc)" pgrep -f "aria2c --enable-rpc"
 check "pipewire running" systemctl --user is-active pipewire
@@ -81,22 +80,20 @@ check "NetworkManager running" systemctl is-active NetworkManager
 
 check "Quickshell 0.3.2+" quickshell_version_ok
 check "Afterhours shell" test -r "$HOME/.config/quickshell/afterhours/shell.qml"
-check "Noto Sans" sh -c 'fc-list | grep -qi "Noto Sans"'
-check "JetBrains Mono" sh -c 'fc-list | grep -qi "JetBrains Mono"'
+check "JetBrains Mono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd Font"'
 
 section "Terminal workflow"
-for c in tmux starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
+for c in starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
   check "$c" command -v "$c"
 done
-check "tmux config parses" tmux -L check -f "$HOME/.config/tmux/tmux.conf" start-server \; kill-server
 check "helix" command -v helix
 check "zed (zeditor)" command -v zeditor
 check "Zed uses Diag" grep -q '"dark": "Diag"' "$HOME/.config/zed/settings.json"
-check "eza has a Diag theme" test -r "${XDG_CONFIG_HOME:-$HOME/.config}/eza/theme.yml"
+check "eza has an Afterhours theme" test -r "${XDG_CONFIG_HOME:-$HOME/.config}/eza/theme.yml"
 check "scripts in ~/.local/bin on PATH" command -v app
 check "Afterhours control on PATH" command -v afterhours
 check "game-plan launchpad on PATH" command -v game-dev
-check "btop uses Diag" grep -q '^color_theme = "diag"' "$HOME/.config/btop/btop.conf"
+check "btop uses Afterhours" grep -q '^color_theme = "diag"' "$HOME/.config/btop/btop.conf"
 check "Qt palette path expanded" sh -c 'test -f "$HOME/.config/qt6ct/qt6ct.conf" && ! grep -q @CONFIG_HOME@ "$HOME/.config/qt6ct/qt6ct.conf"'
 
 printf '\n%d OK, %d FAIL\n' "$pass" "$fail"

@@ -22,10 +22,10 @@ In your current desktop terminal, run a normal full Arch update with the new dep
 ```sh
 sudo pacman -Syu --needed \
   quickshell qt6-wayland qt6-declarative \
-  noto-fonts ttf-jetbrains-mono ttf-terminus-nerd ttf-nerd-fonts-symbols-mono
+  noto-fonts ttf-jetbrains-mono-nerd
 ```
 
-This is the package delta from the existing Diag setup. Keep the existing Hyprland, Hyprlock, Hypridle, portals, SwayOSD, awww, Kitty, audio and other helper dependencies. Keep Fuzzel: clipboard, Wi-Fi and calculator helpers still use it. Keep Waybar/SwayNC/Wlogout installed for rollback; the new normal Hyprland startup does not launch them.
+This is the package delta from the existing Diag setup. Keep the existing Hyprland, Hyprlock, Hypridle, portals, SwayOSD, awww, Kitty, audio and other helper dependencies. Keep Fuzzel: clipboard, Wi-Fi and calculator helpers still use it. Waybar, SwayNC, Wlogout and tmux are no longer used and can be uninstalled.
 
 ```sh
 quickshell --version

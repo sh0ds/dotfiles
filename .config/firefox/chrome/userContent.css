@@ -1,26 +1,26 @@
-/* Firefox's own pages (new tab, home, settings, add-ons) in Diag: black,
+/* Firefox's own pages (new tab, home, settings, add-ons) in Afterhours: black,
    phosphor green links and buttons, square corners. Websites aren't touched. */
 
 @-moz-document url-prefix("about:") {
   :root {
-    --in-content-page-background: #141613 !important;
-    --in-content-page-color: #ecf0e5 !important;
-    --in-content-box-background: #1c201c !important;
-    --in-content-box-border-color: #485344 !important;
-    --in-content-border-color: #485344 !important;
-    --in-content-link-color: #c6db91 !important;
-    --in-content-link-color-hover: #deecb9 !important;
-    --in-content-primary-button-background: #c6db91 !important;
-    --in-content-primary-button-background-hover: #deecb9 !important;
-    --in-content-primary-button-text-color: #141613 !important;
-    --in-content-button-background: #272d26 !important;
-    --in-content-button-background-hover: #485344 !important;
-    --in-content-button-text-color: #ecf0e5 !important;
-    --in-content-item-selected: #c6db91 !important;
-    --in-content-item-selected-text: #141613 !important;
-    --in-content-focus-outline-color: #c6db91 !important;
-    --color-accent-primary: #c6db91 !important;
-    --color-accent-primary-hover: #deecb9 !important;
+    --in-content-page-background: #0c0d0b !important;
+    --in-content-page-color: #dfe3d8 !important;
+    --in-content-box-background: #121411 !important;
+    --in-content-box-border-color: #343c31 !important;
+    --in-content-border-color: #343c31 !important;
+    --in-content-link-color: #b4c97f !important;
+    --in-content-link-color-hover: #cadba3 !important;
+    --in-content-primary-button-background: #b4c97f !important;
+    --in-content-primary-button-background-hover: #cadba3 !important;
+    --in-content-primary-button-text-color: #0c0d0b !important;
+    --in-content-button-background: #1a1e19 !important;
+    --in-content-button-background-hover: #343c31 !important;
+    --in-content-button-text-color: #dfe3d8 !important;
+    --in-content-item-selected: #b4c97f !important;
+    --in-content-item-selected-text: #0c0d0b !important;
+    --in-content-focus-outline-color: #b4c97f !important;
+    --color-accent-primary: #b4c97f !important;
+    --color-accent-primary-hover: #cadba3 !important;
     --border-radius-small: 0 !important;
     --border-radius-medium: 0 !important;
     --border-radius-large: 0 !important;
@@ -31,13 +31,13 @@
 /* New tab and home: just black, with the search box square */
 @-moz-document url("about:newtab"), url("about:home"), url("about:blank") {
   body, .activity-stream {
-    background: #141613 !important;
-    color: #ecf0e5 !important;
+    background: #0c0d0b !important;
+    color: #dfe3d8 !important;
   }
   .search-wrapper .search-handoff-button, .search-wrapper input {
     border-radius: 0 !important;
-    background-color: #1c201c !important;
-    border: 2px solid #485344 !important;
+    background-color: #121411 !important;
+    border: 2px solid #343c31 !important;
     box-shadow: none !important;
   }
 }

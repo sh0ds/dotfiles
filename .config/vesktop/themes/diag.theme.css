@@ -9,57 +9,57 @@
 .theme-dark,
 .visual-refresh,
 .visual-refresh.theme-dark {
-  --background-primary: #141613 !important;
-  --background-secondary: #1c201c !important;
-  --background-secondary-alt: #1c201c !important;
-  --background-tertiary: #141613 !important;
-  --background-floating: #1c201c !important;
+  --background-primary: #0c0d0b !important;
+  --background-secondary: #121411 !important;
+  --background-secondary-alt: #121411 !important;
+  --background-tertiary: #0c0d0b !important;
+  --background-floating: #121411 !important;
 
-  --background-base-lowest: #141613 !important;
-  --background-base-lower: #141613 !important;
-  --background-base-low: #1c201c !important;
-  --background-surface-high: #1c201c !important;
-  --background-surface-higher: #272d26 !important;
-  --background-surface-highest: #272d26 !important;
+  --background-base-lowest: #0c0d0b !important;
+  --background-base-lower: #0c0d0b !important;
+  --background-base-low: #121411 !important;
+  --background-surface-high: #121411 !important;
+  --background-surface-higher: #1a1e19 !important;
+  --background-surface-highest: #1a1e19 !important;
 
-  --background-modifier-hover: #272d26 !important;
-  --background-modifier-active: #272d26 !important;
-  --background-modifier-selected: #38452c !important;
+  --background-modifier-hover: #1a1e19 !important;
+  --background-modifier-active: #1a1e19 !important;
+  --background-modifier-selected: #26301e !important;
 
-  --text-normal: #d8dfd0 !important;
-  --text-muted: #aab5a2 !important;
-  --text-link: #c6db91 !important;
+  --text-normal: #c9d0c1 !important;
+  --text-muted: #929c8a !important;
+  --text-link: #b4c97f !important;
 
-  --interactive-normal: #aab5a2 !important;
-  --interactive-hover: #d8dfd0 !important;
-  --interactive-active: #ecf0e5 !important;
+  --interactive-normal: #929c8a !important;
+  --interactive-hover: #c9d0c1 !important;
+  --interactive-active: #dfe3d8 !important;
 
-  --brand-experiment: #c6db91 !important;
-  --brand-500: #c6db91 !important;
+  --brand-experiment: #b4c97f !important;
+  --brand-500: #b4c97f !important;
 
-  --button-filled-brand-background: #c6db91 !important;
-  --button-filled-brand-background-hover: #deecb9 !important;
-  --button-filled-brand-text: #141613 !important;
-  --button-filled-brand-text-hover: #141613 !important;
-  --status-danger: #e78a7e !important;
-  --status-warning: #e9b078 !important;
-  --status-positive: #95c7a1 !important;
-  --background-mentioned: #272d26 !important;
-  --background-mentioned-hover: #272d26 !important;
-  --mention-foreground: #deecb9 !important;
-  --mention-background: #38452c !important;
-  --input-background: #1c201c !important;
-  --input-border: #485344 !important;
-  --border-subtle: #485344 !important;
-  --border-normal: #485344 !important;
-  --font-code: "Terminess Nerd Font Mono", monospace !important;
+  --button-filled-brand-background: #b4c97f !important;
+  --button-filled-brand-background-hover: #cadba3 !important;
+  --button-filled-brand-text: #0c0d0b !important;
+  --button-filled-brand-text-hover: #0c0d0b !important;
+  --status-danger: #d9786c !important;
+  --status-warning: #d99f66 !important;
+  --status-positive: #83b48f !important;
+  --background-mentioned: #1a1e19 !important;
+  --background-mentioned-hover: #1a1e19 !important;
+  --mention-foreground: #cadba3 !important;
+  --mention-background: #26301e !important;
+  --input-background: #121411 !important;
+  --input-border: #343c31 !important;
+  --border-subtle: #343c31 !important;
+  --border-normal: #343c31 !important;
+  --font-code: "JetBrainsMono Nerd Font", monospace !important;
 
-  --scrollbar-thin-thumb: #485344 !important;
-  --scrollbar-auto-thumb: #485344 !important;
-  --scrollbar-auto-track: #141613 !important;
+  --scrollbar-thin-thumb: #343c31 !important;
+  --scrollbar-auto-thumb: #343c31 !important;
+  --scrollbar-auto-track: #0c0d0b !important;
 
-  --font-primary: "Terminess Nerd Font", monospace !important;
-  --font-display: "Terminess Nerd Font", monospace !important;
+  --font-primary: "JetBrainsMono Nerd Font", monospace !important;
+  --font-display: "JetBrainsMono Nerd Font", monospace !important;
 }
 
 /* Scope geometry to controls. A blanket [class*=container] rule also
@@ -78,7 +78,7 @@
 .theme-dark [class*="gradientContainer"],
 .theme-dark [class*="videoGrid"],
 .theme-dark [class*="scroller"][class*="call"] {
-  background: #141613 !important;
+  background: #0c0d0b !important;
   background-image: none !important;
 }
 
@@ -86,35 +86,35 @@
 .theme-dark [class*="sidebarList"],
 .theme-dark [class*="sidebarRegion"],
 .theme-dark [class*="privateChannels"] {
-  background: #1c201c !important;
+  background: #121411 !important;
 }
 
 /* Restrained selected-channel state */
 .theme-dark [class*="modeSelected"] [class*="link"] {
-  background: #272d26 !important;
-  box-shadow: inset 2px 0 0 #c6db91 !important;
+  background: #1a1e19 !important;
+  box-shadow: inset 2px 0 0 #b4c97f !important;
 }
 
 /* Text and input surfaces */
 .theme-dark [class*="channelTextArea"],
 .theme-dark [class*="themedBackground"] {
-  background: #1c201c !important;
+  background: #121411 !important;
   border-radius: 0 !important;
 }
 
 /* Thin structural separators */
 .theme-dark [class*="sidebar"] {
-  border-color: #485344 !important;
+  border-color: #343c31 !important;
 }
 
 /* Consistent selection */
 .theme-dark ::selection {
-  background: #38452c !important;
-  color: #ecf0e5 !important;
+  background: #26301e !important;
+  color: #dfe3d8 !important;
 }
 
 /* Keep keyboard focus visible; do not animate layout or resize content. */
 .theme-dark :is(button, input, textarea, [role="button"]):focus-visible {
-  outline: 2px solid #c6db91 !important;
+  outline: 2px solid #b4c97f !important;
   outline-offset: 2px;
 }

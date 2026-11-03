@@ -1,4 +1,4 @@
-// Diag: SDDM login screen in the look of sh0ds.dev, recoloured in Arch blue.
+// Afterhours: SDDM login screen in the look of sh0ds.dev, recoloured in Afterhours phosphor.
 // Same layout as the lock screen (hyprlock.conf): pixel Arch logo top left
 // with diagnostic lines next to it, the clock and the prompt in the middle,
 // keys along the bottom. Only QtQuick, no Controls, so nothing gets styled
@@ -7,18 +7,18 @@ import QtQuick
 
 Rectangle {
     id: root
-    color: "#000000"
+    color: "#0c0d0b"
 
-    readonly property color rule: "#3f4650"
-    readonly property color dim: "#8a929c"
-    readonly property color ink: "#e6e8ea"
-    readonly property color arch: "#1793d1"
-    readonly property color warn: "#ffb000"
-    readonly property color error: "#e5484d"
-    // Terminess (ttf-terminus-nerd), 20 px is one of its native sizes
-    readonly property int unit: 20
+    readonly property color rule: "#343c31"
+    readonly property color dim: "#929c8a"
+    readonly property color ink: "#dfe3d8"
+    readonly property color arch: "#b4c97f"
+    readonly property color warn: "#d99f66"
+    readonly property color error: "#d9786c"
+    // JetBrains Mono Nerd Font, the desktop font (ttf-jetbrains-mono-nerd)
+    readonly property int unit: 16
 
-    readonly property string mono: "Terminess Nerd Font"
+    readonly property string mono: "JetBrainsMono Nerd Font"
 
     property int sessionIndex: sessionModel.lastIndex >= 0 ? sessionModel.lastIndex : 0
     property string state_: ""        // "" | "busy" | "fail"
@@ -67,9 +67,9 @@ Rectangle {
         y: logo.y - 4
         spacing: 4
         Text { text: "Arch Linux\u00a0\u00a0" + Qt.formatDate(clock.now, "yyyy-MM-dd"); color: root.dim; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
-        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>host:</font> " + sddm.hostName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
-        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>sess:</font> " + root.sessionName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
-        Text { textFormat: Text.StyledText; text: "<font color='#1793d1'>boot:</font> login"; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
+        Text { textFormat: Text.StyledText; text: "<font color='#b4c97f'>host:</font> " + sddm.hostName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
+        Text { textFormat: Text.StyledText; text: "<font color='#b4c97f'>sess:</font> " + root.sessionName; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
+        Text { textFormat: Text.StyledText; text: "<font color='#b4c97f'>boot:</font> login"; color: root.ink; font.family: root.mono; font.pixelSize: root.unit; renderType: Text.NativeRendering }
     }
 
     // The site's double rule under the header
@@ -102,7 +102,7 @@ Rectangle {
         Rectangle {
             width: root.unit * 16
             height: root.unit * 2
-            color: "#000000"
+            color: "#0c0d0b"
             border.width: 2
             border.color: inp.activeFocus ? root.arch : root.rule
             TextInput {
@@ -113,7 +113,7 @@ Rectangle {
                 verticalAlignment: TextInput.AlignVCenter
                 color: "#ffffff"
                 selectionColor: root.arch
-                selectedTextColor: "#000000"
+                selectedTextColor: "#0c0d0b"
                 font.family: root.mono
                 renderType: TextInput.NativeRendering
                 font.pixelSize: root.unit
@@ -162,9 +162,9 @@ Rectangle {
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             textFormat: Text.StyledText
-            text: root.state_ === "fail" ? "<font color='#e5484d'>fail:</font> wrong password"
-                : root.state_ === "busy" ? "<font color='#1793d1'>load:</font> starting " + root.sessionName
-                : (clock.now.getHours() < 5 ? "<font color='#ffb000'>warn:</font> it's late. go to bed." : " ")
+            text: root.state_ === "fail" ? "<font color='#d9786c'>fail:</font> wrong password"
+                : root.state_ === "busy" ? "<font color='#b4c97f'>load:</font> starting " + root.sessionName
+                : (clock.now.getHours() < 5 ? "<font color='#d99f66'>warn:</font> it's late. go to bed." : " ")
             color: root.ink
             font.family: root.mono
             renderType: Text.NativeRendering
@@ -200,7 +200,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 36
         textFormat: Text.StyledText
-        text: "<font color='#1793d1'>F1</font> halt&nbsp;&nbsp;&nbsp;<font color='#1793d1'>F2</font> reboot&nbsp;&nbsp;&nbsp;<font color='#1793d1'>F3</font> session&nbsp;&nbsp;&nbsp;<font color='#1793d1'>Enter</font> boot"
+        text: "<font color='#b4c97f'>F1</font> halt&nbsp;&nbsp;&nbsp;<font color='#b4c97f'>F2</font> reboot&nbsp;&nbsp;&nbsp;<font color='#b4c97f'>F3</font> session&nbsp;&nbsp;&nbsp;<font color='#b4c97f'>Enter</font> boot"
         color: root.dim
         font.family: root.mono
         renderType: Text.NativeRendering

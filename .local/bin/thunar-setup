@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Apply the Diag defaults once; Thunar keeps later UI changes in xfconf.
+# Apply the Afterhours defaults once; Thunar keeps later UI changes in xfconf.
 # Run inside your desktop session after installing Thunar and the dotfiles.
 set -euo pipefail
 apply=0
@@ -8,7 +8,7 @@ case ${1:-} in
   --apply) apply=1 ;;
   -h|--help)
     echo 'Usage: thunar-setup [--apply]'
-    echo 'Fill missing Diag preferences; --apply also replaces the managed layout preferences.'
+    echo 'Fill missing Afterhours preferences; --apply also replaces the managed layout preferences.'
     exit 0 ;;
   *) echo 'Usage: thunar-setup [--apply]' >&2; exit 2 ;;
 esac

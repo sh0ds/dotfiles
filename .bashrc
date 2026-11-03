@@ -16,14 +16,14 @@ export MANROFFOPT="-c"
 
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
-# History: big, shared between tmux panes, no duplicates
+# History: big, shared between terminals, no duplicates
 HISTSIZE=50000
 HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend checkwinsize globstar
 PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
-# File listings use Diag independently of kitty's ANSI palette.
+# File listings use Afterhours independently of kitty's ANSI palette.
 if [ -r "${XDG_CONFIG_HOME:-$HOME/.config}/diag/ls-colors.sh" ]; then
   . "${XDG_CONFIG_HOME:-$HOME/.config}/diag/ls-colors.sh"
 fi
@@ -38,14 +38,13 @@ alias v='helix'                                               # quick edits in t
 alias zed='zeditor'                                           # the editor for projects
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate -20'
-alias ta='site-dev'                                            # sh0ds.dev tmux session
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
 alias lg='lazygit'                                              # git TUI (Ctrl+G in Helix)
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
-# fzf in Diag: blue matches and pointer, blue-grey selection, square border
-export FZF_DEFAULT_OPTS="--border=sharp --color=fg:#c4c9ce,bg:-1,hl:#1793d1,fg+:#f4f6f8,bg+:#161a1f,hl+:#5fb8e8,info:#8a929c,prompt:#8a929c,pointer:#1793d1,marker:#1793d1,spinner:#1793d1,header:#8a929c,border:#2e353d,gutter:-1"
+# fzf in Afterhours: phosphor matches and pointer, soft selection, rounded border
+export FZF_DEFAULT_OPTS="--border=rounded --color=fg:#c9d0c1,bg:-1,hl:#b4c97f,fg+:#ecefe5,bg+:#1a1e19,hl+:#5e9bb4,info:#929c8a,prompt:#929c8a,pointer:#b4c97f,marker:#b4c97f,spinner:#b4c97f,header:#929c8a,border:#242a23,gutter:-1"
 
 please() {
   local c
@@ -86,8 +85,8 @@ command_not_found_handle() {
   esac
 }
 
-# System info on new terminals, but not in every tmux pane
-if [[ -z $TMUX ]] && command -v fastfetch >/dev/null; then
+# System info on new terminals
+if command -v fastfetch >/dev/null; then
   fastfetch
   case $(date +%m-%d) in
     01-01)       printf '\e[35mhappy new year. same bugs as last year though.\e[0m\n' ;;

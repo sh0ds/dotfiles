@@ -1,4 +1,4 @@
-# ~/.config/helix/config.toml: Helix in Diag. No plugins; language servers
+# ~/.config/helix/config.toml: Helix in Afterhours. No plugins; language servers
 # are in languages.toml, colours in themes/diag.toml. `helix --health` checks
 # which servers it can find.
 theme = "diag"

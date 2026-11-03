@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # firefox-style: links ~/.config/firefox (userChrome.css, userContent.css,
-# user.js: the Diag look) into every Firefox profile it finds. Closes Firefox
+# user.js: the Afterhours look) into every Firefox profile it finds. Closes Firefox
 # first and waits for it, because Firefox rewrites its prefs on exit. After
 # that, edits in ~/.config/firefox show up on the next start.
 set -euo pipefail

@@ -1,16 +1,16 @@
-// Diag for rmpc (recoloured from catppuccin/rmpc). Only colours and icons, the layout is rmpc's own
+// Afterhours for rmpc (recoloured from catppuccin/rmpc). Only colours and icons, the layout is rmpc's own
 // (album art left, queue right).
 #![enable(implicit_some)]
 #![enable(unwrap_newtypes)]
 #![enable(unwrap_variant_newtypes)]
 (
-    text_color: "#ecf0e5",
-    preview_label_style: (fg: "#aab5a2"),
-    preview_metadata_group_style: (fg: "#c6db91", modifiers: "Bold"),
-    highlighted_item_style: (fg: "#c6db91", modifiers: "Bold"),
-    current_item_style: (fg: "#141613", bg: "#c6db91", modifiers: "Bold"),
-    borders_style: (fg: "#485344"),
-    highlight_border_style: (fg: "#c6db91"),
+    text_color: "#dfe3d8",
+    preview_label_style: (fg: "#929c8a"),
+    preview_metadata_group_style: (fg: "#b4c97f", modifiers: "Bold"),
+    highlighted_item_style: (fg: "#b4c97f", modifiers: "Bold"),
+    current_item_style: (fg: "#0c0d0b", bg: "#b4c97f", modifiers: "Bold"),
+    borders_style: (fg: "#343c31"),
+    highlight_border_style: (fg: "#b4c97f"),
     symbols: (
         song: "󰎈",
         dir: "",
@@ -20,18 +20,18 @@
     ),
     progress_bar: (
         symbols: ["─", "─", "█", "─", "─"],
-        track_style: (fg: "#272d26"),
-        elapsed_style: (fg: "#c6db91"),
-        thumb_style: (fg: "#c6db91"),
+        track_style: (fg: "#1a1e19"),
+        elapsed_style: (fg: "#b4c97f"),
+        thumb_style: (fg: "#b4c97f"),
     ),
     scrollbar: (
         symbols: ["│", "█", "▲", "▼"],
-        track_style: (fg: "#272d26"),
-        ends_style: (fg: "#333c32"),
-        thumb_style: (fg: "#c6db91"),
+        track_style: (fg: "#1a1e19"),
+        ends_style: (fg: "#242a23"),
+        thumb_style: (fg: "#b4c97f"),
     ),
     tab_bar: (
-        active_style: (fg: "#c6db91", bg: "#1c201c", modifiers: "Bold"),
-        inactive_style: (fg: "#bdc7b5"),
+        active_style: (fg: "#b4c97f", bg: "#121411", modifiers: "Bold"),
+        inactive_style: (fg: "#a9b2a1"),
     ),
 )

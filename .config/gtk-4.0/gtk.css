@@ -1,94 +1,94 @@
-/* Diag for GTK 4 (libadwaita) apps: blue accent, black and dark grey backgrounds.
+/* Afterhours for GTK 4 (libadwaita) apps: phosphor accent, charcoal backgrounds, rounded controls.
    Works on top of libadwaita's dark style. */
 /* Older libadwaita reads the named colours, 1.6 and newer the variables. */
-@define-color accent_color #c6db91;
-@define-color accent_bg_color #c6db91;
-@define-color accent_fg_color #141613;
-@define-color destructive_color #e78a7e;
-@define-color destructive_bg_color #e78a7e;
-@define-color destructive_fg_color #141613;
-@define-color success_color #95c7a1;
-@define-color success_bg_color #95c7a1;
-@define-color success_fg_color #141613;
-@define-color warning_color #e9b078;
-@define-color warning_bg_color #e9b078;
-@define-color warning_fg_color #141613;
-@define-color error_color #e78a7e;
-@define-color error_bg_color #e78a7e;
-@define-color error_fg_color #141613;
-@define-color window_bg_color #141613;
-@define-color window_fg_color #ecf0e5;
-@define-color view_bg_color #1c201c;
-@define-color view_fg_color #ecf0e5;
-@define-color headerbar_bg_color #141613;
-@define-color headerbar_fg_color #ecf0e5;
-@define-color headerbar_backdrop_color #141613;
-@define-color sidebar_bg_color #1c201c;
-@define-color sidebar_fg_color #ecf0e5;
-@define-color sidebar_backdrop_color #141613;
-@define-color card_bg_color #272d26;
-@define-color card_fg_color #ecf0e5;
-@define-color dialog_bg_color #141613;
-@define-color dialog_fg_color #ecf0e5;
-@define-color popover_bg_color #141613;
-@define-color popover_fg_color #ecf0e5;
-@define-color thumbnail_bg_color #272d26;
-@define-color thumbnail_fg_color #ecf0e5;
+@define-color accent_color #b4c97f;
+@define-color accent_bg_color #b4c97f;
+@define-color accent_fg_color #0c0d0b;
+@define-color destructive_color #d9786c;
+@define-color destructive_bg_color #d9786c;
+@define-color destructive_fg_color #0c0d0b;
+@define-color success_color #83b48f;
+@define-color success_bg_color #83b48f;
+@define-color success_fg_color #0c0d0b;
+@define-color warning_color #d99f66;
+@define-color warning_bg_color #d99f66;
+@define-color warning_fg_color #0c0d0b;
+@define-color error_color #d9786c;
+@define-color error_bg_color #d9786c;
+@define-color error_fg_color #0c0d0b;
+@define-color window_bg_color #0c0d0b;
+@define-color window_fg_color #dfe3d8;
+@define-color view_bg_color #121411;
+@define-color view_fg_color #dfe3d8;
+@define-color headerbar_bg_color #0c0d0b;
+@define-color headerbar_fg_color #dfe3d8;
+@define-color headerbar_backdrop_color #0c0d0b;
+@define-color sidebar_bg_color #121411;
+@define-color sidebar_fg_color #dfe3d8;
+@define-color sidebar_backdrop_color #0c0d0b;
+@define-color card_bg_color #1a1e19;
+@define-color card_fg_color #dfe3d8;
+@define-color dialog_bg_color #0c0d0b;
+@define-color dialog_fg_color #dfe3d8;
+@define-color popover_bg_color #0c0d0b;
+@define-color popover_fg_color #dfe3d8;
+@define-color thumbnail_bg_color #1a1e19;
+@define-color thumbnail_fg_color #dfe3d8;
 :root {
-  --accent-color: #c6db91;
-  --accent-bg-color: #c6db91;
-  --accent-fg-color: #141613;
-  --destructive-color: #e78a7e;
-  --destructive-bg-color: #e78a7e;
-  --destructive-fg-color: #141613;
-  --success-color: #95c7a1;
-  --success-bg-color: #95c7a1;
-  --success-fg-color: #141613;
-  --warning-color: #e9b078;
-  --warning-bg-color: #e9b078;
-  --warning-fg-color: #141613;
-  --error-color: #e78a7e;
-  --error-bg-color: #e78a7e;
-  --error-fg-color: #141613;
-  --window-bg-color: #141613;
-  --window-fg-color: #ecf0e5;
-  --view-bg-color: #1c201c;
-  --view-fg-color: #ecf0e5;
-  --headerbar-bg-color: #141613;
-  --headerbar-fg-color: #ecf0e5;
-  --headerbar-backdrop-color: #141613;
-  --sidebar-bg-color: #1c201c;
-  --sidebar-fg-color: #ecf0e5;
-  --sidebar-backdrop-color: #141613;
-  --card-bg-color: #272d26;
-  --card-fg-color: #ecf0e5;
-  --dialog-bg-color: #141613;
-  --dialog-fg-color: #ecf0e5;
-  --popover-bg-color: #141613;
-  --popover-fg-color: #ecf0e5;
-  --thumbnail-bg-color: #272d26;
-  --thumbnail-fg-color: #ecf0e5;
+  --accent-color: #b4c97f;
+  --accent-bg-color: #b4c97f;
+  --accent-fg-color: #0c0d0b;
+  --destructive-color: #d9786c;
+  --destructive-bg-color: #d9786c;
+  --destructive-fg-color: #0c0d0b;
+  --success-color: #83b48f;
+  --success-bg-color: #83b48f;
+  --success-fg-color: #0c0d0b;
+  --warning-color: #d99f66;
+  --warning-bg-color: #d99f66;
+  --warning-fg-color: #0c0d0b;
+  --error-color: #d9786c;
+  --error-bg-color: #d9786c;
+  --error-fg-color: #0c0d0b;
+  --window-bg-color: #0c0d0b;
+  --window-fg-color: #dfe3d8;
+  --view-bg-color: #121411;
+  --view-fg-color: #dfe3d8;
+  --headerbar-bg-color: #0c0d0b;
+  --headerbar-fg-color: #dfe3d8;
+  --headerbar-backdrop-color: #0c0d0b;
+  --sidebar-bg-color: #121411;
+  --sidebar-fg-color: #dfe3d8;
+  --sidebar-backdrop-color: #0c0d0b;
+  --card-bg-color: #1a1e19;
+  --card-fg-color: #dfe3d8;
+  --dialog-bg-color: #0c0d0b;
+  --dialog-fg-color: #dfe3d8;
+  --popover-bg-color: #0c0d0b;
+  --popover-fg-color: #dfe3d8;
+  --thumbnail-bg-color: #1a1e19;
+  --thumbnail-fg-color: #dfe3d8;
 }
 
 /* Preserve semantic foregrounds from the base theme: a global label colour
    overrides selected rows, suggested actions and destructive buttons. */
 button, entry, spinbutton, combobox button, dropdown button, popover,
 menu, menuitem, tooltip, scale trough, scale highlight, scale slider {
-  border-radius: 4px;
+  border-radius: 8px;
 }
 entry, spinbutton {
   background-color: @view_bg_color;
   color: @view_fg_color;
-  border: 1px solid #485344;
+  border: 1px solid #343c31;
 }
 entry:focus, spinbutton:focus {
   border-color: @accent_bg_color;
 }
 selection {
-  background-color: #38452c;
-  color: #ecf0e5;
+  background-color: #26301e;
+  color: #dfe3d8;
 }
-scale trough { min-height: 5px; background-color: #485344; }
+scale trough { min-height: 5px; background-color: #343c31; }
 scale highlight { background-color: @accent_bg_color; }
 scale slider { min-width: 14px; min-height: 14px; }
 entry:focus-within, spinbutton:focus-within { border-color: @accent_bg_color; }
@@ -99,8 +99,8 @@ button:focus, entry:focus, switch:focus {
   outline: 2px solid @accent_bg_color;
   outline-offset: 2px;
 }
-switch { border-radius: 4px; background-color: #485344; }
+switch { border-radius: 999px; background-color: #343c31; }
 switch:checked { background-color: @accent_bg_color; }
-switch slider { border-radius: 4px; background-color: #d8dfd0; }
-switch:checked slider { background-color: #141613; }
-scale slider { background-color: #d8dfd0; }
+switch slider { border-radius: 999px; background-color: #c9d0c1; }
+switch:checked slider { background-color: #0c0d0b; }
+scale slider { background-color: #c9d0c1; }

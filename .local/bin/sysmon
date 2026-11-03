@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # sysmon: btop (CTRL+SHIFT+Escape, or click the cpu, mem or the temperature
 # in the bar). Jumps to it, starts it, or jumps back.
-# btop rewrites btop.conf on exit. The installer copies its Diag defaults,
-# and this wrapper also selects Diag for pre-existing installations.
+# btop rewrites btop.conf on exit. The installer copies its Afterhours defaults,
+# and this wrapper also selects Afterhours for pre-existing installations.
 set -euo pipefail
 conf=${XDG_CONFIG_HOME:-$HOME/.config}/btop/btop.conf
 mkdir -p "${conf%/*}"

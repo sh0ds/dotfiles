@@ -1,13 +1,13 @@
-// ~/.config/zed/settings.json: Zed in Diag. install-dotfiles.sh copies this
+// ~/.config/zed/settings.json: Zed in Afterhours. install-dotfiles.sh copies this
 // file instead of linking it, because Zed rewrites it when you change a
 // setting in its UI. Edit it here and rerun the installer, or copy your UI
 // changes back into the repo.
 {
   "theme": { "mode": "dark", "dark": "Diag", "light": "Diag" },
   "icon_theme": "Zed (Default)",
-  "ui_font_family": "Noto Sans",
+  "ui_font_family": "JetBrainsMono Nerd Font",
   "ui_font_size": 14,
-  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_size": 14,
   "buffer_line_height": "standard",
 
@@ -37,7 +37,7 @@
   "git_panel": { "dock": "left" },
   "outline_panel": { "dock": "left" },
   "terminal": {
-    "font_family": "JetBrains Mono",
+    "font_family": "JetBrainsMono Nerd Font",
     "blinking": "off",
     "shell": "system"
   },

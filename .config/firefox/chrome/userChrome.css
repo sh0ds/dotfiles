@@ -1,5 +1,5 @@
-/* Firefox in Diag: the sh0ds.dev look in phosphor green, like the rest of the
-   desktop. Black toolbars, Terminess for tabs, the address bar and menus,
+/* Firefox in Afterhours: the sh0ds.dev look in phosphor green, like the rest of the
+   desktop. Black toolbars, JetBrains Mono for tabs, the address bar and menus,
    square corners, 2 px rules, the selected tab marked with an phosphor green rule. Mostly Firefox's
    own theme variables, so it survives updates; `firefox-style` links this
    into your profile. */
@@ -7,15 +7,15 @@
 /* :root[lwtheme] too: a leftover theme add-on (Catppuccin) sets these on
    the root element, and this makes sure ours still win. */
 :root, :root[lwtheme] {
-  --diag-bg: #141613;
-  --diag-row: #272d26;
-  --diag-panel: #1c201c;
-  --diag-rule: #485344;
-  --diag-dim: #aab5a2;
-  --diag-fg: #d8dfd0;
-  --diag-ink: #ecf0e5;
-  --diag-arch: #c6db91;
-  --diag-sel: #38452c;
+  --diag-bg: #0c0d0b;
+  --diag-row: #1a1e19;
+  --diag-panel: #121411;
+  --diag-rule: #343c31;
+  --diag-dim: #929c8a;
+  --diag-fg: #c9d0c1;
+  --diag-ink: #dfe3d8;
+  --diag-arch: #b4c97f;
+  --diag-sel: #26301e;
 
   /* frame, toolbars, tabs */
   --lwt-accent-color: var(--diag-bg) !important;
@@ -45,7 +45,7 @@
   --urlbar-box-hover-bgcolor: var(--diag-row) !important;
   --urlbar-box-text-color: var(--diag-ink) !important;
   --urlbarView-highlight-background: var(--diag-arch) !important;
-  --urlbarView-highlight-color: #141613 !important;
+  --urlbarView-highlight-color: #0c0d0b !important;
   --urlbarView-hover-background: var(--diag-row) !important;
 
   /* buttons, menus, panels, sidebar */
@@ -64,7 +64,7 @@
   --menu-color: var(--diag-ink) !important;
   --menu-border-color: var(--diag-rule) !important;
   --menuitem-hover-background-color: var(--diag-arch) !important;
-  --menuitem-hover-color: #141613 !important;
+  --menuitem-hover-color: #0c0d0b !important;
   --sidebar-background-color: var(--diag-bg) !important;
   --sidebar-text-color: var(--diag-fg) !important;
   --sidebar-border-color: var(--diag-rule) !important;
@@ -80,21 +80,21 @@
   /* Firefox's accent (toggles, checkboxes, primary buttons, focus rings,
      the loading bar). A theme puts its own colour here, Mocha's mauve. */
   --color-accent-primary: var(--diag-arch) !important;
-  --color-accent-primary-hover: #deecb9 !important;
-  --color-accent-primary-active: #deecb9 !important;
+  --color-accent-primary-hover: #cadba3 !important;
+  --color-accent-primary-active: #cadba3 !important;
   --button-primary-bgcolor: var(--diag-arch) !important;
-  --button-primary-hover-bgcolor: #deecb9 !important;
-  --button-primary-active-bgcolor: #deecb9 !important;
-  --button-primary-color: #141613 !important;
+  --button-primary-hover-bgcolor: #cadba3 !important;
+  --button-primary-active-bgcolor: #cadba3 !important;
+  --button-primary-color: #0c0d0b !important;
   --attention-dot-color: var(--diag-arch) !important;
   --tab-attention-icon-color: var(--diag-arch) !important;
   --lwt-tab-line-color: var(--diag-arch) !important;
   --lwt-toolbar-field-highlight: var(--diag-arch) !important;
-  --lwt-toolbar-field-highlight-text: #141613 !important;
+  --lwt-toolbar-field-highlight-text: #0c0d0b !important;
   --lwt-sidebar-background-color: var(--diag-bg) !important;
   --lwt-sidebar-text-color: var(--diag-fg) !important;
   --lwt-sidebar-highlight-background-color: var(--diag-arch) !important;
-  --lwt-sidebar-highlight-text-color: #141613 !important;
+  --lwt-sidebar-highlight-text-color: #0c0d0b !important;
   --lwt-toolbarbutton-icon-fill-attention: var(--diag-arch) !important;
   --lwt-frame: var(--diag-bg) !important;
   --lwt-text-color-inactive: var(--diag-dim) !important;
@@ -113,12 +113,12 @@
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-label { color: #ffffff !important; }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--diag-arch) !important; }
 .tabbrowser-tab:not([selected]):hover .tab-background { background: var(--diag-row) !important; }
-::selection { background: var(--diag-sel, #38452c) !important; color: #f5f7ef !important; }
+::selection { background: var(--diag-sel, #26301e) !important; color: #ecefe5 !important; }
 
-/* Terminess around the page, like the rest of the desktop (16 px is one
+/* JetBrains Mono around the page, like the rest of the desktop (16 px is one
    of its native sizes). The page itself keeps its fonts. */
 #navigator-toolbox, #sidebar-main, #sidebar-box, menupopup, panel, .urlbarView, #urlbar-input {
-  font-family: "Terminess Nerd Font", monospace !important;
+  font-family: "JetBrainsMono Nerd Font", monospace !important;
   font-size: 16px !important;
 }
 

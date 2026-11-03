@@ -1,4 +1,4 @@
-# Diag boot splash: black, the pixel Arch logo, and under it a framed meter
+# Afterhours boot splash: black, the pixel Arch logo, and under it a framed meter
 # filling with Arch blue blocks, like the meters on sh0ds.dev. The disk
 # password prompt (if any) is a "password:" line under the meter.
 

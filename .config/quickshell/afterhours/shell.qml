@@ -19,8 +19,29 @@ ShellRoot {
     property int shareCount: 0
     property bool barVisible: true
     property string volume: "—"
+    // The Pi (site, backups, takt) answers a ping: checked every 30 s.
+    property bool piUp: false
+    readonly property string piHost: Quickshell.env("PI_HOST") || "192.168.178.36"
     property string pendingAction: ""
-    readonly property var player: Mpris.players.values[0] ?? null
+    // Toasts on screen now, newest last. A notification leaves the toasts
+    // after its timeout but stays in the inbox until dismissed.
+    property var toasts: []
+    readonly property var player: Mpris.players.values.find(p => p.isPlaying) ?? Mpris.players.values[0] ?? null
+    // frame (the window border) and other scripts read these flag files.
+    readonly property string runDir: Quickshell.env("XDG_RUNTIME_DIR") || "/tmp"
+    function flag(name, on) { Quickshell.execDetached(on ? ["touch", runDir + "/" + name] : ["rm", "-f", runDir + "/" + name]); }
+    onQuietChanged: flag("diag-dnd", quiet)
+    onSharingChanged: { flag("diag-live", sharing); if (sharing) toasts = []; }
+    onPanelChanged: if (panel === "inbox") toasts = []
+    // A share can't be running before the shell starts listening for it, so a
+    // leftover flag from a crashed shell is cleared (frame would stay coral).
+    Component.onCompleted: flag("diag-live", false)
+    function dropToast(n) { toasts = toasts.filter(t => t !== n); }
+    // KDE Connect mirrors WhatsApp from the phone; nchat already alerts for
+    // those (chat-notify), so the copies are dropped. Other phone apps stay.
+    function mirrored(n) {
+        return /^(kde\s*connect|kdeconnect(d|\.daemon)?)$/i.test(n.appName) && /^whatsapp( business)?$/i.test(n.summary);
+    }
     readonly property var tracks: [
         { name: "PICO-8", tag: "P / 01–08", detail: "Small games. Finish the cart.", command: ["game-dev", "pico"] },
         { name: "PICOTRON", tag: "T / 01–04", detail: "Tools, worlds, more room.", command: ["game-dev", "picotron"] },
@@ -39,6 +60,19 @@ ShellRoot {
         pendingAction = "";
     }
     function workspace(number) { Hyprland.dispatch("hl.dsp.focus({ workspace = " + number + " })"); }
+    // DP-4 always shows 1-5; every screen also lists its own open workspaces.
+    function workspaceIds(screen) {
+        const name = screen?.name ?? "";
+        const ids = new Set(name === "DP-4" ? [1, 2, 3, 4, 5] : []);
+        for (const w of Hyprland.workspaces.values) if (w.id > 0 && w.monitor?.name === name) ids.add(w.id);
+        return [...ids].sort((a, b) => a - b);
+    }
+    // Quiet survives a restart of the shell through its flag file.
+    Process {
+        running: true
+        command: ["test", "-e", root.runDir + "/diag-dnd"]
+        onExited: code => root.quiet = code === 0
+    }
     IpcHandler {
         target: "shell"
         function status(): string {
@@ -48,6 +82,7 @@ ShellRoot {
         function toggleBar(): void { root.barVisible = !root.barVisible; }
         function close(): void { root.panel = ""; }
         function quietMode(enabled: bool): void { root.quiet = enabled; }
+        function quiet(): string { return root.quiet ? "true" : "false"; }
     }
     SystemClock { id: clock; precision: SystemClock.Minutes }
     // wpctl is locale-pinned; nothing is interpolated into a shell command.
@@ -59,6 +94,8 @@ ShellRoot {
             root.volume = match ? (text.includes("MUTED") ? "mute" : Math.round(Number(match[1]) * 100) + "%") : "—";
         } }
     }
+    Process { id: piPing; command: ["ping", "-c", "1", "-W", "1", root.piHost]; onExited: code => root.piUp = code === 0 }
+    Timer { interval: 30000; repeat: true; running: true; triggeredOnStart: true; onTriggered: if (!piPing.running) piPing.running = true }
     Process { id: captureRead; command: ["pgrep", "-x", "wf-recorder"]; onExited: (code) => root.recording = code === 0 }
     Connections {
         target: Hyprland
@@ -78,7 +115,12 @@ ShellRoot {
         bodyMarkupSupported: false
         persistenceSupported: true
         onNotification: notification => {
+            if (root.mirrored(notification)) return;
             notification.tracked = true;
+            notification.closed.connect(() => root.dropToast(notification));
+            const critical = notification.urgency === NotificationUrgency.Critical;
+            if (root.panel !== "inbox" && ((!root.quiet && !root.sharing) || critical))
+                root.toasts = [...root.toasts.filter(t => t !== notification), notification].slice(-3);
             // Bound session history, so a noisy client cannot grow it forever.
             const entries = trackedNotifications.values;
             if (entries.length > 50) entries[0].dismiss();
@@ -93,37 +135,82 @@ ShellRoot {
             visible: root.barVisible
             WlrLayershell.namespace: "afterhours-rail"
             anchors { top: true; left: true; right: true }
-            implicitHeight: 46
-            color: Theme.background
-            Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.line }
+            // Floats 8 px down and 12 px in, lined up with the window gaps.
+            margins { top: 8; left: 12; right: 12 }
+            implicitHeight: 42
+            color: "transparent"
+            Rectangle {
+                anchors.fill: parent
+                radius: Theme.radiusLarge
+                color: Theme.panel
+                border.width: 1
+                border.color: Theme.line
+            }
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 14; anchors.rightMargin: 14
-                spacing: 8
+                anchors.leftMargin: 6; anchors.rightMargin: 6
+                spacing: 4
                 Cell { label: rail.width < 900 ? "▦" : "▦  sh0ds·16"; ink: Theme.accent; hint: "Make / Play / Ship · Super+Ctrl+G"; onClicked: root.toggle("studio", rail.screen) }
                 Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: 20; color: Theme.line }
-                Repeater {
-                    model: rail.width > 650 ? 5 : 3
-                    Cell {
-                        required property int index
-                        label: rail.width > 1050 ? ["01 CODE", "02 PLAY", "03 CRAFT", "04 NOTES", "05 GAMES"][index] : String(index + 1).padStart(2, "0")
-                        selected: Hyprland.monitorFor(rail.screen)?.activeWorkspace?.id === index + 1
-                        onClicked: root.workspace(index + 1)
+                Item {
+                    id: spaces
+                    readonly property int active: Hyprland.monitorFor(rail.screen)?.activeWorkspace?.id ?? -1
+                    readonly property var ids: root.workspaceIds(rail.screen).slice(0, rail.width > 650 ? 10 : 3)
+                    property real markX: 0
+                    property real markW: 0
+                    implicitWidth: spaceRow.implicitWidth
+                    implicitHeight: 32
+                    // The phosphor marker glides to the active workspace.
+                    Rectangle {
+                        x: spaces.markX; width: spaces.markW; height: 32
+                        visible: spaces.markW > 0
+                        radius: Theme.radius
+                        color: Theme.accent
+                        Behavior on x { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
+                        Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
                     }
+                    Row {
+                        id: spaceRow
+                        Repeater {
+                            model: spaces.ids
+                            Cell {
+                                id: space
+                                required property int modelData
+                                readonly property bool here: modelData === spaces.active
+                                readonly property var names: ({1: "CODE", 2: "PLAY", 3: "CRAFT", 4: "NOTES", 5: "GAMES"})
+                                label: String(modelData).padStart(2, "0") + (rail.width > 1050 && names[modelData] ? " " + names[modelData] : "")
+                                ink: here ? Theme.background : (Hyprland.workspaces.values.find(w => w.id === modelData)?.urgent ? Theme.amber : Theme.muted)
+                                fill: "transparent"
+                                color: here ? "transparent" : (pointerHover.hovered ? Theme.raised : "transparent")
+                                HoverHandler { id: pointerHover }
+                                onClicked: root.workspace(modelData)
+                                Binding { target: spaces; property: "markX"; value: space.x; when: space.here; restoreMode: Binding.RestoreNone }
+                                Binding { target: spaces; property: "markW"; value: space.width; when: space.here; restoreMode: Binding.RestoreNone }
+                            }
+                        }
+                    }
+                    WheelHandler { onWheel: e => root.workspace(e.angleDelta.y > 0 ? '"e-1"' : '"e+1"') }
                 }
                 Item { Layout.fillWidth: true }
                 Cell {
                     visible: root.recording || root.sharing
                     label: root.sharing ? "● LIVE" : "● REC"; ink: Theme.danger
-                    hint: "Click to stop recording"
-                    onClicked: root.run(["rec-toggle"])
+                    hint: root.recording ? "Click to stop recording" : "Sharing your screen: popups are held back"
+                    onClicked: if (root.recording) root.run(["rec-toggle"])
                 }
                 Cell {
                     visible: rail.width > 1350 && root.player !== null
-                    label: root.player ? root.player.trackTitle.slice(0, 22) : ""
+                    label: root.player ? (root.player.isPlaying ? "▶ " : "Ⅱ ") + root.player.trackTitle.slice(0, 22) : ""
                     ink: Theme.blue
                     hint: "Play / pause"
                     onClicked: { if (root.player?.canTogglePlaying) root.player.togglePlaying(); }
+                }
+                Cell {
+                    visible: rail.width > 900
+                    label: root.piUp ? "pi" : "pi down"
+                    ink: root.piUp ? Theme.blue : Theme.danger
+                    hint: "Raspberry Pi " + root.piHost + (root.piUp ? " is up · click: ssh" : " is not answering")
+                    onClicked: root.run(["kitty", "-e", "ssh", "pi"])
                 }
                 Cell { label: (rail.width > 900 ? "vol " : "") + root.volume; hint: "Sound controls"; onClicked: root.run(["pavucontrol"]) }
                 Cell {
@@ -136,8 +223,11 @@ ShellRoot {
                     Rectangle {
                         id: trayItem
                         required property var modelData
-                        implicitWidth: 28; implicitHeight: 30; color: "transparent"
-                        Image { anchors.centerIn: parent; width: 18; height: 18; source: trayItem.modelData.icon }
+                        implicitWidth: 30; implicitHeight: 32
+                        radius: Theme.radius
+                        color: trayPointer.containsMouse ? Theme.raised : "transparent"
+                        Behavior on color { ColorAnimation { duration: Theme.motion } }
+                        Image { anchors.centerIn: parent; width: 16; height: 16; sourceSize: Qt.size(32, 32); source: trayItem.modelData.icon }
                         MouseArea {
                             id: trayPointer
                             anchors.fill: parent; acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton; hoverEnabled: true
@@ -154,7 +244,7 @@ ShellRoot {
                         ToolTip.text: modelData.tooltipTitle || modelData.title
                     }
                 }
-                Text { text: Qt.formatDateTime(clock.date, rail.width > 1050 ? "ddd  dd MMM   HH:mm" : "HH:mm"); color: Theme.text; font.family: Theme.mono; font.pixelSize: 12 }
+                Text { Layout.leftMargin: 6; Layout.rightMargin: 4; text: Qt.formatDateTime(clock.date, rail.width > 1050 ? "ddd dd MMM  HH:mm" : "HH:mm"); color: Theme.text; font.family: Theme.font; font.pixelSize: 13; font.bold: true }
                 Cell { label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
             }
         }
@@ -166,10 +256,16 @@ ShellRoot {
         screen: root.panelScreen
         anchors { top: true; bottom: true; left: true; right: true }
         exclusionMode: ExclusionMode.Ignore
-        color: "#99141613"
+        color: "transparent"
         WlrLayershell.namespace: "afterhours-overlay"
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.keyboardFocus: visible ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.background
+            opacity: overlay.visible ? 0.6 : 0
+            Behavior on opacity { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
+        }
         MouseArea { anchors.fill: parent; onClicked: root.panel = "" }
         Rectangle {
             id: sheet
@@ -178,21 +274,26 @@ ShellRoot {
             height: Math.min(parent.height - 100, 660)
             color: Theme.panel
             border.color: Theme.line; border.width: 1
-            radius: 4
+            radius: Theme.radiusLarge
             Keys.onEscapePressed: root.panel = ""
             // Prevent clicks on the sheet reaching the outside-click handler.
             MouseArea { anchors.fill: parent }
-            NumberAnimation on opacity { from: 0; to: 1; duration: Theme.motion; running: overlay.visible }
+            // Grows in from 96 % while it fades in.
+            ParallelAnimation {
+                running: overlay.visible
+                NumberAnimation { target: sheet; property: "opacity"; from: 0; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
+                NumberAnimation { target: sheet; property: "scale"; from: 0.96; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
+            }
             ColumnLayout {
                 anchors.fill: parent; anchors.margins: 28; spacing: 16
                 RowLayout {
-                    Text { text: "AFTERHOURS / " + root.panel.toUpperCase(); color: Theme.accent; font.family: Theme.mono; font.pixelSize: 12; font.letterSpacing: 2 }
+                    Text { text: "AFTERHOURS / " + root.panel.toUpperCase(); color: Theme.accent; font.family: Theme.font; font.pixelSize: 12; font.letterSpacing: 2 }
                     Item { Layout.fillWidth: true }
                     Cell { label: "ESC  ×"; onClicked: root.panel = "" }
                 }
                 Text {
                     text: root.panel === "studio" ? "MAKE. PLAY. SHIP." : root.panel === "apps" ? "OPEN SOMETHING." : root.panel === "inbox" ? "INCOMING." : "END OF SESSION."
-                    color: Theme.text; font.family: Theme.display; font.pixelSize: sheet.width < 600 ? 32 : 46
+                    color: Theme.text; font.family: Theme.font; font.pixelSize: sheet.width < 600 ? 32 : 46
                     Layout.fillWidth: true; elide: Text.ElideRight
                 }
                 Rectangle { Layout.fillWidth: true; height: 1; color: Theme.line }
@@ -223,14 +324,14 @@ ShellRoot {
                                 width: trackMenu.width; height: 44
                                 readonly property bool chosen: trackMenu.currentIndex === index
                                 color: chosen ? Theme.raised : "transparent"
-                                radius: 2
+                                radius: Theme.radius
                                 Behavior on color { ColorAnimation { duration: Theme.motion } }
-                                Rectangle { width: 3; height: parent.height; color: Theme.accent; visible: track.chosen }
+                                Rectangle { x: 4; y: 10; width: 3; height: parent.height - 20; radius: 2; color: Theme.accent; opacity: track.chosen ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
                                 RowLayout {
                                     anchors.fill: parent; anchors.leftMargin: 14; anchors.rightMargin: 12; spacing: 12
-                                    Text { text: String(track.index + 1).padStart(2, "0"); color: track.chosen ? Theme.accent : Theme.muted; font.family: Theme.mono; font.pixelSize: 11 }
-                                    Text { text: track.modelData.name; color: track.chosen ? Theme.accent : Theme.text; font.family: Theme.mono; font.pixelSize: 16; font.bold: track.chosen; Layout.fillWidth: true }
-                                    Text { text: track.chosen ? "◂" : "·"; color: track.chosen ? Theme.accent : Theme.line; font.family: Theme.mono; font.pixelSize: 18 }
+                                    Text { text: String(track.index + 1).padStart(2, "0"); color: track.chosen ? Theme.accent : Theme.muted; font.family: Theme.font; font.pixelSize: 11 }
+                                    Text { text: track.modelData.name; color: track.chosen ? Theme.accent : Theme.text; font.family: Theme.font; font.pixelSize: 16; font.bold: track.chosen; Layout.fillWidth: true }
+                                    Text { text: track.chosen ? "◂" : "·"; color: track.chosen ? Theme.accent : Theme.line; font.family: Theme.font; font.pixelSize: 18 }
                                 }
                                 MouseArea {
                                     anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
@@ -244,7 +345,7 @@ ShellRoot {
                             visible: sheet.width > 600
                             Layout.minimumWidth: 0; Layout.preferredWidth: 280; Layout.maximumWidth: 280; Layout.fillHeight: true
                             spacing: 16
-                            Text { text: "SELECT / 0" + (trackMenu.currentIndex + 1); color: Theme.blue; font.family: Theme.mono; font.pixelSize: 11; font.letterSpacing: 2 }
+                            Text { text: "SELECT / 0" + (trackMenu.currentIndex + 1); color: Theme.blue; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 2 }
                             Item {
                                 visible: sheet.height > 580
                                 Layout.fillWidth: true; Layout.fillHeight: true
@@ -262,9 +363,9 @@ ShellRoot {
                                     }
                                 }
                             }
-                            Text { text: root.tracks[trackMenu.currentIndex].tag; color: Theme.blue; font.family: Theme.mono; font.pixelSize: 12 }
-                            Text { text: root.tracks[trackMenu.currentIndex].detail; color: Theme.text; font.family: Theme.display; font.pixelSize: 25; wrapMode: Text.WordWrap; Layout.minimumWidth: 0; Layout.fillWidth: true }
-                            Text { text: "↑ ↓  SELECT    ↵  OPEN"; color: Theme.muted; font.family: Theme.mono; font.pixelSize: 10 }
+                            Text { text: root.tracks[trackMenu.currentIndex].tag; color: Theme.blue; font.family: Theme.font; font.pixelSize: 12 }
+                            Text { text: root.tracks[trackMenu.currentIndex].detail; color: Theme.text; font.family: Theme.font; font.pixelSize: 25; wrapMode: Text.WordWrap; Layout.minimumWidth: 0; Layout.fillWidth: true }
+                            Text { text: "↑ ↓  SELECT    ↵  OPEN"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 10 }
                         }
                     }
                     ColumnLayout {
@@ -272,14 +373,15 @@ ShellRoot {
                             id: query
                             Layout.fillWidth: true
                             placeholderText: "Find an application…"
-                            font.family: Theme.mono; font.pixelSize: 16; color: Theme.text
-                            background: Rectangle { color: Theme.background; border.color: query.activeFocus ? Theme.accent : Theme.line; radius: 3 }
+                            font.family: Theme.font; font.pixelSize: 16; color: Theme.text
+                            leftPadding: 14; topPadding: 10; bottomPadding: 10
+                            background: Rectangle { color: Theme.background; border.color: query.activeFocus ? Theme.accent : Theme.line; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
                             Keys.onEscapePressed: root.panel = ""
                             onTextChanged: appList.currentIndex = 0
                             Keys.onDownPressed: appList.incrementCurrentIndex()
                             Keys.onUpPressed: appList.decrementCurrentIndex()
                             function launchCurrent() {
-                                const app = appList.model[Math.max(0, appList.currentIndex)];
+                                const app = appList.model.values[Math.max(0, appList.currentIndex)];
                                 if (app) { app.execute(); root.panel = ""; }
                             }
                             Keys.onReturnPressed: launchCurrent()
@@ -289,14 +391,16 @@ ShellRoot {
                         ListView {
                             id: appList
                             Layout.fillWidth: true; Layout.fillHeight: true; clip: true; spacing: 4
-                            model: DesktopEntries.applications.values.filter(app => !app.noDisplay && (app.name + " " + app.genericName).toLowerCase().includes(query.text.toLowerCase())).sort((a,b) => a.name.localeCompare(b.name))
+                            model: ScriptModel { values: DesktopEntries.applications.values.filter(app => !app.noDisplay && (app.name + " " + (app.genericName || "")).toLowerCase().includes(query.text.toLowerCase())).sort((a,b) => a.name.localeCompare(b.name)) }
                             delegate: Rectangle {
                                 id: appRow
                                 required property var modelData
                                 required property int index
                                 width: appList.width; height: 42
+                                radius: Theme.radius
                                 color: appList.currentIndex === index ? Theme.raised : "transparent"
-                                Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.name; color: Theme.text; font.family: Theme.sans; font.pixelSize: 14; textFormat: Text.PlainText }
+                                Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
+                                Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.name; color: Theme.text; font.family: Theme.font; font.pixelSize: 14; textFormat: Text.PlainText }
                                 MouseArea { anchors.fill: parent; hoverEnabled: true; onEntered: appList.currentIndex = appRow.index; onClicked: { appRow.modelData.execute(); root.panel = ""; } }
                             }
                         }
@@ -308,16 +412,18 @@ ShellRoot {
                         }
                         ListView {
                             Layout.fillWidth: true; Layout.fillHeight: true; clip: true; spacing: 10
-                            model: notices.trackedNotifications
+                            model: ScriptModel { values: [...notices.trackedNotifications.values].reverse() }
                             delegate: Notice { required property var modelData; notification: modelData; width: ListView.view.width }
-                            Text { anchors.centerIn: parent; visible: notices.trackedNotifications.values.length === 0; text: "Nothing waiting. Back to the game."; color: Theme.muted; font.family: Theme.mono; font.pixelSize: 12 }
+                            add: Transition { NumberAnimation { property: "opacity"; from: 0; to: 1; duration: Theme.motion } }
+                            displaced: Transition { NumberAnimation { property: "y"; duration: Theme.glide; easing.type: Easing.OutCubic } }
+                            Text { anchors.centerIn: parent; visible: notices.trackedNotifications.values.length === 0; text: "Nothing waiting. Back to the game."; color: Theme.muted; font.family: Theme.font; font.pixelSize: 12 }
                         }
                     }
                     ColumnLayout {
                         spacing: 12
-                        Text { text: "Save your work. Destructive actions need a second click."; color: Theme.muted; font.family: Theme.sans; wrapMode: Text.WordWrap; Layout.fillWidth: true }
+                        Text { text: "Save your work. Destructive actions need a second click."; color: Theme.muted; font.family: Theme.font; wrapMode: Text.WordWrap; Layout.fillWidth: true }
                         Repeater {
-                            model: [ {label:"LOCK",cmd:["hyprlock"]}, {label:"SUSPEND",cmd:["afterhours-suspend"]}, {label:"LOG OUT",cmd:["power","logout"]}, {label:"REBOOT",cmd:["power","reboot"]}, {label:"POWER OFF",cmd:["power","poweroff"]} ]
+                            model: [ {label:"LOCK",cmd:["loginctl","lock-session"]}, {label:"SUSPEND",cmd:["afterhours-suspend"]}, {label:"LOG OUT",cmd:["power","logout"]}, {label:"REBOOT",cmd:["power","reboot"]}, {label:"POWER OFF",cmd:["power","poweroff"]} ]
                             Cell {
                                 required property var modelData
                                 label: root.pendingAction === modelData.label ? "CONFIRM " + modelData.label : modelData.label
@@ -333,7 +439,7 @@ ShellRoot {
                     }
                 }
                 RowLayout {
-                    Text { text: "45 MINUTES COUNTS / FINISHED BEATS BIG"; color: Theme.muted; font.family: Theme.mono; font.pixelSize: 10; Layout.fillWidth: true; elide: Text.ElideRight }
+                    Text { text: "45 MINUTES COUNTS / FINISHED BEATS BIG"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 10; Layout.fillWidth: true; elide: Text.ElideRight }
                     Cell { label: "ALL APPS →"; onClicked: root.panel = "apps" }
                 }
             }
@@ -344,20 +450,41 @@ ShellRoot {
     }
     // Passive toasts never steal keyboard focus. Quiet mode preserves inbox history.
     PanelWindow {
-        visible: !root.quiet && !root.sharing && notices.trackedNotifications.values.length > 0 && root.panel !== "inbox"
+        visible: root.toasts.length > 0
         screen: root.panelScreen
         WlrLayershell.namespace: "afterhours-toast"
         anchors { top: true; right: true }
-        margins { top: 60; right: 16 }
+        margins { top: 8; right: 12 }
         implicitWidth: Math.min(380, (screen?.width ?? 400) - 32)
         implicitHeight: toastColumn.implicitHeight
         color: "transparent"
-        exclusionMode: ExclusionMode.Ignore
+        mask: Region { item: toastColumn }
         Column {
             id: toastColumn; width: parent.width; spacing: 8
             Repeater {
-                model: notices.trackedNotifications.values.slice(-3)
-                Notice { required property var modelData; notification: modelData; width: toastColumn.width; toast: true }
+                // ScriptModel keeps existing toasts alive when one is added or
+                // dropped, so their timers and slide-in don't restart.
+                model: ScriptModel { values: root.toasts }
+                Notice {
+                    id: toast
+                    required property var modelData
+                    notification: modelData; width: toastColumn.width; toast: true
+                    // expireTimeout is in ms; 0 or less means the server decides.
+                    readonly property int life: (modelData.expireTimeout ?? 0) > 0 ? modelData.expireTimeout
+                        : modelData.urgency === NotificationUrgency.Low ? 3000 : 6500
+                    Timer {
+                        interval: Math.max(1000, toast.life)
+                        running: toast.modelData.urgency !== NotificationUrgency.Critical && !toast.hovered
+                        onTriggered: { if (toast.modelData.transient) toast.modelData.expire(); else root.dropToast(toast.modelData); }
+                    }
+                    transform: Translate { id: slide }
+                    Component.onCompleted: enter.start()
+                    ParallelAnimation {
+                        id: enter
+                        NumberAnimation { target: slide; property: "x"; from: 48; to: 0; duration: Theme.glide; easing.type: Easing.OutCubic }
+                        NumberAnimation { target: toast; property: "opacity"; from: 0; to: 1; duration: Theme.motion; easing.type: Easing.OutCubic }
+                    }
+                }
             }
         }
     }

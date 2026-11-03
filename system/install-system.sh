@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install-system.sh: the parts of the Diag look that live outside $HOME and
+# install-system.sh: the parts of the Afterhours look that live outside $HOME and
 # need root: the SDDM login screen and the Plymouth boot splash.
 # Usage: bash ~/code/dotfiles/system/install-system.sh   (asks for sudo)
 # Run it again after changing anything under system/. Old configs it replaces
@@ -8,7 +8,7 @@ set -euo pipefail
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repo=$(dirname "$here")
 
-# ---- SDDM: the Diag theme (Qt 6, runs on weston like before) ----
+# ---- SDDM: the Afterhours theme (Qt 6, runs on weston like before) ----
 t=/usr/share/sddm/themes/diag
 sudo install -d "$t"
 sudo install -m 644 "$here"/sddm/diag/{Main.qml,metadata.desktop,theme.conf} "$t/"
@@ -57,7 +57,7 @@ sudo install -d -o sddm -g sddm /var/lib/sddm/.config
 sudo install -m 644 -o sddm -g sddm "$ini" /var/lib/sddm/.config/weston.ini
 rm "$ini"
 
-# ---- Plymouth: the Diag boot splash ----
+# ---- Plymouth: the Afterhours boot splash ----
 if command -v plymouth-set-default-theme >/dev/null; then
   p=/usr/share/plymouth/themes/diag
   sudo install -d "$p"

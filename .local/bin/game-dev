@@ -45,7 +45,7 @@ case ${1:-menu} in
     exec zeditor -- "$project"
     ;;
   capture) need rec-toggle; exec rec-toggle ;;
-  site) need kitty; need site-dev; exec kitty -e site-dev ;;
+  site) need zeditor; exec zeditor -- "${SITE_REPO:-$HOME/code/website}" ;;
   check)
     missing=0
     for tool in pico8 picotron godot pixelorama zeditor cc make gdb pkg-config lua lua-language-server clangd emcc ffmpeg; do

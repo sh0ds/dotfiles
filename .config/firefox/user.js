@@ -1,4 +1,4 @@
-// Firefox prefs for the Diag look. `firefox-style` links this into your
+// Firefox prefs for the Afterhours look. `firefox-style` links this into your
 // profile; Firefox reads it at every start, so changes in about:config to
 // these prefs don't stick (edit this file instead).
 
