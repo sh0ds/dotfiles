@@ -177,7 +177,7 @@ hl.window_rule({
 ---- WINDOW RULES ----
 ----------------------
 
--- Quick apps (SoundCloud, WhatsApp, mail, music, btop)
+-- Quick apps (SoundCloud, WhatsApp, music, btop)
 -- are normal tiled windows. Each has one key that goes through
 -- ~/.local/bin/app --toggle: start it next to what you're doing, press again
 -- to hide it, press again to bring it back tiled where you are. If it's
@@ -359,11 +359,6 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("update-check --watch")
 	hl.exec_cmd("/usr/lib/kdeconnectd")
 	hl.exec_cmd("kdeconnect-indicator") -- optional tray icon
-	-- Mail: Proton's Bridge in the tray, then aerc hidden (special:hidden,
-	-- where `app --toggle` parks windows) so new mail shows up as
-	-- notifications from the start; SUPER+SHIFT+I brings it in
-	hl.exec_cmd("protonmail-bridge --no-window")
-	hl.exec_cmd("kitty --class mail -e aerc", { workspace = "special:hidden silent" })
 	-- aria2 in the background, Firefox hands its downloads to it
 	hl.exec_cmd("aria2-rpc")
 	-- Easy Effects without a window: the headphone EQ and limiter (docs/audio.md)
@@ -372,8 +367,6 @@ end)
 
 -- WhatsApp (nchat) on SUPER+I, same idea
 hl.bind(mod .. " + I", hl.dsp.exec_cmd("chat"))
--- Mail (aerc) on SUPER+SHIFT+I, next to it
-hl.bind(mod .. " + SHIFT + I", hl.dsp.exec_cmd("inbox"))
 -- Music player (rmpc) on SUPER+U, same idea
 hl.bind(mod .. " + U", hl.dsp.exec_cmd("music"))
 -- Files: Thunar uses the same GTK Diag palette and tiles normally (SUPER+E).

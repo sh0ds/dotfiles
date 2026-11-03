@@ -28,10 +28,10 @@ The notification centre uses a matching flat music transport: a solid black-grey
 
 ### Quick apps
 
-The things I need for a few seconds are normal tiled windows with one key each. The key starts the app next to what I'm doing, pressing it again hides it, and the next press brings it back tiled wherever I am now. Mail starts hidden at login, so its notifications work from the start.
+The things I need for a few seconds are normal tiled windows with one key each. The key starts the app next to what I'm doing, pressing it again hides it, and the next press brings it back tiled wherever I am now.
 
 - `SUPER+S` SoundCloud (a web app through [PWAsForFirefox](https://github.com/filips123/PWAsForFirefox)), `SUPER+U` my own music (rmpc)
-- `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat)), `SUPER+SHIFT+I` mail (in the terminal with [aerc](https://aerc-mail.org))
+- `SUPER+I` WhatsApp (in the terminal with [nchat](https://github.com/d99kris/nchat))
 - `CTRL+SHIFT+Escape` btop, same key as the task manager on Windows
 
 ### What's in it
@@ -57,7 +57,6 @@ Apps:
 - **Firefox Picture-in-Picture** joins the normal tiled window grid. Move and resize it with the usual window keys; `SUPER+V` can float it manually. With the optional tab-count add-on below, a source window with one tab is hidden until the video closes or another tab opens.
 - **mpv, imv and zathura** for videos, pictures and PDFs. Opened from a terminal they take its place until you close them.
 - **A Windows VM** for everything DJ: Lexicon, rekordbox, Traktor and Audacity. `SUPER+SHIFT+M` starts it on workspace 7, and songs I drop into `~/Music/DJ` show up in Windows as drive `Z:`. Setup in [docs/dj-vm.md](docs/dj-vm.md).
-- **aerc** for mail: my Proton address (through Proton Mail Bridge) and my two sh0ds.dev addresses, one tab each. New mail shows up as a notification, HTML mails show as text with images and trackers blocked, and replies are written in Neovim.
 - **Obsidian** for notes on `SUPER+O`, **Proton Pass** for passwords on `SUPER+SHIFT+P`.
 - **Steam** and every game go on workspace 5. Games get GameMode on their own, adaptive sync, no vsync for lower input lag, and quiet notifications until you quit.
 
@@ -70,7 +69,7 @@ Keeping Arch healthy:
 
 Small scripts in `.local/bin` for things I kept needing. Each one has a short comment at the top.
 
-- `app`: the start, hide and bring back logic behind `chat`, `inbox`, `music`, `sysmon`, `notes` and SoundCloud
+- `app`: the start, hide and bring back logic behind `chat`, `music`, `sysmon`, `notes` and SoundCloud
 - `wifi`: the notification panel’s Wi-Fi button opens a network picker; choose Network settings or run `wifi settings` for nmtui
 - `winswitch`: ALT+Tab through all windows, most recent first
 - `calc`: calculator, try `2^10`, `15% of 89` or `300 EUR to USD`
@@ -82,7 +81,6 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `share-picker`: a faster screen-share picker, since the default one kept freezing with Discord
 - `live-status`: do-not-disturb while I share my screen, so nothing private pops up on stream
 - `chat-notify`: WhatsApp messages as notifications, click one and it jumps to WhatsApp
-- `inbox`: shows or hides aerc
 - `keys`: every keybind from the table below in a searchable list (`SUPER+F1`)
 - `notes`: Obsidian on `~/notes`, started or jumped to (`SUPER+O`)
 - `thunar-setup`: fills missing Diag preferences, merges coding/music actions and sidebar shortcuts, and sets kitty for Open Terminal Here; `--apply` reapplies the managed layout
@@ -146,7 +144,7 @@ sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-d
   grim slurp satty wl-clipboard cliphist wf-recorder wtype playerctl pavucontrol pipewire-alsa easyeffects lsp-plugins-lv2 jq socat \
   libqalculate tesseract tesseract-data-eng libnotify unicode-emoji udiskie \
   thunar thunar-archive-plugin xarchiver zip unzip tumbler ffmpegthumbnailer gvfs gvfs-mtp gvfs-smb fd ripgrep aria2 poppler ffmpeg 7zip imagemagick btop lazygit bat tealdeer \
-  aerc w3m gnome-keyring libsecret protonmail-bridge mpd mpc rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
+  gnome-keyring libsecret mpd mpc rmpc mpd-mpris mpv imv zathura zathura-pdf-mupdf obsidian firefox \
   python qemu-desktop libvirt virt-install virt-viewer edk2-ovmf swtpm virtiofsd passt \
   ufw adw-gtk-theme qt6ct gamemode lib32-gamemode pacman-contrib reflector kdeconnect
 yay -S wlogout nchat proton-pass-bin
@@ -219,17 +217,7 @@ And change a few things to your liking:
 - For Firefox downloads through aria2, get the [Aria2 Integration](https://addons.mozilla.org/firefox/addon/aria2-extension/) add-on. In its settings add a server with host `localhost`, port `6800`, path `/jsonrpc`, no SSL, and the secret from `aria2-rpc secret | wl-copy`. Then turn on "Capture downloads". Downloads that need you logged in might fail through aria2; add that site to the add-on's excluded sites and Firefox downloads it itself.
 - In Proton Pass, turn on "Start at login" if you want it in the tray, and get its Firefox add-on for filling in passwords.
 - For the DJ VM (Lexicon, rekordbox, Traktor, Audacity), follow [docs/dj-vm.md](docs/dj-vm.md). It takes about an hour, mostly Windows installing itself.
-- For mail, aerc gets its passwords from the keyring, so start that once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password; after a tty login it stays locked until something asks for it). Proton needs a paid plan for Bridge (`protonmail-bridge` in the package list above).
-
-  Log in to Bridge (`protonmail-bridge`), then in its settings set the IMAP and SMTP connection mode to SSL. Click your account to see the Bridge password (it isn't your Proton password). Then save the three passwords, each command asks for one:
-
-  ```
-  secret-tool store --label="mail: proton" aerc proton
-  secret-tool store --label="mail: mail@sh0ds.dev" aerc sh0ds-mail
-  secret-tool store --label="mail: security@sh0ds.dev" aerc sh0ds-security
-  ```
-
-  The IONOS folder names in `accounts.conf` are the German ones. If sending says it can't save to "Gesendete Objekte", open the folder list in aerc and change `copy-to` to what your Sent folder is called.
+- Apps that keep passwords in the keyring need it running, so start it once with `systemctl --user enable --now gnome-keyring-daemon.socket` (SDDM unlocks it when you log in, as long as the keyring password is your login password).
 - The keyboard is German with Caps Lock as Escape. Change `kb_layout` in `hyprland.lua` for yours.
 - Not on NVIDIA? Delete the two NVIDIA lines in `hyprland.lua`.
 - The `pi up` reading and `pi-status` are for my Raspberry Pi. Delete them, or set `PI_HOST` in `pi-status` to your own. `site-dev` expects a repo in `~/code/website` (or set `SITE_REPO`) and a `pi` host in `~/.ssh/config`.
@@ -294,7 +282,7 @@ bash ~/code/dotfiles/check-desktop.sh
 | `SUPER+E` | Files (Thunar) |
 | `SUPER+O` | Notes (Obsidian, opens or jumps to it) |
 | `SUPER+S` / `SUPER+U` | SoundCloud / music player |
-| `SUPER+I` / `SUPER+SHIFT+I` | WhatsApp / mail |
+| `SUPER+I` | WhatsApp |
 | `CTRL+SHIFT+Escape` | btop |
 | `SUPER+SHIFT+M` | Windows DJ VM |
 | `SUPER+SHIFT+P` | Proton Pass |
@@ -343,7 +331,7 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
 
 ## Credits
 
-The Diag look is mine (from my site), but the swaync, btop, lazygit, rmpc, aerc, zathura and qt6ct theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
+The Diag look is mine (from my site), but the swaync, btop, lazygit, rmpc, zathura and qt6ct theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured. The Neovim base is [LazyVim](https://github.com/LazyVim/LazyVim).
 
 ## License
 
