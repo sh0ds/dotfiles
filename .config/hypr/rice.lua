@@ -396,6 +396,9 @@ hl.on("hyprland.start", function()
 			.. "gsettings set org.gnome.desktop.interface cursor-theme Posy_Cursor_Black; "
 			.. "gsettings set org.gnome.desktop.interface cursor-size 32"
 	)
+	-- Hyprland draws its own cursor and can start with the default one even
+	-- with XCURSOR_THEME set, so name the theme once it's running.
+	hl.exec_cmd("hyprctl setcursor Posy_Cursor_Black 32")
 	hl.exec_cmd("udiskie")
 	hl.exec_cmd("playerctld daemon")
 	hl.exec_cmd("update-check --watch")
