@@ -1,27 +1,37 @@
-# Afterhours prompt: the folder, the branch and languages on the first
-# line; a violet arrow to type after on the second.
-# Timing and the clock sit on the right.
+# Afterhours prompt. Line one: the path with the repo's own folder bright
+# and everything above it dim, the branch in violet, changes in amber, the
+# language versions quiet; a thin dotted rule runs to the right edge where
+# a slow command's time and the clock sit. Line two: just the violet arrow
+# (coral after a failed command). No boxes, no backgrounds.
 # Icons come from kitty's JetBrains Mono Nerd Font.
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = true
 palette = 'afterhours'
 format = """
-[╭─](fg:line)$directory$git_branch$git_status$c$lua$python$line_break\
-[╰─](fg:line)$username$hostname$character"""
-right_format = '$cmd_duration$time'
+$username$hostname$directory$git_branch$git_status$c$lua$python$fill $cmd_duration$time
+$character"""
+
+[fill]
+symbol = '·'
+style = 'fg:line'
 
 [directory]
-style = 'bold fg:text'
-format = '[ ](fg:accent)[$path]($style)[$read_only](fg:danger) '
-read_only = ' '
-truncation_length = 3
-truncate_to_repo = true
+style = 'fg:muted'
+format = '[$path]($style)[$read_only]($read_only_style) '
+repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) '
+before_repo_root_style = 'fg:muted'
+repo_root_style = 'bold fg:text'
+read_only_style = 'fg:danger'
+home_symbol = '~'
+read_only = ' 󰌾'
+truncation_length = 4
+truncate_to_repo = false
 truncation_symbol = '…/'
 
 [git_branch]
 symbol = ' '
-style = 'fg:muted'
-format = '[$symbol](fg:accent)[$branch]($style) '
+style = 'fg:accent'
+format = '[on](fg:line) [$symbol$branch]($style) '
 
 [git_status]
 style = 'fg:amber'
@@ -61,13 +71,13 @@ version_format = '${major}.${minor}'
 min_time = 2000
 show_milliseconds = false
 style = 'fg:amber'
-format = '[󱎫 $duration]($style) '
+format = '[$duration]($style) '
 
 [time]
 disabled = false
 time_format = '%H:%M'
 style = 'fg:muted'
-format = '[󰥔 $time]($style)'
+format = '[$time]($style)'
 
 [line_break]
 disabled = false
