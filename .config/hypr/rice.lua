@@ -393,7 +393,8 @@ hl.on("hyprland.start", function()
 			.. "gsettings set org.gnome.desktop.interface accent-color blue; "
 			.. "gsettings set org.gnome.desktop.interface font-name 'Terminess Nerd Font Mono 13.5'; "
 			.. "gsettings set org.gnome.desktop.interface monospace-font-name 'Terminess Nerd Font Mono 13.5'; "
-			.. "gsettings set org.gnome.desktop.interface cursor-theme Adwaita"
+			.. "gsettings set org.gnome.desktop.interface cursor-theme Posy_Cursor_Black; "
+			.. "gsettings set org.gnome.desktop.interface cursor-size 32"
 	)
 	hl.exec_cmd("udiskie")
 	hl.exec_cmd("playerctld daemon")

@@ -63,9 +63,11 @@ end)
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
-hl.env("XCURSOR_THEME", "Adwaita")
-hl.env("XCURSOR_SIZE", "24")
-hl.env("HYPRCURSOR_SIZE", "24")
+-- Posy's Cursor Black: a sharp, pixel-drawn black arrow with a white edge,
+-- the cursor that matches Terminess. Its smallest size is 32 (README).
+hl.env("XCURSOR_THEME", "Posy_Cursor_Black")
+hl.env("XCURSOR_SIZE", "32")
+hl.env("HYPRCURSOR_SIZE", "32")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct") -- Qt apps in Diag (~/.config/qt6ct)
 hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")

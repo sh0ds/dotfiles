@@ -68,6 +68,7 @@ check "KVM (DJ VM)" test -w /dev/kvm
 check "virtiofsd (DJ VM shared folder)" test -x /usr/lib/virtiofsd
 check "Music/DJ shared folder" test -d "$HOME/Music/DJ"
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
+check "Posy cursor in /usr/share/icons" test -f /usr/share/icons/Posy_Cursor_Black/index.theme
 check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd"'
 check "Terminess Nerd Font" sh -c 'fc-list | grep -qi "Terminess Nerd Font"'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service

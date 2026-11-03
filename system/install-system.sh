@@ -33,7 +33,8 @@ CompositorCommand=weston --shell=kiosk
 
 [Theme]
 Current=diag
-CursorTheme=Adwaita
+CursorTheme=Posy_Cursor_Black
+CursorSize=32
 CONF
 echo "SDDM: diag theme installed"
 

@@ -154,6 +154,13 @@ sudo pacman -Syu --needed hyprland hyprlock hypridle hyprsunset hyprpicker xdg-d
 yay -S wlogout nchat proton-pass-bin
 ```
 
+The cursor is [Posy's Cursor Black](https://github.com/simtrami/posy-improved-cursor-linux), installed system-wide so the login screen uses it too:
+
+```
+git clone --depth 1 https://github.com/simtrami/posy-improved-cursor-linux /tmp/posy
+sudo cp -r /tmp/posy/Posy_Cursor_Black /usr/share/icons/ && rm -rf /tmp/posy
+```
+
 For game dev, also these (details in [docs/gamedev.md](docs/gamedev.md)):
 
 ```
@@ -350,6 +357,8 @@ This is set up for my machine (NVIDIA, two 1080p monitors), so some things might
   ```
 
 ## Credits
+
+The cursor is Michiel de Boer's (Posy) design, ported to Linux by simtrami, under CC BY-NC 4.0.
 
 The Diag look is mine (from my site), but the swaync, btop, lazygit, rmpc, zathura and qt6ct theme files started as [Catppuccin](https://github.com/catppuccin)'s ports and were recoloured.
 
