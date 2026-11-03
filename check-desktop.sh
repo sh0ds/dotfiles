@@ -56,7 +56,9 @@ check "zathura PDF plugin" test -e /usr/lib/zathura/libpdf-mupdf.so
 check "PDFs open in zathura" sh -c 'xdg-mime query default application/pdf | grep -q zathura'
 check "adw-gtk3 theme" test -d /usr/share/themes/adw-gtk3-dark
 check "Thunar folder handler" sh -c 'test "$(xdg-mime query default inode/directory)" = thunar.desktop'
-check "thumbnail service" test -f /usr/share/dbus-1/services/org.freedesktop.thumbnails.Thumbnailer1.service
+# tumbler names its D-Bus file org.xfce.Tumbler.Thumbnailer1.service; accept
+# any thumbnailer that registers the Thumbnailer1 interface.
+check "thumbnail service" sh -c 'ls /usr/share/dbus-1/services/*Thumbnailer1.service >/dev/null 2>&1'
 check "GTK portal" test -x /usr/lib/xdg-desktop-portal-gtk
 check "paccache timer" systemctl is-enabled paccache.timer
 check "fstrim timer" systemctl is-enabled fstrim.timer
