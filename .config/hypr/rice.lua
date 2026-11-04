@@ -26,7 +26,7 @@ end
 -- `frame` recolours the focused border while recording or in quiet mode.
 hl.config({
 	general = {
-		gaps_in = 4,
+		gaps_in = 3,
 		gaps_out = 12,
 		border_size = 2,
 		-- Lets games marked "immediate" below skip vsync: lowest input lag.
@@ -37,7 +37,7 @@ hl.config({
 		},
 	},
 	decoration = {
-		rounding = 10,
+		rounding = 8,
 		-- Between a circle (2) and a square: corners curve in smoothly.
 		rounding_power = 2.6,
 		active_opacity = 1.0,
@@ -354,9 +354,9 @@ hl.on("window.open", function(w)
 	hl.exec_cmd("gamemoded -r" .. pid)
 end)
 
--- Everything DJ (Lexicon, rekordbox, Traktor, Audacity) lives in a Windows VM
+-- Everything DJ (Lexicon, rekordbox, Traktor) lives in a Windows VM
 -- (djvm, SUPER+SHIFT+M) on workspace 7. The screen stays on while it has focus,
--- and the SUPER keys keep working in it instead of going to Windows.
+-- and the SUPER keys keep working in it instead of going to Windows.s
 hl.window_rule({
 	name = "dj-vm",
 	match = { class = "(?i).*virt-viewer.*" },
