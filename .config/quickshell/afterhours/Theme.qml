@@ -23,9 +23,19 @@ QtObject {
     readonly property string mono: font
     readonly property string display: font
     readonly property string sans: font
-    readonly property int radius: 8
-    readonly property int radiusLarge: 14
+    // Glass: the panel colour at 74 %, frosted by Hyprland's blur (the
+    // "glass" layer rule in rice.lua), with a faint light edge instead of a
+    // grey outline. Raised is for hover on glass.
+    readonly property color glass: Qt.rgba(0.075, 0.071, 0.094, 0.74)
+    readonly property color glassRaised: Qt.rgba(0.137, 0.129, 0.172, 0.86)
+    readonly property color edge: Qt.rgba(1, 1, 1, 0.08)
+    readonly property int radius: 10
+    readonly property int radiusLarge: 20
     // Hover and colour changes; things that move take `glide`.
     readonly property int motion: 200
     readonly property int glide: 320
+    // The one spring everything that grows or travels shares: an ease-out
+    // that runs a little past the target and settles back (~420 ms).
+    readonly property int spring: 420
+    readonly property real overshoot: 1.25
 }

@@ -128,14 +128,10 @@ PopupWindow {
         id: box
         anchors.fill: parent
         radius: Theme.radiusLarge
-        color: Theme.panel
-        border.width: 1; border.color: Theme.line
-        transform: Translate { id: drop }
-        ParallelAnimation {
-            id: intro
-            NumberAnimation { target: box; property: "opacity"; from: 0; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
-            NumberAnimation { target: drop; property: "y"; from: -8; to: 0; duration: Theme.glide; easing.type: Easing.OutCubic }
-        }
+        color: Theme.glass
+        border.width: 1; border.color: Theme.edge
+        transformOrigin: Item.TopRight
+        PopIn { id: intro; surface: box; inner: body }
         ColumnLayout {
             id: body
             anchors { top: parent.top; left: parent.left; right: parent.right; margins: 18 }

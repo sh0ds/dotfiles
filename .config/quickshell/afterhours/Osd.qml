@@ -11,6 +11,8 @@ PanelWindow {
     required property var sink
     // Changes in the first seconds are PipeWire settling, not the user.
     property bool armed: false
+    // While the rail is up the island shows the volume instead.
+    property bool held: false
     readonly property real volume: sink?.audio?.volume ?? 0
     readonly property bool muted: sink?.audio?.muted ?? false
     screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
@@ -20,13 +22,14 @@ PanelWindow {
     anchors { top: true }
     margins { top: 58 }
     implicitWidth: 300
-    implicitHeight: 52
+    // 4 px spare under the pill for the spring's overshoot.
+    implicitHeight: 56
     color: "transparent"
     visible: false
     mask: Region {}
     Timer { running: true; interval: 2500; onTriggered: osd.armed = true }
     function pop() {
-        if (!armed) return;
+        if (!armed || held) return;
         leave.stop();
         visible = true;
         hide.restart();
@@ -37,11 +40,11 @@ PanelWindow {
     Timer { id: hide; interval: 1400; onTriggered: leave.restart() }
     Rectangle {
         id: pill
-        width: parent.width; height: parent.height
+        width: parent.width; height: 52
         y: -parent.height
         radius: height / 2
-        color: Theme.panel
-        border.width: 1; border.color: Theme.line
+        color: Theme.glass
+        border.width: 1; border.color: Theme.edge
         Row {
             anchors.centerIn: parent
             spacing: 14
@@ -63,7 +66,7 @@ PanelWindow {
             }
         }
     }
-    NumberAnimation { id: enter; target: pill; property: "y"; to: 0; duration: Theme.glide; easing.type: Easing.OutCubic }
+    NumberAnimation { id: enter; target: pill; property: "y"; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
     SequentialAnimation {
         id: leave
         NumberAnimation { target: pill; property: "y"; to: -osd.height; duration: Theme.glide; easing.type: Easing.InCubic }

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# roms: one launcher entry per game in ~/games/roms/gba, named without the
+# region tags ("Legend of Zelda, The - The Minish Cap (Europe).gba" becomes
+# "Legend of Zelda, The - The Minish Cap"), so typing the name in the
+# launcher (Super+Space) starts it through gba. Runs at login; run it again
+# after adding or removing games. Entries for games that are gone go too.
+# Each entry names its game by a hash of the file name (gba --game HASH),
+# so quotes and apostrophes in names never need escaping.
+set -euo pipefail
+apps=${XDG_DATA_HOME:-$HOME/.local/share}/applications
+mkdir -p "$apps" ~/games/roms/gba
+rm -f "$apps"/rom-*.desktop
+shopt -s nullglob nocaseglob
+n=0
+for rom in ~/games/roms/gba/*.{gba,gbc,gb}; do
+  file=${rom##*/}
+  case ${file,,} in
+    *.gba) system="Game Boy Advance" ;;
+    *.gbc) system="Game Boy Color" ;;
+    *) system="Game Boy" ;;
+  esac
+  name=$(sed -E 's/\.[^.]+$//; s/ *[([][^])]*[])]//g; s/ +$//' <<<"$file")
+  [ -n "$name" ] || name=${file%.*}
+  slug=$(printf '%s' "$file" | md5sum | cut -c1-12)
+  printf '%s\n' '[Desktop Entry]' 'Type=Application' "Name=$name" "Comment=$system · mGBA" \
+    "Exec=gba --game $slug" 'Icon=io.mgba.mGBA' 'Terminal=false' 'Categories=Game;' \
+    >"$apps/rom-$slug.desktop"
+  n=$((n + 1))
+done
+echo "roms: $n game(s) in the launcher"

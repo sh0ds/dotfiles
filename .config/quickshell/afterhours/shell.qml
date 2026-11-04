@@ -97,6 +97,28 @@ ShellRoot {
         sink.audio.volume = Math.max(0, Math.min(1, Math.round((sink.audio.volume + step * 0.05) * 20) / 20));
     }
     function toggleMute() { if (sink?.audio) sink.audio.muted = !sink.audio.muted; }
+    // The island borrows these moments: 1.5 s of volume after a change (not
+    // in the first seconds, that's PipeWire settling), 3.5 s of the track
+    // when a new song starts playing.
+    property bool volumeArmed: false
+    property bool volumePulse: false
+    property bool trackPulse: false
+    Timer { running: true; interval: 2500; onTriggered: root.volumeArmed = true }
+    Timer { id: volumeLater; interval: 1500; onTriggered: root.volumePulse = false }
+    Timer { id: trackLater; interval: 3500; onTriggered: root.trackPulse = false }
+    function pulseVolume() { if (!volumeArmed) return; volumePulse = true; volumeLater.restart(); }
+    Connections {
+        target: root.sink?.audio ?? null
+        function onVolumesChanged() { root.pulseVolume(); }
+        function onMutedChanged() { root.pulseVolume(); }
+    }
+    Connections {
+        target: root.player
+        function onTrackTitleChanged() { if (root.player?.isPlaying && root.player.trackTitle) { root.trackPulse = true; trackLater.restart(); } }
+    }
+    // Notifications and the volume go to the island while the rail is up;
+    // with the rail hidden (Super+B, game mode) the toasts and the pill do.
+    readonly property bool islandShown: barVisible && !gameMode
 
     // Game mode: on while a game is fullscreen (Steam games, anything Hyprland
     // marks as game content, or fullscreen on workspace 5), or when you turn it
@@ -139,19 +161,6 @@ ShellRoot {
         }
         onRunningChanged: if (!running) root.cavaBars = root.cavaRest
     }
-    // System readings for the rail's sys cell (sys-stats), sampled every 2 s
-    // only while the cell is unfolded.
-    property bool statsOpen: false
-    property var stats: null
-    Process {
-        id: statsRead
-        command: ["sys-stats"]
-        stdout: StdioCollector { onStreamFinished: {
-            const v = text.trim().split(/\s+/);
-            if (v.length === 4) root.stats = { cpu: v[0], mem: v[1], temp: v[2], gpu: v[3] };
-        } }
-    }
-    Timer { interval: 2000; repeat: true; triggeredOnStart: true; running: root.statsOpen; onTriggered: if (!statsRead.running) statsRead.running = true }
     // Network for the rail: "wifi:<ssid>", "ethernet" or "offline", every 10 s.
     property string net: ""
     Process {
@@ -214,7 +223,7 @@ ShellRoot {
             screen: modelData
             visible: root.barVisible && !root.gameMode
             WlrLayershell.namespace: "afterhours-rail"
-            // The media card and the control centre hang under this rail.
+            // The media card, the control centre and Today hang under this rail.
             function openControl(cell) {
                 if (control.visible && control.target === cell) { control.visible = false; return; }
                 control.visible = false;
@@ -222,71 +231,45 @@ ShellRoot {
                 control.visible = true;
             }
             MediaCard { id: media; target: mediaCell; player: root.player; bars: root.cavaBars }
+            Dashboard { id: dash; target: island; shell: root }
             ControlCenter { id: control; target: volCell; shell: root }
             anchors { top: true; left: true; right: true }
             // Floats 8 px down and 12 px in, lined up with the window gaps.
             margins { top: 8; left: 12; right: 12 }
             implicitHeight: 42
             color: "transparent"
-            Rectangle {
-                anchors.fill: parent
-                radius: Theme.radiusLarge
-                color: Theme.panel
-                border.width: 1
-                border.color: Theme.line
-            }
-            // The clock island in the middle of the rail: a raised pill with
-            // the time large (its colon breathes in violet, once a second),
-            // a hairline, then the weekday over the date. Click: calendar.
-            Rectangle {
-                id: clockCell
+            // Three glass islands: apps, workspaces and the window title on the
+            // left, the island in the middle, the status cells on the right.
+            // The middle one grows into the room the side pills leave free.
+            readonly property real sideWidth: Math.max(rightPill.width, appsCell.width + spaces.width + 20)
+            Island {
+                id: island
                 z: 1
                 anchors.centerIn: parent
-                height: 34
-                width: clockRow.implicitWidth + 28
-                radius: height / 2
-                color: calendar.visible ? Theme.accentSoft : clockHover.hovered ? Theme.raised : Theme.background
-                border.width: 1
-                border.color: calendar.visible ? Theme.accent : Theme.line
-                Behavior on color { ColorAnimation { duration: Theme.motion } }
-                Behavior on border.color { ColorAnimation { duration: Theme.motion } }
-                Row {
-                    id: clockRow
-                    anchors.centerIn: parent
-                    spacing: 12
-                    Row {
-                        anchors.verticalCenter: parent.verticalCenter
-                        Text { text: Qt.formatDateTime(clock.date, "HH"); color: Theme.text; font.family: Theme.font; font.pixelSize: 18; font.bold: true }
-                        Text {
-                            text: ":"; color: Theme.accent; font.family: Theme.font; font.pixelSize: 18; font.bold: true
-                            SequentialAnimation on opacity {
-                                loops: Animation.Infinite
-                                NumberAnimation { to: 0.25; duration: 500; easing.type: Easing.InOutSine }
-                                NumberAnimation { to: 1; duration: 500; easing.type: Easing.InOutSine }
-                            }
-                        }
-                        Text { text: Qt.formatDateTime(clock.date, "mm"); color: Theme.text; font.family: Theme.font; font.pixelSize: 18; font.bold: true }
-                    }
-                    Rectangle { visible: rail.width > 900; anchors.verticalCenter: parent.verticalCenter; width: 1; height: 18; color: Theme.line }
-                    Column {
-                        visible: rail.width > 900
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: -1
-                        Text { text: Qt.formatDateTime(clock.date, "dddd").toUpperCase(); color: Theme.accent; font.family: Theme.font; font.pixelSize: 9; font.letterSpacing: 2; font.bold: true }
-                        Text { text: Qt.formatDateTime(clock.date, "d MMMM"); color: Theme.muted; font.family: Theme.font; font.pixelSize: 12 }
-                    }
-                }
-                HoverHandler { id: clockHover; cursorShape: Qt.PointingHandCursor }
-                TapHandler { onTapped: calendar.visible = !calendar.visible }
+                shell: root
+                live: rail.screen?.name === Hyprland.focusedMonitor?.name
+                wide: rail.width > 900
+                open: dash.visible
+                maxWidth: Math.max(restWidth, Math.min(560, rail.width - 2 * (rail.sideWidth + 16)))
+                onClockClicked: dash.visible = !dash.visible
+                onTrackClicked: if (mediaCell.visible) media.visible = true
             }
-            Hint { target: clockCell; text: "Calendar · week " + calendar.isoWeek(clock.date); show: clockHover.hovered && !calendar.visible }
-            // Not "Calendar": QtQuick.Controls has a singleton by that name.
-            MonthCalendar { id: calendar; target: clockCell }
+            Hint { target: island; text: "Today · week " + island.isoWeek(clock.date); show: island.hovered && island.mode === "clock" && !dash.visible }
+            Rectangle {
+                id: leftPill
+                anchors.left: parent.left
+                height: parent.height
+                width: leftRow.implicitWidth + 12
+                radius: height / 2
+                color: Theme.glass
+                border.width: 1; border.color: Theme.edge
+                Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
-                anchors.fill: parent
-                anchors.leftMargin: 6; anchors.rightMargin: 6
+                id: leftRow
+                x: 6
+                anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
-                Cell { label: "\uf303"; size: 16; implicitWidth: 38; ink: Theme.accent; hint: "Apps · Super+Space"; onClicked: root.toggle("apps", rail.screen) }
+                Cell { id: appsCell; label: "\uf303"; size: 16; implicitWidth: 38; ink: Theme.accent; hint: "Apps · Super+Space"; onClicked: root.toggle("apps", rail.screen) }
                 // Workspaces: plain numbers in a soft track. The active one is a
                 // wider violet pill that glides over; numbers with windows on
                 // them are bright, empty ones dim, urgent ones amber. Hover lifts
@@ -297,23 +280,30 @@ ShellRoot {
                     readonly property var ids: root.workspaceIds(rail.screen).slice(0, rail.width > 650 ? 10 : 3)
                     property real markX: 0
                     property real markW: 0
+                    // The marker is liquid: on a switch its front edge runs
+                    // ahead and its back edge catches up with a little bounce.
+                    property bool rightward: true
+                    property int lastActive: active
+                    onActiveChanged: { rightward = active > lastActive; lastActive = active; }
+                    property real edgeL: markX
+                    property real edgeR: markX + markW
+                    Behavior on edgeL { NumberAnimation { duration: spaces.rightward ? 460 : 220; easing.type: spaces.rightward ? Easing.OutBack : Easing.OutCubic; easing.overshoot: 1.6 } }
+                    Behavior on edgeR { NumberAnimation { duration: spaces.rightward ? 220 : 460; easing.type: spaces.rightward ? Easing.OutCubic : Easing.OutBack; easing.overshoot: 1.6 } }
                     implicitWidth: spaceRow.implicitWidth + 8
                     implicitHeight: 30
                     Rectangle {
                         anchors.fill: parent
                         radius: height / 2
-                        color: Theme.background
+                        color: Qt.rgba(0, 0, 0, 0.22)
                         border.width: 1
-                        border.color: Theme.line
+                        border.color: Theme.edge
                     }
                     Rectangle {
-                        x: spaces.markX + 4; y: 4
-                        width: spaces.markW; height: parent.height - 8
+                        x: Math.min(spaces.edgeL, spaces.edgeR) + 4; y: 4
+                        width: Math.abs(spaces.edgeR - spaces.edgeL); height: parent.height - 8
                         visible: spaces.markW > 0
                         radius: height / 2
                         color: Theme.accent
-                        Behavior on x { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
-                        Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
                     }
                     Row {
                         id: spaceRow
@@ -362,7 +352,8 @@ ShellRoot {
                     id: windowTitle
                     Layout.fillWidth: true
                     Layout.leftMargin: 10
-                    Layout.maximumWidth: Math.max(0, clockCell.x - windowTitle.x - 24)
+                    // Up to the room the island may grow into, so it never covers the title.
+                    Layout.maximumWidth: Math.max(0, rail.width / 2 - island.maxWidth / 2 - 16 - 12 - windowTitle.x)
                     visible: rail.width > 1050
                     text: Hyprland.activeToplevel?.title ?? ""
                     color: Theme.muted
@@ -370,7 +361,22 @@ ShellRoot {
                     textFormat: Text.PlainText
                     font.family: Theme.font; font.pixelSize: 12
                 }
-                Item { Layout.fillWidth: true }
+            }
+            }
+            Rectangle {
+                id: rightPill
+                anchors.right: parent.right
+                height: parent.height
+                width: rightRow.implicitWidth + 12
+                radius: height / 2
+                color: Theme.glass
+                border.width: 1; border.color: Theme.edge
+                Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
+            RowLayout {
+                id: rightRow
+                anchors.right: parent.right; anchors.rightMargin: 6
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 4
                 Cell {
                     visible: root.recording || root.sharing
                     label: root.sharing ? "● LIVE" : "● REC"; ink: Theme.danger
@@ -419,17 +425,15 @@ ShellRoot {
                 }
                 // Right side: sys, keep awake, the Pi, then network and sound side by
                 // side (both open the control centre), the inbox and the tray.
-                // sys: click unfolds cpu, memory, temperature and gpu; right-click opens btop.
+                // sys: click opens Today (graphs, Pi, disks); right-click opens btop.
                 Cell {
                     visible: rail.width > 900
-                    readonly property var s: root.stats
-                    label: !root.statsOpen ? "sys"
-                        : !s ? "…"
-                        : "cpu " + s.cpu + "%  mem " + s.mem + "G" + (s.temp !== "-" ? "  " + s.temp + "°" : "") + (s.gpu !== "-" ? "  gpu " + s.gpu + "%" : "")
-                    ink: !root.statsOpen ? Theme.muted
-                        : s && (Number(s.cpu) >= 90 || Number(s.temp) >= 85) ? Theme.amber : Theme.text
-                    hint: root.statsOpen ? "Click to fold · right-click: btop" : "Click: cpu, memory, temperature, gpu · right-click: btop"
-                    onClicked: { root.statsOpen = !root.statsOpen; if (!root.statsOpen) root.stats = null; }
+                    label: "\uf080"   // nf-fa-bar_chart
+                    size: 14
+                    ink: Theme.muted
+                    fill: dash.visible ? Theme.accentSoft : "transparent"
+                    hint: "Click: Today (cpu, gpu, memory, Pi, disks) · right-click: btop"
+                    onClicked: dash.visible = !dash.visible
                     onRightClicked: root.run(["sysmon"])
                 }
                 Cell {
@@ -471,7 +475,11 @@ ShellRoot {
                     onWheeled: step => root.nudgeVolume(step)
                 }
                 Cell {
-                    label: (rail.width > 900 ? (root.quiet ? "quiet " : "inbox ") : "✉ ") + notices.trackedNotifications.values.length
+                    // Pops when a notification lands.
+                    readonly property int count: notices.trackedNotifications.values.length
+                    property int seen: 0
+                    onCountChanged: { if (count > seen) bump(); seen = count; }
+                    label: (rail.width > 900 ? (root.quiet ? "quiet " : "inbox ") : "✉ ") + count
                     ink: root.quiet ? Theme.amber : Theme.muted
                     onClicked: root.toggle("inbox", rail.screen)
                 }
@@ -482,7 +490,7 @@ ShellRoot {
                         required property var modelData
                         implicitWidth: 30; implicitHeight: 32
                         radius: Theme.radius
-                        color: trayPointer.containsMouse ? Theme.raised : "transparent"
+                        color: trayPointer.containsMouse ? Theme.glassRaised : "transparent"
                         Behavior on color { ColorAnimation { duration: Theme.motion } }
                         Image { anchors.centerIn: parent; width: 16; height: 16; sourceSize: Qt.size(32, 32); source: trayItem.modelData.icon }
                         MouseArea {
@@ -502,12 +510,13 @@ ShellRoot {
                 }
                 Cell { label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
             }
+            }
         }
     }
     // The living wallpaper and the screen frame, one each per monitor.
     Variants { model: Quickshell.screens; Wallpaper { still: root.gameMode } }
-    Variants { model: Quickshell.screens; ScreenFrame { band: root.barVisible ? 56 : 6; visible: !root.gameMode } }
-    Osd { sink: root.sink }
+    Variants { model: Quickshell.screens; ScreenFrame { visible: !root.gameMode } }
+    Osd { sink: root.sink; held: root.islandShown }
     Overview { id: overviewWindow }
     Lock { id: lockScreen }
     function lockNow() { panel = ""; overviewWindow.open = false; lockScreen.lock(); }
@@ -534,17 +543,17 @@ ShellRoot {
             anchors.centerIn: parent
             width: Math.min(parent.width - 32, 820)
             height: Math.min(parent.height - 100, 660)
-            color: Theme.panel
-            border.color: Theme.line; border.width: 1
+            color: Theme.glass
+            border.color: Theme.edge; border.width: 1
             radius: Theme.radiusLarge
             Keys.onEscapePressed: root.panel = ""
             // Prevent clicks on the sheet reaching the outside-click handler.
             MouseArea { anchors.fill: parent }
-            // Grows in from 96 % while it fades in.
+            // Grows in from 94 % on the shared spring while it fades in.
             ParallelAnimation {
                 running: overlay.visible
                 NumberAnimation { target: sheet; property: "opacity"; from: 0; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
-                NumberAnimation { target: sheet; property: "scale"; from: 0.96; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
+                NumberAnimation { target: sheet; property: "scale"; from: 0.94; to: 1; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
             }
             ColumnLayout {
                 anchors.fill: parent; anchors.margins: 28; spacing: 16
@@ -642,7 +651,13 @@ ShellRoot {
                                          act: () => Hyprland.dispatch('hl.dsp.focus({ window = "address:0x' + t.address + '" })') };
                             });
                         }
-                        onModeChanged: if (mode === "/") Hyprland.refreshToplevels()
+                        onModeChanged: { if (mode === "/") Hyprland.refreshToplevels(); cascade(); }
+                        // Rows cascade in, 20 ms apart, when the launcher opens
+                        // and when the mode changes; typing just filters.
+                        property bool fresh: false
+                        signal cascaded()
+                        function cascade() { fresh = true; freshEnd.restart(); cascaded(); }
+                        Timer { id: freshEnd; interval: 120; onTriggered: launcher.fresh = false }
 
                         // : emoji, from the unicode-emoji list, read the first time.
                         property var emojiAll: []
@@ -672,7 +687,7 @@ ShellRoot {
                             font.family: Theme.font; font.pixelSize: 16; color: Theme.text
                             placeholderTextColor: Theme.muted
                             leftPadding: 14; topPadding: 10; bottomPadding: 10
-                            background: Rectangle { color: Theme.background; border.color: query.activeFocus ? Theme.accent : Theme.line; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
+                            background: Rectangle { color: Qt.rgba(0, 0, 0, 0.25); border.color: query.activeFocus ? Theme.accent : Theme.edge; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
                             Keys.onEscapePressed: root.panel = ""
                             onTextChanged: appList.currentIndex = launcher.mode === "/" && launcher.q === "" && launcher.rows.length > 1 ? 1 : 0
                             Keys.onDownPressed: appList.incrementCurrentIndex()
@@ -723,6 +738,18 @@ ShellRoot {
                                     Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.detail || ""; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; elide: Text.ElideRight; width: Math.max(0, appRow.width - x - 40) }
                                 }
                                 MouseArea { anchors.fill: parent; hoverEnabled: true; onEntered: appList.currentIndex = appRow.index; onClicked: launcher.launch(appRow.index) }
+                                transform: Translate { id: rowShift }
+                                function arrive() { if (index >= 14) return; opacity = 0; rowShift.y = 10; rise.restart(); }
+                                Component.onCompleted: if (launcher.fresh) arrive()
+                                Connections { target: launcher; function onCascaded() { appRow.arrive(); } }
+                                SequentialAnimation {
+                                    id: rise
+                                    PauseAnimation { duration: appRow.index * 20 }
+                                    ParallelAnimation {
+                                        NumberAnimation { target: appRow; property: "opacity"; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
+                                        NumberAnimation { target: rowShift; property: "y"; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
+                                    }
+                                }
                             }
                         }
                     }
@@ -763,13 +790,14 @@ ShellRoot {
                 Text { text: "SHOW UP  <font color=\"" + Theme.accent + "\">◆</font>  SHIP SMALL"; textFormat: Text.StyledText; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 3; Layout.fillWidth: true; Layout.topMargin: 4; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideRight }
             }
         }
-        Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { query.text = root.launchPrefix; query.cursorPosition = query.text.length; root.launchPrefix = ""; query.forceActiveFocus(); } else sheet.forceActiveFocus(); } }
+        Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { launcher.cascade(); query.text = root.launchPrefix; query.cursorPosition = query.text.length; root.launchPrefix = ""; query.forceActiveFocus(); } else sheet.forceActiveFocus(); } }
         // Capture all unhandled Escape presses, including while a text field is focused.
         Item { anchors.fill: parent; focus: true; Keys.onEscapePressed: root.panel = "" }
     }
     // Passive toasts never steal keyboard focus. Quiet mode preserves inbox history.
+    // Only while the rail (and its island) is hidden: Super+B or game mode.
     PanelWindow {
-        visible: root.toasts.length > 0
+        visible: root.toasts.length > 0 && !root.islandShown
         // On the monitor you're working on, not the one a panel last opened on.
         screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
         WlrLayershell.namespace: "afterhours-toast"
@@ -781,10 +809,12 @@ ShellRoot {
         mask: Region { item: toastColumn }
         Column {
             id: toastColumn; width: parent.width; spacing: 8
+            // When one leaves, the ones below glide up on the spring.
+            move: Transition { NumberAnimation { property: "y"; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             Repeater {
                 // ScriptModel keeps existing toasts alive when one is added or
                 // dropped, so their timers and slide-in don't restart.
-                model: ScriptModel { values: root.toasts }
+                model: ScriptModel { values: root.islandShown ? [] : root.toasts }
                 Notice {
                     id: toast
                     required property var modelData
@@ -809,7 +839,7 @@ ShellRoot {
                     Component.onCompleted: enter.start()
                     ParallelAnimation {
                         id: enter
-                        NumberAnimation { target: slide; property: "x"; from: 48; to: 0; duration: Theme.glide; easing.type: Easing.OutCubic }
+                        NumberAnimation { target: slide; property: "x"; from: 48; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
                         NumberAnimation { target: toast; property: "opacity"; from: 0; to: 1; duration: Theme.motion; easing.type: Easing.OutCubic }
                     }
                 }

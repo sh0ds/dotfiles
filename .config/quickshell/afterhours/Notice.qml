@@ -12,8 +12,8 @@ Rectangle {
     readonly property var defaultAction: notification ? notification.actions.find(a => a.identifier === "default") ?? null : null
     visible: notification != null
     implicitHeight: body.implicitHeight + 28
-    color: hover.hovered ? Theme.raised : Theme.panel
-    border.color: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.line
+    color: hover.hovered ? (toast ? Theme.glassRaised : Theme.raised) : (toast ? Theme.glass : Theme.panel)
+    border.color: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : toast ? Theme.edge : Theme.line
     border.width: 1
     radius: Theme.radius + 2
     Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }

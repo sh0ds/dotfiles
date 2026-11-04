@@ -51,6 +51,12 @@ Three PICO-8 shorthands look like errors in Zed, so write them the long way in `
 
 Keys: `F5` runs the cart, `F7` counts PICO-8 tokens (`p8tokens`, the limit is 8192). The count follows the includes and is within a few tokens of PICO-8's own. Near the limit, trust the number in PICO-8's code editor. Snippets: `p8` (the three callbacks), `pt` (Picotron's dev `main.lua`), `fn`, `lfn`, `fori`, `forall`, `forp`, `forxy`.
 
+## Game Boy games (mGBA)
+
+`gba` starts mGBA, which plays Game Boy, Game Boy Color and Game Boy Advance games, including your own builds. Put dumps of your own cartridges in `~/games/roms/gba` and run `roms` (it also runs at login): every game gets a launcher entry under its name without the region tags, so typing "minish" finds The Minish Cap. A game from the launcher starts fullscreen, which turns game mode on; `Ctrl + F` (mGBA's own key) leaves fullscreen. Saves sit next to the game, screenshots go to `~/Pictures/gba`. Each start forces whole-number scaling with no smoothing, so pixels stay sharp, and mGBA pauses when you switch away. Controllers work without setup.
+
+`gba path/to/game.gb` runs any file directly, which is how you test a Game Boy build.
+
 ## Godot
 
 `godot` from pacman is the current Godot 4. Two things to set once in the editor:

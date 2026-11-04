@@ -2,18 +2,18 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
-// The screen frame: the rail's band runs on as a thin border round the
-// whole screen, with rounded inner corners, so windows sit in a frame.
+// The screen frame: a thin border round the whole screen with rounded inner
+// corners, so windows sit in a frame. The rail's three islands float over
+// the wallpaper above it.
 // Drawn on the bottom layer: fullscreen windows and games cover it, and
 // it never takes a click (empty input mask). The window gaps (12 px)
 // leave room for it, so nothing tiles underneath.
 PanelWindow {
     id: frame
     required property var modelData
-    // The rail's band (8 margin + 42 rail + 6); just the side width when the rail is hidden.
-    property int band: 56
+    property int band: 6
     property int side: 6
-    property int corner: 18
+    property int corner: 22
     screen: modelData
     WlrLayershell.namespace: "afterhours-frame"
     WlrLayershell.layer: WlrLayer.Bottom
@@ -45,10 +45,10 @@ PanelWindow {
                     + " V" + (t + r) + " A" + r + "," + r + " 0 0 1 " + (l + r) + "," + t + " Z"
             }
         }
-        // A hairline along the inner edge, the same line colour as the rail.
+        // A faint light hairline along the inner edge, like the glass edges.
         ShapePath {
             strokeWidth: 1
-            strokeColor: Theme.line
+            strokeColor: Theme.edge
             fillColor: "transparent"
             PathSvg {
                 readonly property real l: frame.side + 0.5

@@ -61,11 +61,16 @@ With `Super` held, and on the rail itself, where hovering anything also shows a 
 | `Super + left drag` | Move a window |
 | `Super + right drag` | Resize a window |
 | `Wheel on the workspaces` | Step through workspaces |
-| `Click the clock` | Month calendar |
+| `Click the clock` | Today (month, graphs, disks, Pi, now playing) |
+| `Click a notification in the island` | Open it (or the inbox) |
+| `Right-click a notification in the island` | Dismiss it |
+| `Drag in the island while it shows the volume` | Set the volume |
+| `Click the song in the island` | Media card |
 | `Click now playing` | Media card (cover, seek, shuffle, loop) |
 | `Right-click now playing` | Play / pause |
 | `Wheel on now playing` | Next / previous track |
-| `Right-click sys` | System monitor (btop) |
+| `Click the stats icon` | Today |
+| `Right-click the stats icon` | System monitor (btop) |
 | `Click the network icon` | Control centre |
 | `Right-click the network icon` | Network settings (nmtui) |
 | `Wheel on vol` | Volume up / down |

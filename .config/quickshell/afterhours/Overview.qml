@@ -30,6 +30,38 @@ PanelWindow {
         Hyprland.refreshWorkspaces();
         selected = Hyprland.focusedWorkspace?.id ?? 1;
         keys.forceActiveFocus();
+        zoomLater.restart();
+    } else { zoomIn.stop(); zoomFrom = null; ready = false; }
+
+    // The zoom: the workspace you're on starts as big as the screen and
+    // shrinks into its tile while the rest fades in around it. Waits one
+    // frame so the tiles have their places.
+    property Item zoomFrom: null
+    property bool ready: false
+    Timer { id: zoomLater; interval: 16; onTriggered: ov.zoom() }
+    function zoom() {
+        const t = zoomFrom;
+        zs.xScale = 1; zs.yScale = 1; zt.x = 0; zt.y = 0;
+        if (t && t.width > 0) {
+            const c = t.mapToItem(board, t.width / 2, t.height / 2);
+            const g = t.mapToItem(ov.contentItem, t.width / 2, t.height / 2);
+            zs.origin.x = c.x; zs.origin.y = c.y;
+            zoomIn.s0 = ov.width / t.width;
+            zoomIn.dx = ov.width / 2 - g.x;
+            zoomIn.dy = ov.height / 2 - g.y;
+            zoomIn.restart();
+        }
+        ready = true;
+    }
+    ParallelAnimation {
+        id: zoomIn
+        property real s0: 1
+        property real dx: 0
+        property real dy: 0
+        NumberAnimation { target: zs; property: "xScale"; from: zoomIn.s0; to: 1; duration: Theme.spring + 80; easing.type: Easing.OutBack; easing.overshoot: 0.9 }
+        NumberAnimation { target: zs; property: "yScale"; from: zoomIn.s0; to: 1; duration: Theme.spring + 80; easing.type: Easing.OutBack; easing.overshoot: 0.9 }
+        NumberAnimation { target: zt; property: "x"; from: zoomIn.dx; to: 0; duration: Theme.spring + 80; easing.type: Easing.OutBack; easing.overshoot: 0.9 }
+        NumberAnimation { target: zt; property: "y"; from: zoomIn.dy; to: 0; duration: Theme.spring + 80; easing.type: Easing.OutBack; easing.overshoot: 0.9 }
     }
     function close() { open = false; }
     function go(id) { Hyprland.dispatch("hl.dsp.focus({ workspace = " + id + " })"); close(); }
@@ -83,8 +115,9 @@ PanelWindow {
         id: board
         anchors.centerIn: parent
         spacing: 28
-        opacity: ov.open ? 1 : 0
+        opacity: ov.open && ov.ready ? 1 : 0
         scale: ov.open ? 1 : 0.97
+        transform: [Scale { id: zs }, Translate { id: zt }]
         Behavior on opacity { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
         Behavior on scale { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
         Text {
@@ -131,6 +164,7 @@ PanelWindow {
                                 z: 2
                             }
                             HoverHandler { id: tileHover; onHoveredChanged: if (hovered) ov.selected = tile.modelData }
+                            Component.onCompleted: if (current && row.mon === Hyprland.focusedMonitor) ov.zoomFrom = tile
                             TapHandler { onTapped: ov.go(tile.modelData) }
                             DropArea {
                                 id: drop

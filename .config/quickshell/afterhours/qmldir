@@ -2,7 +2,10 @@ module Afterhours
 singleton Theme 1.0 Theme.qml
 Cell 1.0 Cell.qml
 Notice 1.0 Notice.qml
-MonthCalendar 1.0 MonthCalendar.qml
+MonthView 1.0 MonthView.qml
+Island 1.0 Island.qml
+Dashboard 1.0 Dashboard.qml
+PopIn 1.0 PopIn.qml
 Hint 1.0 Hint.qml
 Meter 1.0 Meter.qml
 Osd 1.0 Osd.qml

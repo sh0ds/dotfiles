@@ -8,7 +8,10 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 
 ## Description
 
-- **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
+- **The rail** is three frosted glass pills on every monitor: apps, workspaces and the focused window's title on the left, the island in the middle, and on the right now playing with cava bars, a stats button, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
+- **The island** in the middle is the clock. It stretches into the volume bar when you change the volume, into the notification when one lands (click to open it, right-click to dismiss), and into the song when a new track starts, then shrinks back to the time.
+- **Today** opens from the clock: the month, cpu / gpu / memory graphs, the disks, the Pi with its ping, and now playing.
+- **Everything moves on one spring:** popups grow out of what you clicked, launcher rows cascade in, the overview zooms out of the workspace you're on, the workspace marker stretches like a drop, and windows bloom open with a small bounce.
 - **One launcher** for everything: type to find an app, or start with `=` for maths, `>` for commands, `/` for open windows and `:` for emoji.
 - **The overview** (`Super + W`) shows every workspace with live previews of its windows. Click one to go there, drag it to another workspace, middle-click to close it.
 - **The media card** opens from now playing: the cover, a seek bar, shuffle, loop and bigger cava bars.
@@ -17,12 +20,12 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **The wallpaper moves:** soft violet clouds drift over the haze, but only while the workspace is empty.
 - **My own lock screen** with a big clock, the password pill and what is playing. hyprlock is still there as the fallback.
 - **Game mode** turns on by itself when a game goes fullscreen: no animations, dimming or shadows, and the rail and frame hide. You can also flip it in the control centre.
-- **Notifications** and the **volume popup** come from the shell itself: toasts with the app's icon that slide in and out on the monitor you're on, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
+- **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume pill while the rail is hidden), with a quiet mode and an inbox for the session. Screen sharing hides them.
 - **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, the lock screen and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
 - **Thunar, Firefox, Obsidian and Zed** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
 - Unfocused windows dim a little. Games, video and picture-in-picture never do.
-- Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone). PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
+- Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone), and `gba` for Game Boy games in mGBA, with every game in `~/games/roms/gba` in the launcher. PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
 - PICO-8 and Picotron code in Zed: their APIs in the Lua language server, `F5` reruns the cart in the console, `F7` counts PICO-8 tokens. How it works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
 - Plus the DJ VM, clipboard history, OCR, screen recording and captioned devlog screenshots.
 

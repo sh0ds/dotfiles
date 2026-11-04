@@ -44,7 +44,9 @@ hl.config({
 		inactive_opacity = 1.0,
 		-- A wide, soft shadow that falls slightly down, like light from above.
 		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(060508d0)", color_inactive = "rgba(06050880)" },
-		blur = { enabled = false },
+		-- Blur only behind the shell's glass (the "glass" layer rule below);
+		-- windows are opaque, so they never pay for it.
+		blur = { enabled = true, size = 7, passes = 3, vibrancy = 0.18, noise = 0.015, new_optimizations = true },
 		-- Unfocused windows sink back a touch (8 %), so the one you type
 		-- into stands out without a heavier border. Games, fantasy consoles,
 		-- video, pixel art and Firefox's PiP are never dimmed (rules below).
@@ -98,43 +100,43 @@ hl.config({
 ---- MOTION: smooth, never slow ----
 ------------------------------------
 
--- Two rules. Anything that moves is a critically damped spring; anything
--- that only appears, disappears or changes colour is an eased fade.
+-- Two rules. Anything that moves rides a spring; anything that only
+-- appears, disappears or changes colour is an eased fade.
 --
 -- Why springs: Hyprland steps them with the exact solution of the spring
 -- equation, so the motion is the same at any frame rate, and when a move is
 -- interrupted (SUPER+arrow twice, fast) the window keeps its velocity and
--- bends towards the new target instead of restarting. Critically damped
--- (dampening = 2 * sqrt(stiffness * mass)) is the fastest a spring can
--- settle without overshooting: no bounce, ever. speed is ignored for
--- springs, the physics sets the duration.
+-- bends towards the new target instead of restarting. speed is ignored for
+-- springs, the physics sets the duration. Critically damped is
+-- dampening = 2 * sqrt(stiffness * mass) (41 for stiffness 420); "bloom"
+-- sits a little under that, so things run ~3 % past their place and settle
+-- back, the same small bounce as the shell (Theme.spring, ~420 ms).
 --
 -- Why eased fades: a linear fade starts and stops abruptly, which reads as
 -- a flicker at 180 Hz. "glide" (ease-out quint) does most of the change in
 -- the first third and then lands softly; "exit" (ease-in) leaves quickly.
 --
--- Amplitude stays small: windows grow from 92 %, workspaces shift 10 %. The
--- eye reads the direction, nothing travels across the screen. Exits are
--- faster than entries, so closing never waits.
+-- Amplitude stays small: windows grow from 94 %, workspaces shift 20 %.
+-- Exits are faster than entries, so closing never waits.
 --
 -- Timings (bezier speed is in 100 ms steps):
 --   120 ms  exits
---   200 ms  fades, layers and every colour change (the shell's rail,
---           menus and toasts use the same 200 ms ease-out)
---   ~170 ms to 90 % / ~290 ms to 99 %   "settle", windows
---   ~200 ms to 90 % / ~340 ms to 99 %   "drift", workspaces
--- Calm, still no overshoot. The shell's own motion matches (Theme.qml:
--- 200 ms colour, 320 ms movement, ease-out).
-hl.curve("settle", { type = "spring", mass = 1, stiffness = 520, dampening = 46 })
+--   200 ms  fades, layers and every colour change
+--   "bloom", windows opening and moving: peaks ~3 % past at ~225 ms,
+--           settled by ~400 ms
+--   ~340 ms "drift", workspaces (no overshoot: the whole screen moves)
+hl.curve("bloom", { type = "spring", mass = 1, stiffness = 420, dampening = 30 })
 hl.curve("drift", { type = "spring", mass = 1, stiffness = 380, dampening = 39 })
 hl.curve("glide", { type = "bezier", points = { { 0.22, 1 }, { 0.36, 1 } } })
 hl.curve("exit", { type = "bezier", points = { { 0.4, 0 }, { 1, 1 } } })
 
--- Windows: grow in from 92 % with a fade, shrink to 96 % on the way out.
--- Tiles glide to their new place when the layout changes.
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle", style = "popin 92%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 96%" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "settle" })
+-- Windows: bloom open from 94 % with a fade and a small bounce, shrink
+-- back to 94 % on the way out. Tiles spring to their new place when the
+-- layout changes. (Hyprland's popin always scales from the centre; there
+-- is no rise-from-below style.)
+hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "bloom", style = "popin 94%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 94%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "bloom" })
 
 -- Fades. Opacity never changes on focus here, so fadeSwitch only drives the
 -- quick apps (~/.local/bin/app) fading out when hidden and back in when
@@ -155,10 +157,11 @@ hl.animation({ leaf = "fadeDpms", enabled = true, speed = 4, bezier = "glide" })
 hl.animation({ leaf = "border", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "borderangle", enabled = false })
 
--- Workspaces: a 10 % sideways drift under a cross-fade, so you see which
--- way you went without the whole screen sliding past. A softer spring than
--- windows, because the whole screen changes.
-hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefade 10%" })
+-- Workspaces: a 20 % drift up or down (by direction) under a cross-fade,
+-- so you see which way you went without the whole screen sliding past.
+-- No bounce here, because the whole screen changes. Scratchpads fade.
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1, spring = "drift", style = "slidefadevert 20%" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 2, bezier = "glide", style = "fade" })
 
 -- Layers fade in 200 ms without scaling (scaling blurs text);
 -- notifications slide in from the edge they live on.
@@ -181,6 +184,16 @@ hl.layer_rule({ name = "still-shell", match = { namespace = "^afterhours-(wallpa
 hl.layer_rule({ name = "launcher-fade", match = { namespace = "^afterhours-(overlay|overview)$" }, animation = "fade" })
 -- Notifications and their panel slide in from the right edge.
 hl.layer_rule({ name = "notify-slide", match = { namespace = "^afterhours-toast$" }, animation = "slide right" })
+-- Glass: blur behind the shell's surfaces and the cards that hang under the
+-- rail (popups). Only pixels more than 30 % opaque are blurred, so the
+-- gaps between the rail's pills stay clear.
+hl.layer_rule({
+	name = "glass",
+	match = { namespace = "^afterhours-(rail|overlay|toast|osd|overview)$" },
+	blur = true,
+	blur_popups = true,
+	ignore_alpha = 0.3,
+})
 
 ------------------------------------------------
 ---- SMART GAPS: one window fills the screen ----
@@ -314,6 +327,17 @@ hl.window_rule({
 hl.window_rule({
 	name = "fantasy-consoles",
 	match = { class = "(?i)^(pico-?8.*|picotron)$" },
+	content = "game",
+	idle_inhibit = "fullscreen",
+	no_dim = true,
+})
+-- mGBA (gba, and each game's launcher entry): Game Boy, Color and Advance.
+-- Tiles where you start it like the fantasy consoles; fullscreen (a game
+-- from the launcher starts that way) it counts as a game, so the shell
+-- turns game mode on. Never dimmed, the screen stays on.
+hl.window_rule({
+	name = "handheld-emulators",
+	match = { class = "^io\\.mgba\\.mGBA$" },
 	content = "game",
 	idle_inhibit = "fullscreen",
 	no_dim = true,

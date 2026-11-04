@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Quickshell
 // A rounded, keyboard-focusable button: faint fill on hover, violet fill
-// when selected, colour changes ease out.
+// when selected, colour changes ease out, a small dip when pressed.
 Rectangle {
     id: cell
     property string label: ""
@@ -20,7 +20,7 @@ Rectangle {
     implicitWidth: content.implicitWidth + 26
     implicitHeight: 32
     radius: Theme.radius
-    color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.raised : fill)
+    color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.glassRaised : fill)
     border.width: activeFocus ? 1 : 0
     border.color: Theme.accent
     activeFocusOnTab: true
@@ -30,6 +30,18 @@ Rectangle {
     Keys.onReturnPressed: clicked()
     Keys.onSpacePressed: clicked()
     Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
+    // A press dips the cell a little; letting go springs it back. bump()
+    // pops it once (the rail's inbox count when a notification lands).
+    property real dip: pointer.pressed ? 0.94 : 1
+    Behavior on dip { NumberAnimation { duration: 180; easing.type: Easing.OutBack; easing.overshoot: 2.2 } }
+    property real pop: 1
+    scale: dip * pop
+    function bump() { popAnim.restart(); }
+    SequentialAnimation {
+        id: popAnim
+        NumberAnimation { target: cell; property: "pop"; to: 1.14; duration: 110; easing.type: Easing.OutCubic }
+        NumberAnimation { target: cell; property: "pop"; to: 1; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: 2.4 }
+    }
     Row {
         id: content
         anchors.centerIn: parent

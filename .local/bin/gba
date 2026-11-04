@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# gba: mGBA for Game Boy, Game Boy Color and Game Boy Advance games.
+#   gba            jump to mGBA if it's open, else open it on its own
+#   gba GAME.gba   start that game fullscreen (game mode turns on)
+#   gba --game ID  the same for a launcher entry written by roms
+# Games live in ~/games/roms/gba (dumps of your own cartridges); `roms`
+# gives each one a launcher entry. Saves stay next to the game, screenshots
+# land in ~/Pictures/gba. Every start forces sharp pixels: whole-number
+# scaling, the right aspect, no smoothing, and it pauses when you switch
+# away. A controller works without setup (mGBA maps SDL gamepads itself).
+set -euo pipefail
+if ! command -v mgba-qt >/dev/null; then
+  notify-send -a mGBA "mGBA is not installed" "sudo pacman -S --needed mgba-qt"
+  exit 1
+fi
+mkdir -p ~/games/roms/gba ~/Pictures/gba
+opts=(-C lockIntegerScaling=1 -C lockAspectRatio=1 -C resampleVideo=0
+  -C pauseOnFocusLost=1 -C "screenshotPath=$HOME/Pictures/gba")
+if [ "${1:-}" = --game ]; then
+  shopt -s nullglob nocaseglob
+  for rom in ~/games/roms/gba/*.{gba,gbc,gb}; do
+    if [ "$(printf '%s' "${rom##*/}" | md5sum | cut -c1-12)" = "${2:-}" ]; then
+      exec mgba-qt "${opts[@]}" -f "$rom"
+    fi
+  done
+  notify-send -a mGBA "Game not found" "It was moved or renamed; run roms to refresh the launcher."
+  exit 1
+fi
+if [ $# -eq 0 ]; then
+  exec app '^io\.mgba\.mGBA$' mgba-qt "${opts[@]}"
+fi
+exec mgba-qt "${opts[@]}" -f "$@"
