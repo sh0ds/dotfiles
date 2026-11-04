@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-f=~/code/website/LOG.md
+f=~/code/website/content/log/index.md
 
 if [ $# -eq 0 ]
   then
