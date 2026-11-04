@@ -47,7 +47,7 @@ cd "$src"
     .config/qt6ct/qt6ct.conf) config_source=$qt_config; copy_config=1 ;;
     .config/btop/btop.conf) copy_config=1 ;; # btop rewrites this on exit
     .config/nchat/color.conf) copy_config=1 ;; # keep app writes out of the repo
-    .config/zed/settings.json) copy_config=1 ;; # Zed rewrites this from its UI
+    .config/zed/settings.json | .config/zed/keymap.json) copy_config=1 ;; # Zed rewrites these from its UI
   esac
   if [ "$copy_config" = 1 ] && [ ! -L "$target" ] && cmp -s "$config_source" "$target"; then
     echo "ok      $rel"

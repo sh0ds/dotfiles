@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "Lua 5.4",
+  "runtime.nonstandardSymbol": ["+=", "-=", "*=", "/=", "%=", "^=", "|=", "&=", "<<=", ">>=", "!="],
+  "runtime.builtin": {
+    "debug": "disable", "ffi": "disable", "io": "disable", "jit": "disable",
+    "os": "disable", "package": "disable"
+  },
+  "workspace.library": ["@HOME@/.local/share/fantasy-lua/picotron"],
+  "workspace.checkThirdParty": false,
+  "diagnostics.disable": ["lowercase-global"]
+}

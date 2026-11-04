@@ -52,6 +52,9 @@
     "make": true
   },
   "languages": {
-    "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] }
+    "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] },
+    // The Lua formatter doesn't know PICO-8's += and != and would mangle
+    // them, so Lua is only formatted when you ask (ctrl+shift+i).
+    "Lua": { "format_on_save": "off" }
   }
 }

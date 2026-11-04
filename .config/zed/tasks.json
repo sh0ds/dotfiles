@@ -1,0 +1,21 @@
+// ~/.config/zed/tasks.json: tasks for every project. Run one with
+// alt+shift+t, or the keys in keymap.json.
+[
+  {
+    // F5: rerun the PICO-8 or Picotron cart this file belongs to (cart-run).
+    "label": "cart: run",
+    "command": "cart-run",
+    "args": ["$ZED_FILE"],
+    "reveal": "never",
+    "hide": "on_success",
+    "allow_concurrent_runs": false
+  },
+  {
+    // F7: how many of PICO-8's 8192 tokens the cart uses (p8tokens).
+    "label": "cart: tokens",
+    "command": "p8tokens",
+    "args": ["$ZED_FILE"],
+    "reveal": "no_focus",
+    "hide": "never"
+  }
+]

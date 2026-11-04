@@ -1,0 +1,56 @@
+{
+  "PICO-8 cart": {
+    "prefix": "p8",
+    "description": "_init, _update and _draw",
+    "body": [
+      "function _init()",
+      "\t$1",
+      "end",
+      "",
+      "function _update${2:60}()",
+      "\t$3",
+      "end",
+      "",
+      "function _draw()",
+      "\tcls(${4:0})",
+      "\t$0",
+      "end"
+    ]
+  },
+  "Picotron cart": {
+    "prefix": "pt",
+    "description": "main.lua that runs code from ~/code/picotron (/code)",
+    "body": [
+      "-- Development only: run the files Zed edits. Copy them into the cart",
+      "-- before you release it (see docs/gamedev.md in the dotfiles).",
+      "cd(\"/code/${1:game}\")",
+      "include(\"${2:src/main.lua}\")"
+    ]
+  },
+  "function": {
+    "prefix": "fn",
+    "body": ["function ${1:name}($2)", "\t$0", "end"]
+  },
+  "local function": {
+    "prefix": "lfn",
+    "body": ["local function ${1:name}($2)", "\t$0", "end"]
+  },
+  "for i": {
+    "prefix": "fori",
+    "body": ["for ${1:i}=${2:1},${3:n} do", "\t$0", "end"]
+  },
+  "for all": {
+    "prefix": "forall",
+    "description": "every value of a sequence (PICO-8's all())",
+    "body": ["for ${1:v} in all(${2:t}) do", "\t$0", "end"]
+  },
+  "for pairs": {
+    "prefix": "forp",
+    "body": ["for ${1:k},${2:v} in pairs(${3:t}) do", "\t$0", "end"]
+  },
+  "for x y": {
+    "prefix": "forxy",
+    "description": "every cell of a grid, row by row",
+    "body": ["for ${1:y}=0,${2:15} do", "\tfor ${3:x}=0,${4:15} do", "\t\t$0", "\tend", "end"]
+  }
+}

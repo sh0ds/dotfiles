@@ -15,6 +15,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **Thunar, Firefox, Obsidian, Zed and Helix** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
 - Unfocused windows dim a little. Games, video and picture-in-picture never do.
 - Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone). PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
+- PICO-8 and Picotron code in Zed: their APIs in the Lua language server, `F5` reruns the cart in the console, `F7` counts PICO-8 tokens. How it works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
 - Plus the DJ VM, a Wi-Fi picker, clipboard history, a calculator, an emoji picker, OCR, screen recording and captioned devlog screenshots.
 
 ## Getting Started

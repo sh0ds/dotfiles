@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# cart-run FILE: F5 in Zed. Runs the PICO-8 or Picotron cart FILE belongs to.
+# If the console is open it jumps there and presses ctrl+r, which reruns the
+# cart and reads its #include / include() files again; sprites, sfx and map
+# edits you haven't saved stay. Otherwise it starts the console: PICO-8 with
+# the cart running, Picotron empty (load your cart once, F5 works from then on).
+# PICO-8's cart: FILE itself if it's a .p8, else the nearest .p8 that
+# #includes FILE, else the only .p8 in FILE's folder or one above it.
+set -euo pipefail
+file=$(realpath -m -- "${1:-$PWD}")
+[ -d "$file" ] && dir=$file || dir=$(dirname -- "$file")
+
+say() { notify-send -a "${2:-PICO-8}" "$1" "${3:-}"; echo "$1${3:+: $3}" >&2; }
+
+# The open window of a console, or nothing.
+window() {
+  hyprctl clients -j | jq -r --arg re "$1" \
+    '[.[] | select(.class | test($re))][0].address // empty'
+}
+
+# Jump to the console and press ctrl+r there.
+rerun() {
+  hyprctl dispatch "hl.dsp.focus({ window = \"address:$1\" })" >/dev/null
+  sleep 0.15 # let the focus land before the keys do
+  wtype -M ctrl r -m ctrl
+}
+
+includes() { # includes CART REL: does CART #include REL?
+  awk -v r="$2" 'tolower($1) == "#include" && tolower($2) == tolower(r) { f = 1 }
+    END { exit !f }' "$1"
+}
+
+find_cart() {
+  case $file in *.p8) [ -f "$file" ] && { echo "$file"; return; } ;; esac
+  local d=$dir carts c
+  shopt -s nullglob nocaseglob
+  while :; do
+    carts=("$d"/*.p8)
+    for c in "${carts[@]}"; do
+      includes "$c" "${file#"$d"/}" && { echo "$c"; return; }
+    done
+    if [[ ${#carts[@]} = 1 && ($d = "$dir" || $d = "$(dirname -- "$dir")") ]]; then
+      echo "${carts[0]}"; return
+    fi
+    case $d in "$HOME" | /) return 1 ;; esac
+    d=$(dirname -- "$d")
+  done
+}
+
+case $dir/ in
+  "$HOME"/code/picotron/* | "$HOME"/.lexaloffle/Picotron/*)
+    if addr=$(window '(?i)^picotron$') && [ -n "$addr" ]; then
+      rerun "$addr"
+    else
+      picotron
+      say "Picotron is starting" Picotron "Load your cart once (load /code/...), then F5 again."
+    fi
+    exit 0 ;;
+esac
+
+if ! cart=$(find_cart); then
+  say "No PICO-8 cart for this file" PICO-8 "Put a .p8 next to it that has #include ${file##*/}."
+  exit 1
+fi
+if addr=$(window '(?i)^(pico-?8.*)$') && [ -n "$addr" ]; then
+  rerun "$addr"
+else
+  pico8 -run "$cart"
+fi

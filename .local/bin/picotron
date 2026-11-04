@@ -8,4 +8,14 @@ if [ ! -x "$dir/picotron" ]; then
   notify-send -a Picotron "Picotron is not installed" "Unzip the Linux download so $dir/picotron exists."
   exit 1
 fi
+# Code lives in ~/code/picotron, edited in Zed. Picotron sees it as /code
+# through a link in its drive (made once the drive exists, so from the second
+# start on). /code is the real folder: rm there deletes for real.
+mkdir -p ~/code/picotron
+luarc=$HOME/code/picotron/.luarc.json
+[ -e "$luarc" ] || sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/picotron.luarc.json >"$luarc"
+drive=$HOME/.lexaloffle/Picotron/drive
+if [ -d "$drive" ] && [ ! -e "$drive/code" ] && [ ! -L "$drive/code" ]; then
+  ln -s ~/code/picotron "$drive/code"
+fi
 exec app '(?i)^picotron$' "$dir/picotron" "$@"

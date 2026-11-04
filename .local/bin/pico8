@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # pico8: PICO-8 from ~/.local/opt/pico-8 (the zip from lexaloffle.com, not in
 # this repo). Jumps to it if it's already open. Carts live in ~/code/pico8,
-# screenshots and GIFs (F6, F9) land in ~/Pictures/pico-8.
+# screenshots and GIFs (F6, F9) land in ~/Pictures/pico-8. Arguments go to
+# PICO-8 (cart-run uses -run CART).
 set -euo pipefail
 dir=${PICO8_DIR:-$HOME/.local/opt/pico-8}
 bin=
@@ -13,6 +14,10 @@ if [ -z "$bin" ]; then
   exit 1
 fi
 mkdir -p ~/code/pico8 ~/Pictures/pico-8
+# Lua language server settings for Zed (PICO-8's API, +=, !=, // comments),
+# written once so they can be committed with the carts. See docs/gamedev.md.
+luarc=$HOME/code/pico8/.luarc.json
+[ -e "$luarc" ] || sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/pico8.luarc.json >"$luarc"
 # Windowed so Hyprland tiles it; pixel_perfect keeps whole-number scaling,
 # so the 128x128 screen stays sharp and the rest is Afterhours black.
 exec app '(?i)^(pico-?8.*)$' "$bin" -windowed 1 -pixel_perfect 1 \

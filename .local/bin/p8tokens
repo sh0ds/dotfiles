@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""p8tokens [FILE]: how full a PICO-8 cart is, from Zed (F7) or a terminal.
+
+FILE is a .p8, or a .lua that a .p8 next to it (or one folder up) #includes;
+default is the .p8 in the current folder. Counts the cart's own code plus
+every #include, by PICO-8's rules: each name, number, string and operator is
+a token; `local`, `end`, commas, periods, semicolons, closing brackets and
+comments are free; a minus right in front of a number is part of it.
+
+This is a close estimate, not PICO-8's own counter. When a cart is near the
+limit, trust the number in PICO-8's code editor (bottom right) or info().
+"""
+from pathlib import Path
+import re
+import sys
+
+TOKEN_LIMIT = 8192
+CHAR_LIMIT = 65535
+
+FREE_WORDS = {"local", "end"}
+FREE_OPS = {",", ".", ";", ")", "]", "}"}
+# Longest first, so ">>>=" isn't read as ">>" ">=".
+OPS = sorted("""
+>>>= <<>= >><= ..= ^^= \\= ... >>> <<> >>< <<= >>= == ~= != <= >= << >> ..
++= -= *= /= %= ^= |= &= ^^ :: + - * / \\ % ^ # & | ~ < > = ( ) { } [ ] ; :
+, . @ $ ?
+""".split(), key=len, reverse=True)
+NUMBER = re.compile(r"0[xX][0-9a-fA-F_]*\.?[0-9a-fA-F_]*|0[bB][01_]*\.?[01_]*|\d[\d_]*\.?\d*|\.\d+")
+NAME = re.compile(r"[A-Za-z_\x80-\U0010ffff][A-Za-z0-9_\x80-\U0010ffff]*")
+LONG_OPEN = re.compile(r"\[(=*)\[")
+
+
+def count(code):
+    """Tokens in a piece of PICO-8 Lua."""
+    tokens, i, n = 0, 0, len(code)
+    prev = None  # last counted thing, to tell unary minus from subtraction
+    while i < n:
+        c = code[i]
+        if c.isspace():
+            i += 1
+            continue
+        if code.startswith("--", i) or code.startswith("//", i):
+            m = LONG_OPEN.match(code, i + 2) if c == "-" else None
+            if m:
+                close = "]" + m.group(1) + "]"
+                end = code.find(close, m.end())
+                i = n if end < 0 else end + len(close)
+            else:
+                end = code.find("\n", i)
+                i = n if end < 0 else end
+            continue
+        m = LONG_OPEN.match(code, i)
+        if m:
+            close = "]" + m.group(1) + "]"
+            end = code.find(close, m.end())
+            i = n if end < 0 else end + len(close)
+            tokens, prev = tokens + 1, "value"
+            continue
+        if c in "\"'":
+            i += 1
+            while i < n and code[i] != c and code[i] != "\n":
+                i += 2 if code[i] == "\\" else 1
+            i += 1
+            tokens, prev = tokens + 1, "value"
+            continue
+        m = NUMBER.match(code, i)
+        if m and m.group():
+            i = m.end()
+            if prev == "unary-minus":
+                prev = "value"  # -1 is one token, already counted with the minus
+            else:
+                tokens, prev = tokens + 1, "value"
+            continue
+        m = NAME.match(code, i)
+        if m:
+            word = m.group()
+            i = m.end()
+            if word not in FREE_WORDS:
+                tokens += 1
+            prev = "value" if word not in {
+                "and", "or", "not", "return", "then", "do", "else", "elseif",
+                "if", "while", "until", "in", "local", "repeat"} else "op"
+            continue
+        op = next((o for o in OPS if code.startswith(o, i)), c)
+        i += len(op)
+        if op in FREE_OPS:
+            prev = "value" if op in {")", "]", "}"} else "op"
+            continue
+        tokens += 1
+        if op == "-" and prev != "value":
+            prev = "unary-minus"
+        else:
+            prev = "op"
+    return tokens
+
+
+def lua_section(text):
+    """The __lua__ part of a .p8 file."""
+    out, inside = [], False
+    for line in text.splitlines():
+        if re.fullmatch(r"__\w+__", line.strip()):
+            inside = line.strip() == "__lua__"
+            continue
+        if inside:
+            out.append(line)
+    return "\n".join(out)
+
+
+def include(target, base):
+    """The code an #include line pulls in: a .lua file, one .p8 tab or all of them."""
+    name, _, tab = target.partition(":")
+    path = base / name
+    if not path.exists():  # PICO-8 lowercases; Linux filenames don't
+        path = next((p for p in base.iterdir() if p.name.lower() == name.lower()), path)
+    text = path.read_text(errors="replace")
+    if path.suffix.lower() != ".p8":
+        return text
+    code = lua_section(text)
+    if tab:
+        tabs = re.split(r"^-->8.*$", code, flags=re.M)
+        code = tabs[int(tab)] if int(tab) < len(tabs) else ""
+    return code
+
+
+def cart_parts(cart):
+    """[(label, code)] for the cart's own code and each #include."""
+    parts, own = [], []
+    for line in lua_section(cart.read_text(errors="replace")).splitlines():
+        m = re.match(r"\s*#include\s+(\S+)", line, re.I)
+        if m:
+            try:
+                parts.append((m.group(1), include(m.group(1), cart.parent)))
+            except (OSError, ValueError) as e:
+                parts.append((f"{m.group(1)} (missing: {e.__class__.__name__})", ""))
+        else:
+            own.append(line)
+    return [(cart.name, "\n".join(own))] + parts
+
+
+def find_cart(arg):
+    path = Path(arg).resolve() if arg else Path.cwd()
+    if path.is_file() and path.suffix.lower() == ".p8":
+        return path, None
+    folder = path if path.is_dir() else path.parent
+    for d in (folder, folder.parent):
+        carts = sorted(d.glob("*.p8")) + sorted(d.glob("*.P8"))
+        if path.is_file():
+            rel = path.relative_to(d).as_posix().lower()
+            for c in carts:
+                if any(label.lower() == rel for label, _ in cart_parts(c)[1:]):
+                    return c, None
+        if len(carts) == 1:
+            return carts[0], None
+    return None, path if path.is_file() else None
+
+
+def bar(used, limit, width=20):
+    filled = min(width, round(width * used / limit))
+    return "#" * filled + "." * (width - filled)
+
+
+def main():
+    cart, loose = find_cart(sys.argv[1] if len(sys.argv) > 1 else "")
+    if cart:
+        parts = cart_parts(cart)
+        title = cart.name
+    elif loose:
+        parts = [(loose.name, loose.read_text(errors="replace"))]
+        title = f"{loose.name} (no cart #includes it, so this file alone)"
+    else:
+        sys.exit("p8tokens: no .p8 here. Give it a cart or a file a cart #includes.")
+    total = sum(count(code) for _, code in parts)
+    chars = sum(len(code) for _, code in parts)
+    print(title)
+    if len(parts) > 1:
+        width = max(len(label) for label, _ in parts)
+        for label, code in parts:
+            print(f"  {label:<{width}}  {count(code):>5}")
+    print(f"tokens {total:>5}/{TOKEN_LIMIT:<5}  {bar(total, TOKEN_LIMIT)}  {100 * total // TOKEN_LIMIT}%")
+    print(f"chars  {chars:>5}/{CHAR_LIMIT:<5}  {bar(chars, CHAR_LIMIT)}  {100 * chars // CHAR_LIMIT}%")
+
+
+if __name__ == "__main__":
+    main()

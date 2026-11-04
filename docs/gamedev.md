@@ -16,6 +16,41 @@ sudo usermod -aG realtime "$USER"
 
 Paid downloads from lexaloffle.com, unzipped into `~/.local/opt` (see the README). `pico8` and `picotron` start them from the launcher. PICO-8's carts live in `~/code/pico8`, its screenshots and GIFs (`F6`, `F9`) in `~/Pictures/pico-8`.
 
+### Code in Zed, everything else in the console
+
+Write the code in Zed and draw, map and compose in the consoles. PICO-8's code editor fits on a 128x128 screen and has no search across files, no go-to-definition and no git. Its sprite, map, sfx and music editors are the best tools for those jobs, so they stay.
+
+**PICO-8:** open `~/code/pico8` in Zed (the whole folder, so the settings below apply). Each game is a folder with a `.p8` that holds the art and sound, and `.lua` files for the code. In PICO-8's code editor the cart only has its includes:
+
+```
+#include src/main.lua
+#include src/player.lua
+```
+
+PICO-8 reads those files every time the cart runs, so the loop is: edit in Zed, save, `F5`. `cart-run` finds the `.p8` that includes the file you're in, jumps to PICO-8 and presses `ctrl+r` there. If PICO-8 isn't open, it starts it with that cart. Sprites and sfx you haven't saved yet stay, since only the code is reloaded. When PICO-8 has another cart loaded, `load` the right one once.
+
+**Picotron:** code lives in `~/code/picotron`, and Picotron sees that folder as `/code` (the `picotron` wrapper links it into Picotron's drive the second time you start it). Make the cart in Picotron as usual and replace its `main.lua` with the `pt` snippet:
+
+```lua
+cd("/code/mygame")
+include("src/main.lua")
+```
+
+Now `F5` in Zed jumps to Picotron and presses `ctrl+r`, which runs the cart and reads the files fresh. Before you release, copy `src` into the cart (`cp /code/mygame/src /ram/cart/src` in Picotron's terminal), drop the `cd` line and save, or the cart only works on this machine. `/code` is the real folder: `rm` in there deletes for real.
+
+### What Zed knows
+
+The first start of `pico8` / `picotron` writes a `.luarc.json` into `~/code/pico8` / `~/code/picotron`. Commit it. It tells the Lua language server which console it's looking at:
+
+- every API function with its arguments and a short description on hover (PICO-8's come from the pico8-ls project, Picotron's are hand-written in `~/.local/share/fantasy-lua/picotron/picotron.lua`, so add one there if Zed calls a real function undefined)
+- `+=`, `-=`, `!=` and the rest, `//` comments in PICO-8, and the button glyphs, so `btn(❎)` works
+- no `string.`, `table.` or `math.` in PICO-8, because the console doesn't have them either
+- a warning for every name that isn't defined anywhere, which is how typos show up
+
+Three PICO-8 shorthands look like errors in Zed, so write them the long way in `.lua` files: `if (a) b()` becomes `if a then b() end`, `?"hi"` becomes `print("hi")`, and `a\b` becomes `flr(a/b)`. The `if` costs the same tokens, the other two cost one or two more.
+
+Keys: `F5` runs the cart, `F7` counts PICO-8 tokens (`p8tokens`, the limit is 8192). The count follows the includes and is within a few tokens of PICO-8's own. Near the limit, trust the number in PICO-8's code editor. Snippets: `p8` (the three callbacks), `pt` (Picotron's dev `main.lua`), `fn`, `lfn`, `fori`, `forall`, `forp`, `forxy`.
+
 ## Godot
 
 `godot` from pacman is the current Godot 4. Two things to set once in the editor:
