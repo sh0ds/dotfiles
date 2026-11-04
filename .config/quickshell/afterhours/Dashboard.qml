@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 // Today: the drawer under the island (click the clock). The date and the
@@ -20,7 +19,7 @@ PopupWindow {
     visible: false
     color: "transparent"
     implicitWidth: 720
-    implicitHeight: body.implicitHeight + 40
+    implicitHeight: body.implicitHeight + 36
     onVisibleChanged: if (visible) {
         pop.restart();
         if (!once.running && memTotal === 0) once.running = true;
@@ -62,6 +61,7 @@ PopupWindow {
         stdout: StdioCollector { onStreamFinished: {
             const m = text.match(/time=([0-9.]+)/);
             dash.piMs = m ? Math.round(Number(m[1])) : -1;
+            dash.shell.piUp = dash.piMs >= 0;
         } }
     }
     Timer { interval: 5000; repeat: true; triggeredOnStart: true; running: dash.visible; onTriggered: if (!ping.running) ping.running = true }
@@ -143,7 +143,7 @@ PopupWindow {
         PopIn { id: pop; surface: box; inner: body }
         RowLayout {
             id: body
-            anchors { top: parent.top; left: parent.left; right: parent.right; margins: 20 }
+            anchors { top: parent.top; left: parent.left; right: parent.right; margins: 18 }
             spacing: 22
 
             ColumnLayout {
@@ -231,15 +231,10 @@ PopupWindow {
                     Layout.fillWidth: true
                     visible: dash.shell.player !== null
                     spacing: 12
-                    Item {
+                    Cover {
                         Layout.preferredWidth: 40; Layout.preferredHeight: 40
-                        Rectangle { id: artMask; anchors.fill: parent; radius: 8; visible: false; layer.enabled: true }
-                        Rectangle {
-                            anchors.fill: parent; radius: 8; color: Theme.accentSoft
-                            Text { anchors.centerIn: parent; text: "\uf001"; color: Theme.accent; font.family: Theme.font; font.pixelSize: 15 }
-                        }
-                        Image { id: art; anchors.fill: parent; source: dash.shell.player?.trackArtUrl ?? ""; fillMode: Image.PreserveAspectCrop; sourceSize: Qt.size(80, 80); asynchronous: true; visible: false }
-                        MultiEffect { anchors.fill: parent; source: art; visible: art.status === Image.Ready; maskEnabled: true; maskSource: artMask }
+                        radius: 8; glyphSize: 15
+                        source: dash.shell.player?.trackArtUrl ?? ""
                     }
                     ColumnLayout {
                         Layout.fillWidth: true

@@ -150,9 +150,9 @@ PanelWindow {
                             readonly property bool chosen: ov.selected === modelData
                             width: row.tileW; height: row.tileH
                             radius: Theme.radius
-                            color: drop.containsDrag ? Theme.accentSoft : Theme.panel
+                            color: drop.containsDrag ? Theme.accentSoft : Theme.glass
                             border.width: chosen || drop.containsDrag ? 2 : 1
-                            border.color: chosen || drop.containsDrag ? Theme.accent : current ? Theme.accentDeep : Theme.line
+                            border.color: chosen || drop.containsDrag ? Theme.accent : current ? Theme.accentDeep : Theme.edge
                             clip: ov.dragFrom !== modelData
                             z: ov.dragFrom === modelData ? 5 : 0
                             Behavior on color { ColorAnimation { duration: Theme.motion } }
@@ -195,7 +195,7 @@ PanelWindow {
                                         radius: 4
                                         color: Theme.raised
                                         border.width: 1
-                                        border.color: winHover.hovered ? Theme.accent : Theme.line
+                                        border.color: winHover.hovered ? Theme.accent : Theme.edge
                                         // A picture of the window, live while the overview is open.
                                         ScreencopyView {
                                             id: shot
@@ -233,8 +233,8 @@ PanelWindow {
                     Rectangle {
                         width: row.tileW * 0.4; height: row.tileH
                         radius: Theme.radius
-                        color: plusHover.hovered || plusDrop.containsDrag ? Theme.raised : "transparent"
-                        border.width: 1; border.color: plusDrop.containsDrag ? Theme.accent : Theme.line
+                        color: plusHover.hovered || plusDrop.containsDrag ? Theme.glassRaised : "transparent"
+                        border.width: 1; border.color: plusDrop.containsDrag ? Theme.accent : Theme.edge
                         Text { anchors.centerIn: parent; text: "+"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 24 }
                         HoverHandler { id: plusHover; cursorShape: Qt.PointingHandCursor }
                         TapHandler { onTapped: ov.newOn(row.mon) }

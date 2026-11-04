@@ -107,6 +107,8 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `Island.qml`: the middle of the rail. The clock at rest; it morphs (width on one spring, faces cross-fading) into the volume, the first queued notification or the new track, on the focused monitor only. Notifications go here while the rail is up and to the toast stack while it's hidden.
 - `Dashboard.qml`: Today, the drawer under the island: `MonthView`, `sys-stats` graphs (2 s), a ping to the Pi (5 s), `uptime -p` and `df` (1 min), all only while open.
 - `MonthView.qml`: the month grid with ISO weeks. Not `Calendar` or `MonthGrid`: QtQuick.Controls types.
+- `Cover.qml`: rounded cover art with a note placeholder (island, Today, media card).
+- `VolumeRow.qml`: speaker, meter and percentage (island and the volume pill).
 - `PopIn.qml`: the shared opening animation of the cards under the rail (scale from 92 % on `Theme.spring`, content 60 ms later).
 - `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.
 - `Wallpaper.qml`: the haze picture plus drifting clouds on the background layer. Replaces awww; it stops rendering while the workspace has a window or game mode is on.

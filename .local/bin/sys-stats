@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sys-stats: one line for the Afterhours rail's sys cell:
+# sys-stats: one line for Today's graphs (click the clock):
 #   <cpu %> <used memory GiB> <cpu °C or -> <gpu % or ->
 # CPU is measured over half a second, so the shell can call it every 2 s
 # without keeping state anywhere.

@@ -12,8 +12,9 @@ Rectangle {
     readonly property var defaultAction: notification ? notification.actions.find(a => a.identifier === "default") ?? null : null
     visible: notification != null
     implicitHeight: body.implicitHeight + 28
-    color: hover.hovered ? (toast ? Theme.glassRaised : Theme.raised) : (toast ? Theme.glass : Theme.panel)
-    border.color: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : toast ? Theme.edge : Theme.line
+    // A toast is glass of its own; in the inbox it sits in the sheet's glass.
+    color: hover.hovered ? Theme.glassRaised : toast ? Theme.glass : Theme.well
+    border.color: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.edge
     border.width: 1
     radius: Theme.radius + 2
     Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
@@ -51,7 +52,7 @@ Rectangle {
             Repeater {
                 id: actionRepeater
                 model: (card.notification?.actions ?? []).filter(a => a.identifier !== "default")
-                Cell { required property var modelData; label: modelData.text; fill: Theme.raised; onClicked: modelData.invoke() }
+                Cell { required property var modelData; label: modelData.text; fill: Theme.glassRaised; onClicked: modelData.invoke() }
             }
         }
     }

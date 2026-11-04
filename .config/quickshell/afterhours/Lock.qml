@@ -120,9 +120,9 @@ Scope {
                         Layout.topMargin: 48
                         implicitWidth: 320; implicitHeight: 48
                         radius: height / 2
-                        color: Theme.panel
+                        color: Theme.glass
                         border.width: 1
-                        border.color: lockRoot.message ? Theme.danger : input.activeFocus ? Theme.accent : Theme.line
+                        border.color: lockRoot.message ? Theme.danger : input.activeFocus ? Theme.accent : Theme.edge
                         Behavior on border.color { ColorAnimation { duration: Theme.motion } }
                         transform: Translate { id: shake }
                         Connections {

@@ -20,13 +20,14 @@ PopupWindow {
     Timer { id: delay; interval: 550; onTriggered: hint.visible = true }
     onShowChanged: { if (show && text.length > 0) delay.restart(); else { delay.stop(); visible = false; } }
     onVisibleChanged: if (visible) fade.restart()
+    // Grows out of the thing it explains, like the cards under the rail.
     Rectangle {
         id: box
         anchors.fill: parent
         radius: Theme.radius
-        color: Theme.raised
+        color: Theme.glassRaised
         border.width: 1
-        border.color: Theme.line
+        border.color: Theme.edge
         Text {
             id: label
             anchors.centerIn: parent
@@ -36,6 +37,11 @@ PopupWindow {
             font.pixelSize: 11
             textFormat: Text.PlainText
         }
-        NumberAnimation { id: fade; target: box; property: "opacity"; from: 0; to: 1; duration: Theme.motion; easing.type: Easing.OutCubic }
+        transformOrigin: Item.Top
+        ParallelAnimation {
+            id: fade
+            NumberAnimation { target: box; property: "opacity"; from: 0; to: 1; duration: Theme.motion; easing.type: Easing.OutCubic }
+            NumberAnimation { target: box; property: "scale"; from: 0.9; to: 1; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
+        }
     }
 }

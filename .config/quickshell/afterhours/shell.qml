@@ -85,7 +85,6 @@ ShellRoot {
         }
         function game(on: bool): void { root.setGame(on); }
     }
-    SystemClock { id: clock; precision: SystemClock.Minutes }
     // Sound straight from PipeWire: the rail, the OSD and the control centre
     // all follow the default output live, no polling.
     readonly property var sink: Pipewire.defaultAudioSink
@@ -254,7 +253,7 @@ ShellRoot {
                 onClockClicked: dash.visible = !dash.visible
                 onTrackClicked: if (mediaCell.visible) media.visible = true
             }
-            Hint { target: island; text: "Today · week " + island.isoWeek(clock.date); show: island.hovered && island.mode === "clock" && !dash.visible }
+            Hint { target: island; text: "Today: the month, graphs, disks, the Pi"; show: island.hovered && island.mode === "clock" && !dash.visible }
             Rectangle {
                 id: leftPill
                 anchors.left: parent.left
@@ -294,7 +293,7 @@ ShellRoot {
                     Rectangle {
                         anchors.fill: parent
                         radius: height / 2
-                        color: Qt.rgba(0, 0, 0, 0.22)
+                        color: Theme.well
                         border.width: 1
                         border.color: Theme.edge
                     }
@@ -323,7 +322,7 @@ ShellRoot {
                                 Rectangle {
                                     anchors.centerIn: parent
                                     width: 22; height: 22; radius: 11
-                                    color: Theme.raised
+                                    color: Theme.glassRaised
                                     opacity: !space.here && pointerHover.hovered ? 1 : 0
                                     Behavior on opacity { NumberAnimation { duration: Theme.motion } }
                                 }
@@ -557,7 +556,7 @@ ShellRoot {
                     color: Theme.text; font.family: Theme.font; font.pixelSize: sheet.width < 600 ? 32 : 46
                     Layout.fillWidth: true; elide: Text.ElideRight
                 }
-                Rectangle { Layout.fillWidth: true; height: 1; color: Theme.line }
+                Rectangle { Layout.fillWidth: true; height: 1; color: Theme.edge }
                 StackLayout {
                     Layout.fillWidth: true; Layout.fillHeight: true
                     currentIndex: ({apps: 0, inbox: 1, session: 2})[root.panel] ?? 0
@@ -677,7 +676,7 @@ ShellRoot {
                             font.family: Theme.font; font.pixelSize: 16; color: Theme.text
                             placeholderTextColor: Theme.muted
                             leftPadding: 14; topPadding: 10; bottomPadding: 10
-                            background: Rectangle { color: Qt.rgba(0, 0, 0, 0.25); border.color: query.activeFocus ? Theme.accent : Theme.edge; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
+                            background: Rectangle { color: Theme.well; border.color: query.activeFocus ? Theme.accent : Theme.edge; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
                             Keys.onEscapePressed: root.panel = ""
                             onTextChanged: appList.currentIndex = launcher.mode === "/" && launcher.q === "" && launcher.rows.length > 1 ? 1 : 0
                             Keys.onDownPressed: appList.incrementCurrentIndex()
@@ -700,7 +699,7 @@ ShellRoot {
                                 width: ListView.view.width; height: 44
                                 radius: Theme.radius
                                 readonly property bool current: appList.currentIndex === index
-                                color: current ? Theme.raised : "transparent"
+                                color: current ? Theme.glassRaised : "transparent"
                                 Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
                                 // The chosen row gets a violet edge, like the workspace marker.
                                 Rectangle { x: 4; y: 11; width: 3; height: parent.height - 22; radius: 2; color: Theme.accent; opacity: appRow.current ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }

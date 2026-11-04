@@ -6,6 +6,8 @@ MonthView 1.0 MonthView.qml
 Island 1.0 Island.qml
 Dashboard 1.0 Dashboard.qml
 PopIn 1.0 PopIn.qml
+Cover 1.0 Cover.qml
+VolumeRow 1.0 VolumeRow.qml
 Hint 1.0 Hint.qml
 Meter 1.0 Meter.qml
 Osd 1.0 Osd.qml

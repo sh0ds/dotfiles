@@ -67,7 +67,7 @@ PopupWindow {
     Timer { id: nightLater; interval: 400; onTriggered: nightRead.running = true }
 
     component Heading: Text {
-        color: Theme.muted; font.family: Theme.font; font.pixelSize: 10; font.letterSpacing: 2; font.bold: true
+        color: Theme.accent; font.family: Theme.font; font.pixelSize: 10; font.letterSpacing: 2; font.bold: true
         Layout.topMargin: 4
     }
     // One audio row: icon (click mutes), name, slider, percent.
@@ -109,8 +109,8 @@ PopupWindow {
         Layout.fillWidth: true
         implicitHeight: 54
         radius: Theme.radius
-        color: on ? Theme.accentSoft : tgHover.hovered ? Theme.raised : Theme.background
-        border.width: 1; border.color: on ? Theme.accent : Theme.line
+        color: on ? Theme.accentSoft : tgHover.hovered ? Theme.glassRaised : Theme.well
+        border.width: 1; border.color: on ? Theme.accent : Theme.edge
         Behavior on color { ColorAnimation { duration: Theme.motion } }
         Behavior on border.color { ColorAnimation { duration: Theme.motion } }
         Column {
@@ -188,7 +188,7 @@ PopupWindow {
                     Layout.fillWidth: true
                     implicitHeight: 32
                     radius: Theme.radius
-                    color: netHover.hovered ? Theme.raised : "transparent"
+                    color: netHover.hovered ? Theme.glassRaised : "transparent"
                     RowLayout {
                         anchors.fill: parent; anchors.leftMargin: 10; anchors.rightMargin: 10
                         spacing: 10

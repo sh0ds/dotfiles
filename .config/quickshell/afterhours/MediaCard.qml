@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Services.Mpris
 // The media card under now playing: cover art, title and artist, a
@@ -46,35 +45,10 @@ PopupWindow {
             spacing: 14
             RowLayout {
                 spacing: 16
-                // Cover art with rounded corners; a violet note when there is none.
-                Item {
+                Cover {
                     Layout.preferredWidth: 96; Layout.preferredHeight: 96
-                    Rectangle {
-                        id: artMask
-                        anchors.fill: parent; radius: Theme.radius
-                        visible: false; layer.enabled: true
-                    }
-                    Rectangle {
-                        anchors.fill: parent; radius: Theme.radius
-                        color: Theme.accentSoft
-                        Text { anchors.centerIn: parent; text: ""; color: Theme.accent; font.family: Theme.font; font.pixelSize: 30 }
-                    }
-                    Image {
-                        id: art
-                        anchors.fill: parent
-                        source: card.player?.trackArtUrl ?? ""
-                        fillMode: Image.PreserveAspectCrop
-                        sourceSize: Qt.size(192, 192)
-                        asynchronous: true
-                        visible: false
-                    }
-                    MultiEffect {
-                        anchors.fill: parent
-                        source: art
-                        visible: art.status === Image.Ready
-                        maskEnabled: true
-                        maskSource: artMask
-                    }
+                    glyphSize: 30
+                    source: card.player?.trackArtUrl ?? ""
                 }
                 ColumnLayout {
                     Layout.fillWidth: true

@@ -1,7 +1,7 @@
 pragma Singleton
 // Afterhours tokens: dark cool charcoal, violet for focus and the active
-// thing, amber for attention, coral for recording and errors. Blue is kept
-// for the terminal's ANSI colours only.
+// thing, amber for attention, coral for recording and errors. No blue in
+// the shell (kitty keeps it for ANSI colours).
 // One font for everything (JetBrains Mono, Nerd Font build for the icons).
 import QtQuick
 QtObject {
@@ -15,20 +15,18 @@ QtObject {
     readonly property color accentSoft: "#2a2340"
     // The second stop of the violet gradient (window border, sliders).
     readonly property color accentDeep: "#8f7ad9"
-    readonly property color blue: "#5e9bb4"
     readonly property color danger: "#d9786c"
     readonly property color amber: "#d99f66"
     readonly property string font: "JetBrainsMono Nerd Font"
-    // Kept so older call sites resolve; all three are the same font now.
-    readonly property string mono: font
-    readonly property string display: font
-    readonly property string sans: font
     // Glass: the panel colour at 74 %, frosted by Hyprland's blur (the
     // "glass" layer rule in rice.lua), with a faint light edge instead of a
     // grey outline. Raised is for hover on glass.
     readonly property color glass: Qt.rgba(0.075, 0.071, 0.094, 0.74)
     readonly property color glassRaised: Qt.rgba(0.137, 0.129, 0.172, 0.86)
     readonly property color edge: Qt.rgba(1, 1, 1, 0.08)
+    // A recessed area on glass: the workspace track, the launcher's field,
+    // the control centre's switches, inbox cards.
+    readonly property color well: Qt.rgba(0, 0, 0, 0.22)
     readonly property int radius: 10
     readonly property int radiusLarge: 20
     // Hover and colour changes; things that move take `glide`.

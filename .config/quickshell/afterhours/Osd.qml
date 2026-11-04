@@ -45,26 +45,7 @@ PanelWindow {
         radius: height / 2
         color: Theme.glass
         border.width: 1; border.color: Theme.edge
-        Row {
-            anchors.centerIn: parent
-            spacing: 14
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 18
-                text: osd.muted ? "󰝟" : osd.volume < 0.34 ? "" : osd.volume < 0.67 ? "" : ""
-                color: osd.muted ? Theme.muted : Theme.accent
-                font.family: Theme.font; font.pixelSize: 16
-            }
-            Meter { anchors.verticalCenter: parent.verticalCenter; width: 170; value: osd.volume; muted: osd.muted; enabled: false }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 40
-                text: osd.muted ? "mute" : Math.round(osd.volume * 100) + "%"
-                color: osd.muted ? Theme.muted : Theme.text
-                font.family: Theme.font; font.pixelSize: 13; font.bold: !osd.muted
-                horizontalAlignment: Text.AlignRight
-            }
-        }
+        VolumeRow { anchors.centerIn: parent; sink: osd.sink; interactive: false }
     }
     NumberAnimation { id: enter; target: pill; property: "y"; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
     SequentialAnimation {

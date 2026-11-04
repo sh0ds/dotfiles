@@ -30,6 +30,15 @@ Item {
     }
 
     WheelHandler { onWheel: e => cal.shift += e.angleDelta.y > 0 ? -1 : 1 }
+    // Changing month slides the days in from the side you're heading to.
+    property int lastShift: 0
+    onShiftChanged: { flip.dir = shift > lastShift ? 1 : -1; lastShift = shift; flip.restart(); }
+    ParallelAnimation {
+        id: flip
+        property int dir: 1
+        NumberAnimation { target: slide; property: "x"; from: 18 * flip.dir; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
+        NumberAnimation { target: dayGrid; property: "opacity"; from: 0.2; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
+    }
 
     ColumnLayout {
         id: body
@@ -53,6 +62,8 @@ Item {
         }
 
         GridLayout {
+            id: dayGrid
+            transform: Translate { id: slide }
             columns: 8
             columnSpacing: 2
             rowSpacing: 2

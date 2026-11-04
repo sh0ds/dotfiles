@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Services.Notifications
 // The island in the middle of the rail. At rest it is the clock; it
@@ -46,12 +45,6 @@ Rectangle {
     Behavior on border.color { ColorAnimation { duration: Theme.motion } }
     HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
 
-    function isoWeek(d) {
-        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
-        const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-        return Math.ceil(((t - y0) / 86400000 + 1) / 7);
-    }
     function closeNotice(n) {
         if (!n) return;
         if (n.transient) n.expire(); else island.shell.dropToast(n);
@@ -106,32 +99,10 @@ Rectangle {
 
     Face {
         name: "volume"
-        Row {
+        VolumeRow {
             anchors.centerIn: parent
-            spacing: 14
-            readonly property real level: island.shell.sink?.audio?.volume ?? 0
-            readonly property bool muted: island.shell.sink?.audio?.muted ?? false
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 18
-                text: parent.muted ? "󰝟" : parent.level < 0.34 ? "\uf026" : parent.level < 0.67 ? "\uf027" : "\uf028"
-                color: parent.muted ? Theme.muted : Theme.accent
-                font.family: Theme.font; font.pixelSize: 16
-            }
-            Meter {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 170
-                value: parent.level; muted: parent.muted
-                onMoved: v => { if (island.shell.sink?.audio) { island.shell.sink.audio.volume = v; island.shell.pulseVolume(); } }
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 40
-                text: parent.muted ? "mute" : Math.round(parent.level * 100) + "%"
-                color: parent.muted ? Theme.muted : Theme.text
-                font.family: Theme.font; font.pixelSize: 13; font.bold: !parent.muted
-                horizontalAlignment: Text.AlignRight
-            }
+            sink: island.shell.sink
+            onMoved: v => { if (island.shell.sink?.audio) { island.shell.sink.audio.volume = v; island.shell.pulseVolume(); } }
         }
     }
 
@@ -190,16 +161,10 @@ Rectangle {
         Row {
             anchors.centerIn: parent
             spacing: 10
-            Item {
+            Cover {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 26; height: 26
-                Rectangle { id: artMask; anchors.fill: parent; radius: 6; visible: false; layer.enabled: true }
-                Rectangle {
-                    anchors.fill: parent; radius: 6; color: Theme.accentSoft
-                    Text { anchors.centerIn: parent; text: "\uf001"; color: Theme.accent; font.family: Theme.font; font.pixelSize: 12 }
-                }
-                Image { id: art; anchors.fill: parent; source: island.shell.player?.trackArtUrl ?? ""; fillMode: Image.PreserveAspectCrop; sourceSize: Qt.size(52, 52); asynchronous: true; visible: false }
-                MultiEffect { anchors.fill: parent; source: art; visible: art.status === Image.Ready; maskEnabled: true; maskSource: artMask }
+                width: 26; height: 26; radius: 6; glyphSize: 12
+                source: island.shell.player?.trackArtUrl ?? ""
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter

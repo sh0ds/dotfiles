@@ -15,8 +15,8 @@ Item {
         id: track
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width; height: 6; radius: 3
-        color: Theme.raised
-        border.width: 1; border.color: Theme.line
+        color: Theme.well
+        border.width: 1; border.color: Theme.edge
         Rectangle {
             width: Math.max(height, track.width * meter.shown); height: parent.height; radius: 3
             gradient: Gradient {
