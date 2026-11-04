@@ -4,9 +4,9 @@
 
 Keep the useful DNA: Lua, a pixel-console identity, numbered workspaces, keyboard access and the Pi/site connection. Replace the old diagnostic dashboard with a game-making workbench. Charcoal has a slight violet cast; violet is reserved for focus. Status dots are violet when fine, amber means attention, coral marks recording and errors. Artwork and games retain their own palette.
 
-The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a violet gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling, glow or large animated background. One font everywhere: JetBrains Mono Nerd Font.
+The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a violet gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling or glow, and the wallpaper's clouds only drift while the workspace is empty. One font everywhere: JetBrains Mono Nerd Font.
 
-`Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, Helix, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
+`Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
 
 ## Desktop and window manager comparison
 
@@ -57,7 +57,7 @@ sudo pacman -Syu --needed hyprland quickshell qt6-wayland qt6-declarative \
   kitty noto-fonts ttf-jetbrains-mono-nerd cava \
   libqalculate unicode-emoji fuzzel wl-clipboard cliphist jq socat playerctl pavucontrol \
   wireplumber pipewire-pulse libnotify grim slurp satty wf-recorder wtype \
-  less zed helix thunar adw-gtk-theme qt6ct papirus-icon-theme
+  less zed thunar adw-gtk-theme qt6ct papirus-icon-theme
 ```
 
 Optional, for violet folders: `yay -S papirus-folders`; `system/install-system.sh` recolours them.
@@ -93,7 +93,7 @@ Install tools when their track needs them, so P1 does not become a month of tool
 | W / F | C/make, Python, browser devtools, FFmpeg | Website work belongs on the plan's `next` branch. The shell does not switch branches or deploy. |
 | J / I | itch.io, butler when needed | Credentials and uploads remain explicit actions. No automatic publishing or scope generation. |
 
-The PICO-8/Picotron wrappers validate the executable when launched. GDScript in Helix connects to Godot's localhost language server (port 6005) while the editor is running. PICO-8's Lua dialect is not standard Lua: do not format or rewrite carts as if it were.
+The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua dialect is not standard Lua: do not format or rewrite carts as if it were.
 
 ## Architecture
 

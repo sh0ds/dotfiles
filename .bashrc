@@ -9,8 +9,8 @@ export PATH="$HOME/.local/bin:$PATH"
 [ -d /usr/lib/emscripten ] && PATH="$PATH:/usr/lib/emscripten"
 [ -d "$HOME/.local/opt/butler" ] && PATH="$PATH:$HOME/.local/opt/butler"
 
-export EDITOR=helix
-export VISUAL=helix
+export EDITOR='zeditor --wait'                   # git commit messages and the like open in Zed
+export VISUAL="$EDITOR"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"   # man pages in bat's colours
 export MANROFFOPT="-c"
 
@@ -33,14 +33,12 @@ alias ls='eza --icons --group-directories-first'
 alias ll='eza -la --icons --group-directories-first --git'
 alias lt='eza --tree --level=2 --icons --git-ignore'
 alias grep='grep --color=auto'
-alias hx='helix'
-alias v='helix'                                               # quick edits in the terminal
 alias zed='zeditor'                                           # the editor for projects
 alias gs='git status -sb'
 alias gl='git log --oneline --graph --decorate -20'
 alias cgcc='gcc -Wall -Wextra -g -fsanitize=address,undefined' # C with warnings and sanitizers
 alias qa='qemu-aarch64'                                        # run ARM64 binaries on the desktop
-alias lg='lazygit'                                              # git TUI (Ctrl+G in Helix)
+alias lg='lazygit'                                              # git TUI
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
 # fzf in Afterhours: violet matches and pointer, soft selection, rounded border
@@ -98,4 +96,3 @@ fi
 eval "$(starship init bash)"                     # prompt
 eval "$(fzf --bash)"                             # Ctrl+R fuzzy history, Ctrl+T file path, Alt+C cd into a folder
 eval "$(zoxide init bash)"                       # z website jumps to ~/code/website; zi picks from a list
-alias e=hx

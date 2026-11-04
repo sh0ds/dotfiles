@@ -417,6 +417,8 @@ ShellRoot {
                         else if (step > 0 && root.player?.canGoPrevious) root.player.previous();
                     }
                 }
+                // Right side: sys, keep awake, the Pi, then network and sound side by
+                // side (both open the control centre), the inbox and the tray.
                 // sys: click unfolds cpu, memory, temperature and gpu; right-click opens btop.
                 Cell {
                     visible: rail.width > 900
@@ -429,6 +431,15 @@ ShellRoot {
                     hint: root.statsOpen ? "Click to fold · right-click: btop" : "Click: cpu, memory, temperature, gpu · right-click: btop"
                     onClicked: { root.statsOpen = !root.statsOpen; if (!root.statsOpen) root.stats = null; }
                     onRightClicked: root.run(["sysmon"])
+                }
+                Cell {
+                    visible: rail.width > 900
+                    label: "\uf0f4"   // nf-fa-coffee
+                    size: 14
+                    selected: root.awake
+                    ink: Theme.muted
+                    hint: root.awake ? "Keeping the screen awake · click to stop" : "Keep the screen awake (no dim, lock or sleep)"
+                    onClicked: root.awake = !root.awake
                 }
                 Cell {
                     visible: rail.width > 900
@@ -448,15 +459,6 @@ ShellRoot {
                     hint: (root.net === "offline" ? "Offline" : root.net === "ethernet" ? "Wired" : root.net.slice(5)) + " · click: control centre · right-click: network settings"
                     onClicked: rail.openControl(netCell)
                     onRightClicked: root.run(["wifi", "settings"])
-                }
-                Cell {
-                    visible: rail.width > 900
-                    label: "\uf0f4"   // nf-fa-coffee
-                    size: 14
-                    selected: root.awake
-                    ink: Theme.muted
-                    hint: root.awake ? "Keeping the screen awake · click to stop" : "Keep the screen awake (no dim, lock or sleep)"
-                    onClicked: root.awake = !root.awake
                 }
                 Cell {
                     id: volCell

@@ -1,5 +1,5 @@
 # ~/.config/lazygit/config.yml: Afterhours, rounded borders, blue on the
-# focused panel. Run `lg`, or Ctrl+G inside Helix.
+# focused panel. Run `lg`.
 gui:
   nerdFontsVersion: "3"
   border: rounded

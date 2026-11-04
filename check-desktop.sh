@@ -89,7 +89,6 @@ section "Terminal workflow"
 for c in starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
   check "$c" command -v "$c"
 done
-check "helix" command -v helix
 check "zed (zeditor)" command -v zeditor
 check "Zed uses Diag" grep -q '"dark": "Diag"' "$HOME/.config/zed/settings.json"
 check "eza has an Afterhours theme" test -r "${XDG_CONFIG_HOME:-$HOME/.config}/eza/theme.yml"

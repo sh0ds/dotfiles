@@ -8,7 +8,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 
 ## Description
 
-- **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
+- **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
 - **One launcher** for everything: type to find an app, or start with `=` for maths, `>` for commands, `/` for open windows and `:` for emoji.
 - **The overview** (`Super + W`) shows every workspace with live previews of its windows. Click one to go there, drag it to another workspace, middle-click to close it.
 - **The media card** opens from now playing: the cover, a seek bar, shuffle, loop and bigger cava bars.
@@ -20,7 +20,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **Notifications** and the **volume popup** come from the shell itself: toasts with the app's icon that slide in and out on the monitor you're on, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
 - **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, the lock screen and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
-- **Thunar, Firefox, Obsidian, Zed and Helix** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
+- **Thunar, Firefox, Obsidian and Zed** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
 - Unfocused windows dim a little. Games, video and picture-in-picture never do.
 - Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone). PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
 - PICO-8 and Picotron code in Zed: their APIs in the Lua language server, `F5` reruns the cart in the console, `F7` counts PICO-8 tokens. How it works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
