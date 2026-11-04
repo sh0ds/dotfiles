@@ -39,7 +39,6 @@ Run `bash install-dotfiles.sh` again whenever files get added or removed. It cle
 - `Super + N` inbox, `Super + Shift + Escape` power menu, `Super + Escape` lock
 - `Super + 1…0` workspace, `Super + Shift + 1…0` move the window there
 - `Super + arrows` or `h j k l` focus, add `Shift` to move the window
-- `Super + R` reading layout: the focused window in the middle, the others on its sides, press again to go back
 - `Super + V` float and centre, `Super + F` fullscreen, `Super + G` group, `Super + Q` close
 - `Super + C` calculator, `Super + Shift + V` clipboard, `Super + period` emoji, `Super + D` docs
 - `Print` region to clipboard, `Ctrl + Print` draw on it, `Alt + Print` captioned devlog shot

@@ -19,7 +19,6 @@ Every desktop shortcut. `Super + F1` shows this table as a searchable list, so k
 | `Super + Shift + 1…0` | Move window to workspace |
 | `Super + arrows / h j k l` | Focus window |
 | `Super + Shift + arrows / h j k l` | Move window |
-| `Super + R` | Reading layout on / off (doc in the middle, the rest on the sides) |
 | `Super + V` | Float and centre / tile again |
 | `Super + X` | Centre a floating window |
 | `Super + F` | Fullscreen |
