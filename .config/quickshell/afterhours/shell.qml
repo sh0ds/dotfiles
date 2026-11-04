@@ -503,7 +503,7 @@ ShellRoot {
         }
     }
     // The living wallpaper and the screen frame, one each per monitor.
-    Variants { model: Quickshell.screens; Wallpaper { still: root.gameMode } }
+    Variants { model: Quickshell.screens; Wallpaper {} }
     Variants { model: Quickshell.screens; ScreenFrame { visible: !root.gameMode } }
     Osd { sink: root.sink; held: root.islandShown }
     Overview { id: overviewWindow }

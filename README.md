@@ -17,8 +17,8 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **The media card** opens from now playing: the cover, a seek bar, shuffle, loop and bigger cava bars.
 - **The control centre** opens from `vol` or the network icon: outputs, the mic, a volume per app, Wi-Fi networks and toggles for night light, quiet, keep awake and game mode.
 - **A thin frame** runs round the screen edge and joins the rail, so the desktop reads as one piece.
-- **See-through windows:** kitty, Thunar, Zed and Obsidian let the wallpaper show through, blurred. Firefox, games, video and art tools stay solid.
-- **The wallpaper moves:** soft violet clouds drift over the haze, behind the windows too. They stop for fullscreen and game mode.
+- **See-through windows:** every window lets the wallpaper show through, blurred, a little more when it isn't focused. kitty keeps its text solid over a see-through background; games, video, art tools and fullscreen stay solid.
+- **The wallpaper** is the haze with soft violet clouds over it. It never moves.
 - **My own lock screen** with a big clock, the password pill and what is playing. hyprlock is still there as the fallback.
 - **Game mode** turns on by itself when a game goes fullscreen: no animations, dimming or shadows, and the rail and frame hide. You can also flip it in the control centre.
 - **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume pill while the rail is hidden), with a quiet mode and an inbox for the session. Screen sharing hides them.

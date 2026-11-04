@@ -4,7 +4,7 @@
 
 Keep the useful DNA: Lua, a pixel-console identity, numbered workspaces, keyboard access and the Pi/site connection. Replace the old diagnostic dashboard with a game-making workbench. Charcoal has a slight violet cast; violet is reserved for focus. Status dots are violet when fine, amber means attention, coral marks recording and errors. Artwork and games retain their own palette.
 
-The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a violet gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling or glow, and the wallpaper's clouds drift behind the see-through windows (kitty, Thunar, Zed, Obsidian), stopping only for fullscreen and game mode. One font everywhere: JetBrains Mono Nerd Font.
+The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a violet gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling or glow, and every window is see-through over a still wallpaper (games, video, art and fullscreen stay solid). One font everywhere: JetBrains Mono Nerd Font.
 
 `Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
 
@@ -111,7 +111,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `VolumeRow.qml`: speaker, meter and percentage (island and the volume pill).
 - `PopIn.qml`: the shared opening animation of the cards under the rail (scale from 92 % on `Theme.spring`, content 60 ms later).
 - `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.
-- `Wallpaper.qml`: the haze picture plus drifting clouds on the background layer. Replaces awww; it stops rendering while the workspace has a fullscreen window or game mode is on.
+- `Wallpaper.qml`: the haze picture plus still violet clouds on the background layer. Replaces awww.
 - `MediaCard.qml`: the popup under now playing (cover, seek, shuffle, loop, cava).
 - `ControlCenter.qml`: the popup under `vol` and the network icon (outputs, mic, app volumes, Wi-Fi via `nmcli`, toggles).
 - `Lock.qml`: the session lock (`ext-session-lock`) with PAM through `pam/password.conf`. Sets logind's locked hint.
