@@ -44,23 +44,9 @@ hl.config({
 		inactive_opacity = 1.0,
 		-- A wide, soft shadow that falls slightly down, like light from above.
 		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(060508d0)", color_inactive = "rgba(06050880)" },
-		-- Hyprland 0.57's acrylic blur: frosted, with a thin curved lens at
-		-- each edge that bends what's behind it, and a faint violet tint
-		-- (tint is 0xAARRGGBB; alpha is how much it colours). Full brightness
-		-- and more vibrancy, so the violet behind the glass glows through
-		-- instead of turning grey. Only the shell's glass is blurred (the
-		-- "glass" layer rule below); windows are opaque and never pay for it.
-		blur = {
-			enabled = true,
-			variant = "acrylic",
-			size = 8,
-			passes = 3,
-			brightness = 1.0,
-			vibrancy = 0.3,
-			noise = 0.015,
-			new_optimizations = true,
-			acrylic = { refraction = 8, bulb = 14, clarity = 0.55, aberration = 0.02, tint = 0x1Eb49cf0 },
-		},
+		-- Blur only behind the shell's glass (the "glass" layer rule below);
+		-- windows are opaque, so they never pay for it.
+		blur = { enabled = true, size = 7, passes = 3, vibrancy = 0.18, noise = 0.015, new_optimizations = true },
 		-- Unfocused windows sink back a touch (8 %), so the one you type
 		-- into stands out without a heavier border. Games, fantasy consoles,
 		-- video, pixel art and Firefox's PiP are never dimmed (rules below).

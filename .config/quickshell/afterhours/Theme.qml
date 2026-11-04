@@ -18,12 +18,12 @@ QtObject {
     readonly property color danger: "#d9786c"
     readonly property color amber: "#d99f66"
     readonly property string font: "JetBrainsMono Nerd Font"
-    // Glass: a violet-grey tint at 55 %, frosted by Hyprland's blur (the
-    // "glass" layer rule in rice.lua), a faint light edge instead of a grey
-    // outline, and Sheen.qml's light on top. Raised is for hover on glass.
-    readonly property color glass: Qt.rgba(0.11, 0.1, 0.145, 0.55)
-    readonly property color glassRaised: Qt.rgba(0.19, 0.17, 0.25, 0.72)
-    readonly property color edge: Qt.rgba(1, 1, 1, 0.1)
+    // Glass: the panel colour at 74 %, frosted by Hyprland's blur (the
+    // "glass" layer rule in rice.lua), with a faint light edge instead of a
+    // grey outline. Raised is for hover on glass.
+    readonly property color glass: Qt.rgba(0.075, 0.071, 0.094, 0.74)
+    readonly property color glassRaised: Qt.rgba(0.137, 0.129, 0.172, 0.86)
+    readonly property color edge: Qt.rgba(1, 1, 1, 0.08)
     // A recessed area on glass: the workspace track, the launcher's field,
     // the control centre's switches, inbox cards.
     readonly property color well: Qt.rgba(0, 0, 0, 0.22)

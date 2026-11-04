@@ -90,8 +90,7 @@ PanelWindow {
         id: shade
         anchors.fill: parent
         color: Theme.background
-        // The blurred desktop shows through, like behind the launcher.
-        opacity: ov.open ? 0.5 : 0
+        opacity: ov.open ? 0.82 : 0
         Behavior on opacity { NumberAnimation { id: fade; duration: Theme.glide; easing.type: Easing.OutCubic } }
     }
     MouseArea { anchors.fill: parent; onClicked: ov.close() }
