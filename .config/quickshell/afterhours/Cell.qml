@@ -15,6 +15,8 @@ Rectangle {
     default property alias lead: leadRow.data
     signal clicked()
     signal rightClicked()
+    // Mouse wheel over the whole cell: +1 up, -1 down.
+    signal wheeled(int step)
     implicitWidth: content.implicitWidth + 26
     implicitHeight: 32
     radius: Theme.radius
@@ -61,6 +63,9 @@ Rectangle {
         active: cell.inBar && cell.hint.length > 0
         Hint { target: cell; text: cell.hint; show: pointer.containsMouse }
     }
+    // Here, not in a user's cell body: children declared there land in the
+    // lead row, which is hidden when empty and would never see the wheel.
+    WheelHandler { onWheel: e => cell.wheeled(e.angleDelta.y > 0 ? 1 : -1) }
     ToolTip.visible: !inBar && pointer.containsMouse && hint.length > 0
     ToolTip.delay: 650
     ToolTip.text: hint

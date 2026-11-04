@@ -55,7 +55,7 @@ On Arch, update normally and install the shell prerequisites using the signed pa
 sudo pacman -Syu --needed hyprland quickshell qt6-wayland qt6-declarative \
   hyprlock hypridle hyprpolkitagent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
   kitty noto-fonts ttf-jetbrains-mono-nerd cava \
-  swayosd awww fuzzel wl-clipboard cliphist jq socat playerctl pavucontrol \
+  libqalculate unicode-emoji fuzzel wl-clipboard cliphist jq socat playerctl pavucontrol \
   wireplumber pipewire-pulse libnotify grim slurp satty wf-recorder wtype \
   less zed helix thunar adw-gtk-theme qt6ct papirus-icon-theme
 ```
@@ -102,14 +102,26 @@ The PICO-8/Picotron wrappers validate the executable when launched. GDScript in 
 - `Cell.qml`: shared keyboard-focusable control with hover and focus states.
 - `Hint.qml`: hover hints for rail controls in their own popup window, because the rail window is too short for a QtQuick `ToolTip`.
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
+- `Meter.qml`: the slim slider used by the OSD, the media card and the control centre.
+- `Osd.qml`: the volume popup on the focused monitor, fed straight from PipeWire. Replaces SwayOSD.
+- `Frame.qml`: the thin screen-edge frame that joins the rail. Click-through.
+- `Wallpaper.qml`: the haze picture plus drifting clouds on the background layer. Replaces awww; it stops rendering while the workspace has a window or game mode is on.
+- `MediaCard.qml`: the popup under now playing (cover, seek, shuffle, loop, cava).
+- `ControlCenter.qml`: the popup under `vol` and the network icon (outputs, mic, app volumes, Wi-Fi via `nmcli`, toggles).
+- `Lock.qml`: the session lock (`ext-session-lock`) with PAM through `pam/password.conf`. Sets logind's locked hint.
+- `Overview.qml`: every workspace with live window previews (screencopy), drag to move, middle-click to close.
 - `afterhours`: starts once or sends typed Quickshell IPC calls; no process-name-wide kills.
-- `afterhours-suspend`: waits for logind's locked hint after starting Hyprlock before requesting suspend.
+- `afterhours-suspend`: locks through the shell (Hyprlock if the shell can't), waits for logind's locked hint, then suspends.
+
+If the shell dies while the screen is locked, the screen stays locked (that is the protocol). Switch to a TTY with `Ctrl + Alt + F3`, log in and run `hyprctl --instance 0 dispatch 'hl.dsp.exec_cmd("hyprlock")'`, then switch back to the desktop TTY (`Ctrl + Alt + F1` or `F2`) and unlock with hyprlock. `misc.allow_session_lock_restore` in `rice.lua` allows that hand-over.
+
+Game mode turns itself on while the focused workspace has a fullscreen game (a `steam_app_*` or gamescope window, anything Hyprland tags as game content, or fullscreen on workspace 5). It switches animations, dimming and shadows off with `hyprctl eval` and hides the rail and frame. Single windows still cover the frame because of the smart gaps.
 
 The inbox is session-only, capped at 50 notifications; it is not written to disk. Quiet mode hides toasts, not inbox entries. Critical toasts stay visible until dismissed. Transient notifications expire; ordinary ones leave the toast after a short interval and remain in the inbox. The shell renders notification content as plain text, never HTML. Sharing suppression uses Hyprland `screencastv2` events; a shell started in the middle of an existing share cannot infer an earlier start event. Enable quiet mode before presenting in that case.
 
-The layer-shell names are `afterhours-rail`, `afterhours-overlay`, and `afterhours-toast`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a rounded track: the active one is a violet pill, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
+The layer-shell names are `afterhours-rail`, `afterhours-overlay`, `afterhours-toast`, `afterhours-osd`, `afterhours-frame`, `afterhours-wallpaper` and `afterhours-overview`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a rounded track: the active one is a violet pill, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
 
-Utilities such as clipboard search, docs and Wi-Fi still use their existing Fuzzel dmenu helpers. Old app and VM scripts remain maintained independently. There is no fake progress counter, permanent timer pressure, app-per-workspace cage or telemetry.
+Utilities such as clipboard search, docs and the Wi-Fi password prompt still use their existing Fuzzel dmenu helpers. Maths, emoji and the window switcher are launcher modes now. Old app and VM scripts remain maintained independently. There is no fake progress counter, permanent timer pressure, app-per-workspace cage or telemetry.
 
 ## Validation
 

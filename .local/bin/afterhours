@@ -21,5 +21,18 @@ case ${1:-start} in
   close) exec quickshell ipc -c afterhours call shell close ;;
   bar) exec quickshell ipc -c afterhours call shell toggleBar ;;
   quiet) exec quickshell ipc -c afterhours call shell quietMode "${2:-true}" ;;
-  *) echo 'Usage: afterhours [start|restart|debug|apps|inbox|session|status|close|bar|quiet true|false]' >&2; exit 2 ;;
+  overview) exec quickshell ipc -c afterhours call shell overview ;;
+  # The launcher with a mode typed: = maths, > commands, / windows, : emoji.
+  launch) exec quickshell ipc -c afterhours call shell launch "${2:-}" ;;
+  game) exec quickshell ipc -c afterhours call shell game "${2:-true}" ;;
+  # Lock, and only report success once the lock really holds, so callers
+  # (hypridle, Super+Escape, afterhours-suspend) can fall back to hyprlock.
+  lock)
+    quickshell ipc -c afterhours call shell lock >/dev/null 2>&1 || exit 1
+    for _ in $(seq 20); do
+      [ "$(quickshell ipc -c afterhours call shell locked 2>/dev/null)" = true ] && exit 0
+      sleep 0.1
+    done
+    exit 1 ;;
+  *) echo 'Usage: afterhours [start|restart|debug|apps|inbox|session|status|close|bar|quiet true|false|overview|launch PREFIX|game true|false|lock]' >&2; exit 2 ;;
 esac

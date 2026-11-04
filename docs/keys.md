@@ -5,7 +5,8 @@ Every desktop shortcut, plus the media keys (volume, play, next, previous), whic
 | Key | Action |
 | --- | --- |
 | `Super + Return` | Terminal |
-| `Super + Space` | App search |
+| `Super + Space` | Launcher: apps, or `=` maths, `>` commands, `/` windows, `:` emoji |
+| `Super + W` | Overview of every workspace (click to focus, drag to move, middle-click to close) |
 | `Super + B` | Firefox |
 | `Super + E` | Files (Thunar) |
 | `Super + O` | Notes (Obsidian) |
@@ -32,9 +33,9 @@ Every desktop shortcut, plus the media keys (volume, play, next, previous), whic
 | `Super + Shift + B` | Hide / show the rail |
 | `Super + D` | Docs search |
 | `Super + F1` | This list |
-| `Super + C` | Calculator |
+| `Super + C` | Launcher in maths mode (`=`) |
 | `Super + Shift + V` | Clipboard history |
-| `Super + period` | Emoji picker |
+| `Super + period` | Launcher in emoji mode (`:`) |
 | `Super + Shift + C` | Colour picker |
 | `Super + Shift + T` | Copy text from a screen region (OCR) |
 | `Super + Shift + N` | Night light on / off |
@@ -46,7 +47,7 @@ Every desktop shortcut, plus the media keys (volume, play, next, previous), whic
 | `Alt + Print` | Captioned devlog screenshot |
 | `Shift + Print` | Whole screen to ~/Pictures |
 | `Super + Shift + S` | Region screenshot to clipboard (same as `Print`) |
-| `Alt + Tab` | Window switcher |
+| `Alt + Tab` | Launcher in window mode (`/`), last window preselected |
 | `Ctrl + Shift + Escape` | System monitor |
 | `Super + Shift + M` | DJ VM |
 
@@ -61,11 +62,12 @@ With `Super` held, and on the rail itself, where hovering anything also shows a 
 | `Super + right drag` | Resize a window |
 | `Wheel on the workspaces` | Step through workspaces |
 | `Click the clock` | Month calendar |
-| `Click now playing` | Play / pause |
+| `Click now playing` | Media card (cover, seek, shuffle, loop) |
+| `Right-click now playing` | Play / pause |
 | `Wheel on now playing` | Next / previous track |
 | `Right-click sys` | System monitor (btop) |
-| `Click the network icon` | Wi-Fi picker |
+| `Click the network icon` | Control centre |
 | `Right-click the network icon` | Network settings (nmtui) |
 | `Wheel on vol` | Volume up / down |
 | `Right-click vol` | Mute / unmute |
-| `Click vol` | Sound settings |
+| `Click vol` | Control centre (outputs, mic, app volumes, Wi-Fi, toggles) |

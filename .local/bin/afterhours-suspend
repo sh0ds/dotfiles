@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # A suspend request must first acquire the session lock. Never suspend unlocked.
 set -euo pipefail
-if ! pgrep -x hyprlock >/dev/null; then
+# The Afterhours lock screen first; hyprlock if the shell can't lock.
+if ! afterhours lock && ! pgrep -x hyprlock >/dev/null; then
   hyprlock --immediate &
 fi
 for attempt in {1..50}; do

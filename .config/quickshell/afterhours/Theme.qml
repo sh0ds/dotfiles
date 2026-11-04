@@ -13,6 +13,8 @@ QtObject {
     readonly property color text: "#e0dde8"
     readonly property color accent: "#b49cf0"
     readonly property color accentSoft: "#2a2340"
+    // The second stop of the violet gradient (window border, sliders).
+    readonly property color accentDeep: "#8f7ad9"
     readonly property color blue: "#5e9bb4"
     readonly property color danger: "#d9786c"
     readonly property color amber: "#d99f66"

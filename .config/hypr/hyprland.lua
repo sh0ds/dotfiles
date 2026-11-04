@@ -40,7 +40,8 @@ end)
 local terminal = "kitty"
 local menu = "afterhours apps"
 local browser = "firefox"
-local lock = "pidof hyprlock || hyprlock"
+-- The shell draws the lock screen; hyprlock is the fallback without it.
+local lock = "afterhours lock || pidof hyprlock || hyprlock"
 
 -------------------
 ---- AUTOSTART ----
@@ -51,10 +52,8 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	hl.exec_cmd("wl-paste --watch cliphist store")
-	hl.exec_cmd("swayosd-server")
-	hl.exec_cmd("awww-daemon")
-	-- Afterhours: quiet contour bands; fill each display without distortion.
-	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 0d0c10 --transition-type none ~/.local/share/backgrounds/afterhours-haze.jpg")
+	-- The wallpaper (the drifting haze) and the volume pill are drawn by the
+	-- Afterhours shell itself, so there is no wallpaper daemon or swayosd.
 end)
 
 -------------------------------
@@ -197,9 +196,10 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- Media keys (work on the lock screen too). No brightness keys: a desktop
 -- monitor's brightness is set on the monitor itself.
 local media = { locked = true, repeating = true }
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("swayosd-client --output-volume raise"), media)
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("swayosd-client --output-volume lower"), media)
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("swayosd-client --output-volume mute-toggle"), media)
+-- The shell sees the change in PipeWire and shows its volume pill.
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"), media)
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), media)
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), media)
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })

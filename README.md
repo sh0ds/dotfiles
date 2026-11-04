@@ -1,6 +1,6 @@
 # Afterhours
 
-My Arch + Hyprland desktop for making small games. Near-black charcoal with violet accents, one font (JetBrains Mono Nerd Font), rounded corners and calm motion. The bar, launcher, notifications and power menu are my own Quickshell config, not a preset.
+My Arch + Hyprland desktop for making small games. Near-black charcoal with violet accents, one font (JetBrains Mono Nerd Font), rounded corners and calm motion. The bar, launcher, lock screen, notifications and everything else on screen are my own Quickshell config, not a preset.
 
 ![Afterhours with kitty, fastfetch and cava](screenshots/afterhours-desktop.png)
 
@@ -9,14 +9,22 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 ## Description
 
 - **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
-- **Notifications** come from the shell itself: toasts with the app's icon that slide in and out on the monitor you're on, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
-- **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, hyprlock and the wallpaper.
+- **One launcher** for everything: type to find an app, or start with `=` for maths, `>` for commands, `/` for open windows and `:` for emoji.
+- **The overview** (`Super + W`) shows every workspace with live previews of its windows. Click one to go there, drag it to another workspace, middle-click to close it.
+- **The media card** opens from now playing: the cover, a seek bar, shuffle, loop and bigger cava bars.
+- **The control centre** opens from `vol` or the network icon: outputs, the mic, a volume per app, Wi-Fi networks and toggles for night light, quiet, keep awake and game mode.
+- **A thin frame** runs round the screen edge and joins the rail, so the desktop reads as one piece.
+- **The wallpaper moves:** soft violet clouds drift over the haze, but only while the workspace is empty.
+- **My own lock screen** with a big clock, the password pill and what is playing. hyprlock is still there as the fallback.
+- **Game mode** turns on by itself when a game goes fullscreen: no animations, dimming or shadows, and the rail and frame hide. You can also flip it in the control centre.
+- **Notifications** and the **volume popup** come from the shell itself: toasts with the app's icon that slide in and out on the monitor you're on, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
+- **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, the lock screen and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
 - **Thunar, Firefox, Obsidian, Zed and Helix** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
 - Unfocused windows dim a little. Games, video and picture-in-picture never do.
 - Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone). PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
 - PICO-8 and Picotron code in Zed: their APIs in the Lua language server, `F5` reruns the cart in the console, `F7` counts PICO-8 tokens. How it works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
-- Plus the DJ VM, a Wi-Fi picker, clipboard history, a calculator, an emoji picker, OCR, screen recording and captioned devlog screenshots.
+- Plus the DJ VM, clipboard history, OCR, screen recording and captioned devlog screenshots.
 
 ## Getting Started
 
@@ -35,12 +43,12 @@ Run `bash install-dotfiles.sh` again whenever files get added or removed. It cle
 
 ## Keys
 
-- `Super + Return` terminal, `Super + Space` apps, `Super + B` Firefox, `Super + E` files, `Super + O` notes
+- `Super + Return` terminal, `Super + Space` launcher, `Super + W` overview, `Super + B` Firefox, `Super + E` files, `Super + O` notes
 - `Super + N` inbox, `Super + Shift + Escape` power menu, `Super + Escape` lock
 - `Super + 1…0` workspace, `Super + Shift + 1…0` move the window there
 - `Super + arrows` or `h j k l` focus, add `Shift` to move the window
 - `Super + V` float and centre, `Super + F` fullscreen, `Super + G` group, `Super + Q` close
-- `Super + C` calculator, `Super + Shift + V` clipboard, `Super + period` emoji, `Super + D` docs
+- `Super + C` maths, `Super + Shift + V` clipboard, `Super + period` emoji, `Alt + Tab` windows, `Super + D` docs
 - `Print` region to clipboard, `Ctrl + Print` draw on it, `Alt + Print` captioned devlog shot
 - `Super + Shift + R` record a region, `Super + Shift + B` hide the rail, `Super + Shift + M` DJ VM
 - `Super + F1` lists all of them (from [docs/keys.md](docs/keys.md))

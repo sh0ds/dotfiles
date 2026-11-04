@@ -67,6 +67,10 @@ hl.config({
 		-- Open mpv or imv from kitty and the image/video takes the terminal's place.
 		enable_swallow = true,
 		swallow_regex = "^(kitty)$",
+		-- The lock screen is the Afterhours shell. If the shell ever dies
+		-- while locked, this lets hyprlock take over the lock (see
+		-- docs/desktop-rebuild.md) instead of leaving a dead red screen.
+		allow_session_lock_restore = true,
 	},
 	-- Tabbed groups (SUPER+G): a flat tab strip, violet for the active tab.
 	group = {
@@ -169,8 +173,11 @@ hl.animation({ leaf = "monitorAdded", enabled = false })
 -- there the instant you press the key.
 hl.layer_rule({ name = "still-bar", match = { namespace = "^afterhours-rail$" }, no_anim = true })
 hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpicker)$" }, no_anim = true })
--- Launcher and calculator fade without enlarging the text.
-hl.layer_rule({ name = "launcher-fade", match = { namespace = "^afterhours-overlay$" }, animation = "fade" })
+-- The wallpaper, the screen frame and the volume pill do their own motion
+-- (or none); the compositor leaves them alone.
+hl.layer_rule({ name = "still-shell", match = { namespace = "^afterhours-(wallpaper|frame|osd)$" }, no_anim = true })
+-- Launcher and overview fade without enlarging the text.
+hl.layer_rule({ name = "launcher-fade", match = { namespace = "^afterhours-(overlay|overview)$" }, animation = "fade" })
 -- Notifications and their panel slide in from the right edge.
 hl.layer_rule({ name = "notify-slide", match = { namespace = "^afterhours-toast$" }, animation = "slide right" })
 
@@ -435,8 +442,8 @@ hl.bind(mod .. " + U", hl.dsp.exec_cmd("music"))
 hl.bind(mod .. " + E", hl.dsp.exec_cmd("thunar"))
 -- Task manager: btop, same key as on Windows
 hl.bind("CTRL + SHIFT + Escape", hl.dsp.exec_cmd("sysmon"))
--- Emoji picker in fuzzel, types the one you pick
-hl.bind(mod .. " + period", hl.dsp.exec_cmd("emoji"))
+-- Emoji: the launcher in emoji mode; Enter types it and copies it
+hl.bind(mod .. " + period", hl.dsp.exec_cmd("afterhours launch :"))
 -- Proton Pass. Pressing it again while it's open brings the window back.
 hl.bind(mod .. " + SHIFT + P", hl.dsp.exec_cmd("proton-pass"))
 -- Unmount every USB stick so it is safe to pull out
@@ -469,14 +476,16 @@ hl.bind(
 		'grim -g "$(slurp)" - | satty --filename - --output-filename ~/Pictures/shot-%Y%m%d-%H%M%S.png --copy-command wl-copy'
 	)
 )
--- Calculator (fuzzel + qalc): "15% of 89", "300 EUR to USD"
-hl.bind(mod .. " + C", hl.dsp.exec_cmd("calc"))
+-- Calculator: the launcher in maths mode (qalc): "15% of 89", "300 EUR to USD"
+hl.bind(mod .. " + C", hl.dsp.exec_cmd("afterhours launch ="))
 -- Night light on/off
 hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd("nightlight"))
 -- Record a region to ~/Videos (press again to stop); the rail shows REC in coral
 hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("rec-toggle"))
--- Window switcher: every open window in a fuzzel list, Enter jumps to it
-hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))
+-- Window switcher: the launcher listing open windows, the previous one picked
+hl.bind("ALT + Tab", hl.dsp.exec_cmd("afterhours launch /"))
+-- Overview: every workspace with live window pictures; drag windows between them
+hl.bind(mod .. " + W", hl.dsp.exec_cmd("afterhours overview"))
 -- Hide or show the bar, for a clean screen while reading or sharing
 hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("afterhours bar"))
 -- Copy the text inside a screen region (OCR): error messages in videos, PDFs, screenshots
@@ -485,7 +494,7 @@ hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd("ocr"))
 hl.bind(mod .. " + O", hl.dsp.exec_cmd("notes"))
 -- Every keybind in a searchable list (read from docs/keys.md)
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))
--- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
+-- Docs search: "g node2d", "8 sspr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D", hl.dsp.exec_cmd("docs"))
 -- The Windows DJ VM: start it, or jump to it if it's open
 hl.bind(mod .. " + SHIFT + M", hl.dsp.exec_cmd("djvm"))

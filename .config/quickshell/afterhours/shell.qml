@@ -8,6 +8,7 @@ import Quickshell.Wayland
 import Quickshell.Services.Notifications
 import Quickshell.Services.Mpris
 import Quickshell.Services.SystemTray
+import Quickshell.Services.Pipewire
 
 ShellRoot {
     id: root
@@ -18,11 +19,12 @@ ShellRoot {
     property bool sharing: false
     property int shareCount: 0
     property bool barVisible: true
-    property string volume: "—"
     // The Pi (site, backups, takt) answers a ping: checked every 30 s.
     property bool piUp: false
     readonly property string piHost: Quickshell.env("PI_HOST") || "192.168.178.36"
     property string pendingAction: ""
+    // What the launcher starts with ("=" for Super+C and so on); used once.
+    property string launchPrefix: ""
     // Toasts on screen now, newest last. A notification leaves the toasts
     // after its timeout but stays in the inbox until dismissed.
     property var toasts: []
@@ -73,23 +75,53 @@ ShellRoot {
         function close(): void { root.panel = ""; }
         function quietMode(enabled: bool): void { root.quiet = enabled; }
         function quiet(): string { return root.quiet ? "true" : "false"; }
+        function lock(): void { root.lockNow(); }
+        function locked(): string { return lockScreen.secure ? "true" : "false"; }
+        function overview(): void { overviewWindow.open = !overviewWindow.open; }
+        // Open the launcher with a mode already typed: "=", ">", "/" or ":".
+        function launch(prefix: string): void {
+            if (root.panel === "apps") { query.text = prefix; query.cursorPosition = prefix.length; }
+            else { root.launchPrefix = prefix; root.toggle("apps", null); }
+        }
+        function game(on: bool): void { root.setGame(on); }
     }
     SystemClock { id: clock; precision: SystemClock.Minutes }
-    // wpctl is locale-pinned; nothing is interpolated into a shell command.
-    Process {
-        id: volumeRead
-        command: ["env", "LC_ALL=C", "wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
-        stdout: StdioCollector { onStreamFinished: {
-            const match = text.match(/Volume:\s+([0-9.]+)/);
-            root.volume = match ? (text.includes("MUTED") ? "mute" : Math.round(Number(match[1]) * 100) + "%") : "—";
-        } }
+    // Sound straight from PipeWire: the rail, the OSD and the control centre
+    // all follow the default output live, no polling.
+    readonly property var sink: Pipewire.defaultAudioSink
+    PwObjectTracker { objects: [Pipewire.defaultAudioSink, Pipewire.defaultAudioSource] }
+    readonly property string volume: !sink?.audio ? "—" : sink.audio.muted ? "mute" : Math.round(sink.audio.volume * 100) + "%"
+    function nudgeVolume(step) {
+        if (!sink?.audio) return;
+        sink.audio.muted = false;
+        sink.audio.volume = Math.max(0, Math.min(1, Math.round((sink.audio.volume + step * 0.05) * 20) / 20));
     }
-    // Volume from the rail (wheel, right-click): wpctl, then read it back at once.
-    function setVolume(args) {
-        Quickshell.execDetached(["wpctl", ...args]);
-        volumeLater.restart();
+    function toggleMute() { if (sink?.audio) sink.audio.muted = !sink.audio.muted; }
+
+    // Game mode: on while a game is fullscreen (Steam games, anything Hyprland
+    // marks as game content, or fullscreen on workspace 5), or when you turn it
+    // on yourself. Animations, dimming and shadows go off, the rail and the
+    // frame hide, the wallpaper stops. Turning it on or off by hand overrides
+    // the automatic choice until the next game starts or ends.
+    readonly property bool gameAuto: {
+        const ws = Hyprland.focusedWorkspace;
+        if (!ws?.hasFullscreen) return false;
+        const ipc = Hyprland.activeToplevel?.lastIpcObject ?? {};
+        return ws.id === 5 || ipc.contentType === "game" || /^(steam_app_\d+|gamescope)$/.test(ipc.class ?? "");
     }
-    Timer { id: volumeLater; interval: 120; onTriggered: if (!volumeRead.running) volumeRead.running = true }
+    property string gameOverride: ""
+    onGameAutoChanged: gameOverride = ""
+    readonly property bool gameMode: gameOverride === "on" || (gameOverride !== "off" && gameAuto)
+    function setGame(on) { gameOverride = on === gameAuto ? "" : on ? "on" : "off"; }
+    Connections {
+        target: Hyprland.focusedWorkspace
+        function onHasFullscreenChanged() { Hyprland.refreshToplevels(); }
+    }
+    onGameModeChanged: {
+        Quickshell.execDetached(["hyprctl", "eval", gameMode
+            ? "hl.config({ animations = { enabled = false }, decoration = { dim_inactive = false, shadow = { enabled = false } } })"
+            : "hl.config({ animations = { enabled = true }, decoration = { dim_inactive = true, shadow = { enabled = true } } })"]);
+    }
     // cava, only while something plays: ten bars, 0-7 each, one line per
     // frame (.config/cava/rail). Stereo, so the bass sits in the middle and
     // the two channels mirror outwards. Without cava the bars stay flat.
@@ -155,7 +187,6 @@ ShellRoot {
         }
     }
     Timer { interval: 2000; repeat: true; running: true; triggeredOnStart: true; onTriggered: {
-        if (!volumeRead.running) volumeRead.running = true;
         if (!captureRead.running) captureRead.running = true;
     } }
     NotificationServer {
@@ -181,8 +212,17 @@ ShellRoot {
             id: rail
             required property var modelData
             screen: modelData
-            visible: root.barVisible
+            visible: root.barVisible && !root.gameMode
             WlrLayershell.namespace: "afterhours-rail"
+            // The media card and the control centre hang under this rail.
+            function openControl(cell) {
+                if (control.visible && control.target === cell) { control.visible = false; return; }
+                control.visible = false;
+                control.target = cell;
+                control.visible = true;
+            }
+            MediaCard { id: media; target: mediaCell; player: root.player; bars: root.cavaBars }
+            ControlCenter { id: control; target: volCell; shell: root }
             anchors { top: true; left: true; right: true }
             // Floats 8 px down and 12 px in, lined up with the window gaps.
             margins { top: 8; left: 12; right: 12 }
@@ -367,13 +407,14 @@ ShellRoot {
                             }
                         }
                     }
-                    hint: "Click: play / pause · wheel: next / previous track"
-                    onClicked: { if (root.player?.canTogglePlaying) root.player.togglePlaying(); }
-                    WheelHandler {
-                        onWheel: e => {
-                            if (e.angleDelta.y < 0 && root.player?.canGoNext) root.player.next();
-                            else if (e.angleDelta.y > 0 && root.player?.canGoPrevious) root.player.previous();
-                        }
+                    id: mediaCell
+                    fill: media.visible ? Theme.accentSoft : "transparent"
+                    hint: "Click: player · right-click: play / pause · wheel: next / previous track"
+                    onClicked: media.visible = !media.visible
+                    onRightClicked: { if (root.player?.canTogglePlaying) root.player.togglePlaying(); }
+                    onWheeled: step => {
+                        if (step < 0 && root.player?.canGoNext) root.player.next();
+                        else if (step > 0 && root.player?.canGoPrevious) root.player.previous();
                     }
                 }
                 // sys: click unfolds cpu, memory, temperature and gpu; right-click opens btop.
@@ -398,12 +439,14 @@ ShellRoot {
                     onClicked: root.run(["kitty", "-e", "ssh", "pi"])
                 }
                 Cell {
+                    id: netCell
                     visible: rail.width > 900
                     label: root.net === "ethernet" ? "\uf0e8" : root.net.startsWith("wifi:") ? "\uf1eb" : "\uf127"
                     size: 14
+                    fill: control.visible && control.target === netCell ? Theme.accentSoft : "transparent"
                     ink: root.net === "offline" ? Theme.danger : Theme.text
-                    hint: root.net === "offline" ? "Offline · click: Wi-Fi" : root.net === "ethernet" ? "Wired · click: Wi-Fi · right-click: settings" : root.net.slice(5) + " · click: Wi-Fi · right-click: settings"
-                    onClicked: root.run(["wifi"])
+                    hint: (root.net === "offline" ? "Offline" : root.net === "ethernet" ? "Wired" : root.net.slice(5)) + " · click: control centre · right-click: network settings"
+                    onClicked: rail.openControl(netCell)
                     onRightClicked: root.run(["wifi", "settings"])
                 }
                 Cell {
@@ -418,11 +461,12 @@ ShellRoot {
                 Cell {
                     id: volCell
                     label: (rail.width > 900 ? "vol " : "") + root.volume
+                    fill: control.visible && control.target === volCell ? Theme.accentSoft : "transparent"
                     ink: root.volume === "mute" ? Theme.muted : Theme.text
-                    hint: "Wheel: volume · right-click: mute · click: sound settings"
-                    onClicked: root.run(["pavucontrol"])
-                    onRightClicked: root.setVolume(["set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"])
-                    WheelHandler { onWheel: e => root.setVolume(["set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@", e.angleDelta.y > 0 ? "5%+" : "5%-"]) }
+                    hint: "Wheel: volume · right-click: mute · click: control centre"
+                    onClicked: rail.openControl(volCell)
+                    onRightClicked: root.toggleMute()
+                    onWheeled: step => root.nudgeVolume(step)
                 }
                 Cell {
                     label: (rail.width > 900 ? (root.quiet ? "quiet " : "inbox ") : "✉ ") + notices.trackedNotifications.values.length
@@ -458,6 +502,13 @@ ShellRoot {
             }
         }
     }
+    // The living wallpaper and the screen frame, one each per monitor.
+    Variants { model: Quickshell.screens; Wallpaper { still: root.gameMode } }
+    Variants { model: Quickshell.screens; Frame { band: root.barVisible ? 56 : 6; visible: !root.gameMode } }
+    Osd { sink: root.sink }
+    Overview { id: overviewWindow }
+    Lock { id: lockScreen }
+    function lockNow() { panel = ""; overviewWindow.open = false; lockScreen.lock(); }
     // One keyboard-driven overlay on the chosen output. Escape and outside click dismiss it.
     PanelWindow {
         id: overlay
@@ -509,46 +560,129 @@ ShellRoot {
                 StackLayout {
                     Layout.fillWidth: true; Layout.fillHeight: true
                     currentIndex: ({apps: 0, inbox: 1, session: 2})[root.panel] ?? 0
+                    // The launcher. Plain text finds apps; a first character
+                    // switches what it searches:
+                    //   =  maths (qalc): Enter copies the answer
+                    //   >  commands: lock, restart the shell, quiet, game mode…
+                    //   /  open windows, most recent first (Alt+Tab opens this)
+                    //   :  emoji: Enter types it and copies it
                     ColumnLayout {
+                        id: launcher
+                        readonly property string raw: query.text
+                        readonly property string mode: ["=", ">", "/", ":"].includes(raw.charAt(0)) ? raw.charAt(0) : ""
+                        readonly property string q: (mode ? raw.slice(1) : raw).trim().toLowerCase()
+                        // Uniform rows: name, detail, an icon name or a glyph, and what Enter does.
+                        readonly property var rows: {
+                            if (mode === "=") return calcRows;
+                            if (mode === ">") return commandRows.filter(c => !q || c.name.toLowerCase().includes(q) || c.detail.toLowerCase().includes(q));
+                            if (mode === "/") return windowRows.filter(w => !q || (w.name + " " + w.detail).toLowerCase().includes(q));
+                            if (mode === ":") return emojiRows;
+                            const rank = app => {
+                                const name = app.name.toLowerCase();
+                                if (!q || name.startsWith(q)) return 0;
+                                if (name.includes(q)) return 1;
+                                const more = [app.genericName, app.comment, ...(app.keywords ?? [])].join(" ").toLowerCase();
+                                return more.includes(q) ? 2 : 3;
+                            };
+                            return DesktopEntries.applications.values
+                                .filter(app => !app.noDisplay && rank(app) < 3)
+                                .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name))
+                                .map(app => ({ name: app.name, detail: app.genericName || "", icon: app.icon, glyph: "", act: () => app.execute() }));
+                        }
+                        function launch(i) {
+                            const row = rows[Math.max(0, i)];
+                            if (!row) return;
+                            root.panel = "";
+                            row.act();
+                        }
+
+                        // = maths. qalc runs a moment after you stop typing.
+                        property string calcAnswer: ""
+                        readonly property var calcRows: {
+                            if (!q) return [{ name: "Type a sum", detail: "2^10 · 15% of 89 · 300 EUR to USD · 5 GiB to MB", icon: "", glyph: "=", act: () => {} }];
+                            const answer = /meaning of life/.test(q) ? "42"
+                                : /\/\s*0+([^0-9.,]|$)/.test(q) ? "nice try"
+                                : calcAnswer;
+                            return [{ name: answer || "…", detail: "Enter copies it", icon: "", glyph: "=",
+                                      act: () => { if (answer) Quickshell.execDetached(["sh", "-c", 'printf %s "$1" | wl-copy && notify-send -a Calculator Copied "$1"', "_", answer]); } }];
+                        }
+                        Timer { id: calcLater; interval: 150; onTriggered: { if (launcher.mode === "=" && launcher.q) { calc.command = ["qalc", "-t", launcher.raw.slice(1)]; calc.running = true; } } }
+                        onRawChanged: if (mode === "=") { calcAnswer = ""; calcLater.restart(); }
+                        Process { id: calc; stdout: StdioCollector { onStreamFinished: launcher.calcAnswer = text.trim() } }
+
+                        // > commands. Logging out and powering off go through the
+                        // session panel, so they keep their second click.
+                        readonly property var commandRows: [
+                            { name: "Lock", detail: "the lock screen", glyph: "", icon: "", act: () => root.lockNow() },
+                            { name: "Overview", detail: "every workspace · Super+W", glyph: "", icon: "", act: () => overviewWindow.open = true },
+                            { name: root.quiet ? "Quiet off" : "Quiet on", detail: "hold back notifications", glyph: "", icon: "", act: () => root.quiet = !root.quiet },
+                            { name: root.awake ? "Keep awake off" : "Keep awake on", detail: "no dim, lock or sleep", glyph: "", icon: "", act: () => root.awake = !root.awake },
+                            { name: root.gameMode ? "Game mode off" : "Game mode on", detail: "no animations, dimming or rail", glyph: "", icon: "", act: () => root.setGame(!root.gameMode) },
+                            { name: "Night light", detail: "warm colours on / off", glyph: "", icon: "", act: () => Quickshell.execDetached(["nightlight"]) },
+                            { name: "Colour picker", detail: "hex code to the clipboard", glyph: "", icon: "", act: () => Quickshell.execDetached(["hyprpicker", "-a"]) },
+                            { name: "Copy text from the screen", detail: "OCR a region", glyph: "", icon: "", act: () => Quickshell.execDetached(["ocr"]) },
+                            { name: "Record a region", detail: "again to stop", glyph: "", icon: "", act: () => Quickshell.execDetached(["rec-toggle"]) },
+                            { name: "Docs search", detail: "Godot, PICO-8, Arch Wiki, man", glyph: "", icon: "", act: () => Quickshell.execDetached(["docs"]) },
+                            { name: "Reload Hyprland", detail: "re-read hyprland.lua", glyph: "", icon: "", act: () => Quickshell.execDetached(["hyprctl", "reload"]) },
+                            { name: "Restart the shell", detail: "afterhours restart", glyph: "", icon: "", act: () => Quickshell.execDetached(["afterhours", "restart"]) },
+                            { name: "Log out, reboot, power off", detail: "the session panel", glyph: "", icon: "", act: () => root.toggle("session", null) }
+                        ]
+
+                        // / windows, most recently used first.
+                        readonly property var windowRows: {
+                            const list = Hyprland.toplevels.values
+                                .filter(t => (t.lastIpcObject?.workspace?.id ?? 0) > 0)
+                                .sort((a, b) => (a.lastIpcObject?.focusHistoryID ?? 99) - (b.lastIpcObject?.focusHistoryID ?? 99));
+                            return list.map(t => {
+                                const cls = t.lastIpcObject?.class ?? "";
+                                const entry = DesktopEntries.heuristicLookup(cls);
+                                return { name: t.title || cls, detail: (entry?.name ?? cls) + " · " + (t.workspace?.id ?? ""), icon: entry?.icon ?? "", glyph: "",
+                                         act: () => Hyprland.dispatch('hl.dsp.focus({ window = "address:0x' + t.address + '" })') };
+                            });
+                        }
+                        onModeChanged: if (mode === "/") Hyprland.refreshToplevels()
+
+                        // : emoji, from the unicode-emoji list, read the first time.
+                        property var emojiAll: []
+                        FileView {
+                            path: "/usr/share/unicode/emoji/emoji-test.txt"
+                            blockLoading: false
+                            preload: launcher.mode === ":"
+                            onLoaded: {
+                                const out = [];
+                                for (const line of text().split("\n")) {
+                                    if (!line.includes("; fully-qualified") || line.includes("skin tone")) continue;
+                                    const m = line.match(/#\s+(\S+)\s+E[0-9.]+\s+(.+)$/);
+                                    if (m) out.push({ e: m[1], n: m[2] });
+                                }
+                                launcher.emojiAll = out;
+                            }
+                        }
+                        readonly property var emojiRows: emojiAll.filter(x => !q || x.n.includes(q)).slice(0, 80).map(x => ({
+                            name: x.n, detail: "", icon: "", glyph: x.e,
+                            act: () => Quickshell.execDetached(["sh", "-c", 'wl-copy -n -- "$1"; sleep 0.2; command -v wtype >/dev/null && wtype -- "$1"', "_", x.e])
+                        }))
+
                         TextField {
                             id: query
                             Layout.fillWidth: true
-                            placeholderText: "Find an application…"
+                            placeholderText: "Find an app…   = maths   > commands   / windows   : emoji"
                             font.family: Theme.font; font.pixelSize: 16; color: Theme.text
+                            placeholderTextColor: Theme.muted
                             leftPadding: 14; topPadding: 10; bottomPadding: 10
                             background: Rectangle { color: Theme.background; border.color: query.activeFocus ? Theme.accent : Theme.line; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
                             Keys.onEscapePressed: root.panel = ""
-                            onTextChanged: appList.currentIndex = 0
+                            onTextChanged: appList.currentIndex = launcher.mode === "/" && launcher.q === "" && launcher.rows.length > 1 ? 1 : 0
                             Keys.onDownPressed: appList.incrementCurrentIndex()
                             Keys.onUpPressed: appList.decrementCurrentIndex()
-                            function launchCurrent() {
-                                const app = appList.model.values[Math.max(0, appList.currentIndex)];
-                                if (app) { app.execute(); root.panel = ""; }
-                            }
-                            Keys.onReturnPressed: launchCurrent()
-                            Keys.onEnterPressed: launchCurrent()
-                            onAccepted: launchCurrent()
+                            Keys.onTabPressed: appList.incrementCurrentIndex()
+                            Keys.onReturnPressed: launcher.launch(appList.currentIndex)
+                            Keys.onEnterPressed: launcher.launch(appList.currentIndex)
                         }
                         ListView {
                             id: appList
                             Layout.fillWidth: true; Layout.fillHeight: true; clip: true; spacing: 4
-                            // Names that start with what you typed come first, then
-                            // other name matches, then matches in the description or
-                            // keywords; alphabetical inside each group.
-                            model: ScriptModel { values: {
-                                const q = query.text.trim().toLowerCase();
-                                const rank = app => {
-                                    const name = app.name.toLowerCase();
-                                    if (!q) return 0;
-                                    if (name.startsWith(q)) return 0;
-                                    if (name.includes(q)) return 1;
-                                    const more = [app.genericName, app.comment, ...(app.keywords ?? [])].join(" ").toLowerCase();
-                                    return more.includes(q) ? 2 : 3;
-                                };
-                                return DesktopEntries.applications.values
-                                    .filter(app => !app.noDisplay && rank(app) < 3)
-                                    .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name));
-                            } }
+                            model: ScriptModel { values: launcher.rows }
                             // Keyboard selection keeps the chosen row in view.
                             highlightFollowsCurrentItem: true
                             highlightMoveDuration: 0
@@ -556,26 +690,37 @@ ShellRoot {
                                 id: appRow
                                 required property var modelData
                                 required property int index
-                                width: appList.width; height: 42
+                                width: ListView.view.width; height: 44
                                 radius: Theme.radius
-                                color: appList.currentIndex === index ? Theme.raised : "transparent"
-                                Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
                                 readonly property bool current: appList.currentIndex === index
+                                color: current ? Theme.raised : "transparent"
+                                Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
                                 // The chosen row gets a violet edge, like the workspace marker.
                                 Rectangle { x: 4; y: 11; width: 3; height: parent.height - 22; radius: 2; color: Theme.accent; opacity: appRow.current ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
                                 Row {
                                     anchors.left: parent.left; anchors.leftMargin: 16; anchors.right: parent.right; anchors.rightMargin: 12
                                     anchors.verticalCenter: parent.verticalCenter
                                     spacing: 12
-                                    Image {
+                                    Item {
                                         anchors.verticalCenter: parent.verticalCenter
-                                        width: 22; height: 22; sourceSize: Qt.size(44, 44)
-                                        source: appRow.modelData.icon ? Quickshell.iconPath(appRow.modelData.icon, true) : ""
+                                        width: 22; height: 22
+                                        Image {
+                                            id: rowIcon
+                                            anchors.fill: parent; sourceSize: Qt.size(44, 44)
+                                            source: appRow.modelData.icon ? Quickshell.iconPath(appRow.modelData.icon, true) : ""
+                                        }
+                                        Text {
+                                            anchors.centerIn: parent
+                                            visible: rowIcon.status !== Image.Ready
+                                            text: appRow.modelData.glyph || ""
+                                            color: Theme.accent; font.family: Theme.font
+                                            font.pixelSize: launcher.mode === ":" ? 18 : 14
+                                        }
                                     }
-                                    Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.name; color: Theme.text; font.family: Theme.font; font.pixelSize: 14; font.bold: appRow.current; textFormat: Text.PlainText }
-                                    Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.genericName || ""; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; elide: Text.ElideRight; width: Math.max(0, appRow.width - x - 40) }
+                                    Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.name; color: Theme.text; font.family: Theme.font; font.pixelSize: launcher.mode === "=" ? 18 : 14; font.bold: appRow.current || launcher.mode === "="; textFormat: Text.PlainText; elide: Text.ElideRight; width: Math.min(implicitWidth, appRow.width * 0.6) }
+                                    Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.detail || ""; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; elide: Text.ElideRight; width: Math.max(0, appRow.width - x - 40) }
                                 }
-                                MouseArea { anchors.fill: parent; hoverEnabled: true; onEntered: appList.currentIndex = appRow.index; onClicked: { appRow.modelData.execute(); root.panel = ""; } }
+                                MouseArea { anchors.fill: parent; hoverEnabled: true; onEntered: appList.currentIndex = appRow.index; onClicked: launcher.launch(appRow.index) }
                             }
                         }
                     }
@@ -616,7 +761,7 @@ ShellRoot {
                 Text { text: "SHOW UP  <font color=\"" + Theme.accent + "\">◆</font>  SHIP SMALL"; textFormat: Text.StyledText; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 3; Layout.fillWidth: true; Layout.topMargin: 4; horizontalAlignment: Text.AlignHCenter; elide: Text.ElideRight }
             }
         }
-        Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { query.text = ""; query.forceActiveFocus(); } else sheet.forceActiveFocus(); } }
+        Connections { target: root; function onPanelChanged() { if (root.panel === "apps") { query.text = root.launchPrefix; query.cursorPosition = query.text.length; root.launchPrefix = ""; query.forceActiveFocus(); } else sheet.forceActiveFocus(); } }
         // Capture all unhandled Escape presses, including while a text field is focused.
         Item { anchors.fill: parent; focus: true; Keys.onEscapePressed: root.panel = "" }
     }

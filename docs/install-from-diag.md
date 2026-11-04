@@ -25,7 +25,7 @@ sudo pacman -Syu --needed \
   noto-fonts ttf-jetbrains-mono-nerd cava papirus-icon-theme
 ```
 
-This is the package delta from the existing Diag setup. Keep the existing Hyprland, Hyprlock, Hypridle, portals, SwayOSD, awww, Kitty, audio and other helper dependencies. Keep Fuzzel: clipboard, Wi-Fi and calculator helpers still use it. Waybar, SwayNC, Wlogout and tmux are no longer used and can be uninstalled.
+This is the package delta from the existing Diag setup. Keep the existing Hyprland, Hyprlock, Hypridle, portals, Kitty, audio and other helper dependencies. Keep Fuzzel: the clipboard, docs and Wi-Fi password helpers still use it. SwayOSD and awww are no longer used (the shell draws the volume popup and the wallpaper) and can be uninstalled too. Waybar, SwayNC, Wlogout and tmux are no longer used and can be uninstalled.
 
 ```sh
 quickshell --version
@@ -109,7 +109,7 @@ Do not run `system/install-system.sh` for this migration. Do not replace NVIDIA 
 
 Return to your normal display manager and choose Hyprland. If you normally start from TTY1 instead, return to that console and log in normally. A fresh session is required: editing/reloading the config does not rerun the startup hook.
 
-The session should start Quickshell, Hypridle, SwayOSD, the existing polkit agent, clipboard watcher and wallpaper daemon. The old shell should not start from this config.
+The session should start Quickshell, Hypridle, the existing polkit agent and the clipboard watcher. The old shell should not start from this config.
 
 If an independently enabled Waybar/SwayNC service or autostart entry still launches it, identify and disable that specific entry. Do not run SwayNC or another notification daemon alongside Afterhours.
 
