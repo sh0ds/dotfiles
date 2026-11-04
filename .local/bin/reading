@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# reading: reading layout on/off (SUPER+R).
+#   On:  every tiled window of this workspace moves to workspace 6, where the
+#        focused one (the doc) sits in the middle at half the width and the
+#        others stack on its left and right (master layout, centred; rice.lua).
+#   Off: (SUPER+R again on workspace 6) they all go back where they came from.
+# One window alone stays in the middle; with two, the doc is on the left.
+set -euo pipefail
+read_ws=6
+state=${XDG_RUNTIME_DIR:-/tmp}/reading-from
+d() { hyprctl dispatch "$1" >/dev/null; }
+
+here=$(hyprctl activeworkspace -j | jq -r '.id')
+if [ "$here" = "$read_ws" ]; then
+  back=$(cat "$state" 2>/dev/null || echo 1)
+  focused=$(hyprctl activewindow -j | jq -r '.address // empty')
+  for addr in $(hyprctl clients -j | jq -r --argjson ws "$read_ws" '.[] | select(.workspace.id == $ws) | .address'); do
+    d "hl.dsp.window.move({ workspace = \"$back\", follow = false, window = \"address:$addr\" })"
+  done
+  d "hl.dsp.focus({ workspace = \"$back\" })"
+  [ -n "$focused" ] && d "hl.dsp.focus({ window = \"address:$focused\" })"
+  rm -f "$state"
+  exit 0
+fi
+
+doc=$(hyprctl activewindow -j | jq -r '.address // empty')
+[ -n "$doc" ] || { notify-send -a Reading "Nothing to read" "Focus the window you want in the middle"; exit 1; }
+echo "$here" > "$state"
+# The others first, the doc last, then the doc becomes the master (the middle).
+for addr in $(hyprctl clients -j | jq -r --argjson ws "$here" --arg doc "$doc" \
+    '.[] | select(.workspace.id == $ws and .floating == false and .address != $doc) | .address'); do
+  d "hl.dsp.window.move({ workspace = \"$read_ws\", follow = false, window = \"address:$addr\" })"
+done
+d "hl.dsp.window.move({ workspace = \"$read_ws\", window = \"address:$doc\" })"
+d "hl.dsp.focus({ window = \"address:$doc\" })"
+d 'hl.dsp.layout("swapwithmaster ignoremaster")'

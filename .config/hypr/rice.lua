@@ -181,6 +181,20 @@ hl.layer_rule({ name = "notify-slide", match = { namespace = "^afterhours-toast$
 -- A workspace with a single tiled window drops its gaps and border, so the editor
 -- alone gets every pixel. Open a second window and they come back.
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
+
+-- Reading layout (SUPER+R, the reading script): workspace 6 tiles with the
+-- master layout, centred. The doc is the master, half the screen wide in the
+-- middle; the other windows stack left and right of it. Alone it still stays
+-- in the middle; with one other window the doc goes left.
+hl.config({
+	master = {
+		mfact = 0.5,
+		slave_count_for_center_master = 2,
+		center_master_fallback = "left",
+		always_keep_position = true,
+	},
+})
+hl.workspace_rule({ workspace = "6", layout = "master", layout_opts = { orientation = "center" } })
 hl.window_rule({
 	name = "smart-borders",
 	match = { float = false, workspace = "w[tv1]" },
@@ -479,11 +493,13 @@ hl.bind(mod .. " + SHIFT + R", hl.dsp.exec_cmd("rec-toggle"))
 hl.bind("ALT + Tab", hl.dsp.exec_cmd("winswitch"))
 -- Hide or show the bar, for a clean screen while reading or sharing
 hl.bind(mod .. " + SHIFT + B", hl.dsp.exec_cmd("afterhours bar"))
+-- Reading layout: the focused window in the middle, the rest beside it (again: back)
+hl.bind(mod .. " + R", hl.dsp.exec_cmd("reading"))
 -- Copy the text inside a screen region (OCR): error messages in videos, PDFs, screenshots
 hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd("ocr"))
 -- Notes: Obsidian as a normal window, started or focused
 hl.bind(mod .. " + O", hl.dsp.exec_cmd("notes"))
--- Every keybind in a searchable list (read from the README table)
+-- Every keybind in a searchable list (read from docs/keys.md)
 hl.bind(mod .. " + F1", hl.dsp.exec_cmd("keys"))
 -- Docs search: "h foldr", "w hyprland", "m printf" (see the docs script)
 hl.bind(mod .. " + D", hl.dsp.exec_cmd("docs"))
