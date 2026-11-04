@@ -4,11 +4,11 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 // The living wallpaper: the haze picture, with three soft violet clouds
-// drifting over it very slowly (one loop takes minutes, and the loop
-// closes seamlessly). It only moves
-// while the desktop shows: as soon as the workspace on this monitor has a
-// window, or the shell is in game mode, the animation stops and the window
-// stops rendering, so it costs nothing while you work.
+// drifting over it (a loop takes a minute or two and closes seamlessly).
+// It keeps moving behind windows, since kitty, Thunar, Zed and Obsidian
+// are see-through. It stops when the workspace on this monitor has a
+// fullscreen window or the shell is in game mode; then the window stops
+// rendering and costs nothing.
 PanelWindow {
     id: wall
     required property var modelData
@@ -20,8 +20,7 @@ PanelWindow {
     anchors { top: true; bottom: true; left: true; right: true }
     color: Theme.background
     readonly property var workspace: Hyprland.monitorFor(modelData)?.activeWorkspace ?? null
-    readonly property bool bare: (workspace?.toplevels?.values?.length ?? 0) === 0
-    readonly property bool drifting: bare && !still
+    readonly property bool drifting: !still && !(workspace?.hasFullscreen ?? false)
     updatesEnabled: drifting
     Image {
         anchors.fill: parent
@@ -86,7 +85,7 @@ PanelWindow {
             }
         }
     }
-    Cloud { baseX: 0.32; baseY: 0.58; period: 140000; strength: 0.14 }
-    Cloud { baseX: 0.70; baseY: 0.42; period: 190000; offset: 2.1; tint: Theme.accentDeep; strength: 0.18; dx: 0.10; dy: 0.12 }
-    Cloud { baseX: 0.52; baseY: 0.80; period: 240000; offset: 4.0; strength: 0.08; dx: 0.18; dy: 0.05; stretch: 2.2 }
+    Cloud { baseX: 0.32; baseY: 0.58; period: 60000; strength: 0.26; dx: 0.18; dy: 0.12 }
+    Cloud { baseX: 0.70; baseY: 0.42; period: 80000; offset: 2.1; tint: Theme.accentDeep; strength: 0.32; dx: 0.16; dy: 0.18 }
+    Cloud { baseX: 0.52; baseY: 0.80; period: 100000; offset: 4.0; strength: 0.16; dx: 0.26; dy: 0.08; stretch: 2.2 }
 }

@@ -44,9 +44,10 @@ hl.config({
 		inactive_opacity = 1.0,
 		-- A wide, soft shadow that falls slightly down, like light from above.
 		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(060508d0)", color_inactive = "rgba(06050880)" },
-		-- Blur only behind the shell's glass (the "glass" layer rule below);
-		-- windows are opaque, so they never pay for it.
-		blur = { enabled = true, size = 7, passes = 3, vibrancy = 0.18, noise = 0.015, new_optimizations = true },
+		-- Blur behind the shell's glass (the "glass" layer rule below) and
+		-- behind the see-through windows (kitty, and the "see-through" rule).
+		-- Everything else is opaque and never pays for it.
+		blur = { enabled = true, size = 8, passes = 3, vibrancy = 0.18, noise = 0.015, new_optimizations = true },
 		-- Unfocused windows sink back a touch (8 %), so the one you type
 		-- into stands out without a heavier border. Games, fantasy consoles,
 		-- video, pixel art and Firefox's PiP are never dimmed (rules below).
@@ -335,6 +336,15 @@ hl.window_rule({
 -- Tiles where you start it like the fantasy consoles; fullscreen (a game
 -- from the launcher starts that way) it counts as a game, so the shell
 -- turns game mode on. Never dimmed, the screen stays on.
+-- See-through: the files, the editor and the notes let the wallpaper
+-- show through, blurred, a little more when they're not focused. kitty
+-- does this itself (background_opacity), so its text stays solid.
+-- Firefox, SoundCloud, games, video and art tools stay opaque.
+hl.window_rule({
+	name = "see-through",
+	match = { class = "(?i)^(thunar|org\\.xfce\\.thunar|dev\\.zed\\.zed(-preview)?|obsidian)$" },
+	opacity = "0.92 0.86",
+})
 hl.window_rule({
 	name = "handheld-emulators",
 	match = { class = "^io\\.mgba\\.mGBA$" },
