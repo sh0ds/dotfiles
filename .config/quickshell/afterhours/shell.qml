@@ -261,6 +261,7 @@ ShellRoot {
                 width: leftRow.implicitWidth + 12
                 radius: height / 2
                 color: Theme.glass
+                Sheen {}
                 border.width: 1; border.color: Theme.edge
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
@@ -369,6 +370,7 @@ ShellRoot {
                 width: rightRow.implicitWidth + 12
                 radius: height / 2
                 color: Theme.glass
+                Sheen {}
                 border.width: 1; border.color: Theme.edge
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
@@ -523,7 +525,8 @@ ShellRoot {
         Rectangle {
             anchors.fill: parent
             color: Theme.background
-            opacity: overlay.visible ? 0.6 : 0
+            // Light enough that the blurred desktop shows through the sheet.
+            opacity: overlay.visible ? 0.35 : 0
             Behavior on opacity { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
         }
         MouseArea { anchors.fill: parent; onClicked: root.panel = "" }
@@ -533,6 +536,7 @@ ShellRoot {
             width: Math.min(parent.width - 32, 820)
             height: Math.min(parent.height - 100, 660)
             color: Theme.glass
+            Sheen {}
             border.color: Theme.edge; border.width: 1
             radius: Theme.radiusLarge
             Keys.onEscapePressed: root.panel = ""

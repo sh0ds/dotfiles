@@ -37,6 +37,7 @@ Rectangle {
     radius: height / 2
     clip: true
     color: open ? Theme.accentSoft : hover.hovered && mode === "clock" ? Theme.glassRaised : Theme.glass
+    Sheen {}
     border.width: 1
     border.color: open ? Theme.accent
         : mode === "notice" && notice?.urgency === NotificationUrgency.Critical ? Theme.danger

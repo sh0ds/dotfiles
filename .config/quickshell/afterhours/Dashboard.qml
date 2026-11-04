@@ -138,6 +138,7 @@ PopupWindow {
         anchors.fill: parent
         radius: Theme.radiusLarge
         color: Theme.glass
+        Sheen {}
         border.width: 1; border.color: Theme.edge
         transformOrigin: Item.Top
         PopIn { id: pop; surface: box; inner: body }

@@ -14,6 +14,7 @@ Rectangle {
     implicitHeight: body.implicitHeight + 28
     // A toast is glass of its own; in the inbox it sits in the sheet's glass.
     color: hover.hovered ? Theme.glassRaised : toast ? Theme.glass : Theme.well
+    Sheen { visible: card.toast }
     border.color: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.edge
     border.width: 1
     radius: Theme.radius + 2

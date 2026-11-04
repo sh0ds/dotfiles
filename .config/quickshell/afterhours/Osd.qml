@@ -44,6 +44,7 @@ PanelWindow {
         y: -parent.height
         radius: height / 2
         color: Theme.glass
+        Sheen {}
         border.width: 1; border.color: Theme.edge
         VolumeRow { anchors.centerIn: parent; sink: osd.sink; interactive: false }
     }

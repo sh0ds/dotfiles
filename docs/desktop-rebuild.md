@@ -109,6 +109,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `MonthView.qml`: the month grid with ISO weeks. Not `Calendar` or `MonthGrid`: QtQuick.Controls types.
 - `Cover.qml`: rounded cover art with a note placeholder (island, Today, media card).
 - `VolumeRow.qml`: speaker, meter and percentage (island and the volume pill).
+- `Sheen.qml`: the light on glass (a white sheen over the top half and a lit top rim). The top of the haze behind the rail is nearly black, so the blur alone can't show there.
 - `PopIn.qml`: the shared opening animation of the cards under the rail (scale from 92 % on `Theme.spring`, content 60 ms later).
 - `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.
 - `Wallpaper.qml`: the haze picture plus drifting clouds on the background layer. Replaces awww; it stops rendering while the workspace has a window or game mode is on.

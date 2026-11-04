@@ -26,6 +26,7 @@ PopupWindow {
         anchors.fill: parent
         radius: Theme.radius
         color: Theme.glassRaised
+        Sheen {}
         border.width: 1
         border.color: Theme.edge
         Text {
