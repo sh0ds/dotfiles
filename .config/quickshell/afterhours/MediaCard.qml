@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Mpris
+import Quickshell.Hyprland
 // The media card under now playing: cover art, title and artist, a
 // progress bar you can drag to seek, the controls, and cava large.
 // Click outside to close.
@@ -20,6 +21,20 @@ PopupWindow {
     implicitWidth: 380
     implicitHeight: body.implicitHeight + 36
     onVisibleChanged: if (visible) { intro.restart(); player?.positionChanged(); }
+    // SoundCloud (the Firefox app on Super+S) can't shuffle or repeat over
+    // MPRIS, so for a Firefox player the two buttons press SoundCloud's own
+    // keys in its window instead: Shift+S shuffles, Shift+L repeats.
+    // SoundCloud doesn't report either state back, so the button only
+    // flashes. The ID is the SoundCloud app's in rice.lua.
+    readonly property bool viaKeys: player !== null && !(player.shuffleSupported ?? false)
+        && /firefox/i.test((player.identity ?? "") + " " + (player.desktopEntry ?? ""))
+    readonly property string soundcloud: "class:^FFPWA-01M4E9WM9PSN126GWCCEG49J4C$"
+    property string flash: ""
+    Timer { id: unflash; interval: 450; onTriggered: card.flash = "" }
+    function press(key) {
+        Hyprland.dispatch('hl.dsp.send_shortcut({ mods = "SHIFT", key = "' + key + '", window = "' + soundcloud + '" })');
+        flash = key; unflash.restart();
+    }
     function clock(seconds) {
         if (!(seconds >= 0) || !isFinite(seconds)) return "–:––";
         const s = Math.floor(seconds);
@@ -108,9 +123,9 @@ PopupWindow {
                 spacing: 10
                 Cell {
                     label: ""; size: 14
-                    visible: card.player?.shuffleSupported ?? false
-                    ink: card.player?.shuffle ? Theme.accent : Theme.muted
-                    onClicked: card.player.shuffle = !card.player.shuffle
+                    visible: (card.player?.shuffleSupported ?? false) || card.viaKeys
+                    ink: card.viaKeys ? (card.flash === "S" ? Theme.accent : Theme.muted) : card.player?.shuffle ? Theme.accent : Theme.muted
+                    onClicked: if (card.viaKeys) card.press("S"); else card.player.shuffle = !card.player.shuffle
                 }
                 Cell { label: ""; size: 14; enabled: card.player?.canGoPrevious ?? false; ink: enabled ? Theme.text : Theme.line; onClicked: card.player.previous() }
                 Cell {
@@ -121,9 +136,10 @@ PopupWindow {
                 Cell { label: ""; size: 14; enabled: card.player?.canGoNext ?? false; ink: enabled ? Theme.text : Theme.line; onClicked: card.player.next() }
                 Cell {
                     label: ""; size: 14
-                    visible: card.player?.loopSupported ?? false
-                    ink: (card.player?.loopState ?? MprisLoopState.None) !== MprisLoopState.None ? Theme.accent : Theme.muted
-                    onClicked: card.player.loopState = card.player.loopState === MprisLoopState.None ? MprisLoopState.Playlist
+                    visible: (card.player?.loopSupported ?? false) || card.viaKeys
+                    ink: card.viaKeys ? (card.flash === "L" ? Theme.accent : Theme.muted)
+                        : (card.player?.loopState ?? MprisLoopState.None) !== MprisLoopState.None ? Theme.accent : Theme.muted
+                    onClicked: if (card.viaKeys) card.press("L"); else card.player.loopState = card.player.loopState === MprisLoopState.None ? MprisLoopState.Playlist
                         : card.player.loopState === MprisLoopState.Playlist ? MprisLoopState.Track : MprisLoopState.None
                 }
             }
