@@ -136,12 +136,13 @@ hl.animation({ leaf = "windowsIn", enabled = true, speed = 1, spring = "settle",
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "exit", style = "popin 96%" })
 hl.animation({ leaf = "windowsMove", enabled = true, speed = 1, spring = "settle" })
 
--- Fades. Opacity never changes on focus here, so fadeSwitch is off; the
--- inactive dim eases with the same curve as everything else. The shadow fades with its
+-- Fades. Opacity never changes on focus here, so fadeSwitch only drives the
+-- quick apps (~/.local/bin/app) fading out when hidden and back in when
+-- shown. The inactive dim eases with the same curve as everything else. The shadow fades with its
 -- window. Screen off/on (DPMS) gets a slow 400 ms fade instead of a hard cut.
 hl.animation({ leaf = "fadeIn", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.2, bezier = "exit" })
-hl.animation({ leaf = "fadeSwitch", enabled = false })
+hl.animation({ leaf = "fadeSwitch", enabled = true, speed = 2.5, bezier = "glide" })
 hl.animation({ leaf = "fadeDim", enabled = true, speed = 3, bezier = "glide" })
 hl.animation({ leaf = "fadeShadow", enabled = true, speed = 2, bezier = "glide" })
 hl.animation({ leaf = "fadeGlow", enabled = false })

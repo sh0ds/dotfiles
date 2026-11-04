@@ -7,9 +7,10 @@
 #                                        app hides it, and the next press brings
 #                                        it back tiled on the workspace you're on
 # Hidden windows wait on special:hidden, which has no key and isn't in the bar.
-# Hiding and bringing back skip the animation: the window would otherwise
-# fly towards the full-screen tile it gets on the hidden workspace, stretched,
-# while the windows left behind re-tile (the "glitch" on Super+S).
+# Hiding fades the window out, then moves it away without the move
+# animation (it would fly, stretched, towards the full-screen tile it gets on
+# the hidden workspace). Bringing it back moves it in invisible and fades it
+# in. The fades are Hyprland's fadeSwitch animation (rice.lua).
 # notes and djvm jump; chat, music, sysmon and SoundCloud
 # (SUPER+S in rice.lua) toggle.
 set -euo pipefail
@@ -18,13 +19,15 @@ toggle=0
 re=$1
 shift
 d() { hyprctl dispatch "$1" >/dev/null; }
-still() { d "hl.dsp.window.set_prop({ prop = \"no_anim\", value = \"$2\", window = \"address:$1\" })"; }
+prop() { d "hl.dsp.window.set_prop({ prop = \"$2\", value = \"$3\", window = \"address:$1\" })"; }
 
 active=$(hyprctl activewindow -j | jq -r '.class // empty')
 if [ -n "$active" ] && jq -en --arg c "$active" --arg re "$re" '$c | test($re)' >/dev/null; then
   if (( toggle )); then
     addr=$(hyprctl activewindow -j | jq -r '.address')
-    still "$addr" 1
+    prop "$addr" opacity 0
+    sleep 0.2
+    prop "$addr" no_anim 1
     d "hl.dsp.window.move({ workspace = \"special:hidden\", follow = false, window = \"address:$addr\" })"
   else
     d 'hl.dsp.focus({ last = true })'
@@ -37,9 +40,14 @@ read -r addr ws < <(hyprctl clients -j | jq -r --arg re "$re" \
 if [ -n "${addr:-}" ]; then
   if [ "$ws" = special:hidden ]; then
     here=$(hyprctl activeworkspace -j | jq -r '.id')
+    prop "$addr" no_anim 1
+    prop "$addr" opacity 0
     d "hl.dsp.window.move({ workspace = \"$here\", window = \"address:$addr\" })"
-    # Back to normal animations once it has landed.
-    (sleep 0.4; still "$addr" unset) >/dev/null 2>&1 &
+    d "hl.dsp.focus({ window = \"address:$addr\" })"
+    sleep 0.05
+    prop "$addr" no_anim unset
+    prop "$addr" opacity 1
+    exit 0
   fi
   d "hl.dsp.focus({ window = \"address:$addr\" })"
   exit 0
