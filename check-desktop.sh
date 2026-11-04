@@ -53,7 +53,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in python3 kitty quickshell cava swayosd-server awww fuzzel hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat secret-tool virsh virt-install virt-viewer mpd mpc rmpc mpd-mpris udiskie thunar xarchiver zip unzip xfconf-query aria2c btop wtype checkupdates mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
+for c in python3 kitty quickshell cava swayosd-server awww fuzzel hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat secret-tool virsh virt-install virt-viewer mpd mpc rmpc mpd-mpris udiskie thunar xarchiver zip unzip xfconf-query aria2c btop wtype checkupdates audacity mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
   check "$c" command -v "$c"
 done
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt
@@ -80,6 +80,7 @@ check "NetworkManager running" systemctl is-active NetworkManager
 
 check "Quickshell 0.3.2+" quickshell_version_ok
 check "Afterhours shell" test -r "$HOME/.config/quickshell/afterhours/shell.qml"
+check "Afterhours rail hints" test -r "$HOME/.config/quickshell/afterhours/Hint.qml"
 check "JetBrains Mono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd Font"'
 
 section "Terminal workflow"

@@ -1,6 +1,6 @@
 # Keys
 
-Every desktop shortcut. `Super + F1` shows this table as a searchable list, so keep it in sync with `.config/hypr/hyprland.lua` and `rice.lua`.
+Every desktop shortcut, plus the media keys (volume, play, next, previous), which work on the lock screen too. `Super + F1` shows this table as a searchable list, so keep it in sync with `.config/hypr/hyprland.lua` and `rice.lua`.
 
 | Key | Action |
 | --- | --- |
@@ -19,11 +19,13 @@ Every desktop shortcut. `Super + F1` shows this table as a searchable list, so k
 | `Super + Shift + 1…0` | Move window to workspace |
 | `Super + arrows / h j k l` | Focus window |
 | `Super + Shift + arrows / h j k l` | Move window |
+| `Super + Ctrl + arrows / h j k l` | Resize window |
 | `Super + V` | Float and centre / tile again |
 | `Super + X` | Centre a floating window |
 | `Super + F` | Fullscreen |
 | `Super + M` | Maximise |
 | `Super + T` | Flip the split |
+| `Super + P` | Pseudotile |
 | `Super + G` | Group / ungroup windows |
 | `Super + Tab` | Next window in the group |
 | `Super + Q` | Close window |
@@ -42,16 +44,21 @@ Every desktop shortcut. `Super + F1` shows this table as a searchable list, so k
 | `Print` | Region screenshot to clipboard |
 | `Ctrl + Print` | Region screenshot to draw on |
 | `Alt + Print` | Captioned devlog screenshot |
+| `Shift + Print` | Whole screen to ~/Pictures |
+| `Super + Shift + S` | Region screenshot to clipboard (same as `Print`) |
 | `Alt + Tab` | Window switcher |
 | `Ctrl + Shift + Escape` | System monitor |
 | `Super + Shift + M` | DJ VM |
 
-## Mouse on the rail
+## Mouse
 
-Hover anything on the rail for a short hint.
+With `Super` held, and on the rail itself, where hovering anything also shows a short hint.
 
 | Mouse | Action |
 | --- | --- |
+| `Super + wheel` | Previous / next workspace |
+| `Super + left drag` | Move a window |
+| `Super + right drag` | Resize a window |
 | `Wheel on the workspaces` | Step through workspaces |
 | `Click the clock` | Month calendar |
 | `Click now playing` | Play / pause |

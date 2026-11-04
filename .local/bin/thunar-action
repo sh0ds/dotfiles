@@ -16,8 +16,8 @@ def run(argv, **kwargs):
 
 
 def main():
-    if len(sys.argv) < 3 or sys.argv[1] not in {'edit', 'terminal', 'git', 'queue', 'aseprite'}:
-        raise ValueError('Usage: thunar-action {edit|terminal|git|queue|aseprite} PATH...')
+    if len(sys.argv) < 3 or sys.argv[1] not in {'edit', 'terminal', 'git', 'queue', 'audacity', 'aseprite'}:
+        raise ValueError('Usage: thunar-action {edit|terminal|git|queue|audacity|aseprite} PATH...')
     action = sys.argv[1]
     paths = [Path(path).resolve(strict=True) for path in sys.argv[2:]]
     if action == 'edit':
@@ -34,6 +34,10 @@ def main():
             run(['kitty', '--directory', directory, '-e', 'lazygit'])
         else:
             run(['kitty', '--directory', directory])
+    elif action == 'audacity':
+        if any(not path.is_file() or path.suffix.lower() not in AUDIO for path in paths):
+            raise ValueError('Select audio files to edit in Audacity.')
+        run(['audacity', *map(str, paths)])
     elif action == 'aseprite':
         if any(not path.is_file() or path.suffix.lower() not in IMAGES for path in paths):
             raise ValueError('Select sprites or images to open in Aseprite.')

@@ -100,6 +100,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. GDScript in 
 - `shell.qml`: per-output rail, one focused-output overlay, native desktop-entry launcher, MPRIS, SNI tray, notifications and IPC. No HTTP service or internet requests.
 - `Theme.qml`: shell palette and typography.
 - `Cell.qml`: shared keyboard-focusable control with hover and focus states.
+- `Hint.qml`: hover hints for rail controls in their own popup window, because the rail window is too short for a QtQuick `ToolTip`.
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
 - `afterhours`: starts once or sends typed Quickshell IPC calls; no process-name-wide kills.
 - `afterhours-suspend`: waits for logind's locked hint after starting Hyprlock before requesting suspend.

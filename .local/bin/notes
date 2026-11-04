@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
-# notes: Obsidian on the ~/notes vault (SUPER+O), as a normal tiled window.
+# notes: Obsidian on your vault (SUPER+O), as a normal tiled window.
 # Jumps to it if it's already open, otherwise starts it. Also links the Afterhours
 # CSS snippet into the vault (turn it on once: Settings -> Appearance -> CSS
 # snippets -> diag).
 set -euo pipefail
-# OBSIDIAN_VAULT overrides the default vault location.
-vault="${OBSIDIAN_VAULT:-$HOME/notes}"
+# OBSIDIAN_VAULT overrides it; otherwise the vault Obsidian made itself
+# ("~/Obsidian Vault") wins over ~/notes, so nothing creates a second one.
+vault=${OBSIDIAN_VAULT:-}
+if [ -z "$vault" ]; then
+  for candidate in "$HOME/Obsidian Vault" "$HOME/notes"; do
+    if [ -d "$candidate/.obsidian" ]; then vault=$candidate; break; fi
+  done
+  vault=${vault:-$HOME/notes}
+fi
 mkdir -p "$vault/.obsidian/snippets"
 ln -sfn "$HOME/.config/diag/obsidian.css" "$vault/.obsidian/snippets/diag.css"
-echo "Afterhours snippet: $vault/.obsidian/snippets/diag.css"
+
 exec app '^md\.obsidian\.Obsidian$' obsidian

@@ -1,7 +1,8 @@
-# cava for the Afterhours rail: eight bars as numbers 0-7 on stdout, one
+# cava for the Afterhours rail: ten bars as numbers 0-7 on stdout, one
 # line per frame. The shell starts it only while something is playing.
+# Stereo: bass in the middle, left and right channels mirrored outwards.
 [general]
-bars = 8
+bars = 10
 framerate = 30
 sleep_timer = 1
 
@@ -9,6 +10,7 @@ sleep_timer = 1
 method = pipewire
 
 [output]
+channels = stereo
 method = raw
 raw_target = /dev/stdout
 data_format = ascii
@@ -17,4 +19,4 @@ bar_delimiter = 59
 frame_delimiter = 10
 
 [smoothing]
-noise_reduction = 66
+noise_reduction = 77

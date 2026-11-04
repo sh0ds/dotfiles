@@ -90,9 +90,11 @@ ShellRoot {
         volumeLater.restart();
     }
     Timer { id: volumeLater; interval: 120; onTriggered: if (!volumeRead.running) volumeRead.running = true }
-    // cava, only while something plays: eight bars, 0-7 each, one line per
-    // frame (.config/cava/rail). Without cava the bars just stay flat.
-    property var cavaBars: [0, 0, 0, 0, 0, 0, 0, 0]
+    // cava, only while something plays: ten bars, 0-7 each, one line per
+    // frame (.config/cava/rail). Stereo, so the bass sits in the middle and
+    // the two channels mirror outwards. Without cava the bars stay flat.
+    readonly property var cavaRest: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    property var cavaBars: cavaRest
     Process {
         id: cava
         running: root.player?.isPlaying ?? false
@@ -100,10 +102,10 @@ ShellRoot {
         stdout: SplitParser {
             onRead: line => {
                 const bars = line.split(";").filter(v => v !== "").map(Number);
-                if (bars.length === 8) root.cavaBars = bars;
+                if (bars.length === 10) root.cavaBars = bars;
             }
         }
-        onRunningChanged: if (!running) root.cavaBars = [0, 0, 0, 0, 0, 0, 0, 0]
+        onRunningChanged: if (!running) root.cavaBars = root.cavaRest
     }
     // System readings for the rail's sys cell (sys-stats), sampled every 2 s
     // only while the cell is unfolded.
@@ -339,17 +341,30 @@ ShellRoot {
                     visible: rail.width > 1350 && root.player !== null
                     label: root.player ? root.player.trackTitle.slice(0, 26) : ""
                     ink: root.player?.isPlaying ? Theme.text : Theme.muted
-                    // cava's bars in violet, flat while paused.
-                    Repeater {
-                        model: root.cavaBars
-                        Rectangle {
-                            required property int modelData
-                            anchors.bottom: parent.bottom
-                            width: 3; radius: 1.5
-                            height: 3 + modelData * 2
-                            color: Theme.accent
-                            opacity: root.player?.isPlaying ? 0.95 : 0.35
-                            Behavior on height { NumberAnimation { duration: 60 } }
+                    // cava as a small waveform: a fixed 16 px box, so the rail
+                    // never moves, bars growing both ways from the centre line,
+                    // brightest in the middle. Paused, it rests as a dotted line.
+                    // The delegates stay put (model: 10) and only their heights
+                    // ease, instead of being rebuilt every frame.
+                    Item {
+                        width: 10 * 3 + 9 * 2; height: 16
+                        Row {
+                            anchors.centerIn: parent
+                            spacing: 2
+                            Repeater {
+                                model: 10
+                                Rectangle {
+                                    required property int index
+                                    readonly property int level: root.player?.isPlaying ? (root.cavaBars[index] ?? 0) : 0
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 3; radius: 1.5
+                                    height: 2 + level * 2
+                                    color: Theme.accent
+                                    opacity: root.player?.isPlaying ? 1 - Math.abs(index - 4.5) / 9 : 0.35
+                                    Behavior on height { NumberAnimation { duration: 90; easing.type: Easing.OutCubic } }
+                                    Behavior on opacity { NumberAnimation { duration: Theme.motion } }
+                                }
+                            }
                         }
                     }
                     hint: "Click: play / pause · wheel: next / previous track"

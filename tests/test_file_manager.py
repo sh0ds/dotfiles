@@ -100,11 +100,12 @@ with open(os.environ['CALLS'], 'a') as stream:
         self.assertIn('WebBrowser=personal', helpers.read_text())
         self.assertIn('TerminalEmulator=kitty', helpers.read_text())
         entries = ET.parse(actions).getroot().findall('action')
-        self.assertEqual(len(entries), 6)
+        self.assertEqual(len(entries), 7)
         self.assertEqual(entries[0].findtext('command'), 'mine %F')
         self.assertEqual({entry.findtext('command') for entry in entries[1:]},
                          {'thunar-action edit %F', 'thunar-action terminal %F', 'thunar-action git %F',
-                          'thunar-action queue %F', 'thunar-action aseprite %F'})
+                          'thunar-action queue %F', 'thunar-action audacity %F',
+                          'thunar-action aseprite %F'})
         lines = bookmarks.read_text().splitlines()
         self.assertEqual(len(lines), 3)
         self.assertIn('file:///srv/samples Samples', lines)
@@ -124,7 +125,7 @@ with open(os.environ['CALLS'], 'a') as stream:
                            '<command>exo-open --launch TerminalEmulator</command></action></actions>')
         self.helper('thunar-setup')
         entries = ET.parse(actions).getroot().findall('action')
-        self.assertEqual(len(entries), 5)
+        self.assertEqual(len(entries), 6)
         self.assertNotIn('diag-terminal', [entry.findtext('unique-id') for entry in entries])
 
     def test_editor_receives_literal_paths_and_project_directory(self):
@@ -182,6 +183,14 @@ with open(os.environ['CALLS'], 'a') as stream:
         track.touch()
         result = self.helper('thunar-action', 'queue', track, success=False)
         self.assertIn('daemon unavailable', result.stderr)
+
+    def test_audacity_receives_selected_audio_only(self):
+        self.recorder('audacity')
+        track = self.home / 'Music/edit.wav'
+        track.touch()
+        self.helper('thunar-action', 'audacity', track)
+        self.assertEqual(self.calls()[0][1], [str(track)])
+        self.helper('thunar-action', 'audacity', self.home / 'Music', success=False)
 
     def test_aseprite_receives_selected_images_only(self):
         self.recorder('aseprite')
