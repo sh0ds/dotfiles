@@ -43,8 +43,8 @@ hl.config({
 		-- Every window is see-through: the wallpaper shows through, blurred,
 		-- a little more when the window isn't focused. Fullscreen stays solid.
 		-- kitty, games, video and art are solid ("solid" rules below).
-		active_opacity = 0.9,
-		inactive_opacity = 0.84,
+		active_opacity = 0.82,
+		inactive_opacity = 0.76,
 		-- A wide, soft shadow that falls slightly down, like light from above.
 		shadow = { enabled = true, range = 26, render_power = 2, offset = { 0, 5 }, color = "rgba(060508d0)", color_inactive = "rgba(06050880)" },
 		-- Blur behind the shell's glass (the "glass" layer rule below) and
