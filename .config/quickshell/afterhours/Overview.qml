@@ -12,7 +12,6 @@ import Quickshell.Hyprland
 PanelWindow {
     id: ov
     property bool open: false
-    signal closed()
     visible: open || fade.running
     screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
     WlrLayershell.namespace: "afterhours-overview"
@@ -32,7 +31,7 @@ PanelWindow {
         selected = Hyprland.focusedWorkspace?.id ?? 1;
         keys.forceActiveFocus();
     }
-    function close() { open = false; closed(); }
+    function close() { open = false; }
     function go(id) { Hyprland.dispatch("hl.dsp.focus({ workspace = " + id + " })"); close(); }
     function focusWindow(t) { Hyprland.dispatch('hl.dsp.focus({ window = "address:0x' + t.address + '" })'); close(); }
     function moveWindow(t, id) { Hyprland.dispatch('hl.dsp.window.move({ workspace = ' + id + ', follow = false, window = "address:0x' + t.address + '" })'); Hyprland.refreshToplevels(); }

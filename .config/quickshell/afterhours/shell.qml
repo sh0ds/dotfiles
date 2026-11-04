@@ -504,7 +504,7 @@ ShellRoot {
     }
     // The living wallpaper and the screen frame, one each per monitor.
     Variants { model: Quickshell.screens; Wallpaper { still: root.gameMode } }
-    Variants { model: Quickshell.screens; Frame { band: root.barVisible ? 56 : 6; visible: !root.gameMode } }
+    Variants { model: Quickshell.screens; ScreenFrame { band: root.barVisible ? 56 : 6; visible: !root.gameMode } }
     Osd { sink: root.sink }
     Overview { id: overviewWindow }
     Lock { id: lockScreen }

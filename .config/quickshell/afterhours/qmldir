@@ -6,7 +6,7 @@ MonthCalendar 1.0 MonthCalendar.qml
 Hint 1.0 Hint.qml
 Meter 1.0 Meter.qml
 Osd 1.0 Osd.qml
-Frame 1.0 Frame.qml
+ScreenFrame 1.0 ScreenFrame.qml
 Wallpaper 1.0 Wallpaper.qml
 MediaCard 1.0 MediaCard.qml
 ControlCenter 1.0 ControlCenter.qml

@@ -104,7 +104,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. GDScript in 
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
 - `Meter.qml`: the slim slider used by the OSD, the media card and the control centre.
 - `Osd.qml`: the volume popup on the focused monitor, fed straight from PipeWire. Replaces SwayOSD.
-- `Frame.qml`: the thin screen-edge frame that joins the rail. Click-through.
+- `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.
 - `Wallpaper.qml`: the haze picture plus drifting clouds on the background layer. Replaces awww; it stops rendering while the workspace has a window or game mode is on.
 - `MediaCard.qml`: the popup under now playing (cover, seek, shuffle, loop, cava).
 - `ControlCenter.qml`: the popup under `vol` and the network icon (outputs, mic, app volumes, Wi-Fi via `nmcli`, toggles).
