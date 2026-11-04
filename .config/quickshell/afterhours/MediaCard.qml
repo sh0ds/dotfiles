@@ -20,7 +20,7 @@ PopupWindow {
     color: "transparent"
     implicitWidth: 380
     implicitHeight: body.implicitHeight + 36
-    onVisibleChanged: if (visible) intro.restart()
+    onVisibleChanged: if (visible) { intro.restart(); player?.positionChanged(); }
     function clock(seconds) {
         if (!(seconds >= 0) || !isFinite(seconds)) return "–:––";
         const s = Math.floor(seconds);

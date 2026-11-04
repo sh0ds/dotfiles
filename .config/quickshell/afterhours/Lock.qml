@@ -162,6 +162,8 @@ Scope {
                             onAccepted: lockRoot.submit()
                             Keys.onEscapePressed: { lockRoot.typed = ""; text = ""; }
                             Component.onCompleted: forceActiveFocus()
+                            // Disabled while PAM checks, which drops focus; take it back.
+                            onEnabledChanged: if (enabled) forceActiveFocus()
                             // Every monitor shares one password; keep this field in step.
                             Connections { target: lockRoot; function onTypedChanged() { if (input.text !== lockRoot.typed) input.text = lockRoot.typed; } }
                         }

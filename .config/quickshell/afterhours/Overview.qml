@@ -35,6 +35,9 @@ PanelWindow {
     function go(id) { Hyprland.dispatch("hl.dsp.focus({ workspace = " + id + " })"); close(); }
     function focusWindow(t) { Hyprland.dispatch('hl.dsp.focus({ window = "address:0x' + t.address + '" })'); close(); }
     function moveWindow(t, id) { Hyprland.dispatch('hl.dsp.window.move({ workspace = ' + id + ', follow = false, window = "address:0x' + t.address + '" })'); Hyprland.refreshToplevels(); }
+    // A new workspace on a given monitor: focus that monitor first, since a
+    // new workspace opens on the focused one.
+    function newOn(m) { Hyprland.dispatch('hl.dsp.focus({ monitor = "' + m.name + '" })'); go(firstFree()); }
     function closeWindow(t) { Hyprland.dispatch('hl.dsp.window.close({ window = "address:0x' + t.address + '" })'); }
 
     // Rows: the main monitor always shows 1-5 (like the rail), every
@@ -200,7 +203,7 @@ PanelWindow {
                         border.width: 1; border.color: plusDrop.containsDrag ? Theme.accent : Theme.line
                         Text { anchors.centerIn: parent; text: "+"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 24 }
                         HoverHandler { id: plusHover; cursorShape: Qt.PointingHandCursor }
-                        TapHandler { onTapped: ov.go(ov.firstFree()) }
+                        TapHandler { onTapped: ov.newOn(row.mon) }
                         DropArea { id: plusDrop; anchors.fill: parent; onDropped: d => { if (d.source?.toplevel) ov.moveWindow(d.source.toplevel, ov.firstFree()); } }
                     }
                 }

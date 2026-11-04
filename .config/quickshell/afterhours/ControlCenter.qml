@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Pipewire
-// The control centre under the rail (right-click vol or the network icon):
+// The control centre under the rail (click vol or the network icon):
 // output and microphone, every app that plays sound with its own slider,
 // Wi-Fi, and the switches (night light, quiet, keep awake, game mode).
 // Replaces pavucontrol and nmtui for everyday use; both stay one click away.
@@ -23,8 +23,9 @@ PopupWindow {
     readonly property var sink: Pipewire.defaultAudioSink
     readonly property var source: Pipewire.defaultAudioSource
     readonly property var sinks: Pipewire.nodes.values.filter(n => n.audio && n.isSink && !n.isStream)
-    // Programs playing sound (output streams), loudest name first.
-    readonly property var streams: Pipewire.nodes.values.filter(n => n.audio && n.isStream && !n.isSink)
+    // Programs playing sound. Playback streams count as sinks in Quickshell
+    // (they take audio in); recording streams like cava are not sinks.
+    readonly property var streams: Pipewire.nodes.values.filter(n => n.audio && n.isStream && n.isSink)
     PwObjectTracker { objects: [...cc.streams, ...cc.sinks] }
     function nodeName(n) {
         const p = n?.properties ?? {};
