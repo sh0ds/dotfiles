@@ -84,6 +84,12 @@ ShellRoot {
             root.volume = match ? (text.includes("MUTED") ? "mute" : Math.round(Number(match[1]) * 100) + "%") : "—";
         } }
     }
+    // Volume from the rail (wheel, right-click): wpctl, then read it back at once.
+    function setVolume(args) {
+        Quickshell.execDetached(["wpctl", ...args]);
+        volumeLater.restart();
+    }
+    Timer { id: volumeLater; interval: 120; onTriggered: if (!volumeRead.running) volumeRead.running = true }
     // cava, only while something plays: eight bars, 0-7 each, one line per
     // frame (.config/cava/rail). Without cava the bars just stay flat.
     property var cavaBars: [0, 0, 0, 0, 0, 0, 0, 0]
@@ -230,10 +236,8 @@ ShellRoot {
                 }
                 HoverHandler { id: clockHover; cursorShape: Qt.PointingHandCursor }
                 TapHandler { onTapped: calendar.visible = !calendar.visible }
-                ToolTip.visible: clockHover.hovered && !calendar.visible
-                ToolTip.delay: 650
-                ToolTip.text: "Calendar"
             }
+            Hint { target: clockCell; text: "Calendar · week " + calendar.isoWeek(clock.date); show: clockHover.hovered && !calendar.visible }
             // Not "Calendar": QtQuick.Controls has a singleton by that name.
             MonthCalendar { id: calendar; target: clockCell }
             RowLayout {
@@ -348,8 +352,14 @@ ShellRoot {
                             Behavior on height { NumberAnimation { duration: 60 } }
                         }
                     }
-                    hint: "Play / pause"
+                    hint: "Click: play / pause · wheel: next / previous track"
                     onClicked: { if (root.player?.canTogglePlaying) root.player.togglePlaying(); }
+                    WheelHandler {
+                        onWheel: e => {
+                            if (e.angleDelta.y < 0 && root.player?.canGoNext) root.player.next();
+                            else if (e.angleDelta.y > 0 && root.player?.canGoPrevious) root.player.previous();
+                        }
+                    }
                 }
                 // sys: click unfolds cpu, memory, temperature and gpu; right-click opens btop.
                 Cell {
@@ -377,7 +387,7 @@ ShellRoot {
                     label: root.net === "ethernet" ? "\uf0e8" : root.net.startsWith("wifi:") ? "\uf1eb" : "\uf127"
                     size: 14
                     ink: root.net === "offline" ? Theme.danger : Theme.text
-                    hint: root.net === "offline" ? "Offline · click: Wi-Fi" : root.net === "ethernet" ? "Wired · click: Wi-Fi · right-click: settings" : root.net.slice(5) + " · right-click: settings"
+                    hint: root.net === "offline" ? "Offline · click: Wi-Fi" : root.net === "ethernet" ? "Wired · click: Wi-Fi · right-click: settings" : root.net.slice(5) + " · click: Wi-Fi · right-click: settings"
                     onClicked: root.run(["wifi"])
                     onRightClicked: root.run(["wifi", "settings"])
                 }
@@ -390,7 +400,15 @@ ShellRoot {
                     hint: root.awake ? "Keeping the screen awake · click to stop" : "Keep the screen awake (no dim, lock or sleep)"
                     onClicked: root.awake = !root.awake
                 }
-                Cell { label: (rail.width > 900 ? "vol " : "") + root.volume; hint: "Sound controls"; onClicked: root.run(["pavucontrol"]) }
+                Cell {
+                    id: volCell
+                    label: (rail.width > 900 ? "vol " : "") + root.volume
+                    ink: root.volume === "mute" ? Theme.muted : Theme.text
+                    hint: "Wheel: volume · right-click: mute · click: sound settings"
+                    onClicked: root.run(["pavucontrol"])
+                    onRightClicked: root.setVolume(["set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"])
+                    WheelHandler { onWheel: e => root.setVolume(["set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@", e.angleDelta.y > 0 ? "5%+" : "5%-"]) }
+                }
                 Cell {
                     label: (rail.width > 900 ? (root.quiet ? "quiet " : "inbox ") : "✉ ") + notices.trackedNotifications.values.length
                     ink: root.quiet ? Theme.amber : Theme.muted
@@ -418,8 +436,7 @@ ShellRoot {
                             }
                             onWheel: event => trayItem.modelData.scroll(event.angleDelta.y, false)
                         }
-                        ToolTip.visible: trayPointer.containsMouse
-                        ToolTip.text: modelData.tooltipTitle || modelData.title
+                        Hint { target: trayItem; text: trayItem.modelData.tooltipTitle || trayItem.modelData.title || ""; show: trayPointer.containsMouse }
                     }
                 }
                 Cell { label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
@@ -500,7 +517,26 @@ ShellRoot {
                         ListView {
                             id: appList
                             Layout.fillWidth: true; Layout.fillHeight: true; clip: true; spacing: 4
-                            model: ScriptModel { values: DesktopEntries.applications.values.filter(app => !app.noDisplay && (app.name + " " + (app.genericName || "")).toLowerCase().includes(query.text.toLowerCase())).sort((a,b) => a.name.localeCompare(b.name)) }
+                            // Names that start with what you typed come first, then
+                            // other name matches, then matches in the description or
+                            // keywords; alphabetical inside each group.
+                            model: ScriptModel { values: {
+                                const q = query.text.trim().toLowerCase();
+                                const rank = app => {
+                                    const name = app.name.toLowerCase();
+                                    if (!q) return 0;
+                                    if (name.startsWith(q)) return 0;
+                                    if (name.includes(q)) return 1;
+                                    const more = [app.genericName, app.comment, ...(app.keywords ?? [])].join(" ").toLowerCase();
+                                    return more.includes(q) ? 2 : 3;
+                                };
+                                return DesktopEntries.applications.values
+                                    .filter(app => !app.noDisplay && rank(app) < 3)
+                                    .sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name));
+                            } }
+                            // Keyboard selection keeps the chosen row in view.
+                            highlightFollowsCurrentItem: true
+                            highlightMoveDuration: 0
                             delegate: Rectangle {
                                 id: appRow
                                 required property var modelData
@@ -509,7 +545,21 @@ ShellRoot {
                                 radius: Theme.radius
                                 color: appList.currentIndex === index ? Theme.raised : "transparent"
                                 Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
-                                Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.name; color: Theme.text; font.family: Theme.font; font.pixelSize: 14; textFormat: Text.PlainText }
+                                readonly property bool current: appList.currentIndex === index
+                                // The chosen row gets a violet edge, like the workspace marker.
+                                Rectangle { x: 4; y: 11; width: 3; height: parent.height - 22; radius: 2; color: Theme.accent; opacity: appRow.current ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
+                                Row {
+                                    anchors.left: parent.left; anchors.leftMargin: 16; anchors.right: parent.right; anchors.rightMargin: 12
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    spacing: 12
+                                    Image {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: 22; height: 22; sourceSize: Qt.size(44, 44)
+                                        source: appRow.modelData.icon ? Quickshell.iconPath(appRow.modelData.icon, true) : ""
+                                    }
+                                    Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.name; color: Theme.text; font.family: Theme.font; font.pixelSize: 14; font.bold: appRow.current; textFormat: Text.PlainText }
+                                    Text { anchors.verticalCenter: parent.verticalCenter; text: appRow.modelData.genericName || ""; color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; elide: Text.ElideRight; width: Math.max(0, appRow.width - x - 40) }
+                                }
                                 MouseArea { anchors.fill: parent; hoverEnabled: true; onEntered: appList.currentIndex = appRow.index; onClicked: { appRow.modelData.execute(); root.panel = ""; } }
                             }
                         }
@@ -558,7 +608,8 @@ ShellRoot {
     // Passive toasts never steal keyboard focus. Quiet mode preserves inbox history.
     PanelWindow {
         visible: root.toasts.length > 0
-        screen: root.panelScreen
+        // On the monitor you're working on, not the one a panel last opened on.
+        screen: Quickshell.screens.find(s => s.name === Hyprland.focusedMonitor?.name) ?? Quickshell.screens[0]
         WlrLayershell.namespace: "afterhours-toast"
         anchors { top: true; right: true }
         margins { top: 8; right: 12 }

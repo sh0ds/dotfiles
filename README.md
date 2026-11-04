@@ -8,8 +8,8 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 
 ## Description
 
-- **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and the power menu.
-- **Notifications** come from the shell itself: toasts that slide in and out, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
+- **The rail** is a floating bar on every monitor. It has an apps button, numbered workspaces, the focused window's title, a centred clock (click it for the month), now playing with cava bars, system stats, the Pi, network, a keep-awake toggle, sound, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
+- **Notifications** come from the shell itself: toasts with the app's icon that slide in and out on the monitor you're on, a quiet mode, and an inbox for the session. Screen sharing hides the toasts.
 - **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, hyprlock and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
 - **Thunar, Firefox, Obsidian, Zed and Helix** use the same palette, with Papirus icons (violet folders) and the Posy cursor.

@@ -68,7 +68,7 @@ hl.config({
 		enable_swallow = true,
 		swallow_regex = "^(kitty)$",
 	},
-	-- Tabbed groups (SUPER+G): a flat tab strip, blue for the active tab.
+	-- Tabbed groups (SUPER+G): a flat tab strip, violet for the active tab.
 	group = {
 		col = {
 			border_active = "rgb(b49cf0)",
@@ -115,8 +115,8 @@ hl.config({
 --
 -- Timings (bezier speed is in 100 ms steps):
 --   120 ms  exits
---   200 ms  fades, layers and every colour change (bar, menus and
---           notifications use the same 200 ms ease-out in their CSS)
+--   200 ms  fades, layers and every colour change (the shell's rail,
+--           menus and toasts use the same 200 ms ease-out)
 --   ~170 ms to 90 % / ~290 ms to 99 %   "settle", windows
 --   ~200 ms to 90 % / ~340 ms to 99 %   "drift", workspaces
 -- Calm, still no overshoot. The shell's own motion matches (Theme.qml:
@@ -356,7 +356,7 @@ end)
 
 -- Everything DJ (Lexicon, rekordbox, Traktor) lives in a Windows VM
 -- (djvm, SUPER+SHIFT+M) on workspace 7. The screen stays on while it has focus,
--- and the SUPER keys keep working in it instead of going to Windows.s
+-- and the SUPER keys keep working in it instead of going to Windows.
 hl.window_rule({
 	name = "dj-vm",
 	match = { class = "(?i).*virt-viewer.*" },

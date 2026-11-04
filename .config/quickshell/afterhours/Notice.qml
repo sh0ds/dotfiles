@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Services.Notifications
 // One notification card. Clicking the card runs its default action (nchat's
 // chat-notify opens WhatsApp that way); × dismisses it.
@@ -28,6 +29,17 @@ Rectangle {
         anchors { top: parent.top; left: parent.left; right: parent.right; margins: 14 }
         spacing: 6
         RowLayout {
+            spacing: 6
+            // The sender's icon; apps without one just show their name.
+            Image {
+                id: appIcon
+                readonly property string named: card.notification?.appIcon ?? ""
+                source: named.startsWith("/") || named.startsWith("file:") ? named : (named.length > 0 ? Quickshell.iconPath(named, true) : "")
+                visible: status === Image.Ready
+                sourceSize { width: 32; height: 32 }
+                Layout.preferredWidth: 16; Layout.preferredHeight: 16
+                fillMode: Image.PreserveAspectFit; smooth: true
+            }
             Text { text: (card.notification?.appName ?? "").toLowerCase(); color: Theme.muted; font.family: Theme.font; font.pixelSize: 11; textFormat: Text.PlainText; Layout.fillWidth: true; elide: Text.ElideRight }
             Cell { label: "×"; implicitWidth: 26; implicitHeight: 24; onClicked: card.notification?.dismiss() }
         }

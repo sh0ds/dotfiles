@@ -104,7 +104,7 @@ with open(os.environ['CALLS'], 'a') as stream:
         self.assertEqual(entries[0].findtext('command'), 'mine %F')
         self.assertEqual({entry.findtext('command') for entry in entries[1:]},
                          {'thunar-action edit %F', 'thunar-action terminal %F', 'thunar-action git %F',
-                          'thunar-action queue %F', 'thunar-action audacity %F'})
+                          'thunar-action queue %F', 'thunar-action aseprite %F'})
         lines = bookmarks.read_text().splitlines()
         self.assertEqual(len(lines), 3)
         self.assertIn('file:///srv/samples Samples', lines)
@@ -183,13 +183,15 @@ with open(os.environ['CALLS'], 'a') as stream:
         result = self.helper('thunar-action', 'queue', track, success=False)
         self.assertIn('daemon unavailable', result.stderr)
 
-    def test_audacity_receives_selected_audio_only(self):
-        self.recorder('audacity')
+    def test_aseprite_receives_selected_images_only(self):
+        self.recorder('aseprite')
+        sprite = self.home / 'hero.aseprite'
+        sprite.touch()
+        self.helper('thunar-action', 'aseprite', sprite)
+        self.assertEqual(self.calls()[0][1], [str(sprite)])
         track = self.home / 'Music/edit.wav'
         track.touch()
-        self.helper('thunar-action', 'audacity', track)
-        self.assertEqual(self.calls()[0][1], [str(track)])
-        self.helper('thunar-action', 'audacity', self.home / 'Music', success=False)
+        self.helper('thunar-action', 'aseprite', track, success=False)
 
     def test_archive_defaults_are_explicit(self):
         self.stub('xarchiver', 'pass')

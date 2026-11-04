@@ -44,7 +44,7 @@ alias lg='lazygit'                                              # git TUI (Ctrl+
 alias cat='bat --paging=never --style=plain'                   # cat with colours; plain `bat` gets line numbers
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range :200 {}'"
 # fzf in Afterhours: violet matches and pointer, soft selection, rounded border
-export FZF_DEFAULT_OPTS="--border=rounded --color=fg:#c9c5d4,bg:-1,hl:#b49cf0,fg+:#ecebf2,bg+:#1b1a22,hl+:#5e9bb4,info:#948fa3,prompt:#948fa3,pointer:#b49cf0,marker:#b49cf0,spinner:#b49cf0,header:#948fa3,border:#25232d,gutter:-1"
+export FZF_DEFAULT_OPTS="--border=rounded --color=fg:#c9c5d4,bg:-1,hl:#b49cf0,fg+:#ecebf2,bg+:#1b1a22,hl+:#cdbcf7,info:#948fa3,prompt:#948fa3,pointer:#b49cf0,marker:#b49cf0,spinner:#b49cf0,header:#948fa3,border:#25232d,gutter:-1"
 
 please() {
   local c

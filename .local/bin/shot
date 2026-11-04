@@ -2,7 +2,7 @@
 # shot: screenshot a region, framed in Afterhours for devlogs and posts (ALT+Print).
 # Asks for a caption (Escape or empty: date only), then saves
 # ~/Pictures/shot-DATE.png and copies it. The frame: black margin, a 2 px
-# rule around the picture, and a caption row with a blue marker, your
+# rule around the picture, and a caption row with a violet marker, your
 # caption on the left and the date and sh0ds.dev on the right.
 set -euo pipefail
 geom=$(slurp) || exit 0

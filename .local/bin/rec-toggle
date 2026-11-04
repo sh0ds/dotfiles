@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # rec-toggle: start/stop recording a screen region to ~/Videos (SUPER+SHIFT+R).
-# the bar shows REC in amber while wf-recorder runs.
+# The rail shows a coral REC while wf-recorder runs; click it to stop.
 if pkill -INT -x wf-recorder; then
   # shellcheck disable=SC2012  # our own rec-DATE.mp4 names, newest first
   notify-send "Recording saved" "$(ls -t ~/Videos/rec-*.mp4 | head -n1)"

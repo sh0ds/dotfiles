@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import Quickshell
 // A rounded, keyboard-focusable button: faint fill on hover, violet fill
 // when selected, colour changes ease out.
 Rectangle {
@@ -53,7 +54,14 @@ Rectangle {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: e => e.button === Qt.RightButton ? cell.rightClicked() : cell.clicked()
     }
-    ToolTip.visible: pointer.containsMouse && hint.length > 0
+    // In the rail (a 42 px window) a ToolTip would be cut off, so the hint
+    // gets its own popup window there; the overlay keeps the plain ToolTip.
+    readonly property bool inBar: Window.height > 0 && Window.height < 80
+    LazyLoader {
+        active: cell.inBar && cell.hint.length > 0
+        Hint { target: cell; text: cell.hint; show: pointer.containsMouse }
+    }
+    ToolTip.visible: !inBar && pointer.containsMouse && hint.length > 0
     ToolTip.delay: 650
     ToolTip.text: hint
 }

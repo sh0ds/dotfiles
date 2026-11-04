@@ -3,3 +3,4 @@ singleton Theme 1.0 Theme.qml
 Cell 1.0 Cell.qml
 Notice 1.0 Notice.qml
 MonthCalendar 1.0 MonthCalendar.qml
+Hint 1.0 Hint.qml

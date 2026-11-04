@@ -45,3 +45,20 @@ Every desktop shortcut. `Super + F1` shows this table as a searchable list, so k
 | `Alt + Tab` | Window switcher |
 | `Ctrl + Shift + Escape` | System monitor |
 | `Super + Shift + M` | DJ VM |
+
+## Mouse on the rail
+
+Hover anything on the rail for a short hint.
+
+| Mouse | Action |
+| --- | --- |
+| `Wheel on the workspaces` | Step through workspaces |
+| `Click the clock` | Month calendar |
+| `Click now playing` | Play / pause |
+| `Wheel on now playing` | Next / previous track |
+| `Right-click sys` | System monitor (btop) |
+| `Click the network icon` | Wi-Fi picker |
+| `Right-click the network icon` | Network settings (nmtui) |
+| `Wheel on vol` | Volume up / down |
+| `Right-click vol` | Mute / unmute |
+| `Click vol` | Sound settings |
