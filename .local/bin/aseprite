@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
-# aseprite: Aseprite from Steam (app 431730).
-#   aseprite                  open it (through Steam), or jump to it
+# aseprite: Aseprite from Steam (app 431730), always started as the binary,
+# never through the Steam client (the Linux build is DRM-free).
+#   aseprite                  open it, or jump to it if it's open
+#   aseprite FILE...          open files in it
 #   aseprite -b sprite.aseprite --sheet out.png ...
-#                             with arguments, run the binary directly: the
-#                             batch CLI for exporting sheets in build scripts
+#                             the batch CLI, for sprite sheets in build scripts
 set -euo pipefail
 bin=${ASEPRITE_BIN:-$HOME/.local/share/Steam/steamapps/common/Aseprite/aseprite}
-if [ "$#" -gt 0 ]; then
-  [ -x "$bin" ] || { echo "aseprite: not installed in Steam ($bin)" >&2; exit 1; }
-  exec "$bin" "$@"
-fi
 if [ ! -x "$bin" ]; then
-  notify-send -a Aseprite "Aseprite is not installed" "Install it in Steam, then try again."
+  echo "aseprite: no binary at $bin (install it in Steam or set ASEPRITE_BIN)" >&2
+  notify-send -a Aseprite "Aseprite is not installed" "No binary at $bin" 2>/dev/null || true
   exit 1
 fi
-exec app '(?i)^aseprite$' steam -silent steam://rungameid/431730
+# The batch CLI and files go straight to the binary; a plain start jumps
+# to an open window first.
+[ "$#" -gt 0 ] && exec "$bin" "$@"
+exec app '(?i)^aseprite$' "$bin"

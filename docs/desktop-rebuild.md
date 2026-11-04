@@ -86,7 +86,7 @@ Install tools when their track needs them, so P1 does not become a month of tool
 | P1 | Lua, Lua language server, this config | Change one rule yourself; the shell does not claim this learning step is completed. |
 | P2–P8 | Licensed PICO-8 | Unzip to `~/.local/opt/pico-8`; wrapper keeps carts in `~/code/pico8` and GIFs/screenshots in `~/Pictures/pico-8`. |
 | T1–T4 | Licensed Picotron | Unzip to `~/.local/opt/picotron`; retain its own drive. |
-| A1–A2 | Pixelorama or Aseprite | `pixelorama`, or `aseprite` through Steam. |
+| A1–A2 | Pixelorama or Aseprite | `pixelorama`, or `aseprite` (installed with Steam, started as the binary). |
 | A3–A4 | PICO-8 tracker, your existing DAW, ChipTone | PICO-8 first; `bitwig` for loops; `sfx` opens jsfxr, `sfx chiptone` ChipTone. |
 | G1–G11 | `godot` | Use Godot 4, typed GDScript warnings, one repo per game; download version-matched export templates in the editor. |
 | X1–X8 | `base-devel clang gdb pkgconf sdl3 lua lua-language-server emscripten` | Check `pkg-config --cflags --libs sdl3 lua`; later check `emcc --version`. Keep engine name for X1, not a fabricated placeholder repository. |

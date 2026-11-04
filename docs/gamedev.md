@@ -68,9 +68,9 @@ Zed already has clangd for C and the Lua extension for the carts.
 
 ## Aseprite (Steam)
 
-Install it in Steam like a game. Then `aseprite` (or the launcher entry) opens it through Steam and jumps to it if it's already open. It's a native Linux build, so it tiles where you start it instead of going to workspace 5 like the Proton games.
+Install it in Steam like a game. `aseprite` (and the launcher entry) then always starts the binary directly, never through the Steam client, and jumps to it if it's already open. Steam is only needed to install and update it. It's a native Linux build, so it tiles where you start it instead of going to workspace 5 like the Proton games.
 
-With arguments, `aseprite` runs the binary directly instead, which is the batch CLI, so build scripts can turn `.aseprite` files into sprite sheets:
+With arguments it passes them straight through, so `aseprite file.png` opens a file and the batch CLI lets build scripts turn `.aseprite` files into sprite sheets:
 
 ```
 aseprite -b hero.aseprite --sheet hero.png --data hero.json
