@@ -54,7 +54,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("awww-daemon")
 	-- Afterhours: quiet contour bands; fill each display without distortion.
-	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 0d0c10 --transition-type none ~/.local/share/backgrounds/afterhours.png")
+	hl.exec_cmd("sleep 1 && awww img --resize crop --fill-color 0d0c10 --transition-type none ~/.local/share/backgrounds/afterhours-haze.jpg")
 end)
 
 -------------------------------

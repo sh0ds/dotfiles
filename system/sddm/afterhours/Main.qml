@@ -81,7 +81,7 @@ Rectangle {
     // ---- Background: the desktop wallpaper, so login, lock and desktop are one place ----
     Image {
         anchors.fill: parent
-        source: "background.png"
+        source: "background.jpg"
         fillMode: Image.PreserveAspectCrop
         smooth: true
     }

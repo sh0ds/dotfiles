@@ -10,11 +10,12 @@ repo=$(dirname "$here")
 
 # ---- SDDM: the Afterhours theme (Qt 6, runs on weston like before) ----
 # The greeter runs as the sddm user and can't read $HOME, so the wallpaper
-# is copied in as background.png.
+# is copied in as background.jpg.
 t=/usr/share/sddm/themes/afterhours
 sudo install -d "$t"
 sudo install -m 644 "$here"/sddm/afterhours/{Main.qml,metadata.desktop,theme.conf} "$t/"
-sudo install -m 644 "$repo/.local/share/backgrounds/afterhours.png" "$t/background.png"
+sudo install -m 644 "$repo/.local/share/backgrounds/afterhours-haze.jpg" "$t/background.jpg"
+sudo rm -f "$t/background.png"
 # The old Diag theme is gone from the repo; drop its installed copy too.
 sudo rm -rf /usr/share/sddm/themes/diag
 sudo install -d /etc/sddm.conf.d

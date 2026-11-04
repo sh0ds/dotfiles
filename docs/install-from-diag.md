@@ -72,7 +72,7 @@ Run an isolated installation:
 preview_home=$(mktemp -d /tmp/afterhours-preview.XXXXXX)
 bash "$HOME/code/dotfiles-afterhours/install-dotfiles.sh" --target "$preview_home"
 test -f "$preview_home/.config/quickshell/afterhours/shell.qml"
-test -f "$preview_home/.local/share/backgrounds/afterhours.png"
+test -f "$preview_home/.local/share/backgrounds/afterhours-haze.jpg"
 ```
 
 This writes into the temporary directory, not your live home. Stop if the installer or either file check fails. Keep the new checkout in its permanent location after the real installation: most installed files will link to it.
