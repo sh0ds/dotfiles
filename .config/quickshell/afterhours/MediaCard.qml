@@ -20,20 +20,28 @@ PopupWindow {
     color: "transparent"
     implicitWidth: 380
     implicitHeight: body.implicitHeight + 36
-    onVisibleChanged: if (visible) { intro.restart(); player?.positionChanged(); }
+    onVisibleChanged: if (visible) {
+        if (!quiet) intro.restart();
+        quiet = false;
+        player?.positionChanged();
+    }
     // SoundCloud (the Firefox app on Super+S) can't shuffle or repeat over
     // MPRIS, so for a Firefox player the two buttons press SoundCloud's own
     // keys in its window instead: Shift+S shuffles, Shift+L repeats.
     // SoundCloud doesn't report either state back, so the button only
     // flashes. The ID is the SoundCloud app's in rice.lua.
+    // Pressing keys in another window takes the keyboard focus away, which
+    // closes the card; it comes straight back, without the pop.
     readonly property bool viaKeys: player !== null && !(player.shuffleSupported ?? false)
         && /firefox/i.test((player.identity ?? "") + " " + (player.desktopEntry ?? ""))
     readonly property string soundcloud: "class:^FFPWA-01M4E9WM9PSN126GWCCEG49J4C$"
     property string flash: ""
+    property bool quiet: false
     Timer { id: unflash; interval: 450; onTriggered: card.flash = "" }
+    Timer { id: reopen; interval: 150; onTriggered: if (!card.visible) { card.quiet = true; card.visible = true; } }
     function press(key) {
         Hyprland.dispatch('hl.dsp.send_shortcut({ mods = "SHIFT", key = "' + key + '", window = "' + soundcloud + '" })');
-        flash = key; unflash.restart();
+        flash = key; unflash.restart(); reopen.restart();
     }
     function clock(seconds) {
         if (!(seconds >= 0) || !isFinite(seconds)) return "–:––";
