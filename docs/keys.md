@@ -69,8 +69,6 @@ With `Super` held, and on the rail itself, where hovering anything also shows a 
 | `Click now playing` | Media card (cover, seek, shuffle, loop) |
 | `Right-click now playing` | Play / pause |
 | `Wheel on now playing` | Next / previous track |
-| `Click the stats icon` | Today |
-| `Right-click the stats icon` | System monitor (btop) |
 | `Click the network icon` | Control centre |
 | `Right-click the network icon` | Network settings (nmtui) |
 | `Wheel on vol` | Volume up / down |

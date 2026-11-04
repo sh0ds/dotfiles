@@ -423,19 +423,9 @@ ShellRoot {
                         else if (step > 0 && root.player?.canGoPrevious) root.player.previous();
                     }
                 }
-                // Right side: sys, keep awake, the Pi, then network and sound side by
+                // Right side: keep awake, the Pi, then network and sound side by
                 // side (both open the control centre), the inbox and the tray.
-                // sys: click opens Today (graphs, Pi, disks); right-click opens btop.
-                Cell {
-                    visible: rail.width > 900
-                    label: "\uf080"   // nf-fa-bar_chart
-                    size: 14
-                    ink: Theme.muted
-                    fill: dash.visible ? Theme.accentSoft : "transparent"
-                    hint: "Click: Today (cpu, gpu, memory, Pi, disks) · right-click: btop"
-                    onClicked: dash.visible = !dash.visible
-                    onRightClicked: root.run(["sysmon"])
-                }
+                // The system graphs are in Today (click the clock).
                 Cell {
                     visible: rail.width > 900
                     label: "\uf0f4"   // nf-fa-coffee
