@@ -182,10 +182,11 @@ hl.layer_rule({ name = "notify-slide", match = { namespace = "^afterhours-toast$
 -- alone gets every pixel. Open a second window and they come back.
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 
--- Reading layout (SUPER+R, the reading script): workspace 6 tiles with the
--- master layout, centred. The doc is the master, half the screen wide in the
--- middle; the other windows stack left and right of it. Alone it still stays
--- in the middle; with one other window the doc goes left.
+-- Reading layout (SUPER+R, the reading script): it switches the workspace
+-- you're on to the master layout, centred, until you press it again. The doc
+-- is the master, half the screen wide in the middle; the other windows stack
+-- left and right of it. Alone it still stays in the middle; with one other
+-- window the doc goes left. No other workspace uses the master layout.
 hl.config({
 	master = {
 		mfact = 0.5,
@@ -194,7 +195,6 @@ hl.config({
 		always_keep_position = true,
 	},
 })
-hl.workspace_rule({ workspace = "6", layout = "master", layout_opts = { orientation = "center" } })
 hl.window_rule({
 	name = "smart-borders",
 	match = { float = false, workspace = "w[tv1]" },
