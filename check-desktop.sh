@@ -53,7 +53,7 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
 fi
 
 section "Desktop pieces"
-for c in python3 kitty quickshell cava fuzzel hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat secret-tool virsh virt-install virt-viewer mpd mpc rmpc mpd-mpris udiskie thunar xarchiver zip unzip xfconf-query aria2c btop wtype checkupdates audacity mpv imv zathura obsidian qt6ct gamemoderun proton-pass xdg-mime yay; do
+for c in python3 kitty quickshell cava fuzzel hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat secret-tool virsh virt-install virt-viewer mpd mpc rmpc mpd-mpris udiskie thunar xarchiver zip unzip xfconf-query aria2c btop wtype checkupdates audacity mpv imv zathura obsidian qt6ct gamemoderun umu-run proton-pass xdg-mime yay; do
   check "$c" command -v "$c"
 done
 check "emoji list (unicode-emoji)" test -r /usr/share/unicode/emoji/emoji-test.txt

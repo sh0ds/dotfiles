@@ -322,6 +322,30 @@ hl.window_rule({
 	no_dim = true,
 })
 
+-- Battle.net and World of Warcraft (battlenet): Proton names every window
+-- of that prefix steam_app_battlenet. They go to workspace 5 with Steam;
+-- the launcher and its login and dialogs float in the middle, and WoW is
+-- treated like a Steam game (GameMode below, solid in "solid-titles").
+hl.window_rule({
+	name = "battlenet",
+	match = { class = "^steam_app_battlenet$" },
+	workspace = "5",
+})
+hl.window_rule({
+	name = "battlenet-launcher",
+	match = { class = "^steam_app_battlenet$", title = "negative:^World of Warcraft" },
+	float = true,
+	center = true,
+})
+hl.window_rule({
+	name = "wow",
+	match = { class = "^steam_app_battlenet$", title = "^World of Warcraft" },
+	content = "game",
+	immediate = true,
+	idle_inhibit = "fullscreen",
+	no_dim = true,
+})
+
 -- PICO-8 and Picotron (pico8, picotron, from the launcher) tile where you
 -- start them instead of going to workspace 5: they're as much an editor as a
 -- game. Marked as game content for adaptive sync, the screen stays on while
@@ -356,7 +380,7 @@ hl.window_rule({
 })
 hl.window_rule({
 	name = "solid-titles",
-	match = { title = "^Picture-in-Picture$|\\(DEBUG\\)$" },
+	match = { title = "^Picture-in-Picture$|\\(DEBUG\\)$|^World of Warcraft" },
 	opacity = "1.0 override 1.0 override",
 })
 -- Video and art keep their true colours even when not focused.
@@ -390,9 +414,14 @@ hl.window_rule({
 -- window opens, gamemoded switches it on for that process, and it switches
 -- off by itself when the game quits. Each process is only asked once, since
 -- asking twice would toggle it back off (launchers open several windows).
+-- WoW shares its class with Battle.net, so it's picked out by title.
 local gamemode_pids = {}
 hl.on("window.open", function(w)
-	if not (w and w.class and w.class:match("^steam_app_%d+$")) then
+	if not (w and w.class) then
+		return
+	end
+	local wow = w.class == "steam_app_battlenet" and (w.title or ""):match("^World of Warcraft")
+	if not (w.class:match("^steam_app_%d+$") or wow) then
 		return
 	end
 	local pid = w.pid

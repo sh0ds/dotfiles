@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Battle.net
+GenericName=Game Launcher
+Comment=Blizzard's launcher for World of Warcraft, under Proton (installs itself the first time)
+Exec=battlenet
+Icon=applications-games
+Terminal=false
+Categories=Game;
+Keywords=wow;warcraft;blizzard;battlenet;
+StartupWMClass=steam_app_battlenet

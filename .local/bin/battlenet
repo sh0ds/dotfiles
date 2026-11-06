@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# battlenet: Blizzard's launcher (World of Warcraft) under Proton, run by
+# umu-launcher with the latest GE-Proton, in its own Wine prefix that stays
+# put: ~/Games/battlenet. Battle.net and WoW update themselves inside it.
+#   battlenet   the first time: downloads Blizzard's installer and runs it
+#               (Battle.net starts by itself when it's done);
+#               after that: starts Battle.net, or jumps to it if it's open
+set -euo pipefail
+if ! command -v umu-run >/dev/null; then
+  notify-send -a Battle.net "umu-launcher is not installed" "sudo pacman -S --needed umu-launcher"
+  exit 1
+fi
+prefix=$HOME/Games/battlenet
+client="$prefix/drive_c/Program Files (x86)/Battle.net/Battle.net Launcher.exe"
+# umu-battlenet makes Proton name every window steam_app_battlenet (rice.lua).
+export WINEPREFIX=$prefix GAMEID=umu-battlenet PROTONPATH=GE-Proton PROTON_VERB=run
+if [ -f "$client" ]; then
+  exec app '^steam_app_battlenet$' umu-run "$client"
+fi
+# A prefix without the client is a cancelled or crashed install, which
+# Blizzard's installer can't resume. Keep it aside and start clean.
+if [ -d "$prefix" ]; then
+  mv "$prefix" "$prefix.broken-$(date +%Y%m%d-%H%M%S)"
+  notify-send -a Battle.net "Starting the install again" "The unfinished one is next to it in ~/Games."
+fi
+mkdir -p "$prefix" ~/.cache/battlenet
+setup=~/.cache/battlenet/Battle.net-Setup.exe
+notify-send -a Battle.net "Installing Battle.net" "The first start also downloads GE-Proton, so give it a minute."
+curl --fail --location --retry 3 --silent --show-error --output "$setup" \
+  'https://downloader.battle.net/download/getInstallerForGame?os=win&gameProgram=BATTLENET_APP&version=Live'
+exec umu-run "$setup"
