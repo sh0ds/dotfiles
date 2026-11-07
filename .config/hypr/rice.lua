@@ -302,12 +302,19 @@ hl.window_rule({
 })
 -- Every other Steam window (settings, game properties, chats, update and
 -- install dialogs) floats in the middle instead of squeezing the tiles.
--- Steam's own corner pop-ups (notificationtoasts_*) are left where Steam puts them.
+-- Steam's own pop-ups (corner toasts, menus) open without a title and only
+-- get one afterwards, so a window without a title floats where Steam puts
+-- it instead of being pulled into the middle.
 hl.window_rule({
 	name = "steam-dialogs",
-	match = { class = "^steam$", title = "negative:^(Steam|Friends List|notificationtoasts_.*)$" },
+	match = { class = "^steam$", title = "negative:^(|Steam|Friends List|notificationtoasts_.*)$" },
 	float = true,
 	center = true,
+})
+hl.window_rule({
+	name = "steam-popups",
+	match = { class = "^steam$", title = "^$" },
+	float = true,
 })
 -- Games (Steam and Proton both name them steam_app_<id>): workspace 5, marked
 -- as game content so misc.vrr = 3 turns adaptive sync on, allowed to tear for
