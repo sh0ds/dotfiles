@@ -42,7 +42,7 @@ class Curseforge(unittest.TestCase):
         downloads = self.home / 'Downloads'
         downloads.mkdir()
         (downloads / 'CurseForge-1.2.3.AppImage').write_text('x')
-        forever = self.home / 'Games/battlenet/drive_c/Program Files (x86)/World of Warcraft/_forever_'
+        forever = self.home / 'games/battlenet/drive_c/Program Files (x86)/World of Warcraft/_forever_'
         forever.mkdir(parents=True)
         calls = self.run_script()
         self.assertTrue(os.access(self.image, os.X_OK))

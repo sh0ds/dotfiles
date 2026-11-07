@@ -7,7 +7,7 @@ import unittest
 
 REPO = Path(__file__).resolve().parents[1]
 SCRIPT = REPO / '.local/bin/battlenet'
-CLIENT = 'Games/battlenet/drive_c/Program Files (x86)/Battle.net/Battle.net Launcher.exe'
+CLIENT = 'games/battlenet/drive_c/Program Files (x86)/Battle.net/Battle.net Launcher.exe'
 
 
 class Battlenet(unittest.TestCase):
@@ -39,7 +39,7 @@ class Battlenet(unittest.TestCase):
         self.assertTrue(any(c.startswith('curl ') and 'gameProgram=BATTLENET_APP' in c for c in calls), calls)
         setup = self.home / '.cache/battlenet/Battle.net-Setup.exe'
         self.assertTrue(setup.exists())
-        prefix = self.home / 'Games/battlenet'
+        prefix = self.home / 'games/battlenet'
         self.assertIn(f'umu-run {setup} | {prefix} umu-battlenet GE-Proton', calls)
 
     def test_installed_launches_through_app(self):
@@ -47,16 +47,16 @@ class Battlenet(unittest.TestCase):
         client.parent.mkdir(parents=True)
         client.touch()
         calls = self.run_script()
-        self.assertEqual(calls, [f'app ^steam_app_battlenet$ umu-run {client} | {self.home}/Games/battlenet umu-battlenet GE-Proton'])
+        self.assertEqual(calls, [f'app ^steam_app_battlenet$ umu-run {client} | {self.home}/games/battlenet umu-battlenet GE-Proton'])
 
     def test_unfinished_install_is_kept_aside(self):
-        stale = self.home / 'Games/battlenet/drive_c'
+        stale = self.home / 'games/battlenet/drive_c'
         stale.mkdir(parents=True)
         self.run_script()
-        kept = [p.name for p in (self.home / 'Games').iterdir() if p.name.startswith('battlenet.broken-')]
+        kept = [p.name for p in (self.home / 'games').iterdir() if p.name.startswith('battlenet.broken-')]
         self.assertEqual(len(kept), 1)
-        self.assertTrue((self.home / 'Games' / kept[0] / 'drive_c').is_dir())
-        self.assertFalse((self.home / 'Games/battlenet/drive_c').exists())
+        self.assertTrue((self.home / 'games' / kept[0] / 'drive_c').is_dir())
+        self.assertFalse((self.home / 'games/battlenet/drive_c').exists())
 
 
 if __name__ == '__main__':

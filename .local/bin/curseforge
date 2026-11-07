@@ -35,7 +35,7 @@ done
 if [ $# -gt 0 ]; then
   exec "$image" "$@"
 fi
-forever="$HOME/Games/battlenet/drive_c/Program Files (x86)/World of Warcraft/_forever_"
+forever="$HOME/games/battlenet/drive_c/Program Files (x86)/World of Warcraft/_forever_"
 if [ -d "$forever" ] && [ ! -e "$dir/told" ]; then
   printf '%s' "$forever" | wl-copy
   notify-send -a CurseForge "WoW Forever's folder is on the clipboard" "In CurseForge: World of Warcraft, add the game by hand, paste it as the folder."
