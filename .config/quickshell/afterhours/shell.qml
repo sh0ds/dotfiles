@@ -121,11 +121,12 @@ ShellRoot {
 
     // Game mode: on while a game is fullscreen on any monitor (Steam games,
     // anything Hyprland marks as game content, or fullscreen on workspace 5),
-    // or when you turn it on yourself. Animations, dimming and shadows go
-    // off, and the rail and the frame hide on the game's monitor only; the
-    // other monitor keeps its rail. Looking at the other monitor doesn't end
-    // it. Turning it on or off by hand overrides the automatic choice until
-    // the next game starts or ends.
+    // or when you turn it on yourself. The rail and the frame hide on the
+    // game's monitor only; the other monitor keeps its rail. Animations,
+    // dimming and shadows are Hyprland-wide, so they're off only while you're
+    // on the game's monitor: switch to the other one and windows animate as
+    // usual. Turning it on or off by hand overrides the automatic choice
+    // until the next game starts or ends.
     readonly property string gameScreen: {
         for (const m of Hyprland.monitors.values) {
             const ws = m.activeWorkspace;
@@ -154,8 +155,9 @@ ShellRoot {
         target: Hyprland.focusedWorkspace
         function onHasFullscreenChanged() { Hyprland.refreshToplevels(); }
     }
-    onGameModeChanged: {
-        Quickshell.execDetached(["hyprctl", "eval", gameMode
+    readonly property bool gameFocused: gameOn !== "" && Hyprland.focusedMonitor?.name === gameOn
+    onGameFocusedChanged: {
+        Quickshell.execDetached(["hyprctl", "eval", gameFocused
             ? "hl.config({ animations = { enabled = false }, decoration = { dim_inactive = false, shadow = { enabled = false } } })"
             : "hl.config({ animations = { enabled = true }, decoration = { dim_inactive = true, shadow = { enabled = true } } })"]);
     }
@@ -633,7 +635,7 @@ ShellRoot {
                             { name: "Overview", detail: "every workspace · Super+W", glyph: "", icon: "", act: () => overviewWindow.open = true },
                             { name: root.quiet ? "Quiet off" : "Quiet on", detail: "hold back notifications", glyph: "", icon: "", act: () => root.quiet = !root.quiet },
                             { name: root.awake ? "Keep awake off" : "Keep awake on", detail: "no dim, lock or sleep", glyph: "", icon: "", act: () => root.awake = !root.awake },
-                            { name: root.gameMode ? "Game mode off" : "Game mode on", detail: "no animations, dimming or rail", glyph: "", icon: "", act: () => root.setGame(!root.gameMode) },
+                            { name: root.gameMode ? "Game mode off" : "Game mode on", detail: "no rail, animations or dimming on its monitor", glyph: "", icon: "", act: () => root.setGame(!root.gameMode) },
                             { name: "Night light", detail: "warm colours on / off", glyph: "", icon: "", act: () => Quickshell.execDetached(["nightlight"]) },
                             { name: "Colour picker", detail: "hex code to the clipboard", glyph: "", icon: "", act: () => Quickshell.execDetached(["hyprpicker", "-a"]) },
                             { name: "Copy text from the screen", detail: "OCR a region", glyph: "", icon: "", act: () => Quickshell.execDetached(["ocr"]) },
