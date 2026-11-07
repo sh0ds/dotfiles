@@ -365,6 +365,15 @@ ShellRoot {
                     }
                     WheelHandler { onWheel: e => root.workspace(e.angleDelta.y > 0 ? '"e-1"' : '"e+1"') }
                 }
+                // Recording or sharing: on the left, before the title, which
+                // shortens to make room (the right side has no room to spare).
+                Cell {
+                    Layout.leftMargin: 6
+                    visible: root.recording || root.sharing
+                    label: root.sharing ? "● LIVE" : "● REC"; ink: Theme.danger
+                    hint: root.recording ? "Click to stop recording" : "Sharing your screen: popups are held back"
+                    onClicked: if (root.recording) root.run(["rec-toggle"])
+                }
                 Text {
                     id: windowTitle
                     Layout.fillWidth: true
@@ -394,12 +403,6 @@ ShellRoot {
                 anchors.right: parent.right; anchors.rightMargin: 6
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
-                Cell {
-                    visible: root.recording || root.sharing
-                    label: root.sharing ? "● LIVE" : "● REC"; ink: Theme.danger
-                    hint: root.recording ? "Click to stop recording" : "Sharing your screen: popups are held back"
-                    onClicked: if (root.recording) root.run(["rec-toggle"])
-                }
                 Cell {
                     visible: rail.width > 1350 && root.player !== null
                     label: root.player ? root.player.trackTitle.slice(0, 26) : ""
