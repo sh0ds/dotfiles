@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# curseforge: the CurseForge app (its Linux AppImage) for the WoW Forever
+# addons in the Battle.net prefix (battlenet).
+#   curseforge   start it, or jump to it if it's open
+# The first time it takes the AppImage you downloaded from
+# curseforge.com/download/app out of ~/Downloads and keeps it in
+# ~/.local/share/curseforge. CurseForge can't see into the Battle.net
+# prefix by itself, so the first start with WoW Forever installed copies
+# its folder (_forever_) to the clipboard: in CurseForge, add World of
+# Warcraft by hand and paste it as the folder.
+set -euo pipefail
+dir=$HOME/.local/share/curseforge
+image=$dir/CurseForge.AppImage
+if [ ! -x "$image" ]; then
+  shopt -s nullglob nocaseglob
+  found=(~/Downloads/curseforge*.appimage)
+  if [ ${#found[@]} -eq 0 ]; then
+    notify-send -a CurseForge "Download the Linux AppImage first" "Then run curseforge again; it picks it up from ~/Downloads."
+    exec xdg-open https://www.curseforge.com/download/app
+  fi
+  mkdir -p "$dir"
+  mv "${found[-1]}" "$image"
+  chmod +x "$image"
+fi
+forever="$HOME/Games/battlenet/drive_c/Program Files (x86)/World of Warcraft/_forever_"
+if [ -d "$forever" ] && [ ! -e "$dir/told" ]; then
+  printf '%s' "$forever" | wl-copy
+  notify-send -a CurseForge "WoW Forever's folder is on the clipboard" "In CurseForge: World of Warcraft, add the game by hand, paste it as the folder."
+  touch "$dir/told"
+fi
+exec app '(?i)^curseforge' "$image"

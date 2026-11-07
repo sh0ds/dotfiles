@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=CurseForge
+GenericName=Addon Manager
+Comment=Addons for WoW Forever in the Battle.net prefix (the first start sets it up)
+Exec=curseforge
+Icon=applications-games
+Terminal=false
+Categories=Game;
+Keywords=wow;addons;curse;warcraft;
