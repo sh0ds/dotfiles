@@ -324,11 +324,13 @@ hl.window_rule({
 
 -- Battle.net and World of Warcraft (battlenet): Proton names every window
 -- of that prefix steam_app_battlenet. The launcher floats in the middle of
--- workspace 5, with Steam, and WoW is treated like a Steam game (GameMode
--- below, solid in "solid-titles"); opening either takes you there.
--- Everything else it opens (friend toasts, menus, update pop-ups) floats
--- where Battle.net puts it, lands on 5 without taking you there and never
--- takes the focus, so it can't pull you away from what you're doing.
+-- workspace 5, with Steam, and opening it takes you there. Everything else
+-- it opens (friend toasts, menus, update pop-ups) floats where Battle.net
+-- puts it, lands on 5 without taking you there and never takes the focus,
+-- so it can't pull you away from what you're doing.
+-- WoW's window opens without a title and only then calls itself "World of
+-- Warcraft", so the pop-up rule catches it first; the "wow" hook below
+-- picks it out by its title and makes it the game.
 hl.window_rule({
 	name = "battlenet",
 	match = { class = "^steam_app_battlenet$", title = "^Battle\\.net$" },
@@ -346,7 +348,6 @@ hl.window_rule({
 hl.window_rule({
 	name = "wow",
 	match = { class = "^steam_app_battlenet$", title = "^World of Warcraft" },
-	workspace = "5",
 	content = "game",
 	immediate = true,
 	idle_inhibit = "fullscreen",
@@ -421,22 +422,47 @@ hl.window_rule({
 -- window opens, gamemoded switches it on for that process, and it switches
 -- off by itself when the game quits. Each process is only asked once, since
 -- asking twice would toggle it back off (launchers open several windows).
--- WoW shares its class with Battle.net, so it's picked out by title.
 local gamemode_pids = {}
-hl.on("window.open", function(w)
-	if not (w and w.class) then
-		return
-	end
-	local wow = w.class == "steam_app_battlenet" and (w.title or ""):match("^World of Warcraft")
-	if not (w.class:match("^steam_app_%d+$") or wow) then
-		return
-	end
-	local pid = w.pid
+local function gamemode(pid)
 	if not pid or pid <= 0 or gamemode_pids[pid] then
 		return
 	end
 	gamemode_pids[pid] = true
 	hl.exec_cmd("gamemoded -r" .. pid)
+end
+hl.on("window.open", function(w)
+	if w and w.class and w.class:match("^steam_app_%d+$") then
+		gamemode(w.pid)
+	end
+end)
+
+-- WoW: once its window says "World of Warcraft", it goes to workspace 5,
+-- tiles (the pop-up rule floated it), takes the focus and goes fullscreen,
+-- which turns game mode on (no rail or frame; adaptive sync and tearing
+-- only work fullscreen), and gets GameMode. Once per window, so Super+F
+-- still takes it out of fullscreen.
+local wow_windows = {}
+local function wow(w)
+	if not (w and w.class == "steam_app_battlenet" and (w.title or ""):match("^World of Warcraft")) then
+		return
+	end
+	if wow_windows[w.address] then
+		return
+	end
+	wow_windows[w.address] = true
+	local target = "address:" .. w.address
+	hl.dispatch(hl.dsp.window.move({ window = target, workspace = "5" }))
+	hl.dispatch(hl.dsp.window.float({ action = "disable", window = target }))
+	hl.dispatch(hl.dsp.focus({ window = target }))
+	hl.dispatch(hl.dsp.window.fullscreen({ action = "set", window = target }))
+	gamemode(w.pid)
+end
+hl.on("window.open", wow)
+hl.on("window.title", wow)
+hl.on("window.close", function(w)
+	if w then
+		wow_windows[w.address] = nil
+	end
 end)
 
 -- Everything DJ (Lexicon, rekordbox, Traktor) lives in a Windows VM

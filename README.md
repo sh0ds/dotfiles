@@ -27,7 +27,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **Thunar, Firefox, Obsidian and Zed** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
 - Unfocused windows dim a little. Games, video and picture-in-picture never do.
 - Wrappers for my game tools: `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone), and `gba` for Game Boy games in mGBA, with every game in `~/games/roms/gba` in the launcher. PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
-- `battlenet` for World of Warcraft: Battle.net under Proton (umu-launcher with GE-Proton) in its own prefix, `~/Games/battlenet`. The first start installs it. It lives on workspace 5 with Steam, and WoW gets GameMode and game mode like a Steam game. Its pop-ups never take the focus.
+- `battlenet` for World of Warcraft: Battle.net under Proton (umu-launcher with GE-Proton) in its own prefix, `~/Games/battlenet`. The first start installs it. It lives on workspace 5 with Steam, and WoW opens fullscreen with GameMode and game mode like a Steam game. Its pop-ups never take the focus.
 - PICO-8 and Picotron code in Zed: their APIs in the Lua language server, `F5` reruns the cart in the console, `F7` counts PICO-8 tokens. How it works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
 - Plus the DJ VM, clipboard history, OCR, screen recording and captioned devlog screenshots.
 
