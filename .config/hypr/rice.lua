@@ -323,23 +323,30 @@ hl.window_rule({
 })
 
 -- Battle.net and World of Warcraft (battlenet): Proton names every window
--- of that prefix steam_app_battlenet. They go to workspace 5 with Steam;
--- the launcher and its login and dialogs float in the middle, and WoW is
--- treated like a Steam game (GameMode below, solid in "solid-titles").
+-- of that prefix steam_app_battlenet. The launcher floats in the middle of
+-- workspace 5, with Steam, and WoW is treated like a Steam game (GameMode
+-- below, solid in "solid-titles"); opening either takes you there.
+-- Everything else it opens (friend toasts, menus, update pop-ups) floats
+-- where Battle.net puts it, lands on 5 without taking you there and never
+-- takes the focus, so it can't pull you away from what you're doing.
 hl.window_rule({
 	name = "battlenet",
-	match = { class = "^steam_app_battlenet$" },
+	match = { class = "^steam_app_battlenet$", title = "^Battle\\.net$" },
 	workspace = "5",
-})
-hl.window_rule({
-	name = "battlenet-launcher",
-	match = { class = "^steam_app_battlenet$", title = "negative:^World of Warcraft" },
 	float = true,
 	center = true,
 })
 hl.window_rule({
+	name = "battlenet-popups",
+	match = { class = "^steam_app_battlenet$", title = "negative:^(Battle\\.net|World of Warcraft.*)$" },
+	workspace = "5 silent",
+	float = true,
+	no_initial_focus = true,
+})
+hl.window_rule({
 	name = "wow",
 	match = { class = "^steam_app_battlenet$", title = "^World of Warcraft" },
+	workspace = "5",
 	content = "game",
 	immediate = true,
 	idle_inhibit = "fullscreen",
