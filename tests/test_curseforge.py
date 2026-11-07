@@ -16,7 +16,7 @@ class Curseforge(unittest.TestCase):
         fake = self.home / 'bin'
         fake.mkdir()
         self.log = self.home / 'calls'
-        for name in ('app', 'notify-send', 'xdg-open', 'wl-copy'):
+        for name in ('app', 'notify-send', 'xdg-open', 'wl-copy', 'xdg-mime'):
             (fake / name).write_text(f'#!/bin/sh\nprintf "{name} %s" "$*" >> "{self.log}"\n'
                                      f'[ {name} = wl-copy ] && printf " <%s>" "$(cat)" >> "{self.log}"\necho >> "{self.log}"\n')
             (fake / name).chmod(0o755)
@@ -48,8 +48,21 @@ class Curseforge(unittest.TestCase):
         self.assertTrue(os.access(self.image, os.X_OK))
         self.assertIn(f'wl-copy  <{forever}>', calls)
         self.assertIn(f'app (?i)^curseforge {self.image}', calls)
-        calls = self.run_script()
+        calls = [c for c in self.run_script() if not c.startswith('xdg-mime')]
         self.assertEqual(calls, [f'app (?i)^curseforge {self.image}'])
+
+    def test_login_link_goes_to_the_app(self):
+        self.image.parent.mkdir(parents=True)
+        self.image.write_text('#!/bin/sh\necho "appimage $*" >> "$HOME/calls"\n')
+        self.image.chmod(0o755)
+        calls = self.run_script_with('cfauth://login?accessToken=x')
+        self.assertIn('xdg-mime default curseforge.desktop x-scheme-handler/cfauth', calls)
+        self.assertEqual(calls[-1], 'appimage cfauth://login?accessToken=x')
+
+    def run_script_with(self, *args):
+        result = subprocess.run(['bash', str(SCRIPT), *args], env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return self.log.read_text().splitlines()
 
 
 if __name__ == '__main__':

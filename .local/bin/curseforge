@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # curseforge: the CurseForge app (its Linux AppImage) for the WoW Forever
 # addons in the Battle.net prefix (battlenet).
-#   curseforge   start it, or jump to it if it's open
+#   curseforge       start it, or jump to it if it's open
+#   curseforge URL   hand a curseforge://, cfauth:// (the browser login) or
+#                    curseforge-checkout:// link to it
 # The first time it takes the AppImage you downloaded from
 # curseforge.com/download/app out of ~/Downloads and keeps it in
 # ~/.local/share/curseforge. CurseForge can't see into the Battle.net
@@ -21,6 +23,17 @@ if [ ! -x "$image" ]; then
   mkdir -p "$dir"
   mv "${found[-1]}" "$image"
   chmod +x "$image"
+fi
+# The login runs in the browser and comes back as a cfauth:// link. The
+# AppImage never registers its links with the system, so curseforge.desktop
+# takes them (the browser asks once whether to open them with CurseForge).
+for scheme in curseforge cfauth curseforge-checkout; do
+  if [ "$(xdg-mime query default "x-scheme-handler/$scheme" 2>/dev/null)" != curseforge.desktop ]; then
+    xdg-mime default curseforge.desktop "x-scheme-handler/$scheme"
+  fi
+done
+if [ $# -gt 0 ]; then
+  exec "$image" "$@"
 fi
 forever="$HOME/Games/battlenet/drive_c/Program Files (x86)/World of Warcraft/_forever_"
 if [ -d "$forever" ] && [ ! -e "$dir/told" ]; then
