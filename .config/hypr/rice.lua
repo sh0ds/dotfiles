@@ -541,8 +541,9 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("kdeconnect-indicator") -- optional tray icon
 	-- aria2 in the background, Firefox hands its downloads to it
 	hl.exec_cmd("aria2-rpc")
-	-- Easy Effects without a window: the headphone EQ and limiter (docs/audio.md)
-	hl.exec_cmd("easyeffects --service-mode --hide-window")
+	-- Easy Effects without a window: the headphone EQ and limiter (docs/audio.md),
+	-- keeping its hands off Vesktop's screen-share audio
+	hl.exec_cmd("easyeffects-start")
 end)
 
 -- WhatsApp (nchat) on SUPER+I, same idea

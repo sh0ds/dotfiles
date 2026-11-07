@@ -27,6 +27,20 @@ Do this once, the settings stay in Easy Effects after that.
 
 If iCUE ever put an EQ preset on the headset itself (it saves it on the headset), set it back to Pure Direct or flat in Windows, otherwise the bass gets boosted twice.
 
+## Streaming in Discord (Vesktop)
+
+Vesktop shares "entire system" audio through venmic, which builds its own little audio graph. Easy Effects would grab that graph's output too and play it into the headset, so you'd hear yourself and the stream would go silent. `easyeffects-start` (what `rice.lua` runs at login) puts venmic on Easy Effects' blocklists first, so it never touches the stream.
+
+In Vesktop's stream window, under the audio options:
+
+- Only Speakers: on
+- Only Default Speakers: on
+- Ignore Inputs: on (your mic stays out of the stream)
+- Ignore Virtual: off (Easy Effects' output is virtual, so this would mute everything)
+- Ignore Devices: on
+
+In Easy Effects (`easyeffects`, the menu, Preferences): Process all output streams on, Process all input streams on. The blocklist covers the stream.
+
 ## Flat sound
 
 For DJ cueing in the VM, or to compare: `easyeffects -b 1` turns all effects off, `easyeffects -b 2` back on.

@@ -36,7 +36,7 @@ cd "$src"
 # Never glob unrelated untracked files into the user's home.
 { git ls-files
   printf '%s\n' .config/quickshell/afterhours/{shell,Theme,Cell,Hint,Notice,MonthView,Island,Dashboard,PopIn,Cover,VolumeRow,Meter,Osd,ScreenFrame,Wallpaper,MediaCard,ControlCenter,Lock,Overview}.qml \
-    .config/quickshell/afterhours/qmldir .config/quickshell/afterhours/pam/password.conf .local/bin/{afterhours,afterhours-suspend,gba,roms,battlenet,curseforge} .local/share/applications/{io.mgba.mGBA,battlenet,curseforge}.desktop \
+    .config/quickshell/afterhours/qmldir .config/quickshell/afterhours/pam/password.conf .local/bin/{afterhours,afterhours-suspend,gba,roms,battlenet,curseforge,easyeffects-start} .local/share/applications/{io.mgba.mGBA,battlenet,curseforge}.desktop \
     .local/share/backgrounds/afterhours-haze.jpg
 } | sort -u | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/|tests/)' |
   while IFS= read -r rel; do

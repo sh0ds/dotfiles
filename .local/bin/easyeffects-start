@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""easyeffects-start: Easy Effects without a window (rice.lua runs this at login).
+
+Before it starts, Vesktop's screen-share audio (venmic) goes on Easy Effects'
+blocklists, for outputs and inputs. Otherwise Easy Effects grabs the stream's
+own audio and plays it into the headset: you hear yourself, and the stream
+loses its sound. venmic's nodes are named venmic-loopback-... and
+vencord-sink / vencord-screen-share, and Easy Effects matches the blocklist
+by prefix. Entries you added yourself stay.
+"""
+import os
+import sys
+from pathlib import Path
+
+BLOCK = ["venmic", "vencord"]
+config = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config") / "easyeffects/db/easyeffectsrc"
+
+
+def merged(value):
+    items = [i for i in value.split(",") if i] if value else []
+    return ",".join(items + [b for b in BLOCK if b not in items])
+
+
+lines = config.read_text().splitlines() if config.exists() else []
+for group in ("StreamOutputs", "StreamInputs"):
+    header = f"[{group}]"
+    if header not in lines:
+        lines += ["", header, f"blocklist={merged('')}"]
+        continue
+    start = lines.index(header) + 1
+    end = next((i for i in range(start, len(lines)) if lines[i].startswith("[")), len(lines))
+    for i in range(start, end):
+        if lines[i].startswith("blocklist="):
+            lines[i] = "blocklist=" + merged(lines[i][len("blocklist="):])
+            break
+    else:
+        lines.insert(start, f"blocklist={merged('')}")
+config.parent.mkdir(parents=True, exist_ok=True)
+config.write_text("\n".join(lines).lstrip("\n") + "\n")
+
+if "--no-start" not in sys.argv:
+    os.execvp("easyeffects", ["easyeffects", "--service-mode", "--hide-window"])
