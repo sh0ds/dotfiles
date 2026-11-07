@@ -119,21 +119,37 @@ ShellRoot {
     // with the rail hidden (Super+B, game mode) the toasts and the pill do.
     readonly property bool islandShown: barVisible && !gameMode
 
-    // Game mode: on while a game is fullscreen (Steam games, anything Hyprland
-    // marks as game content, or fullscreen on workspace 5), or when you turn it
-    // on yourself. Animations, dimming and shadows go off, the rail and the
-    // frame hide, the wallpaper stops. Turning it on or off by hand overrides
-    // the automatic choice until the next game starts or ends.
-    readonly property bool gameAuto: {
-        const ws = Hyprland.focusedWorkspace;
-        if (!ws?.hasFullscreen) return false;
-        const ipc = Hyprland.activeToplevel?.lastIpcObject ?? {};
-        return ws.id === 5 || ipc.contentType === "game" || /^(steam_app_\d+|gamescope)$/.test(ipc.class ?? "");
+    // Game mode: on while a game is fullscreen on any monitor (Steam games,
+    // anything Hyprland marks as game content, or fullscreen on workspace 5),
+    // or when you turn it on yourself. Animations, dimming and shadows go
+    // off, and the rail and the frame hide on the game's monitor only; the
+    // other monitor keeps its rail. Looking at the other monitor doesn't end
+    // it. Turning it on or off by hand overrides the automatic choice until
+    // the next game starts or ends.
+    readonly property string gameScreen: {
+        for (const m of Hyprland.monitors.values) {
+            const ws = m.activeWorkspace;
+            if (!ws?.hasFullscreen) continue;
+            if (ws.id === 5) return m.name;
+            for (const t of ws.toplevels.values) {
+                const ipc = t.lastIpcObject ?? {};
+                if (ipc.fullscreen && (ipc.contentType === "game" || /^(steam_app_\d+|gamescope)$/.test(ipc.class ?? ""))) return m.name;
+            }
+        }
+        return "";
     }
+    readonly property bool gameAuto: gameScreen !== ""
     property string gameOverride: ""
+    property string manualScreen: ""
     onGameAutoChanged: gameOverride = ""
     readonly property bool gameMode: gameOverride === "on" || (gameOverride !== "off" && gameAuto)
-    function setGame(on) { gameOverride = on === gameAuto ? "" : on ? "on" : "off"; }
+    // The monitor whose rail and frame hide: the game's, or the one you were
+    // on when you turned game mode on by hand.
+    readonly property string gameOn: gameMode ? (gameScreen || manualScreen) : ""
+    function setGame(on) {
+        manualScreen = Hyprland.focusedMonitor?.name ?? "";
+        gameOverride = on === gameAuto ? "" : on ? "on" : "off";
+    }
     Connections {
         target: Hyprland.focusedWorkspace
         function onHasFullscreenChanged() { Hyprland.refreshToplevels(); }
@@ -220,7 +236,7 @@ ShellRoot {
             id: rail
             required property var modelData
             screen: modelData
-            visible: root.barVisible && !root.gameMode
+            visible: root.barVisible && rail.modelData.name !== root.gameOn
             WlrLayershell.namespace: "afterhours-rail"
             // The media card, the control centre and Today hang under this rail.
             function openControl(cell) {
@@ -504,7 +520,7 @@ ShellRoot {
     }
     // The living wallpaper and the screen frame, one each per monitor.
     Variants { model: Quickshell.screens; Wallpaper {} }
-    Variants { model: Quickshell.screens; ScreenFrame { visible: !root.gameMode } }
+    Variants { model: Quickshell.screens; ScreenFrame { visible: modelData?.name !== root.gameOn } }
     Osd { sink: root.sink; held: root.islandShown }
     Overview { id: overviewWindow }
     Lock { id: lockScreen }

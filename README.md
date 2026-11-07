@@ -20,7 +20,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **See-through windows:** every window lets the wallpaper show through, blurred, a little more when it isn't focused. kitty keeps its text solid over a see-through background; games, video, art tools and fullscreen stay solid.
 - **The wallpaper** is the haze with soft violet clouds over it. It never moves.
 - **My own lock screen** with a big clock, the password pill and what is playing. hyprlock is still there as the fallback.
-- **Game mode** turns on by itself when a game goes fullscreen: no animations, dimming or shadows, and the rail and frame hide. You can also flip it in the control centre.
+- **Game mode** turns on by itself when a game goes fullscreen: no animations, dimming or shadows, and the rail and frame hide on the game's monitor (the other monitor keeps its rail). You can also flip it in the control centre.
 - **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume pill while the rail is hidden), with a quiet mode and an inbox for the session. Screen sharing hides them.
 - **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, the lock screen and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
