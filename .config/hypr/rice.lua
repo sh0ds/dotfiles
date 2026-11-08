@@ -285,13 +285,9 @@ hl.window_rule({
 	center = true,
 })
 
--- Steam lives on workspace 5, together with the games it starts, so gaming
--- never reshuffles the workspaces you code on.
-hl.window_rule({
-	name = "steam-main",
-	match = { class = "^steam$", title = "^Steam$" },
-	workspace = "5 silent",
-})
+-- The Steam client is a normal app: it opens where you start it. Only the
+-- games it runs go to workspace 5 ("steam-games" below).
+
 -- Friends list: a slim floating column at the top right edge.
 hl.window_rule({
 	name = "steam-friends",
@@ -331,7 +327,7 @@ hl.window_rule({
 
 -- Battle.net and World of Warcraft (battlenet): Proton names every window
 -- of that prefix steam_app_battlenet. The launcher floats in the middle of
--- workspace 5, with Steam, and opening it takes you there. Everything else
+-- workspace 5, with the games, and opening it takes you there. Everything else
 -- it opens (friend toasts, menus, update pop-ups) floats where Battle.net
 -- puts it, lands on 5 without taking you there and never takes the focus,
 -- so it can't pull you away from what you're doing.
