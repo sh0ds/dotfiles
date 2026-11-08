@@ -120,21 +120,22 @@ ShellRoot {
     readonly property bool islandShown: barVisible && !gameMode
 
     // Game mode: on while a game is fullscreen on any monitor (Steam games,
-    // anything Hyprland marks as game content, or fullscreen on workspace 5),
-    // or when you turn it on yourself. The rail and the frame hide on the
-    // game's monitor only; the other monitor keeps its rail. Animations,
-    // dimming and shadows are Hyprland-wide, so they're off only while you're
-    // on the game's monitor: switch to the other one and windows animate as
-    // usual. Turning it on or off by hand overrides the automatic choice
-    // until the next game starts or ends.
+    // WoW, anything Hyprland marks as game content), or when you turn it on
+    // yourself. Steam itself never counts, even fullscreen on workspace 5.
+    // The rail and the frame hide on the game's monitor only; the other
+    // monitor keeps its rail. Animations, dimming and shadows are
+    // Hyprland-wide, so they're off only while you're on the game's monitor:
+    // switch to the other one and windows animate as usual. Turning it on
+    // or off by hand overrides the automatic choice until the next game
+    // starts or ends.
     readonly property string gameScreen: {
         for (const m of Hyprland.monitors.values) {
             const ws = m.activeWorkspace;
             if (!ws?.hasFullscreen) continue;
-            if (ws.id === 5) return m.name;
             for (const t of ws.toplevels.values) {
                 const ipc = t.lastIpcObject ?? {};
-                if (ipc.fullscreen && (ipc.contentType === "game" || /^(steam_app_\d+|gamescope)$/.test(ipc.class ?? ""))) return m.name;
+                const wow = ipc.class === "steam_app_battlenet" && /^World of Warcraft/.test(ipc.title ?? "");
+                if (ipc.fullscreen && (wow || ipc.contentType === "game" || /^(steam_app_\d+|gamescope)$/.test(ipc.class ?? ""))) return m.name;
             }
         }
         return "";
