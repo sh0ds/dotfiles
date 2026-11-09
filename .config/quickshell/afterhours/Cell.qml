@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import Quickshell
 // A keyboard-focusable button with two corners cut (top left, bottom
-// right, like the rail's left piece): faint fill on hover, violet fill
+// right, like the rail's left piece; mirrored, top right and bottom left
+// like the right piece): faint fill on hover, violet fill
 // when selected (a primary button), a soft violet fill with a violet
 // underline when lit (a toggle that is on), colour changes ease out, a
 // small dip when pressed.
@@ -12,6 +13,7 @@ Notch {
     property string hint: ""
     property bool selected: false
     property bool lit: false
+    property bool mirrored: false
     property color ink: Theme.text
     property color fill: "transparent"
     property int size: 13
@@ -23,7 +25,9 @@ Notch {
     signal wheeled(int step)
     implicitWidth: content.implicitWidth + 26
     implicitHeight: 32
-    cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
+    cut: Theme.notchSmall
+    cutTopLeft: !mirrored; cutBottomRight: !mirrored
+    cutTopRight: mirrored; cutBottomLeft: mirrored
     color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.glassRaised : lit ? Theme.accentSoft : fill)
     edge: activeFocus ? Theme.accent : "transparent"
     activeFocusOnTab: true
@@ -65,9 +69,10 @@ Notch {
         Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
     }
     }
-    // Stops where the bottom right corner is cut.
+    // Stops where the cut bottom corner starts.
     Rectangle {
         anchors.bottom: parent.bottom
+        x: cell.mirrored ? Theme.notchSmall : 0
         width: parent.width - Theme.notchSmall; height: 2
         color: Theme.accent
         opacity: cell.lit ? 1 : 0

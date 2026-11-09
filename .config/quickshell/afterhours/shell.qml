@@ -410,6 +410,7 @@ ShellRoot {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
                 Cell {
+                    mirrored: true
                     visible: rail.width > 1350 && root.player !== null
                     label: root.player ? root.player.trackTitle.slice(0, 26) : ""
                     ink: root.player?.isPlaying ? Theme.text : Theme.muted
@@ -455,6 +456,7 @@ ShellRoot {
                 // system graphs are in Today (click the clock).
                 Seam { visible: mediaCell.visible }
                 Cell {
+                    mirrored: true
                     visible: rail.width > 900
                     label: "\uf0f4"   // nf-fa-coffee
                     size: 14
@@ -464,6 +466,7 @@ ShellRoot {
                     onClicked: root.awake = !root.awake
                 }
                 Cell {
+                    mirrored: true
                     visible: rail.width > 900
                     label: "\uf315"   // nf-linux-raspberry_pi
                     size: 16
@@ -472,6 +475,7 @@ ShellRoot {
                     onClicked: root.run(["kitty", "-e", "ssh", "pi"])
                 }
                 Cell {
+                    mirrored: true
                     id: netCell
                     visible: rail.width > 900
                     label: root.net === "ethernet" ? "\uf0e8" : root.net.startsWith("wifi:") ? "\uf1eb" : "\uf127"
@@ -484,6 +488,7 @@ ShellRoot {
                 }
                 Seam { visible: rail.width > 900 }
                 Cell {
+                    mirrored: true
                     id: volCell
                     label: (rail.width > 900 ? "vol " : "") + root.volume
                     fill: control.visible && control.target === volCell ? Theme.accentSoft : "transparent"
@@ -494,6 +499,7 @@ ShellRoot {
                     onWheeled: step => root.nudgeVolume(step)
                 }
                 Cell {
+                    mirrored: true
                     // Pops when a notification lands.
                     readonly property int count: notices.trackedNotifications.values.length
                     property int seen: 0
@@ -508,7 +514,7 @@ ShellRoot {
                         id: trayItem
                         required property var modelData
                         implicitWidth: 30; implicitHeight: 32
-                        cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
+                        cut: Theme.notchSmall; cutTopLeft: false; cutBottomRight: false
                         color: trayPointer.containsMouse ? Theme.glassRaised : "transparent"
                         Behavior on color { ColorAnimation { duration: Theme.motion } }
                         Image { anchors.centerIn: parent; width: 16; height: 16; sourceSize: Qt.size(32, 32); source: trayItem.modelData.icon }
@@ -528,7 +534,7 @@ ShellRoot {
                     }
                 }
                 Seam {}
-                Cell { label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
+                Cell { mirrored: true; label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
             }
             }
         }
