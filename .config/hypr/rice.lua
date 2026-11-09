@@ -198,19 +198,6 @@ hl.layer_rule({
 	ignore_alpha = 0.3,
 })
 
-------------------------------------------------
----- SMART GAPS: one window fills the screen ----
-------------------------------------------------
-
--- A workspace with a single tiled window drops its gaps and border, so the editor
--- alone gets every pixel. Open a second window and they come back.
-hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
-hl.window_rule({
-	name = "smart-borders",
-	match = { float = false, workspace = "w[tv1]" },
-	border_size = 0,
-})
-
 ----------------------
 ---- WINDOW RULES ----
 ----------------------
@@ -359,9 +346,9 @@ hl.window_rule({
 
 -- PICO-8 and Picotron (pico8, picotron, from the launcher) tile where you
 -- start them instead of going to workspace 5: they're as much an editor as a
--- game. Marked as game content for adaptive sync, the screen stays on while
--- one is fullscreen, and a single tile gets the whole screen (smart gaps), so
--- the pixel-perfect picture sits centred on Afterhours black.
+-- game. Marked as game content for adaptive sync, and the screen stays on
+-- while one is fullscreen; the pixel-perfect picture sits centred on
+-- Afterhours black.
 hl.window_rule({
 	name = "fantasy-consoles",
 	match = { class = "(?i)^(pico-?8.*|picotron)$" },
