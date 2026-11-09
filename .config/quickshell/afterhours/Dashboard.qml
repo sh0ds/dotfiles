@@ -14,7 +14,9 @@ PopupWindow {
     anchor.item: target
     anchor.edges: Edges.Bottom
     anchor.gravity: Edges.Bottom
-    anchor.margins.top: 10
+    // 8 px under the rail, like the volume OSD and the rail's own top
+    // margin: under the island (42 px, the rail's full height).
+    anchor.margins.top: 8
     grabFocus: true
     visible: false
     color: "transparent"

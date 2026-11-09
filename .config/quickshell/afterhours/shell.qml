@@ -309,7 +309,8 @@ ShellRoot {
                     Behavior on edgeL { NumberAnimation { duration: spaces.rightward ? 460 : 220; easing.type: spaces.rightward ? Easing.OutBack : Easing.OutCubic; easing.overshoot: 1.6 } }
                     Behavior on edgeR { NumberAnimation { duration: spaces.rightward ? 220 : 460; easing.type: spaces.rightward ? Easing.OutCubic : Easing.OutBack; easing.overshoot: 1.6 } }
                     implicitWidth: spaceRow.implicitWidth + 8
-                    implicitHeight: 30
+                    // As tall as the cells beside it, so the rail's row lines up.
+                    implicitHeight: 32
                     Rectangle {
                         anchors.fill: parent
                         color: Theme.well
@@ -318,8 +319,8 @@ ShellRoot {
                     }
                     Notch {
                         cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
-                        x: Math.min(spaces.edgeL, spaces.edgeR) + 4; y: 4
-                        width: Math.abs(spaces.edgeR - spaces.edgeL); height: parent.height - 8
+                        x: Math.min(spaces.edgeL, spaces.edgeR) + 4; y: 5
+                        width: Math.abs(spaces.edgeR - spaces.edgeL); height: parent.height - 10
                         visible: spaces.markW > 0
                         color: Theme.accent
                     }
