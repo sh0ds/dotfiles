@@ -1,5 +1,5 @@
 import QtQuick
-// A slim slider: a square track, a violet fill and a diamond that grows on
+// A slim slider: a square track with quarter marks, a violet fill and a diamond that grows on
 // hover. Drag, click or scroll; `moved(value)` fires with 0..1 while the
 // user changes it, so the caller decides what to do (set a volume, seek).
 Item {
@@ -17,6 +17,16 @@ Item {
         width: parent.width; height: 6
         color: Theme.well
         border.width: 1; border.color: Theme.edge
+        // Quarter marks, under the fill.
+        Repeater {
+            model: 3
+            Rectangle {
+                required property int index
+                x: Math.round(track.width * (index + 1) / 4); y: 1
+                width: 1; height: track.height - 2
+                color: Theme.line
+            }
+        }
         Rectangle {
             width: Math.max(height, track.width * meter.shown); height: parent.height
             gradient: Gradient {

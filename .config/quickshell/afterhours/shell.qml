@@ -853,10 +853,23 @@ ShellRoot {
                     // expireTimeout is in ms; 0 or less means the server decides.
                     readonly property int life: (modelData.expireTimeout ?? 0) > 0 ? modelData.expireTimeout
                         : modelData.urgency === NotificationUrgency.Low ? 3000 : 6500
+                    readonly property bool ticking: modelData.urgency !== NotificationUrgency.Critical && !hovered
                     Timer {
                         interval: Math.max(1000, toast.life)
-                        running: toast.modelData.urgency !== NotificationUrgency.Critical && !toast.hovered
+                        running: toast.ticking
                         onTriggered: leave.start()
+                    }
+                    // How long it stays: a hairline along the bottom edge that
+                    // runs out with the timer and fills again while hovered.
+                    property real lifeLeft: 1
+                    NumberAnimation on lifeLeft { from: 1; to: 0; duration: Math.max(1000, toast.life); running: toast.ticking }
+                    onTickingChanged: if (!ticking) lifeLeft = 1
+                    Rectangle {
+                        anchors.bottom: parent.bottom; anchors.bottomMargin: 2
+                        x: Theme.notch
+                        width: (parent.width - 2 * Theme.notch) * toast.lifeLeft; height: 1
+                        color: Theme.muted; opacity: 0.5
+                        visible: toast.modelData.urgency !== NotificationUrgency.Critical
                     }
                     SequentialAnimation {
                         id: leave
