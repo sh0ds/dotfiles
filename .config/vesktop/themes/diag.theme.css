@@ -1,6 +1,6 @@
 /**
  * @name Diag
- * @description Black diagnostic UI with restrained Arch-blue accents
+ * @description Afterhours: charcoal, violet accents, square corners
  * @version 1.3.0
  * @author sh0ds
  */
@@ -62,12 +62,19 @@
   --font-display: "JetBrainsMono Nerd Font", monospace !important;
 }
 
-/* Scope geometry to controls. A blanket [class*=container] rule also
-   catches avatars, video masks and third-party content. */
+/* Square corners, like the rest of the desktop. Scoped to controls and
+   floating surfaces: a blanket [class*=container] rule also catches
+   avatars, video masks and third-party content. */
 .theme-dark button,
 .theme-dark input,
 .theme-dark textarea,
-.theme-dark [role="button"] {
+.theme-dark [role="button"],
+.theme-dark [role="menu"],
+.theme-dark [role="dialog"],
+.theme-dark [role="tooltip"],
+.theme-dark [role="listbox"],
+.theme-dark [class*="popout"],
+.theme-dark [class*="tooltip"] {
   border-radius: 0 !important;
 }
 

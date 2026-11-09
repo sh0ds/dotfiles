@@ -104,3 +104,9 @@ switch:checked { background-color: @accent_bg_color; }
 switch slider { border-radius: 0; background-color: #c9c5d4; }
 switch:checked slider { background-color: #0d0c10; }
 scale slider { background-color: #c9c5d4; }
+
+/* Notched, like the shell: every corner square, whatever the theme
+   rounds (user CSS outranks the theme). Radio buttons keep their circle,
+   so they still read as "pick one". */
+* { border-radius: 0; }
+radio { border-radius: 999px; }

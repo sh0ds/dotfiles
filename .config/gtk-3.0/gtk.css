@@ -202,3 +202,9 @@ window.dialog .dialog-action-area button { min-height: 28px; padding: 4px 12px; 
 treeview.view { font-size: 13px; }
 /* This is a cell-renderer view in archive browsers as well as file pickers. */
 treeview.view:selected { background-color: #2b2540; color: #ecebf2; }
+
+/* Notched, like the shell: every corner square, whatever the theme
+   rounds (user CSS outranks the theme). Radio buttons keep their circle,
+   so they still read as "pick one". */
+* { border-radius: 0; }
+radio { border-radius: 999px; }

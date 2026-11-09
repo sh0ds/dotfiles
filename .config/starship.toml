@@ -9,8 +9,8 @@
 add_newline = true
 palette = 'afterhours'
 format = """
-[╭─](fg:line) [](fg:accent) $username$hostname$directory$git_branch$git_status$c$lua$python$fill $cmd_duration$time
-[╰─](fg:line)$character"""
+[┌─](fg:line) [](fg:accent) $username$hostname$directory$git_branch$git_status$c$lua$python$fill $cmd_duration$time
+[└─](fg:line)$character"""
 
 [fill]
 symbol = '·'

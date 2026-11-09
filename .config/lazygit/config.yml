@@ -1,8 +1,8 @@
-# ~/.config/lazygit/config.yml: Afterhours, rounded borders, blue on the
+# ~/.config/lazygit/config.yml: Afterhours, square borders, blue on the
 # focused panel. Run `lg`.
 gui:
   nerdFontsVersion: "3"
-  border: rounded
+  border: single
   theme:
     activeBorderColor:
       - '#b49cf0'
