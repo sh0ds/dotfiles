@@ -96,24 +96,19 @@ ShellRoot {
         sink.audio.volume = Math.max(0, Math.min(1, Math.round((sink.audio.volume + step * 0.05) * 20) / 20));
     }
     function toggleMute() { if (sink?.audio) sink.audio.muted = !sink.audio.muted; }
-    // The island borrows these moments: 1.5 s of volume after a change (not
-    // in the first seconds, that's PipeWire settling), 3.5 s of the track
-    // when a new song starts playing.
+    // The island borrows this moment: 1.5 s of volume after a change (not
+    // in the first seconds, that's PipeWire settling). A new song doesn't
+    // show there: now playing on the rail already has it, and every short
+    // in Firefox would count as one.
     property bool volumeArmed: false
     property bool volumePulse: false
-    property bool trackPulse: false
     Timer { running: true; interval: 2500; onTriggered: root.volumeArmed = true }
     Timer { id: volumeLater; interval: 1500; onTriggered: root.volumePulse = false }
-    Timer { id: trackLater; interval: 3500; onTriggered: root.trackPulse = false }
     function pulseVolume() { if (!volumeArmed) return; volumePulse = true; volumeLater.restart(); }
     Connections {
         target: root.sink?.audio ?? null
         function onVolumesChanged() { root.pulseVolume(); }
         function onMutedChanged() { root.pulseVolume(); }
-    }
-    Connections {
-        target: root.player
-        function onTrackTitleChanged() { if (root.player?.isPlaying && root.player.trackTitle) { root.trackPulse = true; trackLater.restart(); } }
     }
     // Notifications and the volume go to the island while the rail is up;
     // with the rail hidden (Super+B, game mode) the toasts and the volume panel do.
@@ -270,7 +265,6 @@ ShellRoot {
                 open: dash.visible
                 maxWidth: Math.max(restWidth, Math.min(560, rail.width - 2 * (rail.sideWidth + 16)))
                 onClockClicked: dash.visible = !dash.visible
-                onTrackClicked: if (mediaCell.visible) media.visible = true
             }
             Hint { target: island; text: "Today: the month, graphs, disks, the Pi"; show: island.hovered && island.mode === "clock" && !dash.visible }
             Notch {

@@ -5,7 +5,6 @@ import Quickshell.Services.Notifications
 // stretches into whatever just happened and shrinks back:
 //   volume        the level, draggable, while the volume or mute changes
 //   notification  app icon, summary and body, one at a time
-//   track         cover, title and a little cava when a new song starts
 // Only the island on the monitor you're on changes; the others keep the
 // time. Click the clock for the dashboard; click a notification to open it
 // (its default action, or the inbox), right-click to dismiss it.
@@ -18,19 +17,16 @@ Notch {
     property real maxWidth: 560
     readonly property bool hovered: hover.hovered
     signal clockClicked()
-    signal trackClicked()
 
     readonly property var notice: live && shell.toasts.length > 0 ? shell.toasts[0] : null
     readonly property string mode: !live ? "clock"
         : shell.volumePulse ? "volume"
         : notice ? "notice"
-        : shell.trackPulse ? "track"
         : "clock"
     readonly property real restWidth: clockFace.content.implicitWidth + 32
     implicitHeight: 42
     width: mode === "volume" ? 300
         : mode === "notice" ? Math.min(maxWidth, Math.max(320, noticeFace.content.implicitWidth + 40))
-        : mode === "track" ? Math.min(maxWidth * 0.8, trackFace.content.implicitWidth + 36)
         : restWidth
     // The morph: one spring for the width, so every change reads the same.
     Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
@@ -154,49 +150,6 @@ Notch {
         }
     }
 
-    Face {
-        id: trackFace
-        name: "track"
-        Row {
-            anchors.centerIn: parent
-            spacing: 10
-            Cover {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 26; height: 26; glyphSize: 12
-                source: island.shell.player?.trackArtUrl ?? ""
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: island.shell.player?.trackTitle ?? ""
-                color: Theme.text; font.family: Theme.font; font.pixelSize: 13; font.bold: true
-                textFormat: Text.PlainText
-                width: Math.min(implicitWidth, 200); elide: Text.ElideRight
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: island.shell.player?.trackArtist ?? ""
-                visible: text.length > 0
-                color: Theme.muted; font.family: Theme.font; font.pixelSize: 12
-                textFormat: Text.PlainText
-                width: Math.min(implicitWidth, 140); elide: Text.ElideRight
-            }
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 2
-                Repeater {
-                    model: 6
-                    Rectangle {
-                        required property int index
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 3; color: Theme.accent
-                        height: 2 + (island.shell.cavaBars[index + 2] ?? 0) * 2
-                        Behavior on height { NumberAnimation { duration: 90; easing.type: Easing.OutCubic } }
-                    }
-                }
-            }
-        }
-    }
-
     // Not over the volume face: its meter takes the drag.
     MouseArea {
         anchors.fill: parent
@@ -210,8 +163,7 @@ Notch {
                 const action = n?.actions?.find(a => a.identifier === "default");
                 if (action) action.invoke(); else island.shell.toggle("inbox", null);
                 island.closeNotice(n);
-            } else if (island.mode === "track") island.trackClicked();
-            else if (island.mode === "clock") island.clockClicked();
+            } else if (island.mode === "clock") island.clockClicked();
         }
     }
 }

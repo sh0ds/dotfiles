@@ -104,7 +104,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
 - `Meter.qml`: the slim slider used by the OSD, the media card and the control centre.
 - `Osd.qml`: the volume panel, only while the rail is hidden (the island shows the volume otherwise), fed straight from PipeWire. Replaces SwayOSD.
-- `Island.qml`: the middle of the rail. The clock at rest; it morphs (width on one spring, faces cross-fading) into the volume, the first queued notification or the new track, on the focused monitor only. Notifications go here while the rail is up and to the toast stack while it's hidden.
+- `Island.qml`: the middle of the rail. The clock at rest; it morphs (width on one spring, faces cross-fading) into the volume or the first queued notification, on the focused monitor only. Notifications go here while the rail is up and to the toast stack while it's hidden.
 - `Dashboard.qml`: Today, the drawer under the island: `MonthView`, `sys-stats` graphs (2 s), a ping to the Pi (5 s), `uptime -p` and `df` (1 min), all only while open.
 - `MonthView.qml`: the month grid with ISO weeks. Not `Calendar` or `MonthGrid`: QtQuick.Controls types.
 - `Cover.qml`: square cover art with a note placeholder (island, Today, media card).
