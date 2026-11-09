@@ -149,7 +149,6 @@ PanelWindow {
                             readonly property bool current: row.mon.activeWorkspace?.id === modelData
                             readonly property bool chosen: ov.selected === modelData
                             width: row.tileW; height: row.tileH
-                            radius: Theme.radius
                             color: drop.containsDrag ? Theme.accentSoft : Theme.glass
                             border.width: chosen || drop.containsDrag ? 2 : 1
                             border.color: chosen || drop.containsDrag ? Theme.accent : current ? Theme.accentDeep : Theme.edge
@@ -192,7 +191,6 @@ PanelWindow {
                                     Drag.hotSpot.y: height / 2
                                     Rectangle {
                                         anchors.fill: parent
-                                        radius: 4
                                         color: Theme.raised
                                         border.width: 1
                                         border.color: winHover.hovered ? Theme.accent : Theme.edge
@@ -232,7 +230,6 @@ PanelWindow {
                     // A new workspace on this monitor.
                     Rectangle {
                         width: row.tileW * 0.4; height: row.tileH
-                        radius: Theme.radius
                         color: plusHover.hovered || plusDrop.containsDrag ? Theme.glassRaised : "transparent"
                         border.width: 1; border.color: plusDrop.containsDrag ? Theme.accent : Theme.edge
                         Text { anchors.centerIn: parent; text: "+"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 24 }

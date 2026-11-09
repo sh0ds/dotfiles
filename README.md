@@ -1,6 +1,6 @@
 # Afterhours
 
-My Arch + Hyprland desktop for making small games. Near-black charcoal with violet accents, one font (JetBrains Mono Nerd Font), rounded corners and calm motion. The bar, launcher, lock screen, notifications and everything else on screen are my own Quickshell config, not a preset.
+My Arch + Hyprland desktop for making small games. Near-black charcoal with violet accents, one font (JetBrains Mono Nerd Font), notched corners (cut at 45°, never rounded) and calm motion. The bar, launcher, lock screen, notifications and everything else on screen are my own Quickshell config, not a preset.
 
 ![Afterhours with kitty, fastfetch and cava](screenshots/afterhours-desktop.png)
 
@@ -8,7 +8,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 
 ## Description
 
-- **The rail** is three frosted glass pills on every monitor: apps, workspaces and the focused window's title on the left, the island in the middle, and on the right now playing with cava bars, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
+- **The rail** is three frosted glass pieces with notched corners on every monitor: apps, workspaces and the focused window's title on the left, the island in the middle, and on the right now playing with cava bars, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
 - **The island** in the middle is the clock. It stretches into the volume bar when you change the volume, into the notification when one lands (click to open it, right-click to dismiss), and into the song when a new track starts, then shrinks back to the time.
 - **Today** opens from the clock: the month, cpu / gpu / memory graphs, the disks, the Pi with its ping, and now playing.
 - **Everything moves on one spring:** popups grow out of what you clicked, launcher rows cascade in, the overview zooms out of the workspace you're on, the workspace marker stretches like a drop, and windows bloom open with a small bounce.
@@ -19,9 +19,9 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **A thin frame** runs round the screen edge and joins the rail, so the desktop reads as one piece.
 - **See-through windows:** every window lets the wallpaper show through, blurred, a little more when it isn't focused. kitty keeps its text solid over a see-through background; games, video, art tools and fullscreen stay solid.
 - **The wallpaper** is the haze with soft violet clouds over it. It never moves.
-- **My own lock screen** with a big clock, the password pill and what is playing. hyprlock is still there as the fallback.
+- **My own lock screen** with a big clock, the password field and what is playing. hyprlock is still there as the fallback.
 - **Game mode** turns on by itself when a game goes fullscreen: the rail and frame hide on the game's monitor (the other monitor keeps its rail), and animations, dimming and shadows go off while you're on the game's monitor. You can also flip it in the control centre.
-- **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume pill while the rail is hidden), with a quiet mode and an inbox for the session. Screen sharing hides them.
+- **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume panel while the rail is hidden), with a quiet mode and an inbox for the session. Screen sharing hides them.
 - **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, the lock screen and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
 - **Thunar, Firefox, Obsidian and Zed** use the same palette, with Papirus icons (violet folders) and the Posy cursor.

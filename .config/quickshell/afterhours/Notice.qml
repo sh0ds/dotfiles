@@ -4,7 +4,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 // One notification card. Clicking the card runs its default action (nchat's
 // chat-notify opens WhatsApp that way); × dismisses it.
-Rectangle {
+Notch {
     id: card
     required property var notification
     property bool toast: false
@@ -14,9 +14,7 @@ Rectangle {
     implicitHeight: body.implicitHeight + 28
     // A toast is glass of its own; in the inbox it sits in the sheet's glass.
     color: hover.hovered ? Theme.glassRaised : toast ? Theme.glass : Theme.well
-    border.color: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.edge
-    border.width: 1
-    radius: Theme.radius + 2
+    edge: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.edge
     Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
     HoverHandler { id: hover }
     // Under the content, so the × and action buttons keep their own clicks.

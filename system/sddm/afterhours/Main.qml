@@ -1,7 +1,7 @@
 // Afterhours login screen. The same picture as the lock screen
 // (hyprlock.conf): the desktop wallpaper, a large clock with the date under
 // it, and one rounded password pill. Your name sits above it as a chip; F3
-// or the session pill switches session, the round buttons bottom right
+// or the session block switches session, the square buttons bottom right
 // suspend, reboot and power off. Only QtQuick, no Controls, so nothing gets
 // styled behind our back. Qt 6 (metadata.desktop says QtVersion=6).
 import QtQuick
@@ -127,14 +127,13 @@ Rectangle {
 
         Item { width: 1; height: 56 }
 
-        // Who: a round initial in violet and the name. Click (or F4) for
+        // Who: a square initial in violet and the name. Click (or F4) for
         // the next user when there is more than one.
         Rectangle {
             id: who
             anchors.horizontalCenter: parent.horizontalCenter
             height: 40
             width: whoRow.implicitWidth + 12 + 20
-            radius: height / 2
             color: whoHover.hovered && root.userNames.length > 1 ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
             border.width: 1
             border.color: root.line
@@ -145,7 +144,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 12
                 Rectangle {
-                    width: 28; height: 28; radius: 14
+                    width: 28; height: 28
                     color: root.accentSoft
                     border.width: 1
                     border.color: root.accent
@@ -174,7 +173,7 @@ Rectangle {
 
         Item { width: 1; height: 16 }
 
-        // The password pill: a soft violet halo while it has focus,
+        // The password field: a soft violet halo while it has focus,
         // coral and a short shake after a wrong password.
         Item {
             id: pill
@@ -194,7 +193,6 @@ Rectangle {
             Rectangle {
                 anchors.fill: field
                 anchors.margins: -5
-                radius: field.radius + 5
                 color: "transparent"
                 border.width: 4
                 border.color: pill.edge
@@ -205,7 +203,6 @@ Rectangle {
             Rectangle {
                 id: field
                 anchors.fill: parent
-                radius: height / 2
                 color: Qt.rgba(0.075, 0.071, 0.094, 0.92)
                 border.width: 1
                 border.color: pill.edge
@@ -263,13 +260,13 @@ Rectangle {
                     onAccepted: root.doLogin()
                     onTextEdited: if (root.state_ === "fail") root.state_ = ""
                 }
-                // Enter: a round violet arrow, three pulsing dots while the session starts.
+                // Enter: a square violet arrow, three pulsing dots while the session starts.
                 Rectangle {
                     id: go
                     anchors.right: parent.right
                     anchors.rightMargin: 7
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 38; height: 38; radius: 19
+                    width: 38; height: 38
                     color: password.text.length > 0 || root.state_ === "busy" ? root.accent : root.raised
                     Behavior on color { ColorAnimation { duration: root.motion } }
                     Text {
@@ -289,7 +286,7 @@ Rectangle {
                             model: 3
                             Rectangle {
                                 required property int index
-                                width: 5; height: 5; radius: 2.5; color: "#0d0c10"
+                                width: 5; height: 5; color: "#0d0c10"
                                 SequentialAnimation on opacity {
                                     loops: Animation.Infinite; running: root.state_ === "busy"
                                     PauseAnimation { duration: index * 150 }
@@ -307,7 +304,7 @@ Rectangle {
 
         Item { width: 1; height: 18 }
 
-        // A quiet line under the pill: the session starting, or a late-night nudge.
+        // A quiet line under the field: the session starting, or a late-night nudge.
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: root.state_ === "busy" ? "starting " + root.sessionName + "…"
@@ -320,14 +317,14 @@ Rectangle {
         }
     }
 
-    // ---- Bottom: session pill on the left of the buttons, power on the right ----
+    // ---- Bottom: session block on the left of the buttons, power on the right ----
     component Round: Rectangle {
         id: btn
         property string glyph
         property string tip
         property bool armed: false
         signal activated()
-        width: 44; height: 44; radius: 22
+        width: 44; height: 44
         color: btnHover.hovered ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
         border.width: 1
         border.color: btn.armed ? root.danger : btnHover.hovered ? root.accent : root.line
@@ -376,7 +373,6 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height: 44
             width: sessRow.implicitWidth + 36
-            radius: 22
             color: sessHover.hovered ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
             border.width: 1
             border.color: sessHover.hovered ? root.accent : root.line

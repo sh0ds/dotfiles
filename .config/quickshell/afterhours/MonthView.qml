@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 // The month, for the dashboard. Monday first, ISO week numbers on the left,
-// today as a violet pill. ‹ › or the wheel change the month, the month
+// today as a violet block. ‹ › or the wheel change the month, the month
 // title jumps back to today.
 // Not "Calendar" or "MonthGrid": QtQuick.Controls has types by those names.
 Item {
@@ -94,7 +94,6 @@ Item {
                     Rectangle {
                         anchors.centerIn: parent
                         width: 30; height: 26
-                        radius: 13
                         visible: slot.isToday
                         color: Theme.accent
                     }

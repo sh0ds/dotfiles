@@ -24,7 +24,6 @@ PopupWindow {
     Rectangle {
         id: box
         anchors.fill: parent
-        radius: Theme.radius
         color: Theme.glassRaised
         border.width: 1
         border.color: Theme.edge

@@ -112,18 +112,16 @@ Scope {
                         text: Qt.formatDateTime(lockClock.date, "dddd").toUpperCase() + "  ·  " + Qt.formatDateTime(lockClock.date, "d MMMM")
                         color: Theme.muted; font.family: Theme.font; font.pixelSize: 14; font.letterSpacing: 3
                     }
-                    // The password pill: one dot per character, violet edge
+                    // The password field: one dot per character, violet edge
                     // while it has focus, a shake on a wrong password.
-                    Rectangle {
+                    Notch {
                         id: field
                         Layout.alignment: Qt.AlignHCenter
                         Layout.topMargin: 48
                         implicitWidth: 320; implicitHeight: 48
-                        radius: height / 2
                         color: Theme.glass
-                        border.width: 1
-                        border.color: lockRoot.message ? Theme.danger : input.activeFocus ? Theme.accent : Theme.edge
-                        Behavior on border.color { ColorAnimation { duration: Theme.motion } }
+                        edge: lockRoot.message ? Theme.danger : input.activeFocus ? Theme.accent : Theme.edge
+                        Behavior on edge { ColorAnimation { duration: Theme.motion } }
                         transform: Translate { id: shake }
                         Connections {
                             target: lockRoot
@@ -147,7 +145,7 @@ Scope {
                             spacing: 8
                             Repeater {
                                 model: Math.min(lockRoot.typed.length, 18)
-                                Rectangle { width: 8; height: 8; radius: 4; color: Theme.accent }
+                                Rectangle { width: 8; height: 8; color: Theme.accent }
                             }
                         }
                         TextInput {

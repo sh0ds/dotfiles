@@ -1,5 +1,5 @@
 import QtQuick
-// A slim slider: a rounded track, a violet fill and a knob that grows on
+// A slim slider: a square track, a violet fill and a diamond that grows on
 // hover. Drag, click or scroll; `moved(value)` fires with 0..1 while the
 // user changes it, so the caller decides what to do (set a volume, seek).
 Item {
@@ -14,11 +14,11 @@ Item {
     Rectangle {
         id: track
         anchors.verticalCenter: parent.verticalCenter
-        width: parent.width; height: 6; radius: 3
+        width: parent.width; height: 6
         color: Theme.well
         border.width: 1; border.color: Theme.edge
         Rectangle {
-            width: Math.max(height, track.width * meter.shown); height: parent.height; radius: 3
+            width: Math.max(height, track.width * meter.shown); height: parent.height
             gradient: Gradient {
                 orientation: Gradient.Horizontal
                 GradientStop { position: 0; color: meter.muted ? Theme.line : Theme.accentDeep }
@@ -28,8 +28,9 @@ Item {
         }
     }
     Rectangle {
-        property real d: drag.containsMouse || drag.pressed ? 14 : 10
-        width: d; height: d; radius: d / 2
+        property real d: drag.containsMouse || drag.pressed ? 11 : 8
+        // A small diamond, the launcher's ◆.
+        width: d; height: d; rotation: 45
         anchors.verticalCenter: parent.verticalCenter
         x: Math.max(0, Math.min(meter.width - width, meter.width * meter.shown - width / 2))
         color: meter.muted ? Theme.muted : Theme.text

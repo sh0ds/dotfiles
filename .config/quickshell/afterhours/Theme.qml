@@ -27,8 +27,11 @@ QtObject {
     // A recessed area on glass: the workspace track, the launcher's field,
     // the control centre's switches, inbox cards.
     readonly property color well: Qt.rgba(0, 0, 0, 0.22)
-    readonly property int radius: 10
-    readonly property int radiusLarge: 20
+    // Notched: corners are cut at 45 degrees, never rounded (Notch.qml).
+    // The rail's pieces, toasts and the lock field cut notch, the cards and
+    // sheets under the rail notchLarge. Everything inside them is square.
+    readonly property int notch: 8
+    readonly property int notchLarge: 14
     // Hover and colour changes; things that move take `glide`.
     readonly property int motion: 200
     readonly property int glide: 320

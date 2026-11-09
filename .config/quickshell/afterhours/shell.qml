@@ -116,7 +116,7 @@ ShellRoot {
         function onTrackTitleChanged() { if (root.player?.isPlaying && root.player.trackTitle) { root.trackPulse = true; trackLater.restart(); } }
     }
     // Notifications and the volume go to the island while the rail is up;
-    // with the rail hidden (Super+B, game mode) the toasts and the pill do.
+    // with the rail hidden (Super+B, game mode) the toasts and the volume panel do.
     readonly property bool islandShown: barVisible && !gameMode
 
     // Game mode: on while a game is fullscreen on any monitor (Steam games,
@@ -258,7 +258,7 @@ ShellRoot {
             color: "transparent"
             // Three glass islands: apps, workspaces and the window title on the
             // left, the island in the middle, the status cells on the right.
-            // The middle one grows into the room the side pills leave free.
+            // The middle one grows into the room the side pieces leave free.
             readonly property real sideWidth: Math.max(rightPill.width, appsCell.width + spaces.width + 20)
             Island {
                 id: island
@@ -273,14 +273,14 @@ ShellRoot {
                 onTrackClicked: if (mediaCell.visible) media.visible = true
             }
             Hint { target: island; text: "Today: the month, graphs, disks, the Pi"; show: island.hovered && island.mode === "clock" && !dash.visible }
-            Rectangle {
+            Notch {
                 id: leftPill
                 anchors.left: parent.left
                 height: parent.height
                 width: leftRow.implicitWidth + 12
-                radius: height / 2
+                cutTopRight: false; cutBottomLeft: false
                 color: Theme.glass
-                border.width: 1; border.color: Theme.edge
+                edge: Theme.edge
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
                 id: leftRow
@@ -288,8 +288,8 @@ ShellRoot {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 4
                 Cell { id: appsCell; label: "\uf303"; size: 16; implicitWidth: 38; ink: Theme.accent; hint: "Apps · Super+Space"; onClicked: root.toggle("apps", rail.screen) }
-                // Workspaces: plain numbers in a soft track. The active one is a
-                // wider violet pill that glides over; numbers with windows on
+                // Workspaces: plain numbers in a recessed track. The active one is
+                // a wider violet block that glides over; numbers with windows on
                 // them are bright, empty ones dim, urgent ones amber. Hover lifts
                 // a number, the wheel steps through them.
                 Item {
@@ -311,7 +311,6 @@ ShellRoot {
                     implicitHeight: 30
                     Rectangle {
                         anchors.fill: parent
-                        radius: height / 2
                         color: Theme.well
                         border.width: 1
                         border.color: Theme.edge
@@ -320,7 +319,6 @@ ShellRoot {
                         x: Math.min(spaces.edgeL, spaces.edgeR) + 4; y: 4
                         width: Math.abs(spaces.edgeR - spaces.edgeL); height: parent.height - 8
                         visible: spaces.markW > 0
-                        radius: height / 2
                         color: Theme.accent
                     }
                     Row {
@@ -340,7 +338,7 @@ ShellRoot {
                                 Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
                                 Rectangle {
                                     anchors.centerIn: parent
-                                    width: 22; height: 22; radius: 11
+                                    width: 22; height: 22
                                     color: Theme.glassRaised
                                     opacity: !space.here && pointerHover.hovered ? 1 : 0
                                     Behavior on opacity { NumberAnimation { duration: Theme.motion } }
@@ -390,14 +388,14 @@ ShellRoot {
                 }
             }
             }
-            Rectangle {
+            Notch {
                 id: rightPill
                 anchors.right: parent.right
                 height: parent.height
                 width: rightRow.implicitWidth + 12
-                radius: height / 2
+                cutTopLeft: false; cutBottomRight: false
                 color: Theme.glass
-                border.width: 1; border.color: Theme.edge
+                edge: Theme.edge
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
                 id: rightRow
@@ -424,7 +422,7 @@ ShellRoot {
                                     required property int index
                                     readonly property int level: root.player?.isPlaying ? (root.cavaBars[index] ?? 0) : 0
                                     anchors.verticalCenter: parent.verticalCenter
-                                    width: 3; radius: 1.5
+                                    width: 3
                                     height: 2 + level * 2
                                     color: Theme.accent
                                     opacity: root.player?.isPlaying ? 1 - Math.abs(index - 4.5) / 9 : 0.35
@@ -500,7 +498,6 @@ ShellRoot {
                         id: trayItem
                         required property var modelData
                         implicitWidth: 30; implicitHeight: 32
-                        radius: Theme.radius
                         color: trayPointer.containsMouse ? Theme.glassRaised : "transparent"
                         Behavior on color { ColorAnimation { duration: Theme.motion } }
                         Image { anchors.centerIn: parent; width: 16; height: 16; sourceSize: Qt.size(32, 32); source: trayItem.modelData.icon }
@@ -549,14 +546,14 @@ ShellRoot {
             Behavior on opacity { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
         }
         MouseArea { anchors.fill: parent; onClicked: root.panel = "" }
-        Rectangle {
+        Notch {
             id: sheet
             anchors.centerIn: parent
             width: Math.min(parent.width - 32, 820)
             height: Math.min(parent.height - 100, 660)
             color: Theme.glass
-            border.color: Theme.edge; border.width: 1
-            radius: Theme.radiusLarge
+            edge: Theme.edge
+            cut: Theme.notchLarge
             Keys.onEscapePressed: root.panel = ""
             // Prevent clicks on the sheet reaching the outside-click handler.
             MouseArea { anchors.fill: parent }
@@ -698,7 +695,7 @@ ShellRoot {
                             font.family: Theme.font; font.pixelSize: 16; color: Theme.text
                             placeholderTextColor: Theme.muted
                             leftPadding: 14; topPadding: 10; bottomPadding: 10
-                            background: Rectangle { color: Theme.well; border.color: query.activeFocus ? Theme.accent : Theme.edge; radius: Theme.radius; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
+                            background: Rectangle { color: Theme.well; border.color: query.activeFocus ? Theme.accent : Theme.edge; Behavior on border.color { ColorAnimation { duration: Theme.motion } } }
                             Keys.onEscapePressed: root.panel = ""
                             onTextChanged: appList.currentIndex = launcher.mode === "/" && launcher.q === "" && launcher.rows.length > 1 ? 1 : 0
                             Keys.onDownPressed: appList.incrementCurrentIndex()
@@ -719,12 +716,11 @@ ShellRoot {
                                 required property var modelData
                                 required property int index
                                 width: ListView.view.width; height: 44
-                                radius: Theme.radius
                                 readonly property bool current: appList.currentIndex === index
                                 color: current ? Theme.glassRaised : "transparent"
                                 Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
                                 // The chosen row gets a violet edge, like the workspace marker.
-                                Rectangle { x: 4; y: 11; width: 3; height: parent.height - 22; radius: 2; color: Theme.accent; opacity: appRow.current ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
+                                Rectangle { x: 4; y: 11; width: 3; height: parent.height - 22; color: Theme.accent; opacity: appRow.current ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
                                 Row {
                                     anchors.left: parent.left; anchors.leftMargin: 16; anchors.right: parent.right; anchors.rightMargin: 12
                                     anchors.verticalCenter: parent.verticalCenter

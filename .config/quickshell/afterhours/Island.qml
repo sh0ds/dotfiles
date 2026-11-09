@@ -9,7 +9,7 @@ import Quickshell.Services.Notifications
 // Only the island on the monitor you're on changes; the others keep the
 // time. Click the clock for the dashboard; click a notification to open it
 // (its default action, or the inbox), right-click to dismiss it.
-Rectangle {
+Notch {
     id: island
     required property var shell
     property bool live: true
@@ -34,15 +34,14 @@ Rectangle {
         : restWidth
     // The morph: one spring for the width, so every change reads the same.
     Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
-    radius: height / 2
+    cutBottomLeft: false; cutBottomRight: false
     clip: true
     color: open ? Theme.accentSoft : hover.hovered && mode === "clock" ? Theme.glassRaised : Theme.glass
-    border.width: 1
-    border.color: open ? Theme.accent
+    edge: open ? Theme.accent
         : mode === "notice" && notice?.urgency === NotificationUrgency.Critical ? Theme.danger
         : Theme.edge
     Behavior on color { ColorAnimation { duration: Theme.motion } }
-    Behavior on border.color { ColorAnimation { duration: Theme.motion } }
+    Behavior on edge { ColorAnimation { duration: Theme.motion } }
     HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
 
     function closeNotice(n) {
@@ -163,7 +162,7 @@ Rectangle {
             spacing: 10
             Cover {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 26; height: 26; radius: 6; glyphSize: 12
+                width: 26; height: 26; glyphSize: 12
                 source: island.shell.player?.trackArtUrl ?? ""
             }
             Text {
@@ -189,7 +188,7 @@ Rectangle {
                     Rectangle {
                         required property int index
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 3; radius: 1.5; color: Theme.accent
+                        width: 3; color: Theme.accent
                         height: 2 + (island.shell.cavaBars[index + 2] ?? 0) * 2
                         Behavior on height { NumberAnimation { duration: 90; easing.type: Easing.OutCubic } }
                     }

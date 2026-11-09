@@ -37,9 +37,9 @@ hl.config({
 		},
 	},
 	decoration = {
-		rounding = 8,
-		-- Between a circle (2) and a square: corners curve in smoothly.
-		rounding_power = 2.6,
+		-- Notched: windows are square. The shell cuts its own corners at 45
+		-- degrees; Hyprland can only round, so windows keep plain corners.
+		rounding = 0,
 		-- Every window is see-through: the wallpaper shows through, blurred,
 		-- a little more when the window isn't focused. Fullscreen stays solid.
 		-- kitty, games, video and art are solid ("solid" rules below).
@@ -88,7 +88,7 @@ hl.config({
 			font_size = 12,
 			height = 26,
 			gradients = false,
-			rounding = 4,
+			rounding = 0,
 			text_color = "rgb(0d0c10)",
 			text_color_inactive = "rgb(948fa3)",
 			col = {
@@ -180,7 +180,7 @@ hl.animation({ leaf = "monitorAdded", enabled = false })
 -- there the instant you press the key.
 hl.layer_rule({ name = "still-bar", match = { namespace = "^afterhours-rail$" }, no_anim = true })
 hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpicker)$" }, no_anim = true })
--- The wallpaper, the screen frame and the volume pill do their own motion
+-- The wallpaper, the screen frame and the volume panel do their own motion
 -- (or none); the compositor leaves them alone.
 hl.layer_rule({ name = "still-shell", match = { namespace = "^afterhours-(wallpaper|frame|osd)$" }, no_anim = true })
 -- Launcher and overview fade without enlarging the text.
@@ -189,7 +189,7 @@ hl.layer_rule({ name = "launcher-fade", match = { namespace = "^afterhours-(over
 hl.layer_rule({ name = "notify-slide", match = { namespace = "^afterhours-toast$" }, animation = "slide right" })
 -- Glass: blur behind the shell's surfaces and the cards that hang under the
 -- rail (popups). Only pixels more than 30 % opaque are blurred, so the
--- gaps between the rail's pills stay clear.
+-- gaps between the rail's pieces and their cut corners stay clear.
 hl.layer_rule({
 	name = "glass",
 	match = { namespace = "^afterhours-(rail|overlay|toast|osd|overview)$" },

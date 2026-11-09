@@ -115,7 +115,6 @@ PopupWindow {
                     readonly property real step: plot.width / dash.samples
                     x: index * step
                     width: Math.max(1, step - 2)
-                    radius: width / 2
                     anchors.bottom: parent.bottom
                     height: v < 0 ? 2 : 2 + Math.min(1, v / spark.ceiling) * (plot.height - 2)
                     color: spark.hot ? Theme.amber : Theme.accent
@@ -133,12 +132,12 @@ PopupWindow {
         }
     }
 
-    Rectangle {
+    Notch {
         id: box
         anchors.fill: parent
-        radius: Theme.radiusLarge
+        cut: Theme.notchLarge
         color: Theme.glass
-        border.width: 1; border.color: Theme.edge
+        edge: Theme.edge
         transformOrigin: Item.Top
         PopIn { id: pop; surface: box; inner: body }
         RowLayout {
@@ -191,9 +190,9 @@ PopupWindow {
                         Text { text: modelData.target === "/" ? "root" : modelData.target.replace(/^\//, ""); color: Theme.muted; font.family: Theme.font; font.pixelSize: 12; Layout.preferredWidth: 34; elide: Text.ElideRight }
                         Rectangle {
                             Layout.fillWidth: true; Layout.preferredHeight: 6
-                            radius: 3; color: Theme.edge
+                            color: Theme.edge
                             Rectangle {
-                                height: parent.height; radius: 3
+                                height: parent.height
                                 width: parent.width * modelData.pct
                                 color: modelData.pct >= 0.9 ? Theme.amber : Theme.accent
                                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
@@ -208,7 +207,7 @@ PopupWindow {
                     Layout.fillWidth: true
                     spacing: 10
                     Rectangle {
-                        width: 8; height: 8; radius: 4
+                        width: 8; height: 8
                         color: dash.piMs >= 0 ? Theme.accent : Theme.danger
                         SequentialAnimation on opacity {
                             running: dash.visible && dash.piMs >= 0
@@ -233,7 +232,7 @@ PopupWindow {
                     spacing: 12
                     Cover {
                         Layout.preferredWidth: 40; Layout.preferredHeight: 40
-                        radius: 8; glyphSize: 15
+                        glyphSize: 15
                         source: dash.shell.player?.trackArtUrl ?? ""
                     }
                     ColumnLayout {

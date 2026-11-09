@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-// A rounded, keyboard-focusable button: faint fill on hover, violet fill
+// A square, keyboard-focusable button: faint fill on hover, violet fill
 // when selected, colour changes ease out, a small dip when pressed.
 Rectangle {
     id: cell
@@ -19,7 +19,6 @@ Rectangle {
     signal wheeled(int step)
     implicitWidth: content.implicitWidth + 26
     implicitHeight: 32
-    radius: Theme.radius
     color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.glassRaised : fill)
     border.width: activeFocus ? 1 : 0
     border.color: Theme.accent

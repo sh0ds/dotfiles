@@ -1,6 +1,6 @@
-/* Afterhours for Obsidian: the desktop's palette, font and rounded shapes
+/* Afterhours for Obsidian: the desktop's palette, font and square shapes
    in the app chrome; notes keep a calm reading layout with violet links,
-   soft code blocks and rounded callouts. Enable the snippet in Appearance. */
+   square code blocks and callouts. Enable the snippet in Appearance. */
 .theme-dark {
   --background-primary: #0d0c10;
   --background-primary-alt: #131218;
@@ -36,11 +36,11 @@
   --checkbox-color: #b49cf0;
   --checkbox-color-hover: #cdbcf7;
   --checkbox-marker-color: #0d0c10;
-  --checkbox-radius: 5px;
+  --checkbox-radius: 0;
   --nav-item-color-active: #e0dde8;
   --nav-item-background-active: #2b2540;
   --nav-item-background-hover: #1b1a22;
-  --nav-item-radius: 8px;
+  --nav-item-radius: 0;
   --color-accent: #b49cf0;
   --color-accent-1: #b49cf0;
   --color-accent-2: #cdbcf7;
@@ -50,10 +50,10 @@
   --link-unresolved-color: #948fa3;
   --code-background: #131218;
   --code-normal: #c9c5d4;
-  --code-radius: 8px;
+  --code-radius: 0;
   --blockquote-border-color: #b49cf0;
   --blockquote-border-thickness: 2px;
-  --callout-radius: 14px;
+  --callout-radius: 0;
   --table-border-color: #35323f;
   --hr-color: #35323f;
   --divider-color: #35323f;
@@ -65,7 +65,7 @@
   --tag-color: #b49cf0;
   --tag-background: #1b1a22;
   --tag-border-color: #35323f;
-  --tag-radius: 999px;
+  --tag-radius: 0;
   --h1-color: #e0dde8;
   --h2-color: #e0dde8;
   --h3-color: #e0dde8;
@@ -73,26 +73,26 @@
   --font-interface-theme: "JetBrainsMono Nerd Font", monospace;
   --font-text-theme: "JetBrainsMono Nerd Font", monospace;
   --font-monospace-theme: "JetBrainsMono Nerd Font", monospace;
-  --tab-radius-active: 8px;
-  --tab-radius: 8px;
+  --tab-radius-active: 0;
+  --tab-radius: 0;
   --tab-curve: 0px;
   --tab-outline-color: transparent;
-  --radius-s: 6px;
-  --radius-m: 8px;
-  --radius-l: 14px;
-  --radius-xl: 18px;
-  --input-radius: 8px;
-  --modal-radius: 14px;
-  --menu-radius: 10px;
+  --radius-s: 0;
+  --radius-m: 0;
+  --radius-l: 0;
+  --radius-xl: 0;
+  --input-radius: 0;
+  --modal-radius: 0;
+  --menu-radius: 0;
   --shadow-s: 0 4px 12px rgba(5, 6, 5, 0.45);
   --shadow-l: 0 12px 32px rgba(5, 6, 5, 0.6);
   --file-line-width: 46rem;
 }
 
-/* Tabs: pills like Firefox and kitty. The active one is raised. */
+/* Tabs: square like Firefox. The active one is raised. */
 .theme-dark .workspace-tab-header-container { border-bottom: 1px solid #35323f; }
 .theme-dark .workspace-tab-header { background: transparent; box-shadow: none; }
-.theme-dark .workspace-tab-header .workspace-tab-header-inner { border-radius: 8px; }
+.theme-dark .workspace-tab-header .workspace-tab-header-inner { border-radius: 0; }
 .theme-dark .workspace-tab-header::before,
 .theme-dark .workspace-tab-header::after { display: none; }
 .theme-dark .workspace-tab-header.is-active .workspace-tab-header-inner {
@@ -101,11 +101,11 @@
   color: #e0dde8;
 }
 
-/* File list: the open note is a soft violet-tinted pill */
-.theme-dark .nav-file-title, .theme-dark .nav-folder-title { border-radius: 8px; }
+/* File list: the open note is a violet-tinted block */
+.theme-dark .nav-file-title, .theme-dark .nav-folder-title { border-radius: 0; }
 .theme-dark .nav-file-title.is-active { color: #e0dde8; background: #2b2540; }
 
-/* Reading: links without heavy underlines, headings with air, rounded
+/* Reading: links without heavy underlines, headings with air, square
    tables, code blocks and quotes on raised panels. */
 .theme-dark .markdown-rendered a { text-decoration: none; border-bottom: 1px solid rgba(180, 156, 240, 0.35); }
 .theme-dark .markdown-rendered a:hover { border-bottom-color: #b49cf0; }
@@ -115,7 +115,7 @@
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid #35323f;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
 }
 .theme-dark .markdown-rendered th { background: #131218; color: #e0dde8; }
@@ -123,7 +123,7 @@
 .theme-dark .markdown-rendered pre { border: 1px solid #25232d; }
 .theme-dark .markdown-rendered blockquote {
   background: #131218;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0;
   padding: 8px 16px;
 }
 .theme-dark :is(button, input, textarea, select):focus-visible {

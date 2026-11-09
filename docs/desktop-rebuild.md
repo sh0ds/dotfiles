@@ -103,12 +103,13 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `Hint.qml`: hover hints for rail controls in their own popup window, because the rail window is too short for a QtQuick `ToolTip`.
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
 - `Meter.qml`: the slim slider used by the OSD, the media card and the control centre.
-- `Osd.qml`: the volume pill, only while the rail is hidden (the island shows the volume otherwise), fed straight from PipeWire. Replaces SwayOSD.
+- `Osd.qml`: the volume panel, only while the rail is hidden (the island shows the volume otherwise), fed straight from PipeWire. Replaces SwayOSD.
 - `Island.qml`: the middle of the rail. The clock at rest; it morphs (width on one spring, faces cross-fading) into the volume, the first queued notification or the new track, on the focused monitor only. Notifications go here while the rail is up and to the toast stack while it's hidden.
 - `Dashboard.qml`: Today, the drawer under the island: `MonthView`, `sys-stats` graphs (2 s), a ping to the Pi (5 s), `uptime -p` and `df` (1 min), all only while open.
 - `MonthView.qml`: the month grid with ISO weeks. Not `Calendar` or `MonthGrid`: QtQuick.Controls types.
-- `Cover.qml`: rounded cover art with a note placeholder (island, Today, media card).
-- `VolumeRow.qml`: speaker, meter and percentage (island and the volume pill).
+- `Cover.qml`: square cover art with a note placeholder (island, Today, media card).
+- `Notch.qml`: a panel with its corners cut at 45 degrees, the Notched look (rail pieces, island, cards, launcher, toasts, lock field). Everything inside them is square.
+- `VolumeRow.qml`: speaker, meter and percentage (island and the volume panel).
 - `PopIn.qml`: the shared opening animation of the cards under the rail (scale from 92 % on `Theme.spring`, content 60 ms later).
 - `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.
 - `Wallpaper.qml`: the haze picture plus still violet clouds on the background layer. Replaces awww.
@@ -125,7 +126,7 @@ Game mode turns itself on while any monitor shows a fullscreen game (a `steam_ap
 
 The inbox is session-only, capped at 50 notifications; it is not written to disk. Quiet mode hides toasts, not inbox entries. Critical toasts stay visible until dismissed. Transient notifications expire; ordinary ones leave the toast after a short interval and remain in the inbox. The shell renders notification content as plain text, never HTML. Sharing suppression uses Hyprland `screencastv2` events; a shell started in the middle of an existing share cannot infer an earlier start event. Enable quiet mode before presenting in that case.
 
-The layer-shell names are `afterhours-rail`, `afterhours-overlay`, `afterhours-toast`, `afterhours-osd`, `afterhours-frame`, `afterhours-wallpaper` and `afterhours-overview`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a rounded track: the active one is a violet pill, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
+The layer-shell names are `afterhours-rail`, `afterhours-overlay`, `afterhours-toast`, `afterhours-osd`, `afterhours-frame`, `afterhours-wallpaper` and `afterhours-overview`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a square track: the active one is a violet block, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
 
 Utilities such as clipboard search, docs and the Wi-Fi password prompt still use their existing Fuzzel dmenu helpers. Maths, emoji and the window switcher are launcher modes now. Old app and VM scripts remain maintained independently. There is no fake progress counter, permanent timer pressure, app-per-workspace cage or telemetry.
 

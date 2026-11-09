@@ -1,7 +1,7 @@
 /* Firefox in Afterhours, like the rest of the desktop: charcoal toolbars,
-   JetBrains Mono Nerd Font around the page, tabs as rounded pills with the
-   selected one raised with a violet close button, a rounded address bar
-   that rings violet while you type, rounded menus with a soft shadow.
+   JetBrains Mono Nerd Font around the page, square tabs with the
+   selected one raised with a violet close button, a square address bar
+   that rings violet while you type, square menus with a soft shadow.
    Mostly Firefox's own theme variables, so it survives updates;
    `firefox-style` links this into your profile. Pages keep their fonts. */
 
@@ -18,8 +18,8 @@
   --ah-accent: #b49cf0;
   --ah-accent-hi: #cdbcf7;
   --ah-sel: #2b2540;
-  --ah-radius: 8px;
-  --ah-radius-large: 14px;
+  --ah-radius: 0;
+  --ah-radius-large: 0;
 
   /* frame, toolbars, tabs */
   --lwt-accent-color: var(--ah-bg) !important;
@@ -77,7 +77,7 @@
   --sidebar-border-color: var(--ah-line) !important;
   --chrome-content-separator-color: var(--ah-line) !important;
   --focus-outline-color: var(--ah-accent) !important;
-  --border-radius-small: 6px !important;
+  --border-radius-small: 0 !important;
   --border-radius-medium: var(--ah-radius) !important;
   --border-radius-large: var(--ah-radius-large) !important;
   --button-border-radius: var(--ah-radius) !important;
@@ -115,7 +115,7 @@
 
 #navigator-toolbox { border-bottom: 1px solid var(--ah-line) !important; }
 
-/* Tabs: quiet pills. The selected one is raised with a thin outline; the
+/* Tabs: quiet blocks. The selected one is raised with a thin outline; the
    others are muted until hovered. */
 .tabbrowser-tab .tab-background {
   border-radius: var(--ah-radius) !important;
@@ -133,11 +133,11 @@
 .tabbrowser-tab .tab-label { color: var(--ah-muted) !important; }
 .tabbrowser-tab:is(:hover, [selected], [visuallyselected]) .tab-label { color: var(--ah-text) !important; }
 .tabbrowser-tab:is([selected], [visuallyselected]) .tab-close-button { color: var(--ah-accent) !important; }
-.tab-close-button { border-radius: 6px !important; }
+.tab-close-button { border-radius: 0 !important; }
 
-/* Address bar: a rounded field that rings violet while you type */
+/* Address bar: a square field that rings violet while you type */
 #urlbar-background, #searchbar {
-  border-radius: 10px !important;
+  border-radius: 0 !important;
   border-width: 1px !important;
   box-shadow: none !important;
 }
@@ -155,12 +155,12 @@
 /* Vertical tabs: the strip ends in a thin line, like a split in kitty */
 #sidebar-main { border-inline-end: 1px solid var(--ah-line) !important; }
 
-/* Menus and panels: rounded, with the same soft shadow as floating windows */
+/* Menus and panels: square, with the same soft shadow as floating windows */
 panel, menupopup {
   --panel-border-radius: var(--ah-radius-large) !important;
   --panel-shadow: 0 8px 24px rgba(5, 6, 5, 0.6) !important;
 }
-menupopup menuitem, menupopup menu { border-radius: 6px !important; }
+menupopup menuitem, menupopup menu { border-radius: 0 !important; }
 
 @media (prefers-reduced-motion: no-preference) {
   .tab-background, .tab-label, #urlbar-background, .urlbarView-row {

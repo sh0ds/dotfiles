@@ -1,4 +1,4 @@
-/* Afterhours for GTK 3 apps: violet accent, charcoal backgrounds, rounded controls.
+/* Afterhours for GTK 3 apps: violet accent, charcoal backgrounds, square controls.
    Works on top of the adw-gtk3-dark theme. */
 @define-color accent_color #b49cf0;
 @define-color accent_bg_color #b49cf0;
@@ -38,7 +38,7 @@
    overrides selected rows, suggested actions and destructive buttons. */
 button, entry, spinbutton, combobox button, dropdown button, popover,
 menu, menuitem, tooltip, scale trough, scale highlight, scale slider {
-  border-radius: 8px;
+  border-radius: 0;
 }
 entry, spinbutton {
   background-color: @view_bg_color;
@@ -62,15 +62,15 @@ button:focus, entry:focus, switch:focus {
   outline: 2px solid @accent_bg_color;
   outline-offset: 2px;
 }
-switch { border-radius: 999px; background-color: #35323f; }
+switch { border-radius: 0; background-color: #35323f; }
 switch:checked { background-color: @accent_bg_color; }
-switch slider { border-radius: 999px; background-color: #c9c5d4; }
+switch slider { border-radius: 0; background-color: #c9c5d4; }
 switch:checked slider { background-color: #0d0c10; }
 scale slider { background-color: #c9c5d4; }
 
 /* Thunar in Afterhours: the shell's look in a file manager. A charcoal
-   view, the sidebar on a panel with rounded rows, the path as a row of
-   pills with the current folder in violet, rounded tabs, and Papirus icons
+   view, the sidebar on a panel with square rows, the path as a row of
+   blocks with the current folder in violet, square tabs, and Papirus icons
    with violet folders (gtk-icon-theme-name in settings.ini). */
 .thunar {
   font-family: "JetBrainsMono Nerd Font";
@@ -84,7 +84,7 @@ scale slider { background-color: #c9c5d4; }
   padding: 6px 8px;
 }
 .thunar toolbar button {
-  border-radius: 8px;
+  border-radius: 0;
   padding: 4px;
   min-width: 26px;
   min-height: 26px;
@@ -95,9 +95,9 @@ scale slider { background-color: #c9c5d4; }
 }
 .thunar toolbar button:hover { background-color: #1b1a22; }
 
-/* Location bar: a rounded field, or path pills */
+/* Location bar: a square field, or path blocks */
 .thunar toolbar entry {
-  border-radius: 10px;
+  border-radius: 0;
   background-color: #131218;
   border: 1px solid #35323f;
   min-height: 30px;
@@ -105,7 +105,7 @@ scale slider { background-color: #c9c5d4; }
 }
 .thunar toolbar entry:focus { border-color: #b49cf0; box-shadow: 0 0 0 3px alpha(#b49cf0, 0.14); }
 .thunar .path-bar button, .thunar .location-button {
-  border-radius: 999px;
+  border-radius: 0;
   padding: 3px 12px;
   margin: 0 2px;
   background-color: #131218;
@@ -141,7 +141,7 @@ scale slider { background-color: #c9c5d4; }
   padding: 2px 6px;
 }
 .thunar notebook > header tabs > tab {
-  border-radius: 8px;
+  border-radius: 0;
   padding: 4px 12px;
   margin: 4px 2px;
   color: #948fa3;
@@ -162,12 +162,12 @@ scale slider { background-color: #c9c5d4; }
   font-size: 12px;
 }
 
-/* Selection: a soft violet pill. Icons and artwork stay un-tinted, so
+/* Selection: a violet block. Icons and artwork stay un-tinted, so
    selected folders and images keep their colours. */
 @define-color theme_selected_bg_color #2b2540;
 @define-color theme_selected_fg_color #ecebf2;
 .view, .view:selected, .thunar .view:selected {
-  border-radius: 8px;
+  border-radius: 0;
   -gtk-icon-effect: none;
 }
 .view:selected, .view:selected:focus {
@@ -179,7 +179,7 @@ scale slider { background-color: #c9c5d4; }
 .thunar .view rubberband, .thunar rubberband {
   background-color: alpha(#b49cf0, 0.12);
   border: 1px solid alpha(#b49cf0, 0.6);
-  border-radius: 6px;
+  border-radius: 0;
 }
 treeview.view header button {
   font-family: "JetBrainsMono Nerd Font";

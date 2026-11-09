@@ -108,7 +108,6 @@ PopupWindow {
         signal toggled()
         Layout.fillWidth: true
         implicitHeight: 54
-        radius: Theme.radius
         color: on ? Theme.accentSoft : tgHover.hovered ? Theme.glassRaised : Theme.well
         border.width: 1; border.color: on ? Theme.accent : Theme.edge
         Behavior on color { ColorAnimation { duration: Theme.motion } }
@@ -124,12 +123,12 @@ PopupWindow {
         TapHandler { onTapped: tg.toggled() }
     }
 
-    Rectangle {
+    Notch {
         id: box
         anchors.fill: parent
-        radius: Theme.radiusLarge
+        cut: Theme.notchLarge
         color: Theme.glass
-        border.width: 1; border.color: Theme.edge
+        edge: Theme.edge
         transformOrigin: Item.TopRight
         PopIn { id: intro; surface: box; inner: body }
         ColumnLayout {
@@ -187,7 +186,6 @@ PopupWindow {
                     required property var modelData
                     Layout.fillWidth: true
                     implicitHeight: 32
-                    radius: Theme.radius
                     color: netHover.hovered ? Theme.glassRaised : "transparent"
                     RowLayout {
                         anchors.fill: parent; anchors.leftMargin: 10; anchors.rightMargin: 10

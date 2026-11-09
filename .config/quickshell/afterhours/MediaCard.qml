@@ -54,12 +54,12 @@ PopupWindow {
         interval: 1000; repeat: true
         onTriggered: card.player?.positionChanged()
     }
-    Rectangle {
+    Notch {
         id: box
         anchors.fill: parent
-        radius: Theme.radiusLarge
+        cut: Theme.notchLarge
         color: Theme.glass
-        border.width: 1; border.color: Theme.edge
+        edge: Theme.edge
         transformOrigin: Item.Top
         PopIn { id: intro; surface: box; inner: body }
         ColumnLayout {
@@ -94,7 +94,7 @@ PopupWindow {
                             required property int index
                             readonly property int level: card.player?.isPlaying ? (card.bars[index] ?? 0) : 0
                             anchors.verticalCenter: parent.verticalCenter
-                            width: 8; radius: 4
+                            width: 8
                             height: 4 + level * 5.5
                             opacity: card.player?.isPlaying ? 1 - Math.abs(index - 4.5) / 9 : 0.3
                             gradient: Gradient {
