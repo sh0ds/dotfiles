@@ -21,12 +21,12 @@ PopupWindow {
     onShowChanged: { if (show && text.length > 0) delay.restart(); else { delay.stop(); visible = false; } }
     onVisibleChanged: if (visible) fade.restart()
     // Grows out of the thing it explains, like the cards under the rail.
-    Rectangle {
+    Notch {
         id: box
         anchors.fill: parent
+        cut: Theme.notchSmall
         color: Theme.glassRaised
-        border.width: 1
-        border.color: Theme.edge
+        edge: Theme.edge
         Text {
             id: label
             anchors.centerIn: parent

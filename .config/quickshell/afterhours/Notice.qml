@@ -12,8 +12,10 @@ Notch {
     readonly property var defaultAction: notification ? notification.actions.find(a => a.identifier === "default") ?? null : null
     visible: notification != null
     implicitHeight: body.implicitHeight + 28
-    // A toast is glass of its own; in the inbox it sits in the sheet's glass.
+    // A toast is glass of its own, notched; in the inbox it sits square in
+    // the sheet's glass.
     color: hover.hovered ? Theme.glassRaised : toast ? Theme.glass : Theme.well
+    cut: toast ? Theme.notch : 0
     edge: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.edge
     Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
     HoverHandler { id: hover }
