@@ -79,8 +79,6 @@ actions = [
      'text-editor-symbolic', 'edit', ['directories', 'text-files']),
     ('diag-terminal', 'Open Terminal Here', 'Open the selected folder in kitty',
      'utilities-terminal-symbolic', 'terminal', ['directories']),
-    ('diag-lazygit', 'Git in lazygit', 'Inspect the selected Git project in kitty and lazygit',
-     'vcs-normal-symbolic', 'git', ['directories']),
     ('diag-mpd-queue', 'Queue in MPD', 'Append tracks or folders from ~/Music; keep the current queue',
      'media-playlist-append-symbolic', 'queue', ['directories', 'audio-files']),
     ('diag-audacity', 'Edit in Audacity', 'Open selected audio files in Audacity',
@@ -88,7 +86,7 @@ actions = [
     ('diag-aseprite', 'Edit in Aseprite', 'Open selected sprites or images in Aseprite',
      'applications-graphics-symbolic', 'aseprite', ['image-files', 'other-files']),
 ]
-owned = {action[0] for action in actions} | {'diag-neovim'}  # old name of diag-edit
+owned = {action[0] for action in actions} | {'diag-neovim', 'diag-lazygit'}  # old actions, removed on setup
 for action in list(root):
     if action.findtext('unique-id') in owned:
         root.remove(action)

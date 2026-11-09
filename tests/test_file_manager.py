@@ -100,10 +100,10 @@ with open(os.environ['CALLS'], 'a') as stream:
         self.assertIn('WebBrowser=personal', helpers.read_text())
         self.assertIn('TerminalEmulator=kitty', helpers.read_text())
         entries = ET.parse(actions).getroot().findall('action')
-        self.assertEqual(len(entries), 7)
+        self.assertEqual(len(entries), 6)
         self.assertEqual(entries[0].findtext('command'), 'mine %F')
         self.assertEqual({entry.findtext('command') for entry in entries[1:]},
-                         {'thunar-action edit %F', 'thunar-action terminal %F', 'thunar-action git %F',
+                         {'thunar-action edit %F', 'thunar-action terminal %F',
                           'thunar-action queue %F', 'thunar-action audacity %F',
                           'thunar-action aseprite %F'})
         lines = bookmarks.read_text().splitlines()
@@ -125,7 +125,7 @@ with open(os.environ['CALLS'], 'a') as stream:
                            '<command>exo-open --launch TerminalEmulator</command></action></actions>')
         self.helper('thunar-setup')
         entries = ET.parse(actions).getroot().findall('action')
-        self.assertEqual(len(entries), 6)
+        self.assertEqual(len(entries), 5)
         self.assertNotIn('diag-terminal', [entry.findtext('unique-id') for entry in entries])
 
     def test_editor_receives_literal_paths_and_project_directory(self):
@@ -155,17 +155,14 @@ with open(os.environ['CALLS'], 'a') as stream:
         self.assertEqual(calls[1][2].splitlines(), ['DJ & edits/-Artist "live".mp3', 'DJ & edits/02 — mix.FLAC'])
         self.assertEqual(len(calls), 2)
 
-    def test_terminal_and_git_actions_use_selected_folder(self):
+    def test_terminal_action_uses_selected_folder(self):
         self.recorder('kitty')
         project = self.home / 'code/project & tracks'
         project.mkdir()
-        subprocess.run(['git', 'init', '-q', str(project)], check=True)
         self.helper('thunar-action', 'terminal', project)
-        self.helper('thunar-action', 'git', project)
         self.assertEqual(self.calls()[0][1], ['--directory', str(project)])
-        self.assertEqual(self.calls()[1][1], ['--directory', str(project), '-e', 'lazygit'])
-        self.helper('thunar-action', 'git', self.home / 'Music', success=False)
-        self.assertEqual(len(self.calls()), 2)
+        self.helper('thunar-action', 'git', project, success=False)
+        self.assertEqual(len(self.calls()), 1)
 
     def test_outside_library_and_escaping_links_are_rejected_before_mpd(self):
         self.recorder('mpc')

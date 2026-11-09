@@ -86,7 +86,7 @@ check "Afterhours password check" test -r "$HOME/.config/quickshell/afterhours/p
 check "JetBrains Mono Nerd Font" sh -c 'fc-list | grep -qi "JetBrainsMono Nerd Font"'
 
 section "Terminal workflow"
-for c in starship eza fzf zoxide fastfetch sl lazygit bat tldr; do
+for c in starship eza fzf zoxide fastfetch bat tldr; do
   check "$c" command -v "$c"
 done
 check "zed (zeditor)" command -v zeditor

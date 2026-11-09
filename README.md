@@ -46,7 +46,7 @@ These are rendered from the shell's own QML in this repo. The app windows in the
 
 ## Getting Started
 
-You need Arch, Hyprland 0.56 or newer (the Lua config) and Quickshell 0.3.2 or newer. The full package list is in [docs/desktop-rebuild.md](docs/desktop-rebuild.md). Coming from my old Diag setup? Use [docs/install-from-diag.md](docs/install-from-diag.md).
+You need Arch, Hyprland 0.56 or newer (the Lua config) and Quickshell 0.3.2 or newer. The full package list is in [docs/desktop-rebuild.md](docs/desktop-rebuild.md).
 
 ```sh
 git clone https://github.com/sh0ds/dotfiles ~/code/dotfiles

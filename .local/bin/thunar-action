@@ -16,24 +16,18 @@ def run(argv, **kwargs):
 
 
 def main():
-    if len(sys.argv) < 3 or sys.argv[1] not in {'edit', 'terminal', 'git', 'queue', 'audacity', 'aseprite'}:
-        raise ValueError('Usage: thunar-action {edit|terminal|git|queue|audacity|aseprite} PATH...')
+    if len(sys.argv) < 3 or sys.argv[1] not in {'edit', 'terminal', 'queue', 'audacity', 'aseprite'}:
+        raise ValueError('Usage: thunar-action {edit|terminal|queue|audacity|aseprite} PATH...')
     action = sys.argv[1]
     paths = [Path(path).resolve(strict=True) for path in sys.argv[2:]]
     if action == 'edit':
         if any(path.is_dir() for path in paths) and len(paths) != 1:
             raise ValueError('Select one project folder, or select files to edit together.')
         run(['zeditor', '--', *[str(path) for path in paths]])
-    elif action in {'terminal', 'git'}:
+    elif action == 'terminal':
         if len(paths) != 1 or not paths[0].is_dir():
             raise ValueError('Select one folder for this action.')
-        directory = str(paths[0])
-        if action == 'git':
-            run(['git', '-C', directory, 'rev-parse', '--show-toplevel'],
-                capture_output=True, text=True)
-            run(['kitty', '--directory', directory, '-e', 'lazygit'])
-        else:
-            run(['kitty', '--directory', directory])
+        run(['kitty', '--directory', str(paths[0])])
     elif action == 'audacity':
         if any(not path.is_file() or path.suffix.lower() not in AUDIO for path in paths):
             raise ValueError('Select audio files to edit in Audacity.')
