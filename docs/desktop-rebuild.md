@@ -108,7 +108,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `Dashboard.qml`: Today, the drawer under the island: `MonthView`, `sys-stats` graphs (2 s), a ping to the Pi (5 s), `uptime -p` and `df` (1 min), all only while open.
 - `MonthView.qml`: the month grid with ISO weeks. Not `Calendar` or `MonthGrid`: QtQuick.Controls types.
 - `Cover.qml`: square cover art with a note placeholder (island, Today, media card).
-- `Notch.qml`: a panel with its corners cut at 45 degrees, the Notched look. Floating surfaces (rail pieces, island, cards, launcher, toasts, lock field) cut their corners and draw the cuts in violet; buttons and markers cut two opposite corners small. The login screen carries a copy (`Cut` in its Main.qml), since the greeter can't read your config.
+- `Notch.qml`: a panel with its corners cut at 45 degrees, the Notched look. Floating surfaces (rail pieces, island, cards, launcher, toasts, lock field) cut their corners; buttons and markers cut two opposite corners small. The login screen carries a copy (`Cut` in its Main.qml), since the greeter can't read your config.
 - `Caption.qml`: the small violet heading over a block, with a hairline running to its end.
 - `VolumeRow.qml`: speaker, meter and percentage (island and the volume panel).
 - `PopIn.qml`: the shared opening animation of the cards under the rail (scale from 92 % on `Theme.spring`, content 60 ms later).

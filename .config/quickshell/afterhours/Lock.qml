@@ -120,7 +120,6 @@ Scope {
                         Layout.topMargin: 48
                         implicitWidth: 320; implicitHeight: 48
                         color: Theme.glass
-                        cutInk: Theme.cutInk
                         edge: lockRoot.message ? Theme.danger : input.activeFocus ? Theme.accent : Theme.edge
                         Behavior on edge { ColorAnimation { duration: Theme.motion } }
                         transform: Translate { id: shake }

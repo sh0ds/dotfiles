@@ -13,12 +13,11 @@ Rectangle {
 
     // The shell's Notch (afterhours/Notch.qml), copied here because the
     // greeter can't read your config: corners cut at 45 degrees instead of
-    // rounded, the cuts drawn in violet when cutInk is set.
+    // rounded.
     component Cut: Item {
         id: cutBox
         property color color: "transparent"
         property color edge: "transparent"
-        property color cutInk: "transparent"
         property real cut: 8
         property bool cutTopLeft: true
         property bool cutTopRight: true
@@ -49,21 +48,8 @@ Rectangle {
                         + " L" + cutBox.x0 + "," + (cutBox.y0 + cutBox.tl) + " Z"
                 }
             }
-            ShapePath {
-                fillColor: "transparent"
-                strokeColor: cutBox.cutInk
-                strokeWidth: cutBox.cutInk.a > 0 && cutBox.cutSize > 0 ? 1 : -1
-                capStyle: ShapePath.FlatCap
-                PathSvg {
-                    path: (cutBox.tl ? "M" + cutBox.x0 + "," + (cutBox.y0 + cutBox.tl) + " L" + (cutBox.x0 + cutBox.tl) + "," + cutBox.y0 + " " : "")
-                        + (cutBox.tr ? "M" + (cutBox.x1 - cutBox.tr) + "," + cutBox.y0 + " L" + cutBox.x1 + "," + (cutBox.y0 + cutBox.tr) + " " : "")
-                        + (cutBox.br ? "M" + cutBox.x1 + "," + (cutBox.y1 - cutBox.br) + " L" + (cutBox.x1 - cutBox.br) + "," + cutBox.y1 + " " : "")
-                        + (cutBox.bl ? "M" + (cutBox.x0 + cutBox.bl) + "," + cutBox.y1 + " L" + cutBox.x0 + "," + (cutBox.y1 - cutBox.bl) : "")
-                }
-            }
         }
     }
-    readonly property color cutInk: Qt.rgba(0.706, 0.612, 0.941, 0.7)
 
     // The Afterhours palette (Theme.qml in the shell)
     readonly property color panel: "#131218"
@@ -192,7 +178,6 @@ Rectangle {
             cutTopRight: false; cutBottomLeft: false
             color: whoHover.hovered && root.userNames.length > 1 ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
             edge: root.line
-            cutInk: root.cutInk
             Behavior on color { ColorAnimation { duration: root.motion } }
             Row {
                 id: whoRow
@@ -260,7 +245,6 @@ Rectangle {
                 anchors.fill: parent
                 color: Qt.rgba(0.075, 0.071, 0.094, 0.92)
                 edge: pill.edge
-                cutInk: root.cutInk
                 Behavior on edge { ColorAnimation { duration: root.motion } }
 
                 Text {

@@ -8,7 +8,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 
 ## Description
 
-- **The rail** is three frosted glass pieces on every monitor, their cut corners marked in violet: apps, workspaces and the focused window's title on the left, the island in the middle, and on the right now playing with cava bars, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
+- **The rail** is three frosted glass pieces with notched corners on every monitor: apps, workspaces and the focused window's title on the left, the island in the middle, and on the right now playing with cava bars, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
 - **The island** in the middle is the clock. It stretches into the volume bar when you change the volume, into the notification when one lands (click to open it, right-click to dismiss), then shrinks back to the time. New songs don't pop up there; now playing on the right has them.
 - **Today** opens from the clock: the month, cpu / gpu / memory graphs, the disks, the Pi with its ping, and now playing.
 - **Everything moves on one spring:** popups grow out of what you clicked, launcher rows cascade in, the overview zooms out of the workspace you're on, the workspace marker stretches like a drop, and windows bloom open with a small bounce.

@@ -60,7 +60,6 @@ PopupWindow {
         cut: Theme.notchLarge
         color: Theme.glass
         edge: Theme.edge
-        cutInk: Theme.cutInk
         transformOrigin: Item.Top
         PopIn { id: intro; surface: box; inner: body }
         ColumnLayout {

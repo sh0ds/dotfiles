@@ -44,7 +44,6 @@ PanelWindow {
         y: -parent.height
         color: Theme.glass
         edge: Theme.edge
-        cutInk: Theme.cutInk
         VolumeRow { anchors.centerIn: parent; sink: osd.sink; interactive: false }
     }
     NumberAnimation { id: enter; target: pill; property: "y"; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }

@@ -282,7 +282,6 @@ ShellRoot {
                 cutTopRight: false; cutBottomLeft: false
                 color: Theme.glass
                 edge: Theme.edge
-                cutInk: Theme.cutInk
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
                 id: leftRow
@@ -404,7 +403,6 @@ ShellRoot {
                 cutTopLeft: false; cutBottomRight: false
                 color: Theme.glass
                 edge: Theme.edge
-                cutInk: Theme.cutInk
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
                 id: rightRow
@@ -567,7 +565,6 @@ ShellRoot {
             height: Math.min(parent.height - 100, 660)
             color: Theme.glass
             edge: Theme.edge
-            cutInk: Theme.cutInk
             cut: Theme.notchLarge
             Keys.onEscapePressed: root.panel = ""
             // Prevent clicks on the sheet reaching the outside-click handler.
