@@ -1,6 +1,6 @@
 import QtQuick
 // The volume as one row: the speaker (struck through when muted), the
-// meter and the percentage. The island lets you drag it; the pill that
+// meter and the percentage. The island lets you drag it; the panel that
 // shows while the rail is hidden only displays it.
 Row {
     id: vol

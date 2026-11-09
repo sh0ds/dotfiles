@@ -1,6 +1,6 @@
 [SddmGreeterTheme]
 Name=Afterhours
-Description=The Afterhours login: wallpaper, clock and one rounded password pill, like the lock screen
+Description=The Afterhours login: wallpaper, clock and one notched password field, like the lock screen
 Author=sh0ds
 Type=sddm-theme
 Version=2.0

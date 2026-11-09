@@ -54,7 +54,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("wl-paste --watch cliphist store")
 	-- A launcher entry per game in ~/games/roms (see .local/bin/roms).
 	hl.exec_cmd("roms")
-	-- The wallpaper (the drifting haze) and the volume pill are drawn by the
+	-- The wallpaper (the haze, still) and the volume panel are drawn by the
 	-- Afterhours shell itself, so there is no wallpaper daemon or swayosd.
 end)
 
