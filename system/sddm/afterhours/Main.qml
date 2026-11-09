@@ -318,7 +318,7 @@ Rectangle {
     }
 
     // ---- Bottom: session block on the left of the buttons, power on the right ----
-    component Round: Rectangle {
+    component PowerButton: Rectangle {
         id: btn
         property string glyph
         property string tip
@@ -389,9 +389,9 @@ Rectangle {
             HoverHandler { id: sessHover; cursorShape: sessions.count > 1 ? Qt.PointingHandCursor : Qt.ArrowCursor }
             TapHandler { onTapped: if (sessions.count > 0) root.sessionIndex = (root.sessionIndex + 1) % sessions.count }
         }
-        Round { visible: sddm.canSuspend; glyph: ""; tip: "sleep"; onActivated: sddm.suspend() }          // nf-fa-moon_o
-        Round { visible: sddm.canReboot; glyph: ""; tip: "reboot"; armed: root.armed === "reboot"; onActivated: root.confirm("reboot", () => sddm.reboot()) }
-        Round { visible: sddm.canPowerOff; glyph: ""; tip: "power off"; armed: root.armed === "off"; onActivated: root.confirm("off", () => sddm.powerOff()) }
+        PowerButton { visible: sddm.canSuspend; glyph: ""; tip: "sleep"; onActivated: sddm.suspend() }          // nf-fa-moon_o
+        PowerButton { visible: sddm.canReboot; glyph: ""; tip: "reboot"; armed: root.armed === "reboot"; onActivated: root.confirm("reboot", () => sddm.reboot()) }
+        PowerButton { visible: sddm.canPowerOff; glyph: ""; tip: "power off"; armed: root.armed === "off"; onActivated: root.confirm("off", () => sddm.powerOff()) }
     }
 
     // Top right: the host, quiet, like the rail's corner.

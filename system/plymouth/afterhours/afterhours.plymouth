@@ -1,6 +1,6 @@
 [Plymouth Theme]
 Name=Afterhours
-Description=The Afterhours mark breathing in violet over charcoal, with a thin rounded progress bar
+Description=The Afterhours mark breathing in violet over charcoal, with a thin square progress bar
 ModuleName=script
 
 [script]
