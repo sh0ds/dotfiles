@@ -99,7 +99,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 
 - `shell.qml`: per-output rail, one focused-output overlay, native desktop-entry launcher, MPRIS, SNI tray, notifications and IPC. No HTTP service or internet requests.
 - `Theme.qml`: shell palette and typography.
-- `Cell.qml`: shared keyboard-focusable control with hover and focus states.
+- `Cell.qml`: shared keyboard-focusable control with hover and focus states; `selected` is a filled primary button, `lit` a toggle that is on (soft violet with a violet underline).
 - `Hint.qml`: hover hints for rail controls in their own popup window, because the rail window is too short for a QtQuick `ToolTip`.
 - `Notice.qml`: bounded text presentation, action controls and toast lifetime.
 - `Meter.qml`: the slim slider used by the OSD, the media card and the control centre.
@@ -108,7 +108,8 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `Dashboard.qml`: Today, the drawer under the island: `MonthView`, `sys-stats` graphs (2 s), a ping to the Pi (5 s), `uptime -p` and `df` (1 min), all only while open.
 - `MonthView.qml`: the month grid with ISO weeks. Not `Calendar` or `MonthGrid`: QtQuick.Controls types.
 - `Cover.qml`: square cover art with a note placeholder (island, Today, media card).
-- `Notch.qml`: a panel with its corners cut at 45 degrees, the Notched look (rail pieces, island, cards, launcher, toasts, lock field). Everything inside them is square.
+- `Notch.qml`: a panel with its corners cut at 45 degrees, the Notched look. Floating surfaces (rail pieces, island, cards, launcher, toasts, lock field) cut their corners and draw the cuts in violet; buttons and markers cut two opposite corners small. The login screen carries a copy (`Cut` in its Main.qml), since the greeter can't read your config.
+- `Caption.qml`: the small violet heading over a block, with a hairline running to its end.
 - `VolumeRow.qml`: speaker, meter and percentage (island and the volume panel).
 - `PopIn.qml`: the shared opening animation of the cards under the rail (scale from 92 % on `Theme.spring`, content 60 ms later).
 - `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.

@@ -34,6 +34,9 @@ QtObject {
     // Everything inside them is square, the overview's tiles too (the
     // window pictures reach their corners).
     readonly property int notchSmall: 4
+    // The violet on the cut corners of every floating surface (Notch's
+    // cutInk): the accent, a little held back.
+    readonly property color cutInk: Qt.rgba(0.706, 0.612, 0.941, 0.7)
     readonly property int notch: 8
     readonly property int notchLarge: 14
     // Hover and colour changes; things that move take `glide`.

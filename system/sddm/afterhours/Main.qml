@@ -1,14 +1,69 @@
 // Afterhours login screen. The same picture as the lock screen
 // (hyprlock.conf): the desktop wallpaper, a large clock with the date under
-// it, and one rounded password pill. Your name sits above it as a chip; F3
+// it, and one notched password field. Your name sits above it as a chip; F3
 // or the session block switches session, the square buttons bottom right
 // suspend, reboot and power off. Only QtQuick, no Controls, so nothing gets
 // styled behind our back. Qt 6 (metadata.desktop says QtVersion=6).
 import QtQuick
+import QtQuick.Shapes
 
 Rectangle {
     id: root
     color: "#0d0c10"
+
+    // The shell's Notch (afterhours/Notch.qml), copied here because the
+    // greeter can't read your config: corners cut at 45 degrees instead of
+    // rounded, the cuts drawn in violet when cutInk is set.
+    component Cut: Item {
+        id: cutBox
+        property color color: "transparent"
+        property color edge: "transparent"
+        property color cutInk: "transparent"
+        property real cut: 8
+        property bool cutTopLeft: true
+        property bool cutTopRight: true
+        property bool cutBottomRight: true
+        property bool cutBottomLeft: true
+        readonly property real cutSize: Math.max(0, Math.min(cut, width / 2, height / 2))
+        readonly property real tl: cutTopLeft ? cutSize : 0
+        readonly property real tr: cutTopRight ? cutSize : 0
+        readonly property real br: cutBottomRight ? cutSize : 0
+        readonly property real bl: cutBottomLeft ? cutSize : 0
+        readonly property real x0: 0.5
+        readonly property real y0: 0.5
+        readonly property real x1: width - 0.5
+        readonly property real y1: height - 0.5
+        Shape {
+            anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
+            ShapePath {
+                fillColor: cutBox.color
+                strokeColor: cutBox.edge
+                strokeWidth: cutBox.edge.a > 0 ? 1 : -1
+                joinStyle: ShapePath.MiterJoin
+                PathSvg {
+                    path: "M" + (cutBox.x0 + cutBox.tl) + "," + cutBox.y0
+                        + " L" + (cutBox.x1 - cutBox.tr) + "," + cutBox.y0 + " L" + cutBox.x1 + "," + (cutBox.y0 + cutBox.tr)
+                        + " L" + cutBox.x1 + "," + (cutBox.y1 - cutBox.br) + " L" + (cutBox.x1 - cutBox.br) + "," + cutBox.y1
+                        + " L" + (cutBox.x0 + cutBox.bl) + "," + cutBox.y1 + " L" + cutBox.x0 + "," + (cutBox.y1 - cutBox.bl)
+                        + " L" + cutBox.x0 + "," + (cutBox.y0 + cutBox.tl) + " Z"
+                }
+            }
+            ShapePath {
+                fillColor: "transparent"
+                strokeColor: cutBox.cutInk
+                strokeWidth: cutBox.cutInk.a > 0 && cutBox.cutSize > 0 ? 1 : -1
+                capStyle: ShapePath.FlatCap
+                PathSvg {
+                    path: (cutBox.tl ? "M" + cutBox.x0 + "," + (cutBox.y0 + cutBox.tl) + " L" + (cutBox.x0 + cutBox.tl) + "," + cutBox.y0 + " " : "")
+                        + (cutBox.tr ? "M" + (cutBox.x1 - cutBox.tr) + "," + cutBox.y0 + " L" + cutBox.x1 + "," + (cutBox.y0 + cutBox.tr) + " " : "")
+                        + (cutBox.br ? "M" + cutBox.x1 + "," + (cutBox.y1 - cutBox.br) + " L" + (cutBox.x1 - cutBox.br) + "," + cutBox.y1 + " " : "")
+                        + (cutBox.bl ? "M" + (cutBox.x0 + cutBox.bl) + "," + cutBox.y1 + " L" + cutBox.x0 + "," + (cutBox.y1 - cutBox.bl) : "")
+                }
+            }
+        }
+    }
+    readonly property color cutInk: Qt.rgba(0.706, 0.612, 0.941, 0.7)
 
     // The Afterhours palette (Theme.qml in the shell)
     readonly property color panel: "#131218"
@@ -129,25 +184,26 @@ Rectangle {
 
         // Who: a square initial in violet and the name. Click (or F4) for
         // the next user when there is more than one.
-        Rectangle {
+        Cut {
             id: who
             anchors.horizontalCenter: parent.horizontalCenter
             height: 40
             width: whoRow.implicitWidth + 12 + 20
+            cutTopRight: false; cutBottomLeft: false
             color: whoHover.hovered && root.userNames.length > 1 ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
-            border.width: 1
-            border.color: root.line
+            edge: root.line
+            cutInk: root.cutInk
             Behavior on color { ColorAnimation { duration: root.motion } }
             Row {
                 id: whoRow
                 x: 6
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 12
-                Rectangle {
+                Cut {
                     width: 28; height: 28
+                    cut: 4; cutTopRight: false; cutBottomLeft: false
                     color: root.accentSoft
-                    border.width: 1
-                    border.color: root.accent
+                    edge: root.accent
                     Text {
                         anchors.centerIn: parent
                         text: (root.userName || "?").charAt(0).toUpperCase()
@@ -190,23 +246,22 @@ Rectangle {
             transform: Translate { x: pill.shakeX }
             readonly property color edge: root.state_ === "fail" ? root.danger : password.activeFocus ? root.accent : root.line
 
-            Rectangle {
+            Cut {
                 anchors.fill: field
                 anchors.margins: -5
-                color: "transparent"
-                border.width: 4
-                border.color: pill.edge
+                cut: 11
+                color: pill.edge
                 opacity: password.activeFocus || root.state_ === "fail" ? 0.16 : 0
                 Behavior on opacity { NumberAnimation { duration: root.motion } }
-                Behavior on border.color { ColorAnimation { duration: root.motion } }
+                Behavior on color { ColorAnimation { duration: root.motion } }
             }
-            Rectangle {
+            Cut {
                 id: field
                 anchors.fill: parent
                 color: Qt.rgba(0.075, 0.071, 0.094, 0.92)
-                border.width: 1
-                border.color: pill.edge
-                Behavior on border.color { ColorAnimation { duration: root.motion } }
+                edge: pill.edge
+                cutInk: root.cutInk
+                Behavior on edge { ColorAnimation { duration: root.motion } }
 
                 Text {
                     anchors.left: parent.left
@@ -261,12 +316,13 @@ Rectangle {
                     onTextEdited: if (root.state_ === "fail") root.state_ = ""
                 }
                 // Enter: a square violet arrow, three pulsing dots while the session starts.
-                Rectangle {
+                Cut {
                     id: go
                     anchors.right: parent.right
                     anchors.rightMargin: 7
                     anchors.verticalCenter: parent.verticalCenter
                     width: 38; height: 38
+                    cut: 4; cutTopRight: false; cutBottomLeft: false
                     color: password.text.length > 0 || root.state_ === "busy" ? root.accent : root.raised
                     Behavior on color { ColorAnimation { duration: root.motion } }
                     Text {
@@ -286,7 +342,7 @@ Rectangle {
                             model: 3
                             Rectangle {
                                 required property int index
-                                width: 5; height: 5; color: "#0d0c10"
+                                width: 5; height: 5; rotation: 45; color: "#0d0c10"
                                 SequentialAnimation on opacity {
                                     loops: Animation.Infinite; running: root.state_ === "busy"
                                     PauseAnimation { duration: index * 150 }
@@ -318,18 +374,18 @@ Rectangle {
     }
 
     // ---- Bottom: session block on the left of the buttons, power on the right ----
-    component PowerButton: Rectangle {
+    component PowerButton: Cut {
         id: btn
+        cutTopRight: false; cutBottomLeft: false
         property string glyph
         property string tip
         property bool armed: false
         signal activated()
         width: 44; height: 44
         color: btnHover.hovered ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
-        border.width: 1
-        border.color: btn.armed ? root.danger : btnHover.hovered ? root.accent : root.line
+        edge: btn.armed ? root.danger : btnHover.hovered ? root.accent : root.line
         Behavior on color { ColorAnimation { duration: root.motion } }
-        Behavior on border.color { ColorAnimation { duration: root.motion } }
+        Behavior on edge { ColorAnimation { duration: root.motion } }
         Text {
             anchors.centerIn: parent
             text: btn.glyph
@@ -369,15 +425,15 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.margins: 40
         spacing: 12
-        Rectangle {
+        Cut {
             anchors.verticalCenter: parent.verticalCenter
             height: 44
             width: sessRow.implicitWidth + 36
+            cutTopRight: false; cutBottomLeft: false
             color: sessHover.hovered ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
-            border.width: 1
-            border.color: sessHover.hovered ? root.accent : root.line
+            edge: sessHover.hovered ? root.accent : root.line
             Behavior on color { ColorAnimation { duration: root.motion } }
-            Behavior on border.color { ColorAnimation { duration: root.motion } }
+            Behavior on edge { ColorAnimation { duration: root.motion } }
             Row {
                 id: sessRow
                 anchors.centerIn: parent

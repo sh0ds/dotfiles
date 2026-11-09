@@ -120,6 +120,7 @@ Scope {
                         Layout.topMargin: 48
                         implicitWidth: 320; implicitHeight: 48
                         color: Theme.glass
+                        cutInk: Theme.cutInk
                         edge: lockRoot.message ? Theme.danger : input.activeFocus ? Theme.accent : Theme.edge
                         Behavior on edge { ColorAnimation { duration: Theme.motion } }
                         transform: Translate { id: shake }
@@ -145,7 +146,7 @@ Scope {
                             spacing: 8
                             Repeater {
                                 model: Math.min(lockRoot.typed.length, 18)
-                                Rectangle { width: 8; height: 8; color: Theme.accent }
+                                Rectangle { width: 7; height: 7; rotation: 45; color: Theme.accent }   // a diamond per character
                             }
                         }
                         TextInput {

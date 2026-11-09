@@ -16,6 +16,7 @@ Notch {
     // the sheet's glass.
     color: hover.hovered ? Theme.glassRaised : toast ? Theme.glass : Theme.well
     cut: toast ? Theme.notch : 0
+    cutInk: Theme.cutInk
     edge: notification?.urgency === NotificationUrgency.Critical ? Theme.danger : Theme.edge
     Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
     HoverHandler { id: hover }

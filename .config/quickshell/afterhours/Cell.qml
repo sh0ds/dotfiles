@@ -1,13 +1,17 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-// A square, keyboard-focusable button: faint fill on hover, violet fill
-// when selected, colour changes ease out, a small dip when pressed.
-Rectangle {
+// A keyboard-focusable button with two corners cut (top left, bottom
+// right, like the rail's left piece): faint fill on hover, violet fill
+// when selected (a primary button), a soft violet fill with a violet
+// underline when lit (a toggle that is on), colour changes ease out, a
+// small dip when pressed.
+Notch {
     id: cell
     property string label: ""
     property string hint: ""
     property bool selected: false
+    property bool lit: false
     property color ink: Theme.text
     property color fill: "transparent"
     property int size: 13
@@ -19,9 +23,9 @@ Rectangle {
     signal wheeled(int step)
     implicitWidth: content.implicitWidth + 26
     implicitHeight: 32
-    color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.glassRaised : fill)
-    border.width: activeFocus ? 1 : 0
-    border.color: Theme.accent
+    cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
+    color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.glassRaised : lit ? Theme.accentSoft : fill)
+    edge: activeFocus ? Theme.accent : "transparent"
     activeFocusOnTab: true
     Accessible.role: Accessible.Button
     Accessible.name: label
@@ -54,12 +58,20 @@ Rectangle {
     Text {
         id: title
         text: cell.label
-        color: cell.selected ? Theme.background : cell.ink
+        color: cell.selected ? Theme.background : cell.lit ? Theme.accent : cell.ink
         font.family: Theme.font
         font.pixelSize: cell.size
         textFormat: Text.PlainText
         Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
     }
+    }
+    // Stops where the bottom right corner is cut.
+    Rectangle {
+        anchors.bottom: parent.bottom
+        width: parent.width - Theme.notchSmall; height: 2
+        color: Theme.accent
+        opacity: cell.lit ? 1 : 0
+        Behavior on opacity { NumberAnimation { duration: Theme.motion } }
     }
     MouseArea {
         id: pointer

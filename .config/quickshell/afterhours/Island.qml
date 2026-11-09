@@ -31,6 +31,7 @@ Notch {
     // The morph: one spring for the width, so every change reads the same.
     Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
     cutBottomLeft: false; cutBottomRight: false
+    cutInk: Theme.cutInk
     clip: true
     color: open ? Theme.accentSoft : hover.hovered && mode === "clock" ? Theme.glassRaised : Theme.glass
     edge: open ? Theme.accent

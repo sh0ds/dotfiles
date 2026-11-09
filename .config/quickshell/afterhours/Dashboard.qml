@@ -89,10 +89,8 @@ PopupWindow {
         onTriggered: { if (!upRead.running) upRead.running = true; if (!diskRead.running) diskRead.running = true; }
     }
 
-    // A small heading over each block.
-    component Heading: Text {
-        color: Theme.accent; font.family: Theme.font; font.pixelSize: 10; font.letterSpacing: 2; font.bold: true
-    }
+    // A small heading over each block (Caption.qml).
+    component Heading: Caption {}
     // One reading: name, the last 80 s as bars (oldest faintest), the value.
     component Spark: RowLayout {
         id: spark
@@ -138,6 +136,7 @@ PopupWindow {
         cut: Theme.notchLarge
         color: Theme.glass
         edge: Theme.edge
+        cutInk: Theme.cutInk
         transformOrigin: Item.Top
         PopIn { id: pop; surface: box; inner: body }
         RowLayout {

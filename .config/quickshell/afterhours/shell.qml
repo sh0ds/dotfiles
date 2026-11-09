@@ -11,6 +11,13 @@ import Quickshell.Services.SystemTray
 import Quickshell.Services.Pipewire
 
 ShellRoot {
+    // A thin upright line between groups of rail cells.
+    component Seam: Rectangle {
+        implicitWidth: 1; implicitHeight: 16
+        color: Theme.line
+        Layout.leftMargin: 4; Layout.rightMargin: 4
+        Layout.alignment: Qt.AlignVCenter
+    }
     id: root
     property string panel: ""
     property var panelScreen: Quickshell.screens[0] ?? null
@@ -275,6 +282,7 @@ ShellRoot {
                 cutTopRight: false; cutBottomLeft: false
                 color: Theme.glass
                 edge: Theme.edge
+                cutInk: Theme.cutInk
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
                 id: leftRow
@@ -309,7 +317,8 @@ ShellRoot {
                         border.width: 1
                         border.color: Theme.edge
                     }
-                    Rectangle {
+                    Notch {
+                        cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
                         x: Math.min(spaces.edgeL, spaces.edgeR) + 4; y: 4
                         width: Math.abs(spaces.edgeR - spaces.edgeL); height: parent.height - 8
                         visible: spaces.markW > 0
@@ -330,9 +339,10 @@ ShellRoot {
                                 width: here ? 38 : 24
                                 height: 22
                                 Behavior on width { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
-                                Rectangle {
+                                Notch {
                                     anchors.centerIn: parent
                                     width: 22; height: 22
+                                    cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
                                     color: Theme.glassRaised
                                     opacity: !space.here && pointerHover.hovered ? 1 : 0
                                     Behavior on opacity { NumberAnimation { duration: Theme.motion } }
@@ -374,7 +384,11 @@ ShellRoot {
                     // Up to the room the island may grow into, so it never covers the title.
                     Layout.maximumWidth: Math.max(0, rail.width / 2 - island.maxWidth / 2 - 16 - 12 - windowTitle.x)
                     visible: rail.width > 1050
-                    text: Hyprland.activeToplevel?.title ?? ""
+                    // Without the browser's tab count and the app's name at
+                    // the end: the window itself says which app it is.
+                    text: (Hyprland.activeToplevel?.title ?? "")
+                        .replace(/^\[\d+ tabs?\]\s*/, "")
+                        .replace(/\s+[—–-]\s+(Mozilla Firefox|Zed|Obsidian)$/, "")
                     color: Theme.muted
                     elide: Text.ElideRight
                     textFormat: Text.PlainText
@@ -390,6 +404,7 @@ ShellRoot {
                 cutTopLeft: false; cutBottomRight: false
                 color: Theme.glass
                 edge: Theme.edge
+                cutInk: Theme.cutInk
                 Behavior on width { NumberAnimation { duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot } }
             RowLayout {
                 id: rightRow
@@ -436,14 +451,16 @@ ShellRoot {
                         else if (step > 0 && root.player?.canGoPrevious) root.player.previous();
                     }
                 }
-                // Right side: keep awake, the Pi, then network and sound side by
-                // side (both open the control centre), the inbox and the tray.
-                // The system graphs are in Today (click the clock).
+                // Right side, in groups split by seams: now playing | keep
+                // awake, the Pi, network | sound (network and sound both open
+                // the control centre), the inbox and the tray | power. The
+                // system graphs are in Today (click the clock).
+                Seam { visible: mediaCell.visible }
                 Cell {
                     visible: rail.width > 900
                     label: "\uf0f4"   // nf-fa-coffee
                     size: 14
-                    selected: root.awake
+                    lit: root.awake
                     ink: Theme.muted
                     hint: root.awake ? "Keeping the screen awake · click to stop" : "Keep the screen awake (no dim, lock or sleep)"
                     onClicked: root.awake = !root.awake
@@ -467,6 +484,7 @@ ShellRoot {
                     onClicked: rail.openControl(netCell)
                     onRightClicked: root.run(["wifi", "settings"])
                 }
+                Seam { visible: rail.width > 900 }
                 Cell {
                     id: volCell
                     label: (rail.width > 900 ? "vol " : "") + root.volume
@@ -488,10 +506,11 @@ ShellRoot {
                 }
                 Repeater {
                     model: rail.width > 900 ? SystemTray.items : null
-                    Rectangle {
+                    Notch {
                         id: trayItem
                         required property var modelData
                         implicitWidth: 30; implicitHeight: 32
+                        cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
                         color: trayPointer.containsMouse ? Theme.glassRaised : "transparent"
                         Behavior on color { ColorAnimation { duration: Theme.motion } }
                         Image { anchors.centerIn: parent; width: 16; height: 16; sourceSize: Qt.size(32, 32); source: trayItem.modelData.icon }
@@ -510,6 +529,7 @@ ShellRoot {
                         Hint { target: trayItem; text: trayItem.modelData.tooltipTitle || trayItem.modelData.title || ""; show: trayPointer.containsMouse }
                     }
                 }
+                Seam {}
                 Cell { label: "⏻"; hint: "Session controls"; onClicked: root.toggle("session", rail.screen) }
             }
             }
@@ -547,6 +567,7 @@ ShellRoot {
             height: Math.min(parent.height - 100, 660)
             color: Theme.glass
             edge: Theme.edge
+            cutInk: Theme.cutInk
             cut: Theme.notchLarge
             Keys.onEscapePressed: root.panel = ""
             // Prevent clicks on the sheet reaching the outside-click handler.
@@ -569,7 +590,12 @@ ShellRoot {
                     color: Theme.text; font.family: Theme.font; font.pixelSize: sheet.width < 600 ? 32 : 46
                     Layout.fillWidth: true; elide: Text.ElideRight
                 }
-                Rectangle { Layout.fillWidth: true; height: 1; color: Theme.edge }
+                // The rule under the title starts with a short violet run.
+                Item {
+                    Layout.fillWidth: true; implicitHeight: 1
+                    Rectangle { anchors.fill: parent; color: Theme.edge }
+                    Rectangle { width: 48; height: 1; color: Theme.accent }
+                }
                 StackLayout {
                     Layout.fillWidth: true; Layout.fillHeight: true
                     currentIndex: ({apps: 0, inbox: 1, session: 2})[root.panel] ?? 0
@@ -705,11 +731,12 @@ ShellRoot {
                             // Keyboard selection keeps the chosen row in view.
                             highlightFollowsCurrentItem: true
                             highlightMoveDuration: 0
-                            delegate: Rectangle {
+                            delegate: Notch {
                                 id: appRow
                                 required property var modelData
                                 required property int index
                                 width: ListView.view.width; height: 44
+                                cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
                                 readonly property bool current: appList.currentIndex === index
                                 color: current ? Theme.glassRaised : "transparent"
                                 Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }

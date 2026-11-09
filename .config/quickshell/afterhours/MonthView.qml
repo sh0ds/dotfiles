@@ -91,9 +91,10 @@ Item {
                     readonly property bool isToday: !week && day.toDateString() === cal.today.toDateString()
                     Layout.preferredWidth: 32
                     Layout.preferredHeight: 30
-                    Rectangle {
+                    Notch {
                         anchors.centerIn: parent
                         width: 30; height: 26
+                        cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
                         visible: slot.isToday
                         color: Theme.accent
                     }

@@ -66,10 +66,7 @@ PopupWindow {
     Process { id: nightRead; command: ["pgrep", "-x", "hyprsunset"]; onExited: code => cc.night = code === 0 }
     Timer { id: nightLater; interval: 400; onTriggered: nightRead.running = true }
 
-    component Heading: Text {
-        color: Theme.accent; font.family: Theme.font; font.pixelSize: 10; font.letterSpacing: 2; font.bold: true
-        Layout.topMargin: 4
-    }
+    component Heading: Caption { Layout.topMargin: 4 }
     // One audio row: icon (click mutes), name, slider, percent.
     component AudioRow: RowLayout {
         id: arow
@@ -100,8 +97,9 @@ PopupWindow {
         Text { text: Math.round(arow.vol * 100) + "%"; color: arow.mute ? Theme.muted : Theme.text; font.family: Theme.font; font.pixelSize: 11; Layout.preferredWidth: 34; horizontalAlignment: Text.AlignRight }
     }
     // A switch tile: icon, name, state; violet when on.
-    component Toggle: Rectangle {
+    component Toggle: Notch {
         id: tg
+        cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
         property string icon
         property string name
         property bool on: false
@@ -109,9 +107,9 @@ PopupWindow {
         Layout.fillWidth: true
         implicitHeight: 54
         color: on ? Theme.accentSoft : tgHover.hovered ? Theme.glassRaised : Theme.well
-        border.width: 1; border.color: on ? Theme.accent : Theme.edge
+        edge: on ? Theme.accent : Theme.edge
         Behavior on color { ColorAnimation { duration: Theme.motion } }
-        Behavior on border.color { ColorAnimation { duration: Theme.motion } }
+        Behavior on edge { ColorAnimation { duration: Theme.motion } }
         Column {
             anchors.left: parent.left; anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter
@@ -129,6 +127,7 @@ PopupWindow {
         cut: Theme.notchLarge
         color: Theme.glass
         edge: Theme.edge
+        cutInk: Theme.cutInk
         transformOrigin: Item.TopRight
         PopIn { id: intro; surface: box; inner: body }
         ColumnLayout {
@@ -181,8 +180,9 @@ PopupWindow {
             }
             Repeater {
                 model: cc.wifiOn ? cc.networks : []
-                Rectangle {
+                Notch {
                     id: net
+                    cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
                     required property var modelData
                     Layout.fillWidth: true
                     implicitHeight: 32
