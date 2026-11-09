@@ -2,12 +2,13 @@
 
 My Arch + Hyprland desktop for making small games. Near-black charcoal with violet accents, one font (JetBrains Mono Nerd Font), notched corners (cut at 45°, never rounded) and calm motion. The bar, launcher, lock screen, notifications and everything else on screen are my own Quickshell config, not a preset.
 
-![Afterhours with kitty, fastfetch and cava](screenshots/afterhours-desktop.png)
+![Afterhours with Zed, kitty and rmpc under the rail](screenshots/afterhours-desktop.png)
 
-![The rail with system stats and the month calendar open](screenshots/afterhours-calendar.png)
+![Today open under the clock: the month, graphs, disks, the Pi and now playing](screenshots/afterhours-today.png)
 
 ## Description
 
+- **Notched:** everything that floats cuts its corners at 45° instead of rounding them. Buttons cut two opposite corners (mirrored on the right side of the rail). Windows stay square, and so do lists and cards inside a panel. Violet shows a state as a fill or a thin underline, never as an outline.
 - **The rail** is three frosted glass pieces with notched corners on every monitor: apps, workspaces and the focused window's title on the left, the island in the middle, and on the right now playing with cava bars, a keep-awake toggle, the Pi, network and sound side by side, the tray, the inbox and the power menu. Hover anything for a hint. The wheel changes the volume on `vol` and skips tracks on now playing, and right-click on `vol` mutes.
 - **The island** in the middle is the clock. It stretches into the volume bar when you change the volume, into the notification when one lands (click to open it, right-click to dismiss), then shrinks back to the time. New songs don't pop up there; now playing on the right has them.
 - **Today** opens from the clock: the month, cpu / gpu / memory graphs, the disks, the Pi with its ping, and now playing.
@@ -21,7 +22,7 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - **The wallpaper** is the haze with soft violet clouds over it. It never moves.
 - **My own lock screen** with a big clock, the password field and what is playing. hyprlock is still there as the fallback.
 - **Game mode** turns on by itself when a game goes fullscreen: the rail and frame hide on the game's monitor (the other monitor keeps its rail), and animations, dimming and shadows go off while you're on the game's monitor. You can also flip it in the control centre.
-- **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume panel while the rail is hidden), with a quiet mode and an inbox for the session. Screen sharing hides them.
+- **Notifications** and the **volume** come from the shell itself: they show in the island on the monitor you're on (as toasts and a volume panel while the rail is hidden), with a quiet mode and an inbox for the session. A toast shows how long it stays with a line that runs out along its bottom edge. Screen sharing hides them.
 - **Everything from boot to desktop matches:** the Plymouth splash, the SDDM login, the lock screen and the wallpaper.
 - **kitty** has a violet 3 px beam cursor with a short trail, and a two-line starship prompt.
 - **Thunar, Firefox, Obsidian and Zed** use the same palette, with Papirus icons (violet folders) and the Posy cursor.
@@ -31,9 +32,21 @@ My Arch + Hyprland desktop for making small games. Near-black charcoal with viol
 - PICO-8 and Picotron code in Zed: their APIs in the Lua language server, `F5` reruns the cart in the console, `F7` counts PICO-8 tokens. How it works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
 - Plus the DJ VM, clipboard history, OCR, screen recording and captioned devlog screenshots.
 
+## More screenshots
+
+![The launcher](screenshots/afterhours-launcher.png)
+
+![The control centre under vol](screenshots/afterhours-control.png)
+
+![The lock screen](screenshots/afterhours-lock.jpg)
+
+![The login screen](screenshots/afterhours-login.jpg)
+
+These are rendered from the shell's own QML in this repo. The app windows in them are stand-ins.
+
 ## Getting Started
 
-You need Arch, Hyprland 0.56 (the Lua config) and Quickshell 0.3.2 or newer. The full package list is in [docs/desktop-rebuild.md](docs/desktop-rebuild.md). Coming from my old Diag setup? Use [docs/install-from-diag.md](docs/install-from-diag.md).
+You need Arch, Hyprland 0.56 or newer (the Lua config) and Quickshell 0.3.2 or newer. The full package list is in [docs/desktop-rebuild.md](docs/desktop-rebuild.md). Coming from my old Diag setup? Use [docs/install-from-diag.md](docs/install-from-diag.md).
 
 ```sh
 git clone https://github.com/sh0ds/dotfiles ~/code/dotfiles
