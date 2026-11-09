@@ -33,12 +33,21 @@ Notch {
     cutBottomLeft: false; cutBottomRight: false
     clip: true
     color: open ? Theme.accentSoft : hover.hovered && mode === "clock" ? Theme.glassRaised : Theme.glass
-    edge: open ? Theme.accent
-        : mode === "notice" && notice?.urgency === NotificationUrgency.Critical ? Theme.danger
+    edge: mode === "notice" && notice?.urgency === NotificationUrgency.Critical ? Theme.danger
         : Theme.edge
     Behavior on color { ColorAnimation { duration: Theme.motion } }
     Behavior on edge { ColorAnimation { duration: Theme.motion } }
     HoverHandler { id: hover; cursorShape: Qt.PointingHandCursor }
+    // While Today is open: a violet underline along the square bottom
+    // edge, like a lit button.
+    Rectangle {
+        z: 2
+        anchors.bottom: parent.bottom
+        width: parent.width; height: 2
+        color: Theme.accent
+        opacity: island.open ? 1 : 0
+        Behavior on opacity { NumberAnimation { duration: Theme.motion } }
+    }
 
     function closeNotice(n) {
         if (!n) return;

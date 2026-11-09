@@ -29,7 +29,8 @@ Notch {
     cutTopLeft: !mirrored; cutBottomRight: !mirrored
     cutTopRight: mirrored; cutBottomLeft: mirrored
     color: selected ? Theme.accent : (pointer.containsMouse || activeFocus ? Theme.glassRaised : lit ? Theme.accentSoft : fill)
-    edge: activeFocus ? Theme.accent : "transparent"
+    // Keyboard focus: a quiet outline. Violet stays on fills and underlines.
+    edge: activeFocus ? Theme.muted : "transparent"
     activeFocusOnTab: true
     Accessible.role: Accessible.Button
     Accessible.name: label

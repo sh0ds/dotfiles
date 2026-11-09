@@ -98,7 +98,8 @@ PopupWindow {
         }
         Text { text: Math.round(arow.vol * 100) + "%"; color: arow.mute ? Theme.muted : Theme.text; font.family: Theme.font; font.pixelSize: 11; Layout.preferredWidth: 34; horizontalAlignment: Text.AlignRight }
     }
-    // A switch tile: icon, name, state; violet when on.
+    // A switch tile: icon, name, state; soft violet with an underline when
+    // on, like a lit button.
     component Toggle: Notch {
         id: tg
         cut: Theme.notchSmall; cutTopRight: false; cutBottomLeft: false
@@ -109,9 +110,15 @@ PopupWindow {
         Layout.fillWidth: true
         implicitHeight: 54
         color: on ? Theme.accentSoft : tgHover.hovered ? Theme.glassRaised : Theme.well
-        edge: on ? Theme.accent : Theme.edge
+        edge: Theme.edge
         Behavior on color { ColorAnimation { duration: Theme.motion } }
-        Behavior on edge { ColorAnimation { duration: Theme.motion } }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            width: parent.width - Theme.notchSmall; height: 2
+            color: Theme.accent
+            opacity: tg.on ? 1 : 0
+            Behavior on opacity { NumberAnimation { duration: Theme.motion } }
+        }
         Column {
             anchors.left: parent.left; anchors.leftMargin: 12
             anchors.verticalCenter: parent.verticalCenter

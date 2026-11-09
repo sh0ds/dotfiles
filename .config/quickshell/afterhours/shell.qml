@@ -518,6 +518,9 @@ ShellRoot {
                         cut: Theme.notchSmall; cutTopLeft: false; cutBottomRight: false
                         color: trayPointer.containsMouse ? Theme.glassRaised : "transparent"
                         Behavior on color { ColorAnimation { duration: Theme.motion } }
+                        // The same dip as a cell when pressed.
+                        scale: trayPointer.pressed ? 0.94 : 1
+                        Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutBack; easing.overshoot: 2.2 } }
                         Image { anchors.centerIn: parent; width: 16; height: 16; sourceSize: Qt.size(32, 32); source: trayItem.modelData.icon }
                         MouseArea {
                             id: trayPointer
@@ -744,7 +747,7 @@ ShellRoot {
                                 readonly property bool current: appList.currentIndex === index
                                 color: current ? Theme.glassRaised : "transparent"
                                 Behavior on color { ColorAnimation { duration: Theme.motion; easing.type: Easing.OutCubic } }
-                                // The chosen row gets a violet edge, like the workspace marker.
+                                // The chosen row gets a short violet bar, like the workspace marker.
                                 Rectangle { x: 4; y: 11; width: 3; height: parent.height - 22; color: Theme.accent; opacity: appRow.current ? 1 : 0; Behavior on opacity { NumberAnimation { duration: Theme.motion } } }
                                 Row {
                                     anchors.left: parent.left; anchors.leftMargin: 16; anchors.right: parent.right; anchors.rightMargin: 12

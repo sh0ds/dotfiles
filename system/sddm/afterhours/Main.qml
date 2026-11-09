@@ -188,7 +188,7 @@ Rectangle {
                     width: 28; height: 28
                     cut: 4; cutTopRight: false; cutBottomLeft: false
                     color: root.accentSoft
-                    edge: root.accent
+                    edge: root.line
                     Text {
                         anchors.centerIn: parent
                         text: (root.userName || "?").charAt(0).toUpperCase()
@@ -229,14 +229,14 @@ Rectangle {
                 NumberAnimation { target: pill; property: "shakeX"; to: 0; duration: 90; easing.type: Easing.OutCubic }
             }
             transform: Translate { x: pill.shakeX }
-            readonly property color edge: root.state_ === "fail" ? root.danger : password.activeFocus ? root.accent : root.line
+            readonly property color edge: root.state_ === "fail" ? root.danger : root.line
 
             Cut {
                 anchors.fill: field
                 anchors.margins: -5
                 cut: 11
                 color: pill.edge
-                opacity: password.activeFocus || root.state_ === "fail" ? 0.16 : 0
+                opacity: root.state_ === "fail" ? 0.16 : 0
                 Behavior on opacity { NumberAnimation { duration: root.motion } }
                 Behavior on color { ColorAnimation { duration: root.motion } }
             }
@@ -246,6 +246,14 @@ Rectangle {
                 color: Qt.rgba(0.075, 0.071, 0.094, 0.92)
                 edge: pill.edge
                 Behavior on edge { ColorAnimation { duration: root.motion } }
+                // Focus: a violet underline between the cut bottom corners.
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    x: field.cutSize; width: parent.width - 2 * field.cutSize; height: 2
+                    color: root.accent
+                    opacity: password.activeFocus && root.state_ !== "fail" ? 1 : 0
+                    Behavior on opacity { NumberAnimation { duration: root.motion } }
+                }
 
                 Text {
                     anchors.left: parent.left
@@ -360,14 +368,15 @@ Rectangle {
     // ---- Bottom: session block on the left of the buttons, power on the right ----
     component PowerButton: Cut {
         id: btn
-        cutTopRight: false; cutBottomLeft: false
+        // Bottom right, so cut like the shell's right piece.
+        cutTopLeft: false; cutBottomRight: false
         property string glyph
         property string tip
         property bool armed: false
         signal activated()
         width: 44; height: 44
         color: btnHover.hovered ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
-        edge: btn.armed ? root.danger : btnHover.hovered ? root.accent : root.line
+        edge: btn.armed ? root.danger : root.line
         Behavior on color { ColorAnimation { duration: root.motion } }
         Behavior on edge { ColorAnimation { duration: root.motion } }
         Text {
@@ -413,11 +422,10 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             height: 44
             width: sessRow.implicitWidth + 36
-            cutTopRight: false; cutBottomLeft: false
+            cutTopLeft: false; cutBottomRight: false
             color: sessHover.hovered ? root.raised : Qt.rgba(0.075, 0.071, 0.094, 0.85)
-            edge: sessHover.hovered ? root.accent : root.line
+            edge: root.line
             Behavior on color { ColorAnimation { duration: root.motion } }
-            Behavior on edge { ColorAnimation { duration: root.motion } }
             Row {
                 id: sessRow
                 anchors.centerIn: parent
