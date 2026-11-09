@@ -20,9 +20,9 @@ end
 ------------------------------------
 
 -- Afterhours: dark cool charcoal, violet on the focused window,
--- amber for attention, coral for recording and errors. Opaque surfaces with
--- 10 px squircle corners, 8 px between tiles, 12 px at the screen edge.
--- Blur stays off: text stays crisp and NVIDIA has less compositing work.
+-- amber for attention, coral for recording and errors. Square windows,
+-- 6 px between tiles, 12 px at the screen edge (lined up with the rail).
+-- See-through windows and the shell's glass blur the still wallpaper.
 -- `frame` recolours the focused border while recording or in quiet mode.
 hl.config({
 	general = {

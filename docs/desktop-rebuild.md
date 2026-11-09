@@ -4,7 +4,7 @@
 
 Keep the useful DNA: Lua, a pixel-console identity, numbered workspaces, keyboard access and the Pi/site connection. Replace the old diagnostic dashboard with a game-making workbench. Charcoal has a slight violet cast; violet is reserved for focus. Status dots are violet when fine, amber means attention, coral marks recording and errors. Artwork and games retain their own palette.
 
-The new shell is Quickshell QML. It uses opaque surfaces, 8 px control radii and 14 px panel radii, fine separators, 200 ms colour changes and 320 ms ease-out movement. Windows get 10 px squircle corners, a soft drop shadow and a violet gradient border; Hyprland's springs are tuned to the same pace. There is no wallpaper blur, colour cycling or glow, and every window is see-through over a still wallpaper (games, video, art and fullscreen stay solid). One font everywhere: JetBrains Mono Nerd Font.
+The new shell is Quickshell QML, in the Notched look: frosted glass surfaces with their corners cut at 45 degrees (never rounded), fine separators, 200 ms colour changes and movement on one shared spring. Windows are square with a 2 px violet gradient border and a soft drop shadow, and every window is see-through over the blurred, still wallpaper (games, video, art and fullscreen stay solid). Violet shows a state as a fill or a 2 px underline, never as an outline. No colour cycling or glow. One font everywhere: JetBrains Mono Nerd Font.
 
 `Theme.qml` owns shell tokens. Application themes are explicit native configs in kitty, GTK, Qt, Zed, btop, Firefox, MPV and the existing music/chat tools. Existing `diag` filenames and internal theme identifiers remain stable so integrations and installed app selections continue resolving them. Their colours are Afterhours.
 

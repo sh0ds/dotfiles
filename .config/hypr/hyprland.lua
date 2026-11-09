@@ -198,7 +198,7 @@ hl.bind(mod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 -- Media keys (work on the lock screen too). No brightness keys: a desktop
 -- monitor's brightness is set on the monitor itself.
 local media = { locked = true, repeating = true }
--- The shell sees the change in PipeWire and shows its volume pill.
+-- The shell sees the change in PipeWire and shows the volume.
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"), media)
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"), media)
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), media)
