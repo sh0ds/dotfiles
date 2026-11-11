@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # install-system.sh: the parts of the Afterhours look that live outside $HOME and
-# need root: the SDDM login screen, the Plymouth boot splash and the picture
-# the kernel image shows before it.
+# need root: the SDDM login screen, the Plymouth boot splash, the picture
+# the kernel image shows before it and the early boot that gets the splash
+# on screen in time.
 # Usage: bash ~/code/dotfiles/system/install-system.sh   (asks for sudo)
 # Run it again after changing anything under system/. Old configs it replaces
 # are moved to /etc/sddm.conf.d/old/, never deleted.
@@ -124,6 +125,61 @@ else
   echo "Boot: systemd-boot isn't the boot loader here, menu left alone"
 fi
 
+# ---- Early boot: start in parallel, NVIDIA up at once ----
+# Measured on this PC: the stock early boot (busybox, the udev hook) waits
+# about 4 s for every USB device before it mounts the disk or starts the
+# splash, and the NVIDIA driver, the only one with a screen attached, loads
+# after that. The splash got a quarter of a second. With systemd in the
+# early boot nothing waits for USB, and with the NVIDIA modules inside the
+# kernel image the splash has a real screen within about a second.
+# The kms hook goes: it only brought nouveau and the Intel driver (no screen
+# on that one) into the image.
+# Written as a drop-in, so /etc/mkinitcpio.conf stays as it is. The kernel
+# image you booted with is kept as a second menu entry in case the new one
+# doesn't come up: hold Space at power-on and pick the "before" entry.
+# Undo:  sudo rm /etc/mkinitcpio.conf.d/afterhours.conf && sudo mkinitcpio -P
+drop=/etc/mkinitcpio.conf.d/afterhours.conf
+stock_hooks='base udev plymouth autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck'
+early_hooks='base systemd plymouth autodetect microcode modconf keyboard sd-vconsole block filesystems fsck'
+early_boot() {
+  [ -e "$drop" ] && return 0
+  grep -qs '_uki=' /etc/mkinitcpio.d/*.preset && [ -n "$esp" ] && sudo test -f "$loader" || return 0
+  local hooks modules k entry avail size
+  hooks=$(sed -n 's/^HOOKS=(\(.*\))[[:space:]]*$/\1/p' /etc/mkinitcpio.conf | tail -1)
+  modules=$(sed -n 's/^MODULES=(\(.*\))[[:space:]]*$/\1/p' /etc/mkinitcpio.conf | tail -1)
+  if [ "$hooks" != "$stock_hooks" ] || [ -n "$modules" ]; then
+    echo "Early boot: mkinitcpio.conf isn't the stock one, left alone"; return 0
+  fi
+  for k in /usr/lib/modules/*/; do
+    [ -e "$k/pkgbase" ] || continue
+    if ! modinfo -k "$(basename "$k")" nvidia_drm >/dev/null 2>&1; then
+      echo "Early boot: no NVIDIA module for kernel $(basename "$k"), left alone"; return 0
+    fi
+  done
+  # systemd-boot leaves the name of the entry it started in the firmware.
+  entry=$(tail -c +5 /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f 2>/dev/null | tr -d '\0' || true)
+  if [ -z "$entry" ] || ! sudo test -f "$esp/EFI/Linux/$entry"; then
+    echo "Early boot: can't tell which kernel image this boot used, left alone"; return 0
+  fi
+  size=$(sudo du -k "$esp/EFI/Linux/$entry" | cut -f1)
+  avail=$(df -k --output=avail "$esp" | tail -1)
+  if [ "$avail" -lt $((size * 3)) ]; then
+    echo "Early boot: not enough room on $esp for a fallback image, left alone"; return 0
+  fi
+  sudo cp "$esp/EFI/Linux/$entry" "$esp/EFI/Linux/${entry%.efi}-before-afterhours.efi"
+  # Two images of the same kernel now: say which one starts by default.
+  sudo sed -i -E '/^[[:space:]]*default[[:space:]]/d' "$loader"
+  echo "default $entry" | sudo tee -a "$loader" >/dev/null
+  sudo bootctl set-default "$entry" >/dev/null
+  sudo install -d /etc/mkinitcpio.conf.d
+  printf '%s\n' '# Written by dotfiles/system/install-system.sh (see "Early boot" there)' \
+    'MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)' "HOOKS=($early_hooks)" |
+    sudo tee "$drop" >/dev/null
+  echo "Early boot: systemd hooks and early NVIDIA; fallback entry ${entry%.efi}-before-afterhours.efi"
+  rebuild=1
+}
+early_boot
+
 # ---- Plymouth: the Afterhours boot splash ----
 if command -v plymouth-set-default-theme >/dev/null; then
   p=/usr/share/plymouth/themes/afterhours
@@ -147,5 +203,9 @@ else
   echo "papirus-folders isn't installed (yay -S papirus-folders), folders keep Papirus blue"
 fi
 
+if [ -n "${esp:-}" ] && sudo test -d "$esp/EFI/Linux"; then
+  echo "Kernel images on $esp:"
+  sudo ls -l "$esp/EFI/Linux" | awk 'NR > 1 { printf "  %4d MB  %s\n", $5 / 1048576, $NF }'
+fi
 echo "Done. The login screen and splash show on the next boot."
 echo "Preview the login screen without rebooting: sddm-greeter-qt6 --test-mode --theme $t"
