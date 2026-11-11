@@ -120,11 +120,50 @@ Rectangle {
     }
 
     // ---- Background: the desktop wallpaper, so login, lock and desktop are one place ----
+    // It loads in the background and fades in over the charcoal, so the
+    // screen never shows a half-drawn first picture.
     Image {
+        id: wall
         anchors.fill: parent
         source: "background.jpg"
         fillMode: Image.PreserveAspectCrop
         smooth: true
+        asynchronous: true
+        opacity: 0
+        onStatusChanged: if (status !== Image.Loading) intro.start()
+    }
+
+    // ---- Opening: the boot splash ends on its mark alone over charcoal,
+    // so the login starts as that same picture (same pixels: the mark's
+    // bottom edge sits 24 px above the middle) and opens out of it. The
+    // wallpaper comes up, the mark lets go, then the clock and the field
+    // rise in and the corners follow.
+    property real chrome: 0
+    Image {
+        id: mark
+        source: "logo.png"
+        x: Math.round((root.width - width) / 2)
+        y: Math.round(root.height / 2 - height - 24)
+        smooth: false
+    }
+    ParallelAnimation {
+        id: intro
+        NumberAnimation { target: wall; property: "opacity"; to: 1; duration: 900; easing.type: Easing.OutCubic }
+        SequentialAnimation {
+            PauseAnimation { duration: 150 }
+            NumberAnimation { target: mark; property: "opacity"; to: 0; duration: 450; easing.type: Easing.OutCubic }
+        }
+        SequentialAnimation {
+            PauseAnimation { duration: 350 }
+            ParallelAnimation {
+                NumberAnimation { target: centre; property: "opacity"; to: 1; duration: 600; easing.type: Easing.OutCubic }
+                NumberAnimation { target: centre; property: "rise"; to: 0; duration: 700; easing.type: Easing.OutCubic }
+            }
+        }
+        SequentialAnimation {
+            PauseAnimation { duration: 600 }
+            NumberAnimation { target: root; property: "chrome"; to: 1; duration: 500; easing.type: Easing.OutCubic }
+        }
     }
 
     QtObject { id: clock; property date now: new Date() }
@@ -139,13 +178,7 @@ Rectangle {
         spacing: 0
         opacity: 0
         property real rise: 16
-        // Fades in and rises a little on start, like a window opening.
-        Component.onCompleted: { intro.start() }
-        ParallelAnimation {
-            id: intro
-            NumberAnimation { target: centre; property: "opacity"; to: 1; duration: 600; easing.type: Easing.OutCubic }
-            NumberAnimation { target: centre; property: "rise"; to: 0; duration: 700; easing.type: Easing.OutCubic }
-        }
+        // Fades in and rises a little, like a window opening (see Opening).
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -418,6 +451,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.margins: 40
         spacing: 12
+        opacity: root.chrome
         Cut {
             anchors.verticalCenter: parent.verticalCenter
             height: 44
@@ -449,6 +483,7 @@ Rectangle {
         anchors.margins: 40
         text: "\uf303  " + sddm.hostName   // nf-linux-archlinux
         color: root.muted
+        opacity: root.chrome
         font.family: root.font
         font.pixelSize: 13
         renderType: Text.NativeRendering

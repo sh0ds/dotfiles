@@ -16,6 +16,8 @@ t=/usr/share/sddm/themes/afterhours
 sudo install -d "$t"
 sudo install -m 644 "$here"/sddm/afterhours/{Main.qml,metadata.desktop,theme.conf} "$t/"
 sudo install -m 644 "$repo/.local/share/backgrounds/afterhours-haze.jpg" "$t/background.jpg"
+# The login opens from the boot splash's mark, so it needs the same picture.
+sudo install -m 644 "$here/plymouth/afterhours/logo.png" "$t/logo.png"
 sudo rm -f "$t/background.png"
 # The old Diag theme is gone from the repo; drop its installed copy too.
 sudo rm -rf /usr/share/sddm/themes/diag
@@ -51,7 +53,9 @@ echo "SDDM: afterhours theme installed"
 main=DP-4
 layout=$(localectl status 2>/dev/null | sed -n 's/.*X11 Layout: *//p')
 ini=$(mktemp)
-printf '# Written by dotfiles/system/install-system.sh\n[keyboard]\nkeymap_layout=%s\n' "${layout:-de}" >"$ini"
+# weston's own backdrop is the charcoal of the splash instead of black, so
+# nothing flashes between the splash and the login.
+printf '# Written by dotfiles/system/install-system.sh\n[shell]\nbackground-color=0xff0d0c10\n\n[keyboard]\nkeymap_layout=%s\n' "${layout:-de}" >"$ini"
 for s in /sys/class/drm/card*-*/status; do
   [ "$(cat "$s")" = connected ] || continue
   name=$(basename "$(dirname "$s")"); name=${name#card*-}

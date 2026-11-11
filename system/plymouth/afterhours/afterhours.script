@@ -1,7 +1,13 @@
-# Afterhours boot splash: the charcoal of the desktop, the Afterhours mark
-# breathing slowly in violet, and under it a thin square bar that fills
-# as the boot goes. The disk password prompt (if any) shows as dots under
-# the bar, in the same colours as the login screen.
+# Afterhours boot splash, in the shell's Notched style.
+#
+# The mark is already on screen when this starts (the kernel image shows it
+# on the same pixels), so it only keeps breathing. Under it a meter with cut
+# corners slides in: violet fill with a bright tip, quarter ticks, and a
+# caption line with a three digit counter. Shutting down and restarting use
+# the same picture with the meter draining instead.
+#
+# All text is drawn ahead of time as PNG files (JetBrains Mono), because the
+# early boot has no fonts worth showing.
 
 Window.SetBackgroundTopColor(0.051, 0.047, 0.063);      # #0d0c10
 Window.SetBackgroundBottomColor(0.051, 0.047, 0.063);
@@ -9,36 +15,141 @@ Window.SetBackgroundBottomColor(0.051, 0.047, 0.063);
 cx = Window.GetX() + Window.GetWidth() / 2;
 cy = Window.GetY() + Window.GetHeight() / 2;
 
+mode = Plymouth.GetMode();
+leaving = 0;
+label_file = "label-starting.png";
+if (mode == "shutdown") { leaving = 1; label_file = "label-poweroff.png"; }
+if (mode == "reboot")   { leaving = 1; label_file = "label-restart.png"; }
+
+# ---- The mark ----
 logo.image = Image("logo.png");
 logo.sprite = Sprite(logo.image);
 logo.sprite.SetPosition(cx - logo.image.GetWidth() / 2, cy - logo.image.GetHeight() - 24, 1);
+logo.sprite.SetOpacity(0.775);
+
+# ---- The meter: 320 wide, the fill sits 3 px inside the track ----
+meter.w = 320;
+meter.x = Math.Int(cx - meter.w / 2);
+meter.y = Math.Int(cy + 36);
 
 track.image = Image("track.png");
-track.x = cx - track.image.GetWidth() / 2;
-track.y = cy + 36;
 track.sprite = Sprite(track.image);
-track.sprite.SetPosition(track.x, track.y, 1);
 
 fill.image = Image("fill.png");
+fill.full = fill.image.GetWidth();
 fill.sprite = Sprite();
-fill.sprite.SetPosition(track.x + 4, track.y + 4, 2);
-fill.width = 0;
+fill.shown = -1;
 
-# The mark breathes between 55 % and 100 % (about 3 s per breath at 50 fps),
-# and the bar eases towards the real progress instead of jumping.
-target = 0;
-tick = 0;
-fun refresh_callback() {
-  tick++;
-  logo.sprite.SetOpacity(0.775 + 0.225 * Math.Sin(tick / 24));
-  want = target * fill.image.GetWidth();
-  fill.width += (want - fill.width) * 0.12;
-  if (fill.width >= 6) {
-    fill.sprite.SetImage(fill.image.Scale(Math.Int(fill.width), fill.image.GetHeight()));
-    fill.sprite.SetOpacity(1);
+head.sprite = Sprite(Image("head.png"));
+
+tick.image = Image("tick.png");
+for (i = 0; i < 3; i++) tick[i] = Sprite(tick.image);
+
+# ---- The caption: label, hairline ending in a small square, counter ----
+label.image = Image(label_file);
+label.sprite = Sprite(label.image);
+
+for (i = 0; i < 10; i++) digit_image[i] = Image("d" + i + ".png");
+digit.w = digit_image[0].GetWidth() + 1;
+for (i = 0; i < 3; i++) digit[i] = Sprite(digit_image[0]);
+counter.x = meter.x + meter.w - 3 * digit.w + 1;
+counter.shown = -1;
+
+hair.x = meter.x + label.image.GetWidth() + 10;
+hair.w = counter.x - 10 - 3 - hair.x;
+hair.sprite = Sprite(Image("hair.png").Scale(hair.w, 1));
+dot.sprite = Sprite(Image("dot.png"));
+
+# Everything under the mark is placed in one go, so it can slide in as a
+# group: `drop` is how many pixels it still sits below its place.
+fun place(drop, opacity) {
+  y = meter.y + drop;
+  track.sprite.SetPosition(meter.x, y, 1);
+  fill.sprite.SetPosition(meter.x + 3, y + 3, 2);
+  for (i = 0; i < 3; i++) {
+    tick[i].SetPosition(meter.x + Math.Int(meter.w * (i + 1) / 4), y + 16, 1);
+    tick[i].SetOpacity(opacity);
+  }
+  label.sprite.SetPosition(meter.x, y + 26, 1);
+  hair.sprite.SetPosition(hair.x, y + 33, 1);
+  dot.sprite.SetPosition(hair.x + hair.w, y + 32, 1);
+  for (i = 0; i < 3; i++) digit[i].SetPosition(counter.x + i * digit.w, y + 26, 1);
+  track.sprite.SetOpacity(opacity);
+  label.sprite.SetOpacity(opacity);
+  hair.sprite.SetOpacity(opacity);
+  dot.sprite.SetOpacity(opacity);
+  meter.drop = drop;
+  meter.opacity = opacity;
+}
+
+# The fill is cut from the full bar instead of stretched, so its cut corner
+# keeps its angle. The bright tip rides on its right end.
+fun show_fill(amount) {
+  w = Math.Int(amount * fill.full);
+  if (w < 0) w = 0;
+  if (w > fill.full) w = fill.full;
+  if (w != fill.shown) {
+    fill.shown = w;
+    if (w >= 2) fill.sprite.SetImage(fill.image.Crop(0, 0, w, fill.image.GetHeight()));
+  }
+  if (w >= 2) {
+    fill.sprite.SetOpacity(meter.opacity);
+    head.sprite.SetPosition(meter.x + 3 + w - 2, meter.y + meter.drop + 3, 3);
+    if (w < fill.full - 3) head.sprite.SetOpacity(meter.opacity);
+    else head.sprite.SetOpacity(0);
   } else {
     fill.sprite.SetOpacity(0);
+    head.sprite.SetOpacity(0);
   }
+}
+
+# Leading zeros stay dim, like an odometer.
+fun show_counter(amount) {
+  n = Math.Int(amount * 100 + 0.5);
+  if (n < 0) n = 0;
+  if (n > 100) n = 100;
+  if (n != counter.shown) {
+    counter.shown = n;
+    digit[0].SetImage(digit_image[Math.Int(n / 100)]);
+    digit[1].SetImage(digit_image[Math.Int(n / 10) % 10]);
+    digit[2].SetImage(digit_image[n % 10]);
+  }
+  dim = 0.3 * meter.opacity;
+  if (n >= 100) digit[0].SetOpacity(meter.opacity); else digit[0].SetOpacity(dim);
+  if (n >= 10)  digit[1].SetOpacity(meter.opacity); else digit[1].SetOpacity(dim);
+  digit[2].SetOpacity(meter.opacity);
+}
+
+# 50 frames a second. The meter group fades in and rises 10 px over the
+# first half second, the mark breathes between 55 % and 100 % (about 3 s per
+# breath), and the fill eases towards the real progress instead of jumping.
+tick_count = 0;
+appear = 0;
+target = 0;
+amount = 0;
+if (leaving) { amount = 1; }
+finished = 0;
+
+fun refresh_callback() {
+  tick_count++;
+  if (finished) return;
+  logo.sprite.SetOpacity(0.775 + 0.225 * Math.Sin(tick_count / 24));
+
+  if (appear < 1) {
+    appear += (1 - appear) * 0.14 + 0.004;
+    if (appear > 1) appear = 1;
+    place(Math.Int((1 - appear) * 10), appear);
+  }
+
+  if (leaving) {
+    # No real progress on the way down: drain over about two seconds.
+    if (tick_count > 15) amount -= amount * 0.025 + 0.002;
+    if (amount < 0) amount = 0;
+  } else {
+    amount += (target - amount) * 0.10;
+  }
+  show_fill(amount);
+  show_counter(amount);
 }
 Plymouth.SetRefreshFunction(refresh_callback);
 
@@ -48,11 +159,12 @@ fun progress_callback(duration, progress) {
 }
 Plymouth.SetBootProgressFunction(progress_callback);
 
+# ---- Messages and the disk password (if there ever is one) ----
 line.sprite = Sprite();
 fun show_line(text, r, g, b) {
   img = Image.Text(text, r, g, b);
   line.sprite.SetImage(img);
-  line.sprite.SetPosition(cx - img.GetWidth() / 2, track.y + 40, 3);
+  line.sprite.SetPosition(cx - img.GetWidth() / 2, meter.y + 64, 3);
   line.sprite.SetOpacity(1);
 }
 
@@ -74,9 +186,15 @@ fun message_callback(text) {
 }
 Plymouth.SetMessageFunction(message_callback);
 
+# The last picture is the mark alone at full strength: the login screen
+# opens with exactly that and takes over from there.
 fun quit_callback() {
-  target = 1;
-  fill.sprite.SetImage(fill.image);
-  fill.sprite.SetOpacity(1);
+  finished = 1;
+  place(0, 0);
+  fill.sprite.SetOpacity(0);
+  head.sprite.SetOpacity(0);
+  for (i = 0; i < 3; i++) digit[i].SetOpacity(0);
+  line.sprite.SetOpacity(0);
+  logo.sprite.SetOpacity(1);
 }
 Plymouth.SetQuitFunction(quit_callback);
