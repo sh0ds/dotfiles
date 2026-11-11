@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# cleanup: frees disk space on the Arch desktop without touching anything
+# you made. It shows what it found first and asks before it removes it.
+#
+#   cleanup          show the plan, ask, then clean
+#   cleanup --dry    only show the plan
+#   cleanup --yes    clean without asking
+#
+# What it removes:
+#   - orphaned packages (installed as a dependency, needed by nothing now)
+#   - old package versions in pacman's cache (keeps the last 2 of each,
+#     and none of packages you uninstalled)
+#   - yay's build leftovers (src/, pkg/ and built packages; the PKGBUILD
+#     checkouts stay, so -git packages don't start from zero)
+#   - system log entries older than 2 weeks and crash dumps older than a week
+#   - thumbnails and trash older than 30 days, pip's download cache
+#   - unused Flatpak runtimes, if Flatpak is installed
+# What it never touches: Downloads, your code, games, saves, Proton
+# prefixes, shader caches, clipboard history, browser profiles and
+# snapshots (snapper cleans those up by itself). Sizes of the big ones are
+# listed at the end so you can decide yourself.
+set -uo pipefail
+
+mode=ask
+case ${1:-} in
+  --dry) mode=dry ;;
+  --yes) mode=yes ;;
+  "") ;;
+  *) sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac
+
+cache=${XDG_CACHE_HOME:-$HOME/.cache}
+data=${XDG_DATA_HOME:-$HOME/.local/share}
+trash=$data/Trash
+days=30
+have() { command -v "$1" >/dev/null 2>&1; }
+size() { du -shc -- "$@" 2>/dev/null | tail -n 1 | cut -f1; }
+say() { printf '\n\033[1;35m%s\033[0m\n' "$1"; }
+row() { printf '  %-34s %s\n' "$1" "$2"; }
+
+# ---- what there is to clean ----
+orphans=()
+if have pacman; then mapfile -t orphans < <(pacman -Qdtq 2>/dev/null); fi
+
+yay_left=()
+if [ -d "$cache/yay" ]; then
+  mapfile -t yay_left < <(find "$cache/yay" -mindepth 2 -maxdepth 2 \
+    \( -type d \( -name src -o -name pkg \) -o -type f -name '*.pkg.tar*' \) 2>/dev/null)
+fi
+
+thumbs=()
+if [ -d "$cache/thumbnails" ]; then
+  mapfile -t thumbs < <(find "$cache/thumbnails" -type f -mtime +"$days" 2>/dev/null)
+fi
+
+# A trashed file has a note in Trash/info written when it was deleted.
+trashed=()
+if [ -d "$trash/info" ]; then
+  mapfile -t trashed < <(find "$trash/info" -type f -name '*.trashinfo' -mtime +"$days" 2>/dev/null)
+fi
+
+dumps=()
+if [ -d /var/lib/systemd/coredump ]; then
+  mapfile -t dumps < <(find /var/lib/systemd/coredump -type f -mtime +7 2>/dev/null)
+fi
+
+say "Plan"
+if (( ${#orphans[@]} )); then
+  row "orphaned packages" "${#orphans[@]}: ${orphans[*]}"
+else
+  row "orphaned packages" "none"
+fi
+if have paccache; then
+  row "old package versions" "$(paccache -dk2 2>/dev/null | tail -n 1)"
+  row "uninstalled packages in cache" "$(paccache -duk0 2>/dev/null | tail -n 1)"
+else
+  row "package cache" "skipped (install pacman-contrib for paccache)"
+fi
+if (( ${#yay_left[@]} )); then row "yay build leftovers" "$(size "${yay_left[@]}")"; else row "yay build leftovers" "none"; fi
+if have journalctl; then row "system log" "$(journalctl --disk-usage 2>/dev/null | grep -oE '[0-9.]+[KMGT]' | tail -n 1) now, keeps 2 weeks"; fi
+row "crash dumps older than a week" "${#dumps[@]}"
+row "thumbnails older than $days days" "${#thumbs[@]}"
+row "trash older than $days days" "${#trashed[@]}"
+if [ -d "$cache/pip" ]; then row "pip download cache" "$(size "$cache/pip")"; fi
+if have flatpak; then row "unused Flatpak runtimes" "checked when cleaning"; fi
+
+if [ "$mode" = dry ]; then
+  say "Nothing removed (--dry)."
+elif [ "$mode" = ask ]; then
+  printf '\nClean this up? [y/N] '
+  read -r answer
+  [[ $answer == [yY]* ]] || { echo "Nothing removed."; exit 0; }
+  mode=yes
+fi
+
+if [ "$mode" = yes ]; then
+  before=$(df --output=avail -B1 / 2>/dev/null | tail -n 1)
+  say "Cleaning"
+  if (( ${#orphans[@]} )); then sudo pacman -Rns --noconfirm -- "${orphans[@]}"; fi
+  if have paccache; then sudo paccache -rk2; sudo paccache -ruk0; fi
+  if (( ${#yay_left[@]} )); then rm -rf -- "${yay_left[@]}"; echo "yay build leftovers removed"; fi
+  if have journalctl; then sudo journalctl --vacuum-time=2weeks 2>&1 | tail -n 1; fi
+  if (( ${#dumps[@]} )); then sudo rm -f -- "${dumps[@]}"; echo "${#dumps[@]} crash dumps removed"; fi
+  if (( ${#thumbs[@]} )); then rm -f -- "${thumbs[@]}"; echo "${#thumbs[@]} thumbnails removed"; fi
+  for info in ${trashed[@]+"${trashed[@]}"}; do
+    name=$(basename -- "$info" .trashinfo)
+    rm -rf -- "${trash:?}/files/$name" "$info"
+  done
+  if (( ${#trashed[@]} )); then echo "${#trashed[@]} items removed from the trash"; fi
+  if [ -d "$cache/pip" ]; then rm -rf -- "${cache:?}/pip"; echo "pip download cache removed"; fi
+  if have flatpak; then flatpak uninstall --unused -y 2>&1 | tail -n 1; fi
+  after=$(df --output=avail -B1 / 2>/dev/null | tail -n 1)
+  if [[ $before =~ ^[0-9]+$ && $after =~ ^[0-9]+$ ]]; then
+    say "Freed $(numfmt --to=iec $(( after > before ? after - before : 0 ))) on /"
+  fi
+fi
+
+# ---- not touched, yours to decide ----
+say "Not touched"
+for dir in "$HOME/Downloads" "$HOME/.dotfiles-backup" "$trash" "$cache"; do
+  [ -d "$dir" ] && row "${dir/#$HOME/\~}" "$(size "$dir")"
+done
+if have pacdiff; then
+  n=$(pacdiff -o 2>/dev/null | grep -c .)
+  (( n )) && row "config files to merge (pacdiff)" "$n"
+fi
+if have systemctl; then
+  n=$(systemctl --failed --no-legend 2>/dev/null | grep -c .)
+  (( n )) && row "failed services (systemctl --failed)" "$n"
+fi
+exit 0

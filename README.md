@@ -78,6 +78,7 @@ Run `bash install-dotfiles.sh` again whenever files get added or removed, it cle
 afterhours restart       # restart the shell
 afterhours debug         # run it in the foreground and see errors
 afterhours quiet true    # no toasts, the inbox still collects
+cleanup                  # frees disk space: shows what it found, asks, then cleans
 bash check-desktop.sh    # checks the installed session
 python3 -m unittest discover -s tests
 ```
