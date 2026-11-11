@@ -20,14 +20,14 @@ Paid downloads from lexaloffle.com, unzipped into `~/.local/opt` (see the README
 
 Write the code in Zed and draw, map and compose in the consoles. PICO-8's code editor fits on a 128x128 screen and has no search across files, no go-to-definition and no git. Its sprite, map, sfx and music editors are the best tools for those jobs, so they stay.
 
-**PICO-8:** open `~/code/pico8` in Zed (the whole folder, so the settings below apply). Each game is a folder with a `.p8` that holds the art and sound, and `.lua` files for the code. In PICO-8's code editor the cart only has its includes:
+**PICO-8:** open `~/code/pico8` in Zed, or just one cart's folder (the first `F5` in it links the settings below into that folder; reopen the folder once after that). Each game is a folder with a `.p8` that holds the art and sound, and `.lua` files for the code. In PICO-8's code editor the cart only has its includes:
 
 ```
 #include src/main.lua
 #include src/player.lua
 ```
 
-PICO-8 reads those files every time the cart runs, so the loop is: edit in Zed, save, `F5`. `cart-run` finds the `.p8` that includes the file you're in, jumps to PICO-8 and presses `ctrl+r` there. If PICO-8 isn't open, it starts it with that cart. Sprites and sfx you haven't saved yet stay, since only the code is reloaded. When PICO-8 has another cart loaded, `load` the right one once.
+PICO-8 reads those files every time the cart runs, so the loop is: edit in Zed, `F5` (it saves first). `cart-run` finds the `.p8` that includes the file you're in, jumps to PICO-8 and presses `ctrl+r` there. If PICO-8 isn't open, it starts it with that cart. Sprites and sfx you haven't saved yet stay, since only the code is reloaded. When PICO-8 has another cart loaded, `load` the right one once.
 
 **Picotron:** code lives in `~/code/picotron`, and Picotron sees that folder as `/code` (the `picotron` wrapper links it into Picotron's drive the second time you start it). Make the cart in Picotron as usual and replace its `main.lua` with the `pt` snippet:
 

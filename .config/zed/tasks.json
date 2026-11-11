@@ -6,6 +6,9 @@
     "label": "cart: run",
     "command": "cart-run",
     "args": ["$ZED_FILE"],
+    // Saves first: PICO-8 reads the cart from disk, so an unsaved edit
+    // would rerun the old code and F5 would look dead.
+    "save": "all",
     "reveal": "never",
     "hide": "on_success",
     "allow_concurrent_runs": false
@@ -15,6 +18,7 @@
     "label": "cart: tokens",
     "command": "p8tokens",
     "args": ["$ZED_FILE"],
+    "save": "all",
     "reveal": "no_focus",
     "hide": "never"
   }

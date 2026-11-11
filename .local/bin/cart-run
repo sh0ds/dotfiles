@@ -58,10 +58,26 @@ case $dir/ in
     exit 0 ;;
 esac
 
+# The Lua language server only reads .luarc.json from the top folder of the
+# project you opened in Zed. The settings live in ~/code/pico8 (the pico8
+# wrapper writes them), so every folder between there and the cart gets a link
+# to them: opening just the cart's folder knows PICO-8 too.
+link_luarc() {
+  local root=$HOME/code/pico8 d
+  d=$(dirname -- "$1")
+  [ -e "$root/.luarc.json" ] || return 0
+  while [[ $d = "$root"/* ]]; do
+    [ -e "$d/.luarc.json" ] || [ -L "$d/.luarc.json" ] ||
+      ln -s "$(realpath --relative-to="$d" "$root/.luarc.json")" "$d/.luarc.json"
+    d=$(dirname -- "$d")
+  done
+}
+
 if ! cart=$(find_cart); then
   say "No PICO-8 cart for this file" PICO-8 "Put a .p8 next to it that has #include ${file##*/}."
   exit 1
 fi
+link_luarc "$cart"
 if addr=$(window '(?i)^(pico-?8.*)$') && [ -n "$addr" ]; then
   rerun "$addr"
 else

@@ -95,6 +95,17 @@ class Carts(unittest.TestCase):
         self.assertIn('wtype -M ctrl r -m ctrl', out)
         self.assertNotIn('pico8 -run', out)
 
+    def test_f5_links_the_language_server_settings_into_the_cart_folder(self):
+        nested = self.root / 'code/pico8/jams/tiny'
+        nested.mkdir(parents=True)
+        (nested / 'tiny.p8').write_text(CART)
+        (self.root / 'code/pico8/.luarc.json').write_text('{}')
+        self.cart_run(str(nested / 'tiny.p8'))
+        self.cart_run(str(nested / 'tiny.p8'))
+        self.assertEqual(os.readlink(nested / '.luarc.json'), '../../.luarc.json')
+        self.assertEqual(os.readlink(nested.parent / '.luarc.json'), '../.luarc.json')
+        self.assertFalse((self.root / 'code/pico8/.luarc.json').is_symlink())
+
     def test_f5_in_picotron_code_reruns_picotron(self):
         code = self.root / 'code/picotron/tiny'
         code.mkdir(parents=True)
