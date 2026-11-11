@@ -19,7 +19,11 @@ class Cleanup(unittest.TestCase):
         fake.mkdir()
         self.log = self.home / 'calls'
         stubs = {
-            'pacman': '[ "$1" = -Qdtq ] && printf "libfoo\\nlibbar\\n"',
+            'pacman': '[ "$1" = -Qdtq ] && printf "libfoo\\nlibbar\\n"\n'
+                      'if [ "$1" = -Qq ]; then case $2 in waybar|neovim|tmux) exit 0 ;; *) exit 1 ;; esac; fi\n'
+                      # tmux is still needed by something else
+                      'case "$*" in "-Rns --noconfirm -- tmux") exit 1 ;; esac',
+            'gio': '[ "$1" = trash ] && mv -- "$3" "$HOME/.local/share/Trash/files/"',
             'paccache': 'echo "==> finished: 3 packages removed (disk space saved: 120 MiB)"',
             'journalctl': 'echo "Archived and active journals take up 1.2G in the file system."',
             'sudo': '"$@"',
@@ -54,6 +58,12 @@ class Cleanup(unittest.TestCase):
         self.new_trash = make('.local/share/Trash/files/new.txt')
         self.new_info = make('.local/share/Trash/info/new.txt.trashinfo')
         self.download = make('Downloads/keep.zip', old=True)
+        self.nvim = make('.config/nvim/init.lua')
+        self.waybar = make('.config/waybar/config')
+        self.kitty = make('.config/kitty/kitty.conf')
+        self.old_backup = make('.dotfiles-backup/20261001-120000.aaaaaa/.bashrc')
+        os.utime(self.old_backup.parent, (OLD, OLD))
+        self.new_backup = make('.dotfiles-backup/20261110-120000.bbbbbb/.bashrc')
 
     def tearDown(self):
         self.temp.cleanup()
@@ -65,7 +75,8 @@ class Cleanup(unittest.TestCase):
         return result.stdout, calls
 
     def assert_untouched(self):
-        for path in (self.old_thumb, self.yay_src, self.yay_pkg, self.pip, self.old_trash, self.old_info):
+        for path in (self.old_thumb, self.yay_src, self.yay_pkg, self.pip, self.old_trash, self.old_info,
+                     self.nvim, self.waybar, self.old_backup):
             self.assertTrue(path.exists(), path)
 
     def test_dry_run_shows_the_plan_and_removes_nothing(self):
@@ -74,18 +85,26 @@ class Cleanup(unittest.TestCase):
         self.assertIn('120 MiB', out)
         self.assertIn('1.2G now', out)
         self.assertIn('Nothing removed', out)
+        self.assertIn('waybar neovim tmux', out)
+        self.assertIn('~/.config/nvim', out)
+        self.assertIn('~/.dotfiles-backup/20261001-120000.aaaaaa', out)
+        self.assertNotIn('20261110', out)
         self.assert_untouched()
-        self.assertFalse([c for c in calls if c.startswith('sudo') or '-Rns' in c or ' -r' in c])
+        self.assertFalse([c for c in calls if c.startswith('sudo') or '-Rns' in c or ' -r' in c or c.startswith('gio')])
 
     def test_no_answer_means_no(self):
-        out, calls = self.run_script(stdin='\n')
-        self.assertIn('Nothing removed', out)
+        out, calls = self.run_script(stdin='\n\n')
+        self.assertIn('Left as it is', out)
+        self.assertIn('Left as they are', out)
         self.assert_untouched()
-        self.assertFalse([c for c in calls if c.startswith('sudo')])
+        self.assertFalse([c for c in calls if c.startswith('sudo') or c.startswith('gio')])
 
     def test_yes_removes_leftovers_and_keeps_the_rest(self):
-        out, calls = self.run_script(stdin='y\n')
+        out, calls = self.run_script(stdin='y\nn\n')
         self.assertIn('pacman -Rns --noconfirm -- libfoo libbar', calls)
+        self.assertNotIn('pacman -Rns --noconfirm -- waybar', calls)
+        for kept in (self.nvim, self.waybar, self.old_backup):
+            self.assertTrue(kept.exists(), kept)
         self.assertIn('paccache -rk2', calls)
         self.assertIn('paccache -ruk0', calls)
         self.assertIn('journalctl --vacuum-time=2weeks', calls)
@@ -95,10 +114,28 @@ class Cleanup(unittest.TestCase):
             self.assertTrue(kept.exists(), kept)
         self.assertIn('~/Downloads', out)
 
+    def test_replaced_apps_are_their_own_question(self):
+        out, calls = self.run_script(stdin='n\ny\n')
+        self.assertNotIn('paccache -rk2', calls)
+        self.assertTrue(self.old_thumb.exists())
+        self.assertIn('pacman -Rns --noconfirm -- waybar', calls)
+        self.assertIn('pacman -Rns --noconfirm -- neovim', calls)
+        self.assertIn('waybar uninstalled', out)
+        self.assertIn('tmux kept', out)
+        trash = self.home / '.local/share/Trash/files'
+        for name in ('nvim', 'waybar', '20261001-120000.aaaaaa'):
+            self.assertTrue((trash / name).exists(), name)
+        self.assertFalse(self.nvim.exists())
+        self.assertFalse(self.old_backup.exists())
+        for kept in (self.kitty, self.new_backup, self.download):
+            self.assertTrue(kept.exists(), kept)
+
     def test_yes_flag_skips_the_question(self):
         _, calls = self.run_script('--yes')
         self.assertIn('paccache -rk2', calls)
         self.assertFalse(self.old_thumb.exists())
+        self.assertIn('pacman -Rns --noconfirm -- waybar', calls)
+        self.assertFalse(self.nvim.exists())
 
     def test_unknown_argument_prints_usage(self):
         result = subprocess.run(['bash', str(SCRIPT), '--all'], env=self.env, capture_output=True, text=True)

@@ -4,7 +4,7 @@
 #
 #   cleanup          show the plan, ask, then clean
 #   cleanup --dry    only show the plan
-#   cleanup --yes    clean without asking
+#   cleanup --yes    clean without asking (the replaced apps too)
 #
 # What it removes:
 #   - orphaned packages (installed as a dependency, needed by nothing now)
@@ -15,6 +15,12 @@
 #   - system log entries older than 2 weeks and crash dumps older than a week
 #   - thumbnails and trash older than 30 days, pip's download cache
 #   - unused Flatpak runtimes, if Flatpak is installed
+# Asked separately, because it's more than leftovers: the apps Afterhours
+# replaced, if they're still installed (Waybar, SwayNC, wlogout, SwayOSD,
+# the wallpaper daemons, mako, dunst, Neovim, Helix, aerc, tmux), their
+# config folders and dotfiles backups older than 30 days. The packages are
+# uninstalled; the folders go to the trash, so they can be restored for 30
+# days.
 # What it never touches: Downloads, your code, games, saves, Proton
 # prefixes, shader caches, clipboard history, browser profiles and
 # snapshots (snapper cleans those up by itself). Sizes of the big ones are
@@ -64,6 +70,24 @@ if [ -d /var/lib/systemd/coredump ]; then
   mapfile -t dumps < <(find /var/lib/systemd/coredump -type f -mtime +7 2>/dev/null)
 fi
 
+# Replaced by the Afterhours shell, Zed and kitty. Only what's installed.
+retired_names=(waybar swaync wlogout swayosd awww swww hyprpaper mako dunst neovim helix aerc tmux)
+retired=()
+if have pacman; then
+  for name in "${retired_names[@]}"; do
+    pacman -Qq "$name" >/dev/null 2>&1 && retired+=("$name")
+  done
+fi
+old_dirs=()
+for dir in "$HOME"/.config/{waybar,swaync,wlogout,swayosd,awww,swww,hyprpaper,mako,dunst,nvim,helix,aerc,tmux} \
+  "$data/nvim" "$HOME/.local/state/nvim" "$HOME/.tmux.conf"; do
+  [ -e "$dir" ] || [ -L "$dir" ] || continue
+  old_dirs+=("$dir")
+done
+if [ -d "$HOME/.dotfiles-backup" ]; then
+  while IFS= read -r dir; do old_dirs+=("$dir"); done < <(find "$HOME/.dotfiles-backup" -mindepth 1 -maxdepth 1 -mtime +"$days" 2>/dev/null | sort)
+fi
+
 say "Plan"
 if (( ${#orphans[@]} )); then
   row "orphaned packages" "${#orphans[@]}: ${orphans[*]}"
@@ -84,13 +108,28 @@ row "trash older than $days days" "${#trashed[@]}"
 if [ -d "$cache/pip" ]; then row "pip download cache" "$(size "$cache/pip")"; fi
 if have flatpak; then row "unused Flatpak runtimes" "checked when cleaning"; fi
 
+
+old=no
+if (( ${#retired[@]} + ${#old_dirs[@]} )); then
+  say "Replaced, not needed by this setup"
+  if (( ${#retired[@]} )); then row "apps to uninstall" "${retired[*]}"; fi
+  for dir in ${old_dirs[@]+"${old_dirs[@]}"}; do row "to the trash" "${dir/#$HOME/\~}  $(size "$dir")"; done
+  old=found
+fi
+
 if [ "$mode" = dry ]; then
   say "Nothing removed (--dry)."
 elif [ "$mode" = ask ]; then
-  printf '\nClean this up? [y/N] '
+  printf '\nClean up the plan (caches, logs, leftovers)? [y/N] '
   read -r answer
-  [[ $answer == [yY]* ]] || { echo "Nothing removed."; exit 0; }
-  mode=yes
+  if [[ $answer == [yY]* ]]; then mode=yes; else mode=no; echo "Left as it is."; fi
+  if [ "$old" = found ]; then
+    printf 'Remove the replaced apps and old folders too? [y/N] '
+    read -r answer
+    if [[ $answer == [yY]* ]]; then old=yes; else echo "Left as they are."; fi
+  fi
+elif [ "$old" = found ]; then
+  old=yes
 fi
 
 if [ "$mode" = yes ]; then
@@ -113,6 +152,26 @@ if [ "$mode" = yes ]; then
   if [[ $before =~ ^[0-9]+$ && $after =~ ^[0-9]+$ ]]; then
     say "Freed $(numfmt --to=iec $(( after > before ? after - before : 0 ))) on /"
   fi
+fi
+
+if [ "$old" = yes ]; then
+  say "Removing what was replaced"
+  # One at a time: if something else still needs one, only that one stays.
+  for name in ${retired[@]+"${retired[@]}"}; do
+    if sudo pacman -Rns --noconfirm -- "$name" >/dev/null 2>&1; then echo "$name uninstalled"
+    else echo "$name kept: another package still needs it (pacman -Rns $name says which)"; fi
+  done
+  if (( ${#old_dirs[@]} )); then
+    if have gio; then
+      for dir in "${old_dirs[@]}"; do
+        if gio trash -- "$dir" 2>/dev/null; then echo "${dir/#$HOME/\~} moved to the trash"
+        else echo "${dir/#$HOME/\~} kept: couldn't move it to the trash"; fi
+      done
+    else
+      echo "folders kept: gio (glib2) is needed to move them to the trash"
+    fi
+  fi
+  rm -rf -- "${cache:?}/nvim"
 fi
 
 # ---- not touched, yours to decide ----
