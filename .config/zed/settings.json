@@ -51,6 +51,9 @@
     "toml": true,
     "make": true
   },
+  // A cart is Lua between a header and the art data. Zed colours it as Lua;
+  // the header and the data lines are the only parts it can't read.
+  "file_types": { "Lua": ["p8"] },
   "languages": {
     "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] },
     // The Lua formatter doesn't know PICO-8's += and != and would mangle

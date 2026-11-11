@@ -10,7 +10,6 @@
     // would rerun the old code and F5 would look dead.
     "save": "all",
     "reveal": "never",
-    "hide": "on_success",
     "allow_concurrent_runs": false
   },
   {

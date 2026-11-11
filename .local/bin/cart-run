@@ -12,6 +12,12 @@ file=$(realpath -m -- "${1:-$PWD}")
 
 say() { notify-send -a "${2:-PICO-8}" "$1" "${3:-}"; echo "$1${3:+: $3}" >&2; }
 
+# Start a console on its own, cut loose from the terminal this runs in. Zed
+# runs F5 in a hidden terminal and closes it when the script is done, which
+# hangs up everything still attached to it: without this PICO-8 died the
+# moment it started.
+launch() { setsid -f "$@" </dev/null >/dev/null 2>&1; }
+
 # The open window of a console, or nothing.
 window() {
   hyprctl clients -j | jq -r --arg re "$1" \
@@ -52,7 +58,7 @@ case $dir/ in
     if addr=$(window '(?i)^picotron$') && [ -n "$addr" ]; then
       rerun "$addr"
     else
-      picotron
+      launch picotron
       say "Picotron is starting" Picotron "Load your cart once (load /code/...), then F5 again."
     fi
     exit 0 ;;
@@ -81,5 +87,5 @@ link_luarc "$cart"
 if addr=$(window '(?i)^(pico-?8.*)$') && [ -n "$addr" ]; then
   rerun "$addr"
 else
-  pico8 -run "$cart"
+  launch pico8 -run "$cart"
 fi

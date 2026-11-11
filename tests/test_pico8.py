@@ -62,6 +62,7 @@ class Carts(unittest.TestCase):
         self.stub('hyprctl', 'case $1 in clients) echo "${CLIENTS:-[]}" ;; '
                              f'*) echo "hyprctl $*" >>"{self.log}" ;; esac')
         self.stub('sleep', ':')
+        self.stub('setsid', '[ "$1" = -f ] && shift; "$@"')
         self.env = dict(os.environ, HOME=str(self.root),
                         PATH=f"{self.bin}:{os.environ['PATH']}")
 
