@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # install-system.sh: the parts of the Afterhours look that live outside $HOME and
-# need root: the SDDM login screen and the Plymouth boot splash.
+# need root: the SDDM login screen, the Plymouth boot splash and the picture
+# the kernel image shows before it.
 # Usage: bash ~/code/dotfiles/system/install-system.sh   (asks for sudo)
 # Run it again after changing anything under system/. Old configs it replaces
 # are moved to /etc/sddm.conf.d/old/, never deleted.
@@ -62,6 +63,43 @@ sudo install -d -o sddm -g sddm /var/lib/sddm/.config
 sudo install -m 644 -o sddm -g sddm "$ini" /var/lib/sddm/.config/weston.ini
 rm "$ini"
 
+# ---- Boot: the Afterhours mark from the first second, no menu flash ----
+# For systemd-boot with unified kernel images (mkinitcpio presets that have
+# --splash). The picture inside the kernel image shows until the splash
+# takes over; Arch's default is its own logo. Ours is the splash's mark on
+# the same pixels, so the two blend into one.
+# The boot menu is text only and can't be themed, so it stays hidden. To
+# get it (for the LTS kernel): hold Space while the PC starts, or run
+#   systemctl reboot --boot-loader-menu=10
+# Undo: the files this changes are kept next to them as *.before-afterhours.
+bmp=/usr/local/share/afterhours/splash-afterhours.bmp
+arch_bmp=/usr/share/systemd/bootctl/splash-arch.bmp
+rebuild=0
+if grep -qs -- "--splash" /etc/mkinitcpio.d/*.preset; then
+  sudo install -D -m 644 "$here/boot/splash-afterhours.bmp" "$bmp"
+  for preset in /etc/mkinitcpio.d/*.preset; do
+    grep -q -- "--splash $arch_bmp" "$preset" || continue
+    [ -e "$preset.before-afterhours" ] || sudo cp "$preset" "$preset.before-afterhours"
+    sudo sed -i "s|--splash $arch_bmp|--splash $bmp|" "$preset"
+    echo "Boot: $(basename "$preset" .preset) shows the Afterhours mark"
+    rebuild=1
+  done
+else
+  echo "Boot: no kernel image with a built-in picture here, skipped"
+fi
+esp=$(sudo bootctl --print-esp-path 2>/dev/null || true)
+loader=$esp/loader/loader.conf
+if [ -n "$esp" ] && sudo test -f "$loader"; then
+  if ! sudo grep -qx 'timeout 0' "$loader"; then
+    sudo test -e "$loader.before-afterhours" || sudo cp "$loader" "$loader.before-afterhours"
+    sudo sed -i -E '/^[[:space:]]*timeout[[:space:]]/d' "$loader"
+    echo 'timeout 0' | sudo tee -a "$loader" >/dev/null
+    echo "Boot: the menu is hidden (hold Space at power-on to see it)"
+  fi
+else
+  echo "Boot: systemd-boot isn't the boot loader here, menu left alone"
+fi
+
 # ---- Plymouth: the Afterhours boot splash ----
 if command -v plymouth-set-default-theme >/dev/null; then
   p=/usr/share/plymouth/themes/afterhours
@@ -72,6 +110,8 @@ if command -v plymouth-set-default-theme >/dev/null; then
   echo "Plymouth: afterhours splash installed"
 else
   echo "Plymouth isn't installed, skipped the boot splash"
+  # Nothing rebuilt the kernel images yet, so the new picture isn't in them.
+  if [ "$rebuild" = 1 ]; then sudo mkinitcpio -P; fi
 fi
 
 # ---- Icons: Papirus with violet folders (papirus-folders recolours the
