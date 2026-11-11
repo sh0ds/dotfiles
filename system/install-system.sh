@@ -96,6 +96,12 @@ if [ -n "$esp" ] && sudo test -f "$loader"; then
     echo 'timeout 0' | sudo tee -a "$loader" >/dev/null
     echo "Boot: the menu is hidden (hold Space at power-on to see it)"
   fi
+  # A timeout once set from inside the menu (keys t, + and -) is kept by the
+  # firmware and wins over loader.conf, so hide the menu there as well.
+  var=/sys/firmware/efi/efivars/LoaderConfigTimeout-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f
+  if [ -e "$var" ] && [ "$(tail -c +5 "$var" | tr -d '\0')" != 0 ]; then
+    sudo bootctl set-timeout 0 >/dev/null && echo "Boot: cleared the menu timeout stored in the firmware"
+  fi
 else
   echo "Boot: systemd-boot isn't the boot loader here, menu left alone"
 fi
