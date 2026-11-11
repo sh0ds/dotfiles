@@ -47,7 +47,7 @@ Hyprland wins on fit, not because every other desktop is worse. The cost is comp
 
 ## Dependencies and migration
 
-The physical machine is Arch with NVIDIA and DP-4 as its current main monitor. The cloud validation machine is Debian with software-rendered, headless Wayland. These are different test targets.
+The physical machine is Arch with NVIDIA and two screens named by their serial in `hyprland.lua`. The cloud validation machine is Debian with software-rendered, headless Wayland. These are different test targets.
 
 On Arch, update normally and install the shell prerequisites using the signed package repositories:
 
@@ -69,7 +69,7 @@ Keep the existing audio, VM, music and app dependencies from [the legacy referen
 Before installing:
 
 1. Inspect `git status --short` and preserve local edits. Keep a second TTY available for recovery.
-2. Review DP-4, monitor position, German keyboard layout and NVIDIA environment variables in `hyprland.lua`. Keep the GPU settings for this machine; remove them if migrating to a different GPU.
+2. Review the `screens` table (which screen is main), monitor position, German keyboard layout and NVIDIA environment variables in `hyprland.lua`. Keep the GPU settings for this machine; remove them if migrating to a different GPU.
 3. Check the isolated install with `bash install-dotfiles.sh --target /tmp/afterhours-preview`.
 4. On the physical desktop, run `bash install-dotfiles.sh`. Do not run the system installer just to change the theme.
 5. Log out and select Hyprland. Waybar, SwayNC and Wlogout were removed; if an old session still runs them, they must exit. Do not run another notification daemon alongside Afterhours.
@@ -127,7 +127,7 @@ Game mode turns itself on while any monitor shows a fullscreen game (a `steam_ap
 
 The inbox is session-only, capped at 50 notifications; it is not written to disk. Quiet mode hides toasts, not inbox entries. Critical toasts stay visible until dismissed. Transient notifications expire; ordinary ones leave the toast after a short interval and remain in the inbox. The shell renders notification content as plain text, never HTML. Sharing suppression uses Hyprland `screencastv2` events; a shell started in the middle of an existing share cannot infer an earlier start event. Enable quiet mode before presenting in that case.
 
-The layer-shell names are `afterhours-rail`, `afterhours-overlay`, `afterhours-toast`, `afterhours-osd`, `afterhours-frame`, `afterhours-wallpaper` and `afterhours-overview`. Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a square track: the active one is a violet block, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; DP-4 always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
+The layer-shell names are `afterhours-rail`, `afterhours-overlay`, `afterhours-toast`, `afterhours-osd`, `afterhours-frame`, `afterhours-wallpaper`, `afterhours-overview` and `afterhours-arrive` (the first second after login). Screens are enumerated dynamically. Workspace focus uses the same Lua dispatcher syntax as the compositor config. A focused monitor is selected by name for keyboard-opened panels. Workspaces show as numbers in a square track: the active one is a violet block, numbers with windows are bright, empty ones dim. Narrow rails shorten the clock and hide optional media/tray content; the main screen (the one at 0x0) always shows workspaces 1–5, every rail also lists its own open workspaces, and the mouse wheel steps through them. All ten workspaces remain keyboard-accessible.
 
 Utilities such as clipboard search, docs and the Wi-Fi password prompt still use their existing Fuzzel dmenu helpers. Maths, emoji and the window switcher are launcher modes now. Old app and VM scripts remain maintained independently. There is no fake progress counter, permanent timer pressure, app-per-workspace cage or telemetry.
 

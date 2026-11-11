@@ -77,7 +77,7 @@ PanelWindow {
     readonly property var rows: {
         const out = [];
         for (const m of Hyprland.monitors.values) {
-            const ids = new Set(m.name === "DP-4" ? [1, 2, 3, 4, 5] : []);
+            const ids = new Set(m.x === 0 && m.y === 0 ? [1, 2, 3, 4, 5] : []);
             for (const w of Hyprland.workspaces.values) if (w.id > 0 && w.monitor === m) ids.add(w.id);
             out.push({ monitor: m, ids: [...ids].sort((a, b) => a - b) });
         }

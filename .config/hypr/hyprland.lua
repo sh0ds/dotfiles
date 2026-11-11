@@ -7,16 +7,30 @@
 ---- MONITORS ----
 ------------------
 
--- `hyprctl monitors` lists names, e.g. "DP-1".
--- DP-4 is the main screen: it sits at 0x0, gets workspaces 1-5 (the shell keeps
--- those five on it), the cursor at login, and is XWayland's primary output, so
--- games open there. It stands on the right of the desk, so any other screen
--- goes to its left (left of 0x0 is fine, Hyprland handles negative positions).
-local main_screen = "DP-4"
+-- The screens go by what they are (make, model, serial), not by plug names
+-- like DP-4: the kernel numbers the plugs in the order the graphics drivers
+-- load, so those names move. `hyprctl monitors` shows each screen's
+-- description. Both are the same AOC model, so the serial tells them apart.
+--   main: on the right of the desk. Sits at 0x0, gets workspaces 1-5 (the
+--         shell keeps those five on whichever screen is at 0x0), the cursor
+--         at login, and is XWayland's primary output, so games open there.
+--   side: to its left (left of 0x0 is fine, Hyprland handles negative
+--         positions). Any other screen you plug in lands left of that.
+-- system/install-system.sh reads the `main` line for the login screen.
+local screens = {
+	main = "desc:AOC 27G4HRE ZNUR7HA004264",
+	side = "desc:AOC 27G4HRE ZNUR7HA004263",
+}
 hl.monitor({
-	output = main_screen,
+	output = screens.main,
 	mode = "highrr",
 	position = "0x0",
+	scale = "auto",
+})
+hl.monitor({
+	output = screens.side,
+	mode = "highrr",
+	position = "-1920x0",
 	scale = "auto",
 })
 hl.monitor({
@@ -26,11 +40,17 @@ hl.monitor({
 	scale = "auto",
 })
 for i = 1, 5 do
-	hl.workspace_rule({ workspace = tostring(i), monitor = main_screen, default = i == 1 })
+	hl.workspace_rule({ workspace = tostring(i), monitor = screens.main, default = i == 1 })
 end
-hl.config({ cursor = { default_monitor = main_screen } })
+hl.config({ cursor = { default_monitor = screens.main } })
 hl.on("hyprland.start", function()
-	hl.exec_cmd("command -v xrandr >/dev/null && xrandr --output " .. main_screen .. " --primary")
+	-- xrandr only knows plug names, so look the main screen's up by its serial.
+	local serial = screens.main:match("(%S+)$")
+	hl.exec_cmd(
+		"command -v xrandr >/dev/null && name=$(hyprctl monitors -j | jq -r --arg s "
+			.. serial
+			.. " '.[] | select(.serial == $s).name') && [ -n \"$name\" ] && xrandr --output \"$name\" --primary"
+	)
 end)
 
 -----------------
@@ -48,7 +68,7 @@ local lock = "afterhours lock || pidof hyprlock || hyprlock"
 -------------------
 
 hl.on("hyprland.start", function()
-	hl.exec_cmd("afterhours start")
+	hl.exec_cmd("afterhours start --arrive")
 	hl.exec_cmd("hypridle")
 	hl.exec_cmd("systemctl --user start hyprpolkitagent")
 	hl.exec_cmd("wl-paste --watch cliphist store")
@@ -116,6 +136,9 @@ hl.config({
 	misc = {
 		force_default_wallpaper = 0,
 		disable_hyprland_logo = true,
+		-- The charcoal of the splash and the login, for the moment before
+		-- the shell has drawn the wallpaper.
+		background_color = "rgb(0d0c10)",
 	},
 })
 

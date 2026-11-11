@@ -59,10 +59,14 @@ ShellRoot {
         pendingAction = "";
     }
     function workspace(number) { Hyprland.dispatch("hl.dsp.focus({ workspace = " + number + " })"); }
-    // DP-4 always shows 1-5; every screen also lists its own open workspaces.
+    // The main screen is the one hyprland.lua puts at 0x0. Going by position
+    // instead of a plug name (DP-4 and friends) survives the kernel
+    // renumbering the plugs.
+    function isMain(screen) { return !!screen && screen.x === 0 && screen.y === 0; }
+    // The main screen always shows 1-5; every screen also lists its own open workspaces.
     function workspaceIds(screen) {
         const name = screen?.name ?? "";
-        const ids = new Set(name === "DP-4" ? [1, 2, 3, 4, 5] : []);
+        const ids = new Set(isMain(screen) ? [1, 2, 3, 4, 5] : []);
         for (const w of Hyprland.workspaces.values) if (w.id > 0 && w.monitor?.name === name) ids.add(w.id);
         return [...ids].sort((a, b) => a - b);
     }
@@ -549,6 +553,8 @@ ShellRoot {
     Osd { sink: root.sink; held: root.islandShown }
     Overview { id: overviewWindow }
     Lock { id: lockScreen }
+    // The first second after login (Arrive.qml); the start script sets the flag.
+    Variants { model: Quickshell.env("AFTERHOURS_ARRIVE") === "1" ? Quickshell.screens : []; Arrive {} }
     function lockNow() { panel = ""; overviewWindow.open = false; lockScreen.lock(); }
     // One keyboard-driven overlay on the chosen output. Escape and outside click dismiss it.
     PanelWindow {

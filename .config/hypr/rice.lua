@@ -182,7 +182,7 @@ hl.layer_rule({ name = "still-bar", match = { namespace = "^afterhours-rail$" },
 hl.layer_rule({ name = "still-tools", match = { namespace = "^(selection|hyprpicker)$" }, no_anim = true })
 -- The wallpaper, the screen frame and the volume panel do their own motion
 -- (or none); the compositor leaves them alone.
-hl.layer_rule({ name = "still-shell", match = { namespace = "^afterhours-(wallpaper|frame|osd)$" }, no_anim = true })
+hl.layer_rule({ name = "still-shell", match = { namespace = "^afterhours-(wallpaper|frame|osd|arrive)$" }, no_anim = true })
 -- Launcher and overview fade without enlarging the text.
 hl.layer_rule({ name = "launcher-fade", match = { namespace = "^afterhours-(overlay|overview)$" }, animation = "fade" })
 -- Notifications and their panel slide in from the right edge.

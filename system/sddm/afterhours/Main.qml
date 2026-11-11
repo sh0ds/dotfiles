@@ -78,7 +78,9 @@ Rectangle {
             shake.restart()
             password.forceActiveFocus()
         }
-        function onLoginSucceeded() { root.state_ = "" }
+        // The way out mirrors the way in: back to the mark alone over
+        // charcoal, which is what the desktop then opens from.
+        function onLoginSucceeded() { intro.stop(); outro.start() }
     }
 
     function doLogin() {
@@ -145,6 +147,13 @@ Rectangle {
         x: Math.round((root.width - width) / 2)
         y: Math.round(root.height / 2 - height - 24)
         smooth: false
+    }
+    ParallelAnimation {
+        id: outro
+        NumberAnimation { target: wall; property: "opacity"; to: 0; duration: 260; easing.type: Easing.OutCubic }
+        NumberAnimation { target: centre; property: "opacity"; to: 0; duration: 160; easing.type: Easing.OutCubic }
+        NumberAnimation { target: root; property: "chrome"; to: 0; duration: 160; easing.type: Easing.OutCubic }
+        NumberAnimation { target: mark; property: "opacity"; to: 1; duration: 260; easing.type: Easing.OutCubic }
     }
     ParallelAnimation {
         id: intro

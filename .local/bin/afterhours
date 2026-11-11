@@ -8,14 +8,20 @@ fi
 case ${1:-start} in
   # From a terminal the shell is detached, so closing the terminal doesn't
   # take the rail with it; Hyprland's start hook runs it the same way.
-  start) exec setsid -f quickshell -c afterhours --no-duplicate >/dev/null 2>&1 ;;
+  # --arrive (only Hyprland's start hook passes it) opens the session from
+  # the Afterhours mark, see Arrive.qml.
+  start)
+    unset AFTERHOURS_ARRIVE
+    [ "${2:-}" = --arrive ] && export AFTERHOURS_ARRIVE=1
+    exec setsid -f quickshell -c afterhours --no-duplicate >/dev/null 2>&1 ;;
   # Stop the running shell and start a fresh one (after a config change).
   restart)
     quickshell kill -c afterhours >/dev/null 2>&1 || true
     sleep 0.3
+    unset AFTERHOURS_ARRIVE
     exec setsid -f quickshell -c afterhours --no-duplicate >/dev/null 2>&1 ;;
   # In the foreground with its log, for debugging.
-  debug) exec quickshell -c afterhours --no-duplicate ;;
+  debug) unset AFTERHOURS_ARRIVE; exec quickshell -c afterhours --no-duplicate ;;
   apps|inbox|session) exec quickshell ipc -c afterhours call shell toggle "$1" ;;
   status) exec quickshell ipc -c afterhours call shell status ;;
   close) exec quickshell ipc -c afterhours call shell close ;;

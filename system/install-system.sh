@@ -47,18 +47,31 @@ CursorSize=32
 CONF
 echo "SDDM: afterhours theme installed"
 
-# weston's kiosk shell puts the greeter on whichever screen it finds first
-# (DP-3 here), so switch every other connected screen off while it runs. The
+# weston's kiosk shell puts the greeter on whichever screen it finds first,
+# so switch every connected screen but the main one off while it runs. The
 # screens come back as soon as Hyprland starts. Run this again after plugging
 # in a new screen.
-main=DP-4
+# The main screen is the `main` line in hyprland.lua; its serial is looked up
+# in what each plug's screen reports about itself (EDID), since plug names
+# like DP-4 move when the driver load order changes. If no connected screen
+# has that serial, all screens stay on.
+serial=$(sed -n 's/^[[:space:]]*main = "desc:.* \([^ "]*\)",.*/\1/p' "$repo/.config/hypr/hyprland.lua" | head -1)
+main=
+for s in /sys/class/drm/card*-*/status; do
+  [ -n "$serial" ] && [ "$(cat "$s")" = connected ] || continue
+  if grep -qaF -- "$serial" "$(dirname "$s")/edid" 2>/dev/null; then
+    main=$(basename "$(dirname "$s")"); main=${main#card*-}
+  fi
+done
+[ -n "$main" ] && echo "SDDM: the login screen goes on $main" ||
+  echo "SDDM: main screen not found by its serial, the login uses every screen"
 layout=$(localectl status 2>/dev/null | sed -n 's/.*X11 Layout: *//p')
 ini=$(mktemp)
 # weston's own backdrop is the charcoal of the splash instead of black, so
 # nothing flashes between the splash and the login.
 printf '# Written by dotfiles/system/install-system.sh\n[shell]\nbackground-color=0xff0d0c10\n\n[keyboard]\nkeymap_layout=%s\n' "${layout:-de}" >"$ini"
 for s in /sys/class/drm/card*-*/status; do
-  [ "$(cat "$s")" = connected ] || continue
+  [ -n "$main" ] && [ "$(cat "$s")" = connected ] || continue
   name=$(basename "$(dirname "$s")"); name=${name#card*-}
   [ "$name" = "$main" ] && continue
   printf '\n[output]\nname=%s\nmode=off\n' "$name" >>"$ini"
