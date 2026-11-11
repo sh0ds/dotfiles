@@ -91,6 +91,20 @@ if grep -qs -- "--splash" /etc/mkinitcpio.d/*.preset; then
 else
   echo "Boot: no kernel image with a built-in picture here, skipped"
 fi
+# The splash normally waits for the real graphics driver. With NVIDIA that
+# one loads so late that the splash gets a fraction of a second, and all you
+# see before the login is the still picture. This option lets it draw on the
+# screen the firmware set up, from the first moment, on the same pixels as
+# that picture.
+cmdline=/etc/kernel/cmdline
+if grep -qs '_uki=' /etc/mkinitcpio.d/*.preset && [ -f "$cmdline" ] \
+   && [ "$(wc -l <"$cmdline")" -le 1 ] && grep -qw splash "$cmdline" \
+   && ! grep -q 'plymouth\.use-simpledrm' "$cmdline"; then
+  [ -e "$cmdline.before-afterhours" ] || sudo cp "$cmdline" "$cmdline.before-afterhours"
+  sudo sed -i '1s/[[:space:]]*$/ plymouth.use-simpledrm/' "$cmdline"
+  echo "Boot: the splash starts right away (plymouth.use-simpledrm)"
+  rebuild=1
+fi
 esp=$(sudo bootctl --print-esp-path 2>/dev/null || true)
 loader=$esp/loader/loader.conf
 if [ -n "$esp" ] && sudo test -f "$loader"; then
