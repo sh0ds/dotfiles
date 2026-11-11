@@ -2,7 +2,7 @@
 # install-system.sh: the parts of the Afterhours look that live outside $HOME and
 # need root: the SDDM login screen, the Plymouth boot splash, the picture
 # the kernel image shows before it and the early boot that gets the splash
-# on screen in time.
+# on screen in time. docs/boot.md walks through the whole chain.
 # Usage: bash ~/code/dotfiles/system/install-system.sh   (asks for sudo)
 # Run it again after changing anything under system/. Old configs it replaces
 # are moved to /etc/sddm.conf.d/old/, never deleted.
@@ -105,18 +105,15 @@ if grep -qs -- "--splash" /etc/mkinitcpio.d/*.preset; then
 else
   echo "Boot: no kernel image with a built-in picture here, skipped"
 fi
-# The splash normally waits for the real graphics driver. With NVIDIA that
-# one loads so late that the splash gets a fraction of a second, and all you
-# see before the login is the still picture. This option lets it draw on the
-# screen the firmware set up, from the first moment, on the same pixels as
-# that picture.
+# An earlier version of this script put plymouth.use-simpledrm on the kernel
+# command line. It never did anything here (the firmware starts the screen at
+# 1024x768, which the splash refuses to draw on) and the early boot below
+# gives the splash a real screen instead, so it comes out again.
 cmdline=/etc/kernel/cmdline
-if grep -qs '_uki=' /etc/mkinitcpio.d/*.preset && [ -f "$cmdline" ] \
-   && [ "$(wc -l <"$cmdline")" -le 1 ] && grep -qw splash "$cmdline" \
-   && ! grep -q 'plymouth\.use-simpledrm' "$cmdline"; then
-  [ -e "$cmdline.before-afterhours" ] || sudo cp "$cmdline" "$cmdline.before-afterhours"
-  sudo sed -i '1s/[[:space:]]*$/ plymouth.use-simpledrm/' "$cmdline"
-  echo "Boot: the splash starts right away (plymouth.use-simpledrm)"
+if grep -qs 'plymouth\.use-simpledrm' "$cmdline"; then
+  sudo sed -i 's/[[:space:]]*plymouth\.use-simpledrm//' "$cmdline"
+  if sudo cmp -s "$cmdline" "$cmdline.before-afterhours"; then sudo rm "$cmdline.before-afterhours"; fi
+  echo "Boot: took the unused plymouth.use-simpledrm off the kernel command line"
   rebuild=1
 fi
 esp=$(sudo bootctl --print-esp-path 2>/dev/null || true)
@@ -149,13 +146,28 @@ fi
 # on that one) into the image.
 # Written as a drop-in, so /etc/mkinitcpio.conf stays as it is. The kernel
 # image you booted with is kept as a second menu entry in case the new one
-# doesn't come up: hold Space at power-on and pick the "before" entry.
+# doesn't come up: hold Space at power-on and pick the "before" entry. The
+# next run of this script after a good boot removes it again.
 # Undo:  sudo rm /etc/mkinitcpio.conf.d/afterhours.conf && sudo mkinitcpio -P
 drop=/etc/mkinitcpio.conf.d/afterhours.conf
 stock_hooks='base udev plymouth autodetect microcode modconf kms keyboard keymap consolefont block filesystems fsck'
 early_hooks='base systemd plymouth autodetect microcode modconf keyboard sd-vconsole block filesystems fsck'
 early_boot() {
-  [ -e "$drop" ] && return 0
+  if [ -e "$drop" ]; then
+    # Already set up. Once a boot has gone through it (systemd records when
+    # its early boot started; the old one leaves that at 0) the fallback
+    # image has done its job and only takes room on the boot partition.
+    local started booted old
+    started=$(systemctl show -p InitRDTimestampMonotonic --value 2>/dev/null || true)
+    booted=$(tail -c +5 /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f 2>/dev/null | tr -d '\0' || true)
+    if [ -n "$esp" ] && [ "${started:-0}" != 0 ] && [[ $booted != *-before-afterhours.efi ]]; then
+      sudo find "$esp/EFI/Linux" -maxdepth 1 -name '*-before-afterhours.efi' 2>/dev/null |
+        while IFS= read -r old; do
+          sudo rm -- "$old" && echo "Early boot: works, removed the fallback $(basename "$old")"
+        done
+    fi
+    return 0
+  fi
   grep -qs '_uki=' /etc/mkinitcpio.d/*.preset && [ -n "$esp" ] && sudo test -f "$loader" || return 0
   local hooks modules k entry avail size
   hooks=$(sed -n 's/^HOOKS=(\(.*\))[[:space:]]*$/\1/p' /etc/mkinitcpio.conf | tail -1)

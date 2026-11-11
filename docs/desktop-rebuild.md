@@ -60,7 +60,7 @@ sudo pacman -Syu --needed hyprland quickshell qt6-wayland qt6-declarative \
   less zed thunar adw-gtk-theme qt6ct papirus-icon-theme
 ```
 
-Optional, for violet folders: `yay -S papirus-folders`; `system/install-system.sh` recolours them.
+Optional, for violet folders: `yay -S papirus-folders`; `system/install-system.sh` recolours them. The same script sets up everything between power-on and the desktop, see [boot.md](boot.md).
 
 Use **Quickshell 0.3.2+**, and the **Hyprland 0.56 Lua API** used by this checkout. Do not blindly upgrade into an incompatible config format. Check `quickshell --version` and `Hyprland --version` before migrating. Package names are Arch-specific; availability can change with repository packaging.
 

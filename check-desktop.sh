@@ -52,6 +52,14 @@ if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
   check "Hyprland answers hyprctl" hyprctl version
 fi
 
+section "Boot (docs/boot.md)"
+check "kernel images show the Afterhours mark" sh -c 'grep -qs -- "--splash /usr/local/share/afterhours/splash-afterhours.bmp" /etc/mkinitcpio.d/*.preset && test -f /usr/local/share/afterhours/splash-afterhours.bmp'
+check "early boot drop-in (systemd hooks, early NVIDIA)" test -f /etc/mkinitcpio.conf.d/afterhours.conf
+check "this boot went through it" sh -c 'test "$(systemctl show -p InitRDTimestampMonotonic --value)" != 0'
+check "Plymouth theme is afterhours" sh -c 'test "$(plymouth-set-default-theme)" = afterhours'
+check "SDDM theme is afterhours" grep -qs "^Current=afterhours" /etc/sddm.conf.d/10-afterhours.conf
+check "a screen sits at 0x0 (the main one)" sh -c 'hyprctl monitors -j | jq -e "any(.[]; .x == 0 and .y == 0)"'
+
 section "Desktop pieces"
 for c in python3 kitty quickshell cava fuzzel hyprpicker hyprsunset grim slurp satty wl-copy cliphist wf-recorder playerctl wpctl pavucontrol easyeffects qalc tesseract jq firefox firefoxpwa nchat secret-tool virsh virt-install virt-viewer mpd mpc rmpc mpd-mpris udiskie thunar xarchiver zip unzip xfconf-query aria2c btop wtype checkupdates audacity mpv imv zathura obsidian qt6ct gamemoderun umu-run proton-pass xdg-mime yay; do
   check "$c" command -v "$c"

@@ -39,6 +39,20 @@ class Afterhours(unittest.TestCase):
             time.sleep(0.05)
         self.assertEqual(self.calls.read_text().splitlines(), ['-c', 'afterhours', '--no-duplicate'])
 
+    def test_only_the_session_start_opens_from_the_mark(self):
+        self.stub('quickshell', 'printf "%s\\n" "${AFTERHOURS_ARRIVE:-unset}" > "$CALLS"')
+        for args, want in ((('start', '--arrive'), '1'), (('start',), 'unset'), (('restart',), 'unset')):
+            with self.subTest(args=args):
+                self.calls.unlink(missing_ok=True)
+                env = dict(self.env, AFTERHOURS_ARRIVE='1')  # as inherited from a shell the rail started
+                subprocess.run(['bash', str(REPO / '.local/bin/afterhours'), *args],
+                               env=env, text=True, capture_output=True, timeout=10)
+                for _ in range(50):
+                    if self.calls.exists() and self.calls.read_text().endswith('\n'):
+                        break
+                    time.sleep(0.05)
+                self.assertEqual(self.calls.read_text().split()[-1], want)
+
     def test_panels_use_the_named_shell_ipc(self):
         self.stub('quickshell')
         for panel in ['apps', 'inbox', 'session']:
