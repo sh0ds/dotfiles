@@ -112,6 +112,9 @@ PopupWindow {
         color: on ? Theme.accentSoft : tgHover.hovered ? Theme.glassRaised : Theme.well
         edge: Theme.edge
         Behavior on color { ColorAnimation { duration: Theme.motion } }
+        // The same dip as a cell when pressed.
+        scale: tgTap.pressed ? 0.96 : 1
+        Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutBack; easing.overshoot: 2.2 } }
         Rectangle {
             anchors.bottom: parent.bottom
             width: parent.width - Theme.notchSmall; height: 2
@@ -127,7 +130,7 @@ PopupWindow {
             Text { text: tg.on ? "on" : "off"; color: Theme.muted; font.family: Theme.font; font.pixelSize: 10 }
         }
         HoverHandler { id: tgHover; cursorShape: Qt.PointingHandCursor }
-        TapHandler { onTapped: tg.toggled() }
+        TapHandler { id: tgTap; onTapped: tg.toggled() }
     }
 
     Notch {
@@ -195,6 +198,7 @@ PopupWindow {
                     Layout.fillWidth: true
                     implicitHeight: 32
                     color: netHover.hovered ? Theme.glassRaised : "transparent"
+                    Behavior on color { ColorAnimation { duration: Theme.motion } }
                     RowLayout {
                         anchors.fill: parent; anchors.leftMargin: 10; anchors.rightMargin: 10
                         spacing: 10

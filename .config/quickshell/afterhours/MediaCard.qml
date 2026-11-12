@@ -76,8 +76,21 @@ PopupWindow {
                     source: card.player?.trackArtUrl ?? ""
                 }
                 ColumnLayout {
+                    id: trackText
                     Layout.fillWidth: true
                     spacing: 4
+                    // A new track: the words slide in from the right on the
+                    // spring while they fade up, like a toast arriving.
+                    transform: Translate { id: trackShift }
+                    Connections {
+                        target: card.player
+                        function onTrackTitleChanged() { if (card.visible) trackIn.restart(); }
+                    }
+                    ParallelAnimation {
+                        id: trackIn
+                        NumberAnimation { target: trackShift; property: "x"; from: 16; to: 0; duration: Theme.spring; easing.type: Easing.OutBack; easing.overshoot: Theme.overshoot }
+                        NumberAnimation { target: trackText; property: "opacity"; from: 0; to: 1; duration: Theme.glide; easing.type: Easing.OutCubic }
+                    }
                     Text { text: (card.player?.identity ?? "").toUpperCase(); color: Theme.accent; font.family: Theme.font; font.pixelSize: 10; font.letterSpacing: 2; font.bold: true; Layout.fillWidth: true; elide: Text.ElideRight; textFormat: Text.PlainText }
                     Text { text: card.player?.trackTitle || "Nothing playing"; color: Theme.text; font.family: Theme.font; font.pixelSize: 16; font.bold: true; Layout.fillWidth: true; elide: Text.ElideRight; maximumLineCount: 2; wrapMode: Text.WordWrap; textFormat: Text.PlainText }
                     Text { text: card.player?.trackArtist ?? ""; color: Theme.muted; font.family: Theme.font; font.pixelSize: 12; Layout.fillWidth: true; elide: Text.ElideRight; textFormat: Text.PlainText; visible: text.length > 0 }

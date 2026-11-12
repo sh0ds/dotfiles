@@ -501,6 +501,8 @@ ShellRoot {
                 Cell {
                     Layout.leftMargin: 6
                     visible: root.recording || root.sharing
+                    // Cells that come and go pop in, like the inbox count.
+                    onVisibleChanged: if (visible) bump()
                     label: root.sharing ? "● LIVE" : "● REC"; ink: Theme.danger
                     hint: root.recording ? "Click to stop recording" : "Sharing your screen: popups are held back"
                     onClicked: if (root.recording) root.run(["rec-toggle"])
@@ -570,6 +572,7 @@ ShellRoot {
                         }
                     }
                     id: mediaCell
+                    onVisibleChanged: if (visible) bump()
                     fill: media.visible ? Theme.accentSoft : "transparent"
                     hint: "Click: player · right-click: play / pause · wheel: next / previous track"
                     onClicked: media.visible = !media.visible
@@ -638,6 +641,7 @@ ShellRoot {
                     property int seen: 0
                     onFinishedChanged: { if (finished > seen) bump(); seen = finished; }
                     visible: root.downloadStats.shown || downloadsCard.visible || held
+                    onVisibleChanged: if (visible) bump()
                     label: rail.width > 900 ? root.downloadStats.label : root.downloadStats.label.replace(/^(dl|seed) /, "↓ ")
                     ink: root.downloadStats.getting ? Theme.text : root.downloadStats.failed ? Theme.amber : Theme.muted
                     fill: downloadsCard.visible ? Theme.accentSoft : "transparent"
