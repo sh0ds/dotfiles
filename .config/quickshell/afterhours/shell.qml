@@ -258,6 +258,8 @@ ShellRoot {
         const total = Number(d.totalLength) || 0, got = Number(d.completedLength) || 0;
         return {
             gid: d.gid, phase: phase, torrent: bt !== null, meta: meta,
+            // The card's sections, in this order.
+            group: ["down", "metadata", "queued", "paused"].includes(phase) ? "DOWNLOADING" : phase === "seed" ? "SEEDING" : "FINISHED",
             name: bt?.info?.name || (meta ? file.slice(10).replace(/\+/g, " ") : file.split("/").pop()) || uri.split("?")[0].split("/").pop() || "download",
             total: total, got: got, progress: total > 0 ? got / total : 0,
             speed: Number(d.downloadSpeed) || 0, up: Number(d.uploadSpeed) || 0, uploaded: Number(d.uploadLength) || 0,
@@ -273,16 +275,27 @@ ShellRoot {
         // Running, then waiting, then the last ten that stopped, newest first.
         aria("system.multicall", [[call("aria2.tellActive", []), call("aria2.tellWaiting", [0, 20]), call("aria2.tellStopped", [-1, 10])]], result => {
             ariaAsking = false;
+            const order = ["DOWNLOADING", "SEEDING", "FINISHED"];
             // Each answer comes wrapped in a list, or as an error object.
             // (No flatMap: QML's JavaScript doesn't have it.)
             const all = [].concat(...(result ?? []).map(part => Array.isArray(part) ? part[0] : [])).map(downloadRow)
                 // A magnet link's info step and removed ones aren't worth a row.
-                .filter(r => r.phase !== "removed" && !(r.meta && r.phase === "done"));
+                .filter(r => r.phase !== "removed" && !(r.meta && r.phase === "done"))
+                .map((r, i) => [r, i])
+                .sort((a, b) => order.indexOf(a[0].group) - order.indexOf(b[0].group) || a[1] - b[1])
+                .map(pair => pair[0]);
             downloads = all;
-            // Same downloads in the same order: update the rows in place, so
-            // hover and the bars' easing carry on.
-            if (downloadRows.count === all.length && all.every((r, i) => downloadRows.get(i).gid === r.gid)) all.forEach((r, i) => downloadRows.set(i, r));
-            else { downloadRows.clear(); all.forEach(r => downloadRows.append(r)); }
+            // Rows are updated, moved, added and dropped one by one, never
+            // rebuilt: hover and the bars' easing carry on, and the card's
+            // list animates only what changed.
+            const wanted = new Set(all.map(r => r.gid));
+            for (let i = downloadRows.count - 1; i >= 0; i--) if (!wanted.has(downloadRows.get(i).gid)) downloadRows.remove(i);
+            all.forEach((r, i) => {
+                let at = -1;
+                for (let j = i; j < downloadRows.count; j++) if (downloadRows.get(j).gid === r.gid) { at = j; break; }
+                if (at < 0) downloadRows.insert(i, r);
+                else { if (at !== i) downloadRows.move(at, i, 1); downloadRows.set(i, r); }
+            });
         });
     }
     Timer { interval: 2000; repeat: true; running: root.ariaToken !== ""; triggeredOnStart: true; onTriggered: root.readDownloads() }
@@ -294,15 +307,17 @@ ShellRoot {
         const open = [...getting, ...waiting].filter(d => d.total > 0);
         const total = open.reduce((a, d) => a + d.total, 0);
         const pct = total > 0 ? Math.floor(100 * open.reduce((a, d) => a + d.got, 0) / total) : 0;
-        let label = "\uf019";   // nf-fa-download
-        // A magnet link has no size until its info arrives: no percentage yet.
-        if (getting.length) label += (total > 0 ? " " + pct + "%" : " …") + (getting.length > 1 ? " · " + getting.length : "");
+        // Words with a value, like vol and inbox. A magnet link has no size
+        // until its info arrives: no percentage yet.
+        let label = "dl";
+        if (getting.length) label += (total > 0 ? " " + pct + "%" : " …") + (getting.length > 1 ? " ×" + getting.length : "");
         else if (waiting.length) label += waiting.some(d => d.phase === "paused") ? " paused" : " queued";
-        else if (seeding.length) label = "\uf093 " + seeding.length;   // nf-fa-upload
+        else if (seeding.length) label = "seed " + seeding.length;
         else if (failed.length) label += " failed";
         return {
             shown: getting.length + waiting.length + seeding.length + failed.length > 0,
             getting: getting.length, seeding: seeding.length, failed: failed.length > 0, label: label,
+            finished: of("done", "seed").length,
             speed: downloads.reduce((a, d) => a + d.speed, 0), up: downloads.reduce((a, d) => a + d.up, 0)
         };
     }
@@ -566,25 +581,9 @@ ShellRoot {
                 }
                 // Right side, in groups split by seams: now playing | keep
                 // awake, the Pi, network | sound (network and sound both open
-                // the control centre), the inbox and the tray | power. The
+                // the control centre), downloads, the inbox and the tray | power. The
                 // system graphs are in Today (click the clock).
                 Seam { visible: mediaCell.visible }
-                // Downloads and torrents (aria2-rpc): only while something
-                // comes in, waits, seeds or failed.
-                Cell {
-                    mirrored: true
-                    id: dlCell
-                    property bool held: false
-                    visible: root.downloadStats.shown || downloadsCard.visible || held
-                    label: root.downloadStats.label
-                    ink: root.downloadStats.getting ? Theme.text : root.downloadStats.failed ? Theme.amber : Theme.muted
-                    fill: downloadsCard.visible ? Theme.accentSoft : "transparent"
-                    hint: (root.downloadStats.getting ? "Downloading at " + root.bytes(root.downloadStats.speed) + "/s"
-                        : root.downloadStats.seeding ? "Seeding " + root.downloadStats.seeding + (root.downloadStats.seeding === 1 ? " torrent" : " torrents")
-                        : root.downloadStats.failed ? "A download failed" : "Downloads") + " · click: the list"
-                    onClicked: downloadsCard.visible = !downloadsCard.visible
-                }
-                Seam { visible: dlCell.visible }
                 Cell {
                     mirrored: true
                     visible: rail.width > 900
@@ -627,6 +626,25 @@ ShellRoot {
                     onClicked: rail.openControl(volCell)
                     onRightClicked: root.toggleMute()
                     onWheeled: step => root.nudgeVolume(step)
+                }
+                // Downloads and torrents (aria2-rpc), a counter like the inbox:
+                // only while something comes in, waits, seeds or failed, and
+                // it pops when one finishes.
+                Cell {
+                    mirrored: true
+                    id: dlCell
+                    property bool held: false
+                    readonly property int finished: root.downloadStats.finished
+                    property int seen: 0
+                    onFinishedChanged: { if (finished > seen) bump(); seen = finished; }
+                    visible: root.downloadStats.shown || downloadsCard.visible || held
+                    label: rail.width > 900 ? root.downloadStats.label : root.downloadStats.label.replace(/^(dl|seed) /, "↓ ")
+                    ink: root.downloadStats.getting ? Theme.text : root.downloadStats.failed ? Theme.amber : Theme.muted
+                    fill: downloadsCard.visible ? Theme.accentSoft : "transparent"
+                    hint: (root.downloadStats.getting ? "Downloading at " + root.bytes(root.downloadStats.speed) + "/s"
+                        : root.downloadStats.seeding ? "Seeding " + root.downloadStats.seeding + (root.downloadStats.seeding === 1 ? " torrent" : " torrents")
+                        : root.downloadStats.failed ? "A download failed" : "Downloads") + " · click: downloads"
+                    onClicked: downloadsCard.visible = !downloadsCard.visible
                 }
                 Cell {
                     mirrored: true

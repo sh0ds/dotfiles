@@ -12,9 +12,9 @@ cd ~/Downloads
 name=${1%%\?*}
 name=${name##*/}
 if aria2c "$@"; then
-  { [ "$(notify-send -a Downloads -A open=Open "Download done" "$name")" = open ] &&
+  { [ "$(notify-send -a Downloads -i folder-download -A open=Open "Download done" "$name")" = open ] &&
       thunar ~/Downloads; } >/dev/null 2>&1 & disown
 else
-  notify-send -a Downloads -u critical "Download failed" "$name, run dl again to carry on"
+  notify-send -a Downloads -i folder-download -u critical "Download failed" "$name, run dl again to carry on"
   exit 1
 fi

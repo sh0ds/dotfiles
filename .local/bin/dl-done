@@ -18,5 +18,5 @@ if [ -s "$secret" ]; then
   torrent=$(jq -r '.result.bittorrent.info.name // empty' <<<"$reply" 2>/dev/null)
   [ -z "$torrent" ] || name=$torrent
 fi
-[ "$(notify-send -a Downloads -A open=Open "Download done" "$name")" = open ] &&
+[ "$(notify-send -a Downloads -i folder-download -A open=Open "Download done" "$name")" = open ] &&
   exec thunar "$(dirname "$path")"

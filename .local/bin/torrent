@@ -10,7 +10,7 @@ set -euo pipefail
 state=${XDG_STATE_HOME:-$HOME/.local/state}/aria2
 rpc=http://127.0.0.1:6800/jsonrpc
 fail() {
-  notify-send -a Downloads -u critical "Torrent not added" "$1" 2>/dev/null || true
+  notify-send -a Downloads -i folder-download -u critical "Torrent not added" "$1" 2>/dev/null || true
   echo "torrent: $1" >&2
   exit 1
 }
@@ -44,6 +44,6 @@ for item; do
     fail "aria2-rpc isn't running, start it with: aria2-rpc & disown"
   error=$(jq -r '.error.message // empty' <<<"$reply")
   [ -z "$error" ] || fail "aria2 said: $error"
-  notify-send -a Downloads "Torrent added" "${name:-torrent}" 2>/dev/null || true
+  notify-send -a Downloads -i folder-download "Torrent added" "${name:-torrent}" 2>/dev/null || true
   echo "added ${name:-torrent} ($(jq -r .result <<<"$reply"))"
 done
