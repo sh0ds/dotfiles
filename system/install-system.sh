@@ -213,6 +213,17 @@ if command -v plymouth-set-default-theme >/dev/null; then
   sudo plymouth-set-default-theme -R afterhours    # -R rebuilds the initramfs
   sudo rm -rf /usr/share/plymouth/themes/diag
   echo "Plymouth: afterhours splash installed"
+  # SDDM starts after plymouth-quit. Plain `plymouth quit` clears the screen
+  # first, so there was a black moment (and sometimes console text) between
+  # the splash and the login. With --retain-splash the splash's last frame,
+  # the mark alone, stays on screen until weston draws over it.
+  # Undo: sudo rm -r /etc/systemd/system/plymouth-quit.service.d && sudo systemctl daemon-reload
+  sudo install -d /etc/systemd/system/plymouth-quit.service.d
+  printf '%s\n' '# Written by dotfiles/system/install-system.sh: keep the mark up until the login draws' \
+    '[Service]' 'ExecStart=' 'ExecStart=-/usr/bin/plymouth quit --retain-splash' |
+    sudo tee /etc/systemd/system/plymouth-quit.service.d/afterhours.conf >/dev/null
+  sudo systemctl daemon-reload
+  echo "Plymouth: the splash hands its last frame to the login"
 else
   echo "Plymouth isn't installed, skipped the boot splash"
   # Nothing rebuilt the kernel images yet, so the new picture isn't in them.

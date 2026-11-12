@@ -13,8 +13,17 @@ case ${1:-start} in
   # take the rail with it; Hyprland's start hook runs it the same way.
   # --arrive (only Hyprland's start hook passes it) opens the session from
   # the Afterhours mark, see Arrive.qml.
+  # The shell needs a moment to load. Until its own mark is up, swaybg
+  # holds the same picture (afterhours-arrive.png is the mark with room
+  # below it, so centred it lands on the same pixels); Arrive.qml closes
+  # swaybg once it covers it. Without swaybg the screen is plain charcoal
+  # for that moment.
   start)
-    [ "${2:-}" = --arrive ] && export AFTERHOURS_ARRIVE=1
+    if [ "${2:-}" = --arrive ]; then
+      export AFTERHOURS_ARRIVE=1
+      command -v swaybg >/dev/null &&
+        setsid -f swaybg -c 0d0c10 -m center -i ~/.local/share/backgrounds/afterhours-arrive.png >/dev/null 2>&1
+    fi
     exec setsid -f quickshell -c afterhours --no-duplicate >/dev/null 2>&1 ;;
   # Stop the running shell and start a fresh one (after a config change).
   restart)

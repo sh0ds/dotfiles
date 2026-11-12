@@ -57,7 +57,7 @@ sudo pacman -Syu --needed hyprland quickshell qt6-wayland qt6-declarative \
   kitty noto-fonts ttf-jetbrains-mono-nerd cava \
   libqalculate unicode-emoji fuzzel wl-clipboard cliphist jq socat playerctl pavucontrol \
   wireplumber pipewire-pulse libnotify grim slurp satty wf-recorder wtype \
-  less zed thunar adw-gtk-theme qt6ct papirus-icon-theme
+  less zed thunar adw-gtk-theme qt6ct papirus-icon-theme swaybg
 ```
 
 Optional, for violet folders: `yay -S papirus-folders`; `system/install-system.sh` recolours them. The same script sets up everything between power-on and the desktop, see [boot.md](boot.md).

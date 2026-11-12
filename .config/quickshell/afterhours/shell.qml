@@ -695,13 +695,15 @@ ShellRoot {
         }
     }
     // The living wallpaper and the screen frame, one each per monitor.
-    Variants { model: Quickshell.screens; Wallpaper {} }
+    // How many wallpapers are drawn; the arrival waits for all of them.
+    property int wallsReady: 0
+    Variants { model: Quickshell.screens; Wallpaper { onReadyChanged: if (ready) root.wallsReady++ } }
     Variants { model: Quickshell.screens; ScreenFrame { visible: modelData?.name !== root.gameOn } }
     Osd { sink: root.sink; held: root.islandShown }
     Overview { id: overviewWindow }
     Lock { id: lockScreen }
     // The first second after login (Arrive.qml); the start script sets the flag.
-    Variants { model: Quickshell.env("AFTERHOURS_ARRIVE") === "1" ? Quickshell.screens : []; Arrive {} }
+    Variants { model: Quickshell.env("AFTERHOURS_ARRIVE") === "1" ? Quickshell.screens : []; Arrive { ready: root.wallsReady >= Quickshell.screens.length } }
     function lockNow() { panel = ""; overviewWindow.open = false; lockScreen.lock(); }
     // One keyboard-driven overlay on the chosen output. Escape and outside click dismiss it.
     PanelWindow {

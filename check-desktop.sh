@@ -57,6 +57,8 @@ check "kernel images show the Afterhours mark" sh -c 'grep -qs -- "--splash /usr
 check "early boot drop-in (systemd hooks, early NVIDIA)" test -f /etc/mkinitcpio.conf.d/afterhours.conf
 check "this boot went through it" sh -c 'test "$(systemctl show -p InitRDTimestampMonotonic --value)" != 0'
 check "Plymouth theme is afterhours" sh -c 'test "$(plymouth-set-default-theme)" = afterhours'
+check "splash stays up until the login draws" grep -qs -- "--retain-splash" /etc/systemd/system/plymouth-quit.service.d/afterhours.conf
+check "swaybg (holds the mark while the shell loads)" command -v swaybg
 check "SDDM theme is afterhours" grep -qs "^Current=afterhours" /etc/sddm.conf.d/10-afterhours.conf
 check "a screen sits at 0x0 (the main one)" sh -c 'hyprctl monitors -j | jq -e "any(.[]; .x == 0 and .y == 0)"'
 

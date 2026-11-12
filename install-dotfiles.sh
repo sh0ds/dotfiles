@@ -37,7 +37,7 @@ cd "$src"
 { git ls-files
   printf '%s\n' .config/quickshell/afterhours/{shell,Theme,Cell,Notch,Caption,Hint,Notice,MonthView,Island,Dashboard,PopIn,Cover,VolumeRow,Meter,Osd,ScreenFrame,Wallpaper,MediaCard,ControlCenter,Downloads,Lock,Overview,Arrive}.qml \
     .config/quickshell/afterhours/qmldir .config/quickshell/afterhours/mark.png .config/quickshell/afterhours/pam/password.conf .local/bin/{afterhours,afterhours-suspend,gba,roms,battlenet,curseforge,easyeffects-start,cleanup,torrent} .local/share/applications/{io.mgba.mGBA,battlenet,curseforge,torrent}.desktop \
-    .local/share/backgrounds/afterhours-haze.jpg
+    .local/share/backgrounds/afterhours-haze.jpg .local/share/backgrounds/afterhours-arrive.png
 } | sort -u | grep -vE '^(install-dotfiles\.sh|check-desktop\.sh|README\.md|LICENSE|\.gitignore|screenshots/|docs/|system/|tests/)' |
   while IFS= read -r rel; do
   target="$target_home/$rel"

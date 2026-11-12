@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 // The wallpaper: the haze picture with three soft violet clouds over it,
 // behind the see-through windows. Still: nothing on it moves.
+// `ready` once the picture is drawn (or failed to load), for Arrive.
 PanelWindow {
     id: wall
     required property var modelData
@@ -13,7 +14,9 @@ PanelWindow {
     exclusionMode: ExclusionMode.Ignore
     anchors { top: true; bottom: true; left: true; right: true }
     color: Theme.background
+    readonly property bool ready: picture.status === Image.Ready || picture.status === Image.Error
     Image {
+        id: picture
         anchors.fill: parent
         source: Quickshell.env("HOME") + "/.local/share/backgrounds/afterhours-haze.jpg"
         fillMode: Image.PreserveAspectCrop

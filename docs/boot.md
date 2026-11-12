@@ -8,11 +8,13 @@ One picture carries the whole start: the Afterhours mark over charcoal, on the s
 2. **Boot menu, hidden.** systemd-boot with `timeout 0`, also in the firmware's stored timeout, which wins over `loader.conf`. To get the menu (for the LTS kernel): hold Space while the PC starts, or `systemctl reboot --boot-loader-menu=10`.
 3. **The kernel image's picture.** `system/boot/splash-afterhours.bmp`, built into both kernel images through `--splash` in `/etc/mkinitcpio.d/*.preset`. It is the mark, still. The firmware starts the screen at 1024x768 here, so it looks soft; that part can't be changed from Linux.
 4. **Early boot.** `/etc/mkinitcpio.conf.d/afterhours.conf`: systemd hooks, so nothing waits for USB devices, and the NVIDIA modules inside the image, so the splash has a real screen about a second in. `/etc/mkinitcpio.conf` itself stays as it was.
-5. **Splash.** Plymouth theme `system/plymouth/afterhours`: the mark breathes, a notched meter with a counter slides in under it. Shutting down and restarting show the same with the meter draining. It ends on the mark alone.
+5. **Splash.** Plymouth theme `system/plymouth/afterhours`: the mark breathes, a notched meter with a counter slides in under it. Shutting down and restarting show the same with the meter draining. It ends on the mark alone, and that last frame stays on screen when Plymouth quits (`plymouth quit --retain-splash`, a drop-in for `plymouth-quit.service`) until the login draws over it.
 6. **Login.** SDDM theme `system/sddm/afterhours` on weston, on the main screen only. It opens from the mark (wallpaper fades in, clock and password field rise) and after a correct password fades back to it.
-7. **Session.** Hyprland's background is the same charcoal. The shell starts with `afterhours start --arrive`, which puts the mark over everything for half a second (`Arrive.qml`) and then lets go of the finished desktop. A shell restart never shows it.
+7. **Session.** Hyprland's background is the same charcoal. `afterhours start --arrive` first puts the mark up with swaybg (`afterhours-arrive.png`, same pixels), because the shell takes a moment to load. Then the shell's own mark (`Arrive.qml`) covers it, swaybg closes, and once the wallpaper is drawn on every screen the mark lets go of the finished desktop (at least 300 ms, at most 2.5 s). A shell restart never shows it.
 
-Between 6 and 7 the screen is dark for a moment: the login's compositor has stopped and Hyprland is taking the graphics card. Nothing can draw then.
+Between 6 and 7 the screen is dark for a moment: the login's compositor has stopped and Hyprland is taking the graphics card. Nothing can draw then. That's the only gap left.
+
+If the login ever fails to start, the retained splash stays up and the PC looks stuck on the mark. `Ctrl + Alt + F3` gives a text login.
 
 ## Screens
 
