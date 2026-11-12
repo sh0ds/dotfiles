@@ -1,7 +1,22 @@
 #!/usr/bin/env bash
-# dl-done: the notification when aria2-rpc finishes a download from Firefox.
+# dl-done: the notification when aria2-rpc finishes a download (Firefox, torrent).
 # aria2 calls it with the download's id, its number of files and the file's path.
 # Click it to open the folder in Thunar.
-path=$3
-[ "$(notify-send -a Downloads -A open=Open "Download done" "${path##*/}")" = open ] &&
+# Torrents call it twice, once when the download is done and again when seeding
+# stops: only the first one pings. A magnet link's first step, which only
+# fetches the torrent's info, doesn't ping at all.
+gid=$1 path=$3
+name=${path##*/}
+[[ $name == "[METADATA]"* ]] && exit 0
+secret=${XDG_STATE_HOME:-$HOME/.local/state}/aria2/secret
+if [ -s "$secret" ]; then
+  request=$(jq -cn --arg t "token:$(cat "$secret")" --arg g "$gid" \
+    '{jsonrpc: "2.0", id: "done", method: "aria2.tellStatus", params: [$t, $g, ["status", "bittorrent"]]}')
+  reply=$(curl -s --max-time 3 -H 'Content-Type: application/json' -d "$request" http://127.0.0.1:6800/jsonrpc)
+  [ "$(jq -r '.result | "\(.status) \(.bittorrent != null)"' <<<"$reply" 2>/dev/null)" = "complete true" ] && exit 0
+  # A torrent with a folder of files: its name, not the first file's.
+  torrent=$(jq -r '.result.bittorrent.info.name // empty' <<<"$reply" 2>/dev/null)
+  [ -z "$torrent" ] || name=$torrent
+fi
+[ "$(notify-send -a Downloads -A open=Open "Download done" "$name")" = open ] &&
   exec thunar "$(dirname "$path")"

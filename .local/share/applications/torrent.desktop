@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Torrent
+Comment=Download a magnet link or .torrent file with aria2
+Exec=torrent %U
+Icon=folder-download
+Terminal=false
+NoDisplay=true
+MimeType=x-scheme-handler/magnet;application/x-bittorrent;

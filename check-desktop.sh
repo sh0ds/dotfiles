@@ -83,6 +83,7 @@ check "Music/DJ shared folder" test -d "$HOME/Music/DJ"
 check "in the gamemode group" sh -c 'id -nG | grep -qw gamemode'
 check "polkit agent unit" systemctl --user cat hyprpolkitagent.service
 check "aria2 running for Firefox (aria2-rpc)" pgrep -f "aria2c --enable-rpc"
+check "magnet links open in torrent" sh -c 'test "$(xdg-mime query default x-scheme-handler/magnet)" = torrent.desktop'
 check "pipewire running" systemctl --user is-active pipewire
 check "NetworkManager running" systemctl is-active NetworkManager
 

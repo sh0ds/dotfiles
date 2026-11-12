@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # default-apps: folders in Thunar, videos in mpv, pictures in imv, PDFs in zathura,
+# magnet links and .torrent files in torrent (aria2),
 # from Thunar, Firefox downloads, udiskie or xdg-open. Run it once after
 # installing them; it only touches these file types in ~/.config/mimeapps.list.
 set -euo pipefail
@@ -20,4 +21,5 @@ xdg-mime default imv.desktop \
   image/png image/jpeg image/gif image/webp image/bmp image/tiff image/avif image/svg+xml
 xdg-mime default org.pwmt.zathura-pdf-mupdf.desktop \
   application/pdf application/epub+zip application/oxps
-echo "Done: folders in Thunar, archives in Xarchiver, video and audio in mpv, pictures in imv, PDFs in zathura."
+xdg-mime default torrent.desktop x-scheme-handler/magnet application/x-bittorrent
+echo "Done: folders in Thunar, archives in Xarchiver, video and audio in mpv, pictures in imv, PDFs in zathura, torrents in aria2."

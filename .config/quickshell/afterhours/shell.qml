@@ -210,6 +210,102 @@ ShellRoot {
     }
     Process { id: piPing; command: ["ping", "-c", "1", "-W", "1", root.piHost]; onExited: code => root.piUp = code === 0 }
     Timer { interval: 30000; repeat: true; running: true; triggeredOnStart: true; onTriggered: if (!piPing.running) piPing.running = true }
+    // Downloads: aria2-rpc (Firefox downloads, dl, torrent) asked over its
+    // JSON-RPC every 2 s. That's localhost only, the shell itself never goes
+    // online. The token is the secret aria2-rpc made; without it (aria2-rpc
+    // never ran) nothing is asked.
+    property string ariaToken: ""
+    property bool ariaAsking: false
+    property var downloads: []
+    property ListModel downloadRows: ListModel {}
+    signal openDownloads(string screenName)
+    FileView {
+        id: ariaSecret
+        path: (Quickshell.env("XDG_STATE_HOME") || Quickshell.env("HOME") + "/.local/state") + "/aria2/secret"
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.ariaToken = "token:" + text().trim()
+    }
+    // aria2-rpc makes the secret on its very first run, maybe after the shell started.
+    Timer { interval: 30000; repeat: true; running: root.ariaToken === ""; onTriggered: ariaSecret.reload() }
+    function aria(method, params, done) {
+        if (!ariaToken) return;
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            let reply = null;
+            try { reply = JSON.parse(xhr.responseText); } catch (e) {}
+            if (done) done(reply?.result ?? null);
+        };
+        xhr.open("POST", "http://127.0.0.1:6800/jsonrpc");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        // system.multicall carries the token inside each call instead.
+        xhr.send(JSON.stringify({ jsonrpc: "2.0", id: "shell", method: method, params: method.startsWith("aria2.") ? [ariaToken, ...params] : params }));
+    }
+    function bytes(n) {
+        const units = ["B", "kB", "MB", "GB", "TB"];
+        let i = 0;
+        while (n >= 1000 && i < units.length - 1) { n /= 1000; i++; }
+        return (i === 0 || n >= 10 ? Math.round(n) : n.toFixed(1)) + " " + units[i];
+    }
+    function downloadRow(d) {
+        const bt = d.bittorrent ?? null;
+        const file = d.files?.[0]?.path ?? "";
+        const uri = d.files?.[0]?.uris?.[0]?.uri ?? "";
+        const meta = file.startsWith("[METADATA]");
+        const phase = d.status === "active" ? (meta ? "metadata" : d.seeder === "true" ? "seed" : "down")
+            : ({ waiting: "queued", paused: "paused", complete: "done", error: "error" })[d.status] ?? "removed";
+        const total = Number(d.totalLength) || 0, got = Number(d.completedLength) || 0;
+        return {
+            gid: d.gid, phase: phase, torrent: bt !== null, meta: meta,
+            name: bt?.info?.name || (meta ? file.slice(10).replace(/\+/g, " ") : file.split("/").pop()) || uri.split("?")[0].split("/").pop() || "download",
+            total: total, got: got, progress: total > 0 ? got / total : 0,
+            speed: Number(d.downloadSpeed) || 0, up: Number(d.uploadSpeed) || 0, uploaded: Number(d.uploadLength) || 0,
+            peers: Number(d.connections) || 0, dir: d.dir ?? "", path: file, error: d.errorMessage ?? ""
+        };
+    }
+    function readDownloads() {
+        if (!ariaToken || ariaAsking) return;
+        ariaAsking = true;
+        const keys = ["gid", "status", "totalLength", "completedLength", "downloadSpeed", "uploadSpeed", "uploadLength",
+                      "connections", "seeder", "errorMessage", "dir", "files", "bittorrent"];
+        const call = (method, extra) => ({ methodName: method, params: [ariaToken, ...extra, keys] });
+        // Running, then waiting, then the last ten that stopped, newest first.
+        aria("system.multicall", [[call("aria2.tellActive", []), call("aria2.tellWaiting", [0, 20]), call("aria2.tellStopped", [-1, 10])]], result => {
+            ariaAsking = false;
+            // Each answer comes wrapped in a list, or as an error object.
+            // (No flatMap: QML's JavaScript doesn't have it.)
+            const all = [].concat(...(result ?? []).map(part => Array.isArray(part) ? part[0] : [])).map(downloadRow)
+                // A magnet link's info step and removed ones aren't worth a row.
+                .filter(r => r.phase !== "removed" && !(r.meta && r.phase === "done"));
+            downloads = all;
+            // Same downloads in the same order: update the rows in place, so
+            // hover and the bars' easing carry on.
+            if (downloadRows.count === all.length && all.every((r, i) => downloadRows.get(i).gid === r.gid)) all.forEach((r, i) => downloadRows.set(i, r));
+            else { downloadRows.clear(); all.forEach(r => downloadRows.append(r)); }
+        });
+    }
+    Timer { interval: 2000; repeat: true; running: root.ariaToken !== ""; triggeredOnStart: true; onTriggered: root.readDownloads() }
+    // What the rail's download cell shows: the overall percentage while
+    // something comes in, else paused or queued, else how many seed.
+    readonly property var downloadStats: {
+        const of = (...phases) => downloads.filter(d => phases.includes(d.phase));
+        const getting = of("down", "metadata"), waiting = of("queued", "paused"), seeding = of("seed"), failed = of("error");
+        const open = [...getting, ...waiting].filter(d => d.total > 0);
+        const total = open.reduce((a, d) => a + d.total, 0);
+        const pct = total > 0 ? Math.floor(100 * open.reduce((a, d) => a + d.got, 0) / total) : 0;
+        let label = "\uf019";   // nf-fa-download
+        // A magnet link has no size until its info arrives: no percentage yet.
+        if (getting.length) label += (total > 0 ? " " + pct + "%" : " …") + (getting.length > 1 ? " · " + getting.length : "");
+        else if (waiting.length) label += waiting.some(d => d.phase === "paused") ? " paused" : " queued";
+        else if (seeding.length) label = "\uf093 " + seeding.length;   // nf-fa-upload
+        else if (failed.length) label += " failed";
+        return {
+            shown: getting.length + waiting.length + seeding.length + failed.length > 0,
+            getting: getting.length, seeding: seeding.length, failed: failed.length > 0, label: label,
+            speed: downloads.reduce((a, d) => a + d.speed, 0), up: downloads.reduce((a, d) => a + d.up, 0)
+        };
+    }
     Process { id: captureRead; command: ["pgrep", "-x", "wf-recorder"]; onExited: (code) => root.recording = code === 0 }
     Connections {
         target: Hyprland
@@ -257,6 +353,19 @@ ShellRoot {
             MediaCard { id: media; target: mediaCell; player: root.player; bars: root.cavaBars }
             Dashboard { id: dash; target: island; shell: root }
             ControlCenter { id: control; target: volCell; shell: root }
+            Downloads {
+                id: downloadsCard; target: dlCell; shell: root
+                onVisibleChanged: if (!visible) dlCell.held = false
+            }
+            // From the launcher: show the cell first, open the card once it has a place.
+            Connections {
+                target: root
+                function onOpenDownloads(screenName) {
+                    if (rail.screen?.name !== screenName) return;
+                    dlCell.held = true;
+                    Qt.callLater(() => downloadsCard.visible = true);
+                }
+            }
             anchors { top: true; left: true; right: true }
             // Floats 8 px down and 12 px in, lined up with the window gaps.
             margins { top: 8; left: 12; right: 12 }
@@ -460,6 +569,22 @@ ShellRoot {
                 // the control centre), the inbox and the tray | power. The
                 // system graphs are in Today (click the clock).
                 Seam { visible: mediaCell.visible }
+                // Downloads and torrents (aria2-rpc): only while something
+                // comes in, waits, seeds or failed.
+                Cell {
+                    mirrored: true
+                    id: dlCell
+                    property bool held: false
+                    visible: root.downloadStats.shown || downloadsCard.visible || held
+                    label: root.downloadStats.label
+                    ink: root.downloadStats.getting ? Theme.text : root.downloadStats.failed ? Theme.amber : Theme.muted
+                    fill: downloadsCard.visible ? Theme.accentSoft : "transparent"
+                    hint: (root.downloadStats.getting ? "Downloading at " + root.bytes(root.downloadStats.speed) + "/s"
+                        : root.downloadStats.seeding ? "Seeding " + root.downloadStats.seeding + (root.downloadStats.seeding === 1 ? " torrent" : " torrents")
+                        : root.downloadStats.failed ? "A download failed" : "Downloads") + " · click: the list"
+                    onClicked: downloadsCard.visible = !downloadsCard.visible
+                }
+                Seam { visible: dlCell.visible }
                 Cell {
                     mirrored: true
                     visible: rail.width > 900
@@ -674,6 +799,8 @@ ShellRoot {
                             { name: "Colour picker", detail: "hex code to the clipboard", glyph: "", icon: "", act: () => Quickshell.execDetached(["hyprpicker", "-a"]) },
                             { name: "Copy text from the screen", detail: "OCR a region", glyph: "", icon: "", act: () => Quickshell.execDetached(["ocr"]) },
                             { name: "Record a region", detail: "again to stop", glyph: "", icon: "", act: () => Quickshell.execDetached(["rec-toggle"]) },
+                            { name: "Downloads", detail: "Firefox downloads and torrents", glyph: "\uf019", icon: "", act: () => root.openDownloads(Hyprland.focusedMonitor?.name ?? "") },
+                            { name: "Add a torrent", detail: "the magnet link or .torrent link on the clipboard", glyph: "\uf076", icon: "", act: () => Quickshell.execDetached(["torrent"]) },
                             { name: "Docs search", detail: "Godot, PICO-8, Arch Wiki, man", glyph: "", icon: "", act: () => Quickshell.execDetached(["docs"]) },
                             { name: "Reload Hyprland", detail: "re-read hyprland.lua", glyph: "", icon: "", act: () => Quickshell.execDetached(["hyprctl", "reload"]) },
                             { name: "Restart the shell", detail: "afterhours restart", glyph: "", icon: "", act: () => Quickshell.execDetached(["afterhours", "restart"]) },

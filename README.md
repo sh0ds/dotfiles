@@ -19,6 +19,7 @@ What's in it:
 - **One launcher:** type to find an app, or start with `=` for maths, `>` for commands, `/` for open windows and `:` for emoji.
 - **The overview** (`Super + W`) shows every workspace with live previews. Click to go there, drag a window to another workspace, middle-click to close it.
 - **The media card** opens from now playing with the cover, a seek bar, shuffle, loop and bigger cava bars.
+- **Downloads and torrents:** Firefox downloads, `dl` and torrents all go through one aria2 in the background. Magnet links and `.torrent` files open in it (or run `torrent` with the link on the clipboard), they seed until as much went up as came down, and a cell shows up on the rail while something runs. Click it for the list with pause, remove and the folder; a finished name opens the file.
 - **The control centre** opens from `vol` or the network icon: outputs, the mic, volume per app, Wi-Fi and toggles for night light, quiet, keep awake and game mode.
 - **A thin frame** runs around the screen edge and joins the rail, so it all looks like one piece.
 - **See-through windows:** the blurred wallpaper shows through every window, a bit more when it's not focused. kitty keeps its text solid, and games, video, art tools and fullscreen stay solid too. Unfocused windows dim a little, except games, video and picture-in-picture.

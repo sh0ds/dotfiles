@@ -88,6 +88,7 @@ Small scripts in `.local/bin` for things I kept needing. Each one has a short co
 - `thunar-setup`: fills missing Diag preferences, merges coding/music actions and sidebar shortcuts, and sets kitty for Open Terminal Here; `--apply` reapplies the managed layout
 - `dl`: downloads into `~/Downloads` with aria2, 16 connections at once, and pings you when it's done. `dl` on its own takes the link from the clipboard
 - `aria2-rpc`: aria2 in the background so Firefox downloads go through it too, `dl-done` is its notification
+- `torrent`: hands a magnet link or `.torrent` file (or the link on the clipboard) to aria2-rpc. It seeds to ratio 1.0. Torrents need port 6881 open: `sudo ufw allow 6881/tcp && sudo ufw allow 6881/udp`
 - `djvm`: starts or shows the Windows DJ VM; `djvm off` shuts it down cleanly. `djvm setup` keeps installer ISOs in `~/.local/share/djvm/isos` and repairs old CD-ROM paths; [setup and recovery](dj-vm.md)
 - `power-menu`: a text-only session console that adapts to HiDPI and portrait screens
 - `power`: what the power menu's log out, reboot and shut down buttons run; it shuts the DJ VM down first

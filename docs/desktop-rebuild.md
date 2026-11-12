@@ -97,7 +97,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 
 ## Architecture
 
-- `shell.qml`: per-output rail, one focused-output overlay, native desktop-entry launcher, MPRIS, SNI tray, notifications and IPC. No HTTP service or internet requests.
+- `shell.qml`: per-output rail, one focused-output overlay, native desktop-entry launcher, MPRIS, SNI tray, notifications and IPC. No HTTP service or internet requests; the one HTTP call is to aria2-rpc on `127.0.0.1:6800` for the downloads cell.
 - `Theme.qml`: shell palette and typography.
 - `Cell.qml`: shared keyboard-focusable control with hover and focus states; `selected` is a filled primary button, `lit` a toggle that is on (soft violet with a violet underline), `mirrored` cuts the other two corners (the buttons in the rail's right piece).
 - `Hint.qml`: hover hints for rail controls in their own popup window, because the rail window is too short for a QtQuick `ToolTip`.
@@ -115,6 +115,7 @@ The PICO-8/Picotron wrappers validate the executable when launched. PICO-8's Lua
 - `ScreenFrame.qml`: the thin screen-edge frame that joins the rail. Click-through. Not `Frame`: that name belongs to QtQuick.Controls, which shell.qml imports, so it would win.
 - `Wallpaper.qml`: the haze picture plus still violet clouds on the background layer. Replaces awww.
 - `MediaCard.qml`: the popup under now playing (cover, seek, shuffle, loop, cava).
+- `Downloads.qml`: the popup under the download cell, everything aria2-rpc has (Firefox downloads, `dl`, `torrent`) with pause, remove and the folder. The cell only shows while something downloads, waits, seeds or failed.
 - `ControlCenter.qml`: the popup under `vol` and the network icon (outputs, mic, app volumes, Wi-Fi via `nmcli`, toggles).
 - `Lock.qml`: the session lock (`ext-session-lock`) with PAM through `pam/password.conf`. Sets logind's locked hint.
 - `Overview.qml`: every workspace with live window previews (screencopy), drag to move, middle-click to close.

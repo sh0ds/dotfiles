@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# torrent: hand magnet links and .torrent files to aria2-rpc, the aria2 that
+# already runs in the background for Firefox. They download into ~/Downloads
+# and seed until as much went up as came down (aria2.conf). The rail shows
+# them while they run, click there to pause, remove or open the folder.
+# Usage: torrent MAGNET | FILE.torrent | URL...   or just torrent to take
+# the link from the clipboard. Magnet links from Firefox and .torrent files
+# from Thunar open with it too, once default-apps has run.
+set -euo pipefail
+state=${XDG_STATE_HOME:-$HOME/.local/state}/aria2
+rpc=http://127.0.0.1:6800/jsonrpc
+fail() {
+  notify-send -a Downloads -u critical "Torrent not added" "$1" 2>/dev/null || true
+  echo "torrent: $1" >&2
+  exit 1
+}
+(($#)) || set -- "$(wl-paste --no-newline 2>/dev/null || true)"
+[ -s "$state/secret" ] || fail "aria2-rpc isn't set up yet, run aria2-rpc once (login does it)"
+token=token:$(cat "$state/secret")
+for item; do
+  # Thunar and xdg-open hand over files as file:// links.
+  if [[ $item == file://* ]]; then
+    item=${item#file://}
+    item=$(printf '%b' "${item//%/\\x}")
+  fi
+  if [[ $item == magnet:\?* || $item == http://* || $item == https://* ]]; then
+    request=$(jq -cn --arg t "$token" --arg u "$item" '{jsonrpc: "2.0", id: "torrent", method: "aria2.addUri", params: [$t, [$u]]}')
+    name=$(sed -n 's/.*[?&]dn=\([^&]*\).*/\1/p' <<<"$item")
+    name=${name//+/ }
+    name=$(printf '%b' "${name//%/\\x}")
+    if [ -z "$name" ]; then
+      name=${item%%\?*}
+      name=${name##*/}
+    fi
+    [[ $name == magnet:* ]] && name="magnet link"
+  elif [ -f "$item" ]; then
+    # Through stdin: a big .torrent is too long for one argument.
+    request=$(base64 -w0 -- "$item" | jq -cRs --arg t "$token" '{jsonrpc: "2.0", id: "torrent", method: "aria2.addTorrent", params: [$t, .]}')
+    name=${item##*/}
+  else
+    fail "not a magnet link, .torrent file or link: ${item:0:80}"
+  fi
+  reply=$(curl -sS --max-time 10 -H 'Content-Type: application/json' -d @- "$rpc" <<<"$request" 2>/dev/null) ||
+    fail "aria2-rpc isn't running, start it with: aria2-rpc & disown"
+  error=$(jq -r '.error.message // empty' <<<"$reply")
+  [ -z "$error" ] || fail "aria2 said: $error"
+  notify-send -a Downloads "Torrent added" "${name:-torrent}" 2>/dev/null || true
+  echo "added ${name:-torrent} ($(jq -r .result <<<"$reply"))"
+done

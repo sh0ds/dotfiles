@@ -3,8 +3,11 @@
 # ~/.config/aria2/aria2.conf). Run it again after it stops and it carries on.
 # Usage: dl URL...   or just dl to take the link from the clipboard.
 # A notification pops up when it's done, click it to open ~/Downloads in Thunar.
+# Magnet links and .torrent links go to torrent instead, so they seed in the
+# background rather than keeping this terminal busy.
 set -euo pipefail
 (($#)) || set -- "$(wl-paste --no-newline)"
+case $1 in magnet:\?* | *.torrent | *.torrent\?*) exec torrent "$@" ;; esac
 cd ~/Downloads
 name=${1%%\?*}
 name=${name##*/}
