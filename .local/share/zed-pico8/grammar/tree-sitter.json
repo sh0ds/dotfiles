@@ -1,0 +1,6 @@
+{
+  "grammars": [
+    { "name": "p8", "camelcase": "P8", "scope": "source.p8", "path": ".", "file-types": ["p8"] }
+  ],
+  "metadata": { "version": "0.1.0", "license": "MIT", "description": "PICO-8 cart sections" }
+}

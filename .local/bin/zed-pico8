@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# zed-pico8: gets the PICO-8 extension for Zed ready (the source is in
+# .local/share/zed-pico8 of the dotfiles). It colours the code in .p8 carts
+# as Lua with the header and the sprite/map/sound data greyed out, and runs
+# lua-language-server on carts with the PICO-8 settings.
+# Run it once, and again after the dotfiles change the grammar, then in Zed:
+#   first time:  ctrl+shift+p > zed: install dev extension > ~/.local/share/zed-pico8
+#   later:       Extensions page (ctrl+shift+x) > PICO-8 > Rebuild
+set -euo pipefail
+src=$(cd "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../.." && pwd)
+ext=$HOME/.local/share/zed-pico8
+grammar=.local/share/zed-pico8/grammar
+
+missing=()
+command -v lua-language-server >/dev/null || missing+=(lua-language-server)
+command -v rustup >/dev/null || missing+=(rustup)
+if [ "${#missing[@]}" -gt 0 ]; then
+  echo "Needs: sudo pacman -S ${missing[*]}" >&2
+  [[ " ${missing[*]} " = *" rustup "* ]] && echo "then:  rustup default stable" >&2
+  exit 1
+fi
+
+# Zed fetches the grammar with git from this checkout, at the last commit
+# that changed it, so it must be committed.
+rev=$(git -C "$src" log -1 --format=%H -- "$grammar")
+if [ -z "$rev" ] || [ -n "$(git -C "$src" status --porcelain -- "$grammar")" ]; then
+  echo "Commit $grammar in $src first." >&2
+  exit 1
+fi
+[ -e "$ext/Cargo.toml" ] || { echo "Run install-dotfiles.sh first." >&2; exit 1; }
+sed -e "s|@DOTFILES@|$src|" -e "s|@REV@|$rev|" "$src/.local/share/zed-pico8/extension.toml.in" >"$ext/extension.toml"
+echo "Ready: $ext"
+echo "In Zed: ctrl+shift+p > zed: install dev extension > choose that folder"
+echo "(already installed: Extensions page > PICO-8 > Rebuild)"

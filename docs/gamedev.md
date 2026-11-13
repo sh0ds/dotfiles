@@ -44,6 +44,18 @@ include("main.lua")
 
 The cart now runs the code Zed edits, so Zed and Picotron never write to the same file. `F5` jumps to Picotron and presses `ctrl+r`, which reads the code fresh. It reruns whatever cart Picotron has loaded, so `load /code/NAME/NAME.p64` first when you switch games. Before you release, copy the code into the cart (`cp /code/NAME/main.lua /ram/cart/game.lua` in Picotron's terminal, then `include("game.lua")` without the `cd`), or the cart only works on this machine. `/code` is the real folder: `rm` in there deletes for real.
 
+### The PICO-8 extension for Zed
+
+Zed's Lua colouring trips over a cart's header, so `.p8` files get their own small language: the `__lua__` part is coloured as Lua, the header and the `__gfx__` / `__map__` / `__sfx__` data are greyed out, and the outline panel lists the sections. It lives in `.local/share/zed-pico8` as a dev extension. Set it up once:
+
+```
+sudo pacman -S --needed rustup lua-language-server
+rustup default stable
+zed-pico8
+```
+
+Then in Zed: `ctrl+shift+p` > `zed: install dev extension` > `~/.local/share/zed-pico8`. Zed builds it, which takes a minute the first time. When the dotfiles change the grammar later, run `zed-pico8` again and press Rebuild on PICO-8 in the Extensions page (`ctrl+shift+x`).
+
 ### What Zed knows
 
 Starting `pico8` / `picotron` writes (and keeps up to date) a `.luarc.json` in `~/code/pico8` / `~/code/picotron`. Commit it. It tells the Lua language server which console it's looking at:

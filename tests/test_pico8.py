@@ -297,5 +297,31 @@ class Guard(unittest.TestCase):
         self.assertIn('__lua__\nx=1\n', self.save('x=1\n'))
 
 
+class ZedExtension(unittest.TestCase):
+    def test_setup_points_zed_at_the_committed_grammar(self):
+        grammar = '.local/share/zed-pico8/grammar'
+        rev = subprocess.run(['git', '-C', str(REPO), 'log', '-1', '--format=%H', '--', grammar],
+                             capture_output=True, text=True).stdout.strip()
+        dirty = subprocess.run(['git', '-C', str(REPO), 'status', '--porcelain', '--', grammar],
+                               capture_output=True, text=True).stdout
+        if not rev or dirty:
+            self.skipTest('grammar not committed')
+        with tempfile.TemporaryDirectory(prefix='zed-pico8-') as tmp:
+            home, bin_ = Path(tmp), Path(tmp) / 'bin'
+            ext = home / '.local/share/zed-pico8'
+            ext.mkdir(parents=True)
+            (ext / 'Cargo.toml').write_text('')
+            bin_.mkdir()
+            for name in ('lua-language-server', 'rustup'):
+                (bin_ / name).write_text('#!/bin/sh\n')
+                (bin_ / name).chmod(0o755)
+            subprocess.run(['bash', str(REPO / '.local/bin/zed-pico8')], check=True,
+                           capture_output=True, env=dict(os.environ, HOME=str(home),
+                           PATH=f"{bin_}:{os.environ['PATH']}"))
+            toml = (ext / 'extension.toml').read_text()
+        self.assertIn(f'repository = "file://{REPO}"', toml)
+        self.assertIn(f'rev = "{rev}"', toml)
+
+
 if __name__ == '__main__':
     unittest.main()

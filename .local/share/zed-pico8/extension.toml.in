@@ -1,0 +1,21 @@
+# Written to extension.toml by zed-pico8, which fills in where the grammar
+# is (this dotfiles checkout) and its commit. Edit this file, not that one.
+id = "pico8"
+name = "PICO-8"
+description = "PICO-8 carts: the code coloured as Lua, lua-language-server with the PICO-8 settings."
+version = "0.1.0"
+schema_version = 1
+authors = ["sh0ds"]
+repository = "https://github.com/sh0ds/dotfiles"
+
+[grammars.p8]
+repository = "file://@DOTFILES@"
+rev = "@REV@"
+path = ".local/share/zed-pico8/grammar"
+
+[language_servers.pico8-lua]
+name = "LuaLS for PICO-8"
+languages = ["PICO-8"]
+
+[language_servers.pico8-lua.language_ids]
+"PICO-8" = "lua"

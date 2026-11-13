@@ -51,10 +51,10 @@
     "toml": true,
     "make": true
   },
-  // A cart is Lua between a header and the art data. Zed colours it as Lua,
-  // and in ~/code/pico8 the language server reads the header and the data
-  // as comments (pico8-plugin.lua), so whole carts open without errors.
-  "file_types": { "Lua": ["p8"] },
+  // .p8 carts are the PICO-8 language from the dev extension in
+  // ~/.local/share/zed-pico8 (set up with zed-pico8): the code is coloured
+  // as Lua, the header and the art data are greyed out, and the language
+  // server reads them as comments (pico8-plugin.lua).
   "languages": {
     "Erlang": { "language_servers": ["elp", "!erlang-ls", "..."] },
     // The Lua formatter doesn't know PICO-8's += and != and would mangle

@@ -3,3 +3,5 @@
 
 # Python validation cache
 __pycache__/
+.local/share/zed-pico8/target/
+.local/share/zed-pico8/extension.toml
