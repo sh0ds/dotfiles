@@ -54,7 +54,7 @@ rustup default stable
 zed-pico8
 ```
 
-Then in Zed: `ctrl+shift+p` > `zed: install dev extension` > `~/.local/share/zed-pico8`. Zed builds it, which takes a minute the first time. When the dotfiles change the grammar later, run `zed-pico8` again and press Rebuild on PICO-8 in the Extensions page (`ctrl+shift+x`).
+Start `pico8` once afterwards: it writes `~/code/pico8/.zed/settings.json`, which lets the language server run the PICO-8 plugin without asking (it would ask in a prompt Zed doesn't show, and wait). Commit that file. Then in Zed: `ctrl+shift+p` > `zed: install dev extension` > `~/.local/share/zed-pico8`. Zed builds it, which takes a minute the first time. When the dotfiles change the grammar later, run `zed-pico8` again and press Rebuild on PICO-8 in the Extensions page (`ctrl+shift+x`).
 
 ### What Zed knows
 

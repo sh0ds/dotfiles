@@ -21,6 +21,16 @@ mkdir -p ~/code/pico8 ~/Pictures/pico-8
 luarc=$HOME/code/pico8/.luarc.json
 sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/pico8.luarc.json >"$luarc.new"
 if cmp -s "$luarc.new" "$luarc"; then rm "$luarc.new"; else mv "$luarc.new" "$luarc"; fi
+# Zed settings for this folder: lets the language servers run that plugin
+# (see the file). Written once; commit it too.
+zed_settings=$HOME/code/pico8/.zed/settings.json
+if [ ! -e "$zed_settings" ]; then
+  mkdir -p "${zed_settings%/*}"
+  cp ~/.local/share/fantasy-lua/pico8.zed-settings.json "$zed_settings"
+elif ! grep -q trustByClient "$zed_settings"; then
+  notify-send -a PICO-8 "Zed won't load the PICO-8 API" \
+    "Add the lsp part of ~/.local/share/fantasy-lua/pico8.zed-settings.json to $zed_settings."
+fi
 # p8guard stops a save in PICO-8 from bringing back code Zed has changed
 # since (see its header). One runs at a time; it quits after PICO-8 does.
 setsid -f p8guard </dev/null >/dev/null 2>&1

@@ -1,0 +1,11 @@
+// ~/code/pico8/.zed/settings.json, written by the pico8 wrapper (dotfiles).
+// .luarc.json here loads pico8-plugin.lua. lua-language-server asks before it
+// runs a plugin, in a prompt Zed doesn't show, and waits: then neither the
+// PICO-8 API nor the cart sections load. trustByClient answers yes for this
+// folder only, for .lua files (Lua extension) and .p8 carts (PICO-8 extension).
+{
+  "lsp": {
+    "lua-language-server": { "initialization_options": { "trustByClient": true } },
+    "pico8-lua": { "initialization_options": { "trustByClient": true } }
+  }
+}
