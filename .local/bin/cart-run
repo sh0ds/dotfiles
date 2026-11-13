@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # cart-run FILE: F5 in Zed. Runs the PICO-8 or Picotron cart FILE belongs to.
-# If the console is open it jumps there and presses ctrl+r, which reruns the
-# cart and reads its #include / include() files again; sprites, sfx and map
-# edits you haven't saved stay. Otherwise it starts the console: PICO-8 with
-# the cart running, Picotron empty (load your cart once, F5 works from then on).
+# If the console is open it jumps there and reruns the cart with the code as
+# Zed has it (PICO-8: ctrl+s, Zed's code back in, ctrl+r, see save_and_rerun;
+# Picotron: ctrl+r, which reads include() files again). Sprites, map and sound
+# you changed in the console stay. Otherwise it starts the console: PICO-8 with
+# the cart running (a second PICO-8 if another cart is open), Picotron empty
+# (load your cart once, F5 works from then on).
 # PICO-8's cart: FILE itself if it's a .p8, else the nearest .p8 that
 # #includes FILE, else the only .p8 in FILE's folder or one above it.
 set -euo pipefail
@@ -28,6 +30,30 @@ window() {
 rerun() {
   hyprctl dispatch "hl.dsp.focus({ window = \"address:$1\" })" >/dev/null
   sleep 0.15 # let the focus land before the keys do
+  wtype -M ctrl r -m ctrl
+}
+
+# PICO-8 only reloads the cart on ctrl+r if nothing in it is unsaved;
+# otherwise it says DIDN'T RELOAD and runs the old code. So first ctrl+s
+# there, which writes its sprites, map and sound (and its old copy of the
+# code), then put Zed's code back with p8guard and ctrl+r: PICO-8 sees a
+# changed file with nothing unsaved and loads it. A cart PICO-8 saved with
+# other code than Zed's is copied to ~/.cache/pico8/overwritten/ first.
+save_and_rerun() {
+  local addr=$1 cart=$2 copy before
+  copy=$(mktemp)
+  cp -- "$cart" "$copy"
+  before=$(stat -c %Y.%s -- "$cart")
+  hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })" >/dev/null
+  sleep 0.15
+  wtype -M ctrl s -m ctrl
+  for _ in 1 2 3 4 5 6 7 8 9 10; do # up to 1 s for PICO-8 to write
+    sleep 0.1
+    [ "$(stat -c %Y.%s -- "$cart")" != "$before" ] && break
+  done
+  sleep 0.1 # let the write finish
+  p8guard --keep-code "$cart" "$copy" || true
+  rm -f -- "$copy"
   wtype -M ctrl r -m ctrl
 }
 
@@ -83,9 +109,44 @@ if ! cart=$(find_cart); then
   say "No PICO-8 cart for this file" PICO-8 "Put a .p8 next to it that has #include ${file##*/}."
   exit 1
 fi
+# Which open PICO-8 has this cart: the one started with it (-run CART on its
+# command line), else a PICO-8 started from the launcher that F5 already used
+# for this cart, else a launcher one F5 hasn't used yet. Another cart gets its
+# own PICO-8 next to the first, so nothing unsaved in the first one is lost;
+# close it when you're done there. ~/.cache/pico8/windows remembers which
+# launcher PICO-8 got which cart.
+claims=${XDG_CACHE_HOME:-$HOME/.cache}/pico8/windows
+pico8_for() {
+  local cart=$1 addr pid arg found= free= claimed args i
+  while read -r addr pid; do
+    args=()
+    [ -r "/proc/$pid/cmdline" ] && mapfile -d '' args <"/proc/$pid/cmdline"
+    arg=
+    for ((i = 0; i < ${#args[@]}; i++)); do
+      [ "${args[i]}" = -run ] && arg=${args[i + 1]:-}
+    done
+    [ -n "$arg" ] || arg=$(awk -v a="$addr" '$1 == a { $1 = ""; sub(/^ /, ""); print; exit }' "$claims" 2>/dev/null)
+    if [ -n "$arg" ] && [ "$(realpath -m -- "$arg")" = "$cart" ]; then
+      found=$addr
+    elif [ -z "$arg" ] && [ -z "$free" ]; then
+      free=$addr
+    fi
+  done < <(hyprctl clients -j | jq -r '.[] | select(.class | test("(?i)^pico-?8")) | "\(.address) \(.pid)"')
+  if [ -z "$found" ] && [ -n "$free" ]; then
+    found=$free
+    mkdir -p "${claims%/*}"
+    { tail -n 50 "$claims" 2>/dev/null; printf '%s %s\n' "$free" "$cart"; } >"$claims.new"
+    mv -- "$claims.new" "$claims"
+  fi
+  echo "$found"
+}
+
 link_luarc "$cart"
-if addr=$(window '(?i)^(pico-?8.*)$') && [ -n "$addr" ]; then
-  rerun "$addr"
+cart=$(realpath -- "$cart")
+if addr=$(pico8_for "$cart") && [ -n "$addr" ]; then
+  save_and_rerun "$addr" "$cart"
 else
-  launch pico8 -run "$cart"
+  [ -n "$(window '(?i)^(pico-?8.*)$')" ] &&
+    say "${cart##*/} opens in its own PICO-8" PICO-8 "The other PICO-8 stays as it is. Close it when you're done there."
+  launch env PICO8_NEW=1 pico8 -run "$cart"
 fi

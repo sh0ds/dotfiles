@@ -20,27 +20,33 @@ Paid downloads from lexaloffle.com, unzipped into `~/.local/opt` (see the README
 
 Write the code in Zed and draw, map and compose in the consoles. PICO-8's code editor fits on a 128x128 screen and has no search across files, no go-to-definition and no git. Its sprite, map, sfx and music editors are the best tools for those jobs, so they stay.
 
-**PICO-8:** open `~/code/pico8` in Zed, or just one cart's folder (the first `F5` in it links the settings below into that folder; reopen the folder once after that). Each game is a folder with a `.p8` that holds the art and sound, and `.lua` files for the code. In PICO-8's code editor the cart only has its includes:
+Three keys in Zed do the switching:
 
-```
-#include src/main.lua
-#include src/player.lua
-```
+- `ctrl+alt+n` makes a new cart and opens it in Zed and in the console. It asks for a name and puts the cart next to the file you're in (`quick-exercises/e8-bounce.p8`), or, from the top of `~/code/pico8`, in a folder of its own (`dash/dash.p8`).
+- `F5` saves everything and runs the cart in the console with the code as Zed has it.
+- `F7` counts PICO-8 tokens.
 
-PICO-8 reads those files every time the cart runs, so the loop is: edit in Zed, `F5` (it saves first). `cart-run` finds the `.p8` that includes the file you're in, jumps to PICO-8 and presses `ctrl+r` there. If PICO-8 isn't open, it starts it with that cart. Sprites and sfx you haven't saved yet stay, since only the code is reloaded. When PICO-8 has another cart loaded, `load` the right one once.
+**PICO-8:** open `~/code/pico8` in Zed (or one cart's folder: the first `F5` links the settings below into it, reopen the folder once after that). A cart is one `.p8` file with its code inside, so Zed and PICO-8 both write to it: Zed the code, PICO-8 the sprites, map and sound. Two things keep them from undoing each other:
 
-**Picotron:** code lives in `~/code/picotron`, and Picotron sees that folder as `/code` (the `picotron` wrapper links it into Picotron's drive the second time you start it). Make the cart in Picotron as usual and replace its `main.lua` with the `pt` snippet:
+- `F5` jumps to the PICO-8 that has this cart, presses `ctrl+s` there so your art is saved, puts Zed's code back into the file and presses `ctrl+r`. Unsaved sprites never block the reload and never get lost. A PICO-8 that has a different cart open stays as it is, and this cart opens in a second PICO-8 next to it. Close the old one when you're done there.
+- `p8guard` runs while PICO-8 does. When you press `ctrl+s` in PICO-8 and it writes back code older than what Zed saved, it puts Zed's code back and keeps the new art. Code you write in PICO-8's own editor is new, so it stays.
+
+So write code in Zed, and use PICO-8's code editor only for a quick look. Whenever the code in the file gets replaced, the version PICO-8 saved lands in `~/.cache/pico8/overwritten/` first.
+
+Bigger games can still split the code into `.lua` files with `#include src/main.lua` in the cart. `F5` and `F7` follow the includes.
+
+**Picotron:** code lives in `~/code/picotron`, and Picotron sees that folder as `/code` (the `picotron` wrapper links it into Picotron's drive the second time you start it). `ctrl+alt+n` in there makes `NAME/main.lua`, opens it in Zed, starts Picotron and copies two lines to the clipboard. In Picotron, paste them over the code in the cart's `main.lua` and save the cart with `save /code/NAME/NAME.p64`:
 
 ```lua
-cd("/code/mygame")
-include("src/main.lua")
+cd("/code/NAME")
+include("main.lua")
 ```
 
-Now `F5` in Zed jumps to Picotron and presses `ctrl+r`, which runs the cart and reads the files fresh. Before you release, copy `src` into the cart (`cp /code/mygame/src /ram/cart/src` in Picotron's terminal), drop the `cd` line and save, or the cart only works on this machine. `/code` is the real folder: `rm` in there deletes for real.
+The cart now runs the code Zed edits, so Zed and Picotron never write to the same file. `F5` jumps to Picotron and presses `ctrl+r`, which reads the code fresh. It reruns whatever cart Picotron has loaded, so `load /code/NAME/NAME.p64` first when you switch games. Before you release, copy the code into the cart (`cp /code/NAME/main.lua /ram/cart/game.lua` in Picotron's terminal, then `include("game.lua")` without the `cd`), or the cart only works on this machine. `/code` is the real folder: `rm` in there deletes for real.
 
 ### What Zed knows
 
-Starting `pico8` / `picotron` writes a `.luarc.json` into `~/code/pico8` / `~/code/picotron`. Commit it. It tells the Lua language server which console it's looking at:
+Starting `pico8` / `picotron` writes (and keeps up to date) a `.luarc.json` in `~/code/pico8` / `~/code/picotron`. Commit it. It tells the Lua language server which console it's looking at:
 
 - every API function with its arguments and a short description on hover (PICO-8's come from the pico8-ls project, Picotron's are hand-written in `~/.local/share/fantasy-lua/picotron/picotron.lua`, so add one there if Zed calls a real function undefined)
 - whole `.p8` carts: the header, `#include` lines and the `__gfx__` / `__map__` / `__sfx__` data read as comments, so a cart with its code inside opens without errors
@@ -48,9 +54,9 @@ Starting `pico8` / `picotron` writes a `.luarc.json` into `~/code/pico8` / `~/co
 - no `string.`, `table.` or `math.` in PICO-8, because the console doesn't have them either
 - a warning for every name that isn't defined anywhere, which is how typos show up
 
-The PICO-8 part is a language server plugin, `~/.local/share/fantasy-lua/pico8-plugin.lua`. It changes what the server reads, never your files. The first time Zed opens a cart after it's in place, the server asks whether to trust the plugin: say yes once. `pico8` rewrites `.luarc.json` when the dotfiles change it, so commit that file when git shows it changed.
+The PICO-8 part is a language server plugin, `~/.local/share/fantasy-lua/pico8-plugin.lua`. It changes what the server reads, never your files. The first time Zed opens a cart after it's in place, the server asks whether to trust the plugin: say yes once. Commit `.luarc.json` when git shows it changed.
 
-Keys: `F5` runs the cart, `F7` counts PICO-8 tokens (`p8tokens`, the limit is 8192). The count follows the includes and is within a few tokens of PICO-8's own. Near the limit, trust the number in PICO-8's code editor. Snippets: `p8` (the three callbacks), `pt` (Picotron's dev `main.lua`), `fn`, `lfn`, `fori`, `forall`, `forp`, `forxy`.
+`F7` (`p8tokens`) counts against the limit of 8192. The count follows the includes and is within a few tokens of PICO-8's own. Near the limit, trust the number in PICO-8's code editor. Snippets: `p8` (the three callbacks), `pt` (Picotron's dev `main.lua`), `fn`, `lfn`, `fori`, `forall`, `forp`, `forxy`.
 
 ## Game Boy games (mGBA)
 

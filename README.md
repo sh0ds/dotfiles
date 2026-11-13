@@ -31,7 +31,7 @@ What's in it:
 - **kitty** has a 3 px violet beam cursor with a short trail and a two-line starship prompt. **Thunar, Firefox, Obsidian and Zed** use the same colours, with Papirus icons (violet folders) and the Posy cursor.
 - **Game tools:** wrappers for `pico8`, `picotron`, `aseprite`, `bitwig` and `sfx` (jsfxr / ChipTone), and `gba` for Game Boy games in mGBA, with every game in `~/games/roms/gba` in the launcher. PICO-8 and Picotron are paid downloads from Lexaloffle, so they're not in here.
 - **WoW:** `battlenet` runs Battle.net under Proton (umu-launcher with GE-Proton) in its own prefix, `~/games/battlenet`, and the first start installs it. It lives on workspace 5 with the games, WoW opens fullscreen with GameMode and game mode like a Steam game, and its pop-ups never steal focus. `curseforge` runs the CurseForge app for addons, pointed at WoW Forever's folder in that prefix.
-- **PICO-8 and Picotron in Zed:** their APIs in the Lua language server, `F5` reruns the cart, `F7` counts PICO-8 tokens. How that works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
+- **PICO-8 and Picotron in Zed:** their APIs in the Lua language server, `ctrl+alt+n` makes a cart, `F5` reruns it without losing art, `F7` counts PICO-8 tokens. How that works is in [docs/gamedev.md](docs/gamedev.md#code-in-zed-everything-else-in-the-console).
 - Plus the DJ VM, clipboard history, OCR, screen recording and captioned devlog screenshots.
 
 ## More screenshots

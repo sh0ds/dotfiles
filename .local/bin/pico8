@@ -2,7 +2,8 @@
 # pico8: PICO-8 from ~/.local/opt/pico-8 (the zip from lexaloffle.com, not in
 # this repo). Jumps to it if it's already open. Carts live in ~/code/pico8,
 # screenshots and GIFs (F6, F9) land in ~/Pictures/pico-8. Arguments go to
-# PICO-8 (cart-run uses -run CART).
+# PICO-8 (cart-run uses -run CART). PICO8_NEW=1 starts another PICO-8 next
+# to an open one instead of jumping to it (cart-run, for a second cart).
 set -euo pipefail
 dir=${PICO8_DIR:-$HOME/.local/opt/pico-8}
 bin=
@@ -20,7 +21,13 @@ mkdir -p ~/code/pico8 ~/Pictures/pico-8
 luarc=$HOME/code/pico8/.luarc.json
 sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/pico8.luarc.json >"$luarc.new"
 if cmp -s "$luarc.new" "$luarc"; then rm "$luarc.new"; else mv "$luarc.new" "$luarc"; fi
+# p8guard stops a save in PICO-8 from bringing back code Zed has changed
+# since (see its header). One runs at a time; it quits after PICO-8 does.
+setsid -f p8guard </dev/null >/dev/null 2>&1
 # Windowed so Hyprland tiles it; pixel_perfect keeps whole-number scaling,
 # so the 128x128 screen stays sharp and the rest is Afterhours black.
-exec app '(?i)^(pico-?8.*)$' "$bin" -windowed 1 -pixel_perfect 1 \
-  -root_path "$HOME/code/pico8" -desktop "$HOME/Pictures/pico-8" "$@"
+flags=(-windowed 1 -pixel_perfect 1 -root_path "$HOME/code/pico8" -desktop "$HOME/Pictures/pico-8")
+if [ "${PICO8_NEW:-}" = 1 ]; then
+  exec "$bin" "${flags[@]}" "$@"
+fi
+exec app '(?i)^(pico-?8.*)$' "$bin" "${flags[@]}" "$@"

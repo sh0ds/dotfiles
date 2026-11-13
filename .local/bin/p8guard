@@ -1,0 +1,214 @@
+#!/usr/bin/env python3
+"""p8guard: keeps PICO-8 from saving over code you wrote in Zed.
+
+A .p8 cart is one file with two editors on it: Zed for the code, PICO-8 for
+sprites, map and sound. PICO-8 keeps its own copy of the cart in memory, so
+ctrl+s there writes back whatever code it loaded, even if Zed changed the
+code since. p8guard watches the carts in ~/code/pico8 and remembers every
+version of their code. When PICO-8 (the focused window) saves an older
+version back, that was PICO-8 saving stale code: p8guard puts the newest code back and keeps the
+new sprites, map and sound from that save. A copy of the file as PICO-8 wrote
+it goes to ~/.cache/pico8/overwritten/ first. Code you change inside PICO-8
+is new, not old, so it's kept, and so is going back to old code in Zed.
+
+The pico8 wrapper starts it; it stops by itself a while after the last
+PICO-8 closes. Run `p8guard --once DIR` to check a folder without waiting.
+`p8guard --keep-code CART COPY` puts the code from COPY into CART and keeps
+CART's sprites, map and sound (cart-run uses it on F5).
+"""
+import fcntl
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+import time
+
+ROOT = Path(os.environ.get("P8GUARD_ROOT", Path.home() / "code/pico8"))
+CACHE = Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "pico8"
+POLL = 0.5
+IDLE_EXIT = 30  # seconds without a running PICO-8
+SECTION = re.compile(r"^__(\w+)__\s*$")
+
+
+def split(text):
+    """(code, before, after): the __lua__ body and everything around it."""
+    lines = text.splitlines(keepends=True)
+    start = end = None
+    for i, line in enumerate(lines):
+        m = SECTION.match(line)
+        if not m:
+            continue
+        if m.group(1) == "lua":
+            start = i + 1
+        elif start is not None and end is None:
+            end = i
+    if start is None:
+        return None
+    end = len(lines) if end is None else end
+    return "".join(lines[start:end]), "".join(lines[:start]), "".join(lines[end:])
+
+
+def norm(code):
+    """Code as compared: line ends, trailing spaces and blank tail don't count."""
+    return "\n".join(l.rstrip() for l in code.replace("\r", "").split("\n")).rstrip("\n")
+
+
+def notify(title, body):
+    try:
+        subprocess.run(["notify-send", "-a", "PICO-8", title, body], timeout=5,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except (OSError, subprocess.SubprocessError):
+        pass
+    print(f"{title}: {body}", file=sys.stderr)
+
+
+class Guard:
+    def __init__(self, root, pico8_focused=lambda: True):
+        self.root = root
+        self.pico8_focused = pico8_focused  # did PICO-8 write this save?
+        self.seen = {}     # path -> (mtime_ns, size)
+        self.history = {}  # path -> [normalised code, oldest first]
+        self.latest = {}   # path -> raw code of the newest version
+
+    def carts(self):
+        for dirpath, dirnames, filenames in os.walk(self.root):
+            dirnames[:] = [d for d in dirnames if not d.startswith(".")]
+            for f in filenames:
+                if f.lower().endswith(".p8"):
+                    yield Path(dirpath) / f
+
+    def read_settled(self, path):
+        """The file once it stops changing, so a half-written save isn't read."""
+        last = None
+        for _ in range(20):
+            try:
+                st = path.stat()
+                text = path.read_text(errors="surrogateescape")
+            except OSError:
+                return None
+            now = (st.st_mtime_ns, st.st_size, text)
+            if now == last:
+                return text
+            last = now
+            time.sleep(0.15)
+        return None
+
+    def check(self, path):
+        try:
+            st = path.stat()
+        except OSError:
+            self.seen.pop(path, None)
+            return
+        stamp = (st.st_mtime_ns, st.st_size)
+        if self.seen.get(path) == stamp:
+            return
+        text = self.read_settled(path)
+        if text is None:
+            return
+        st = path.stat()
+        self.seen[path] = (st.st_mtime_ns, st.st_size)
+        parts = split(text)
+        if parts is None:
+            return
+        code, before, after = parts
+        key = norm(code)
+        hist = self.history.setdefault(path, [])
+        if hist and key != hist[-1] and key in hist[:-1] and self.pico8_focused():
+            self.restore(path, text, before, after)
+            return
+        if not hist or key != hist[-1]:
+            if key in hist:
+                hist.remove(key)
+            hist.append(key)
+            del hist[:-100]
+        self.latest[path] = code
+
+    def restore(self, path, text, before, after):
+        backup = CACHE / "overwritten" / f"{path.stem}-{time.strftime('%Y%m%d-%H%M%S')}.p8"
+        backup.parent.mkdir(parents=True, exist_ok=True)
+        backup.write_text(text, errors="surrogateescape")
+        tmp = path.with_name(f".{path.name}.p8guard")
+        tmp.write_text(before + self.latest[path] + after, errors="surrogateescape")
+        os.replace(tmp, path)
+        st = path.stat()
+        self.seen[path] = (st.st_mtime_ns, st.st_size)
+        notify(f"Kept your Zed code in {path.name}",
+               "PICO-8 saved an older copy of the code. Its sprites, map and sound "
+               "are in, the code is Zed's. Press ctrl+r in PICO-8 to load it. "
+               f"PICO-8's version: {backup}")
+
+    def scan(self):
+        for path in self.carts():
+            self.check(path)
+
+
+def active_class():
+    try:
+        out = subprocess.run(["hyprctl", "activewindow", "-j"], capture_output=True,
+                             text=True, timeout=2).stdout
+        return json.loads(out or "{}").get("class", "")
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return ""
+
+
+def pico8_running():
+    for pid in os.listdir("/proc"):
+        if not pid.isdigit():
+            continue
+        try:
+            exe = os.readlink(f"/proc/{pid}/exe")
+        except OSError:
+            continue
+        if re.search(r"/pico8(_64|_dyn)?$", exe):
+            return True
+    return False
+
+
+def keep_code(cart, zed_copy):
+    """cart-run after its ctrl+s in PICO-8: the code from Zed, the rest from PICO-8."""
+    cart, zed_copy = Path(cart), Path(zed_copy)
+    text = cart.read_text(errors="surrogateescape")
+    mine, theirs = split(zed_copy.read_text(errors="surrogateescape")), split(text)
+    if mine is None or theirs is None or norm(mine[0]) == norm(theirs[0]):
+        return
+    backup = CACHE / "overwritten" / f"{cart.stem}-{time.strftime('%Y%m%d-%H%M%S')}.p8"
+    backup.parent.mkdir(parents=True, exist_ok=True)
+    backup.write_text(text, errors="surrogateescape")
+    tmp = cart.with_name(f".{cart.name}.p8guard")
+    tmp.write_text(theirs[1] + mine[0] + theirs[2], errors="surrogateescape")
+    os.replace(tmp, cart)
+
+
+def main():
+    args = sys.argv[1:]
+    if args[:1] == ["--keep-code"]:
+        keep_code(args[1], args[2])
+        return
+    if args[:1] == ["--once"]:
+        Guard(Path(args[1]) if len(args) > 1 else ROOT).scan()
+        return
+    CACHE.mkdir(parents=True, exist_ok=True)
+    lock = open(CACHE / "p8guard.lock", "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        return  # already watching
+    # A save counts as PICO-8's when PICO-8 had the focus both now and half a
+    # second ago: ctrl+s there, not a save in Zed right before F5 jumped over.
+    focus = [False, False]
+    guard = Guard(ROOT, lambda: all(focus))
+    last_seen = time.monotonic()
+    while True:
+        focus = [focus[1], bool(re.match(r"(?i)^pico-?8", active_class()))]
+        guard.scan()
+        if pico8_running():
+            last_seen = time.monotonic()
+        elif time.monotonic() - last_seen > IDLE_EXIT:
+            return
+        time.sleep(POLL)
+
+
+if __name__ == "__main__":
+    main()

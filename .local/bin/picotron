@@ -13,7 +13,8 @@ fi
 # start on). /code is the real folder: rm there deletes for real.
 mkdir -p ~/code/picotron
 luarc=$HOME/code/picotron/.luarc.json
-[ -e "$luarc" ] || sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/picotron.luarc.json >"$luarc"
+sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/picotron.luarc.json >"$luarc.new"
+if cmp -s "$luarc.new" "$luarc"; then rm "$luarc.new"; else mv "$luarc.new" "$luarc"; fi
 drive=$HOME/.lexaloffle/Picotron/drive
 if [ -d "$drive" ] && [ ! -e "$drive/code" ] && [ ! -L "$drive/code" ]; then
   ln -s ~/code/picotron "$drive/code"

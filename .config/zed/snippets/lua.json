@@ -24,7 +24,7 @@
       "-- Development only: run the files Zed edits. Copy them into the cart",
       "-- before you release it (see docs/gamedev.md in the dotfiles).",
       "cd(\"/code/${1:game}\")",
-      "include(\"${2:src/main.lua}\")"
+      "include(\"${2:main.lua}\")"
     ]
   },
   "function": {

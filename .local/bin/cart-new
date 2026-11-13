@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# cart-new [NAME] [--in DIR]: a new cart, open in Zed and in the console.
+# ctrl+alt+n in Zed asks for the name.
+#
+# PICO-8 (anywhere outside ~/code/picotron): the cart goes next to the file
+# you're in, or, from the top of ~/code/pico8, in a folder of its own:
+#   in quick-exercises/   ->  quick-exercises/NAME.p8
+#   in ~/code/pico8       ->  NAME/NAME.p8
+# NAME may also be a path below ~/code/pico8 (jams/mini/mini). The cart is
+# empty; type p8 + tab in Zed for _init, _update and _draw. PICO-8 opens with
+# it (a second PICO-8 if one is open with another cart).
+#
+# Picotron (in ~/code/picotron): NAME/main.lua for the code, edited in Zed.
+# The cart itself (sprites, map, sound) is made in Picotron, which can't be
+# done from outside: the two lines that make the cart run the code from Zed
+# go to the clipboard, and a notification says where to paste them.
+set -euo pipefail
+name= dir=$PWD
+while [ "$#" -gt 0 ]; do
+  case $1 in
+    --in) dir=$(realpath -m -- "${2:-$PWD}"); shift 2 ;;
+    *) name=$1; shift ;;
+  esac
+done
+[ -f "$dir" ] && dir=$(dirname -- "$dir")
+console=pico8 root=$HOME/code/pico8
+[[ $dir = "$HOME/code/picotron" || $dir = "$HOME"/code/picotron/* ]] && console=picotron root=$HOME/code/picotron
+[[ $dir = "$root" || $dir = "$root"/* ]] || dir=$root
+where=${dir#"$root"}; where=${where#/}
+
+if [ -z "$name" ]; then
+  if [ "$console" = picotron ]; then
+    name=$(fuzzel --dmenu --prompt-only "new Picotron cart: " </dev/null) || exit 0
+  else
+    name=$(fuzzel --dmenu --prompt-only "new cart in ${where:-pico8}/: " </dev/null) || exit 0
+  fi
+fi
+name=${name%.p8}; name=${name%.p64}
+name=$(printf '%s' "$name" | tr 'A-Z ' 'a-z-')
+if [ -z "$name" ] || [[ ! $name =~ ^[a-z0-9_./-]+$ ]] || [[ $name = *..* ]]; then
+  notify-send -a PICO-8 "No cart made" "Use letters, numbers, - and _ for the name."
+  exit 1
+fi
+
+if [ "$console" = picotron ]; then
+  name=${name##*/}
+  code=$root/$name/main.lua
+  if [ ! -e "$code" ]; then
+    mkdir -p "$root/$name"
+    : >"$code"
+  fi
+  setsid -f zeditor "$root" "$code" </dev/null >/dev/null 2>&1
+  printf 'cd("/code/%s")\ninclude("main.lua")\n' "$name" | wl-copy
+  setsid -f picotron </dev/null >/dev/null 2>&1 # its own session, like cart-run
+  notify-send -a Picotron "Make the cart for $name in Picotron" \
+    "Paste (ctrl+v) over the code in main.lua, then type: save /code/$name/$name.p64. After that the code is Zed's, and F5 there reruns it."
+  exit 0
+fi
+
+if [[ $name = */* ]]; then
+  cart=$root/$name.p8
+elif [ "$dir" = "$root" ]; then
+  cart=$root/$name/$name.p8
+else
+  cart=$dir/$name.p8
+fi
+if [ -e "$cart" ]; then
+  notify-send -a PICO-8 "${cart#"$root"/} already exists" "Opening it instead."
+else
+  mkdir -p "$(dirname -- "$cart")"
+  # The smallest cart PICO-8 loads: header and an empty code section. The
+  # sprite, map and sound sections appear when you save there.
+  printf 'pico-8 cartridge // http://www.pico-8.com\nversion 43\n__lua__\n\n' >"$cart"
+fi
+
+setsid -f zeditor "$root" "$cart:4" </dev/null >/dev/null 2>&1
+exec cart-run "$cart"

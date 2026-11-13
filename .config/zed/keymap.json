@@ -1,20 +1,22 @@
 // ~/.config/zed/keymap.json: install-dotfiles.sh copies this file, like
 // settings.json, because Zed's keymap editor rewrites it.
-// F5 and F7 sit in both contexts, so they also beat Zed's own keys while
+// F5, F7 and ctrl+alt+n sit in both contexts, so they also beat Zed's own keys while
 // the cursor is in a file.
 [
   {
     "context": "Workspace",
     "bindings": {
       "f5": ["task::Spawn", { "task_name": "cart: run" }],
-      "f7": ["task::Spawn", { "task_name": "cart: tokens" }]
+      "f7": ["task::Spawn", { "task_name": "cart: tokens" }],
+      "ctrl-alt-n": ["task::Spawn", { "task_name": "cart: new" }]
     }
   },
   {
     "context": "Editor",
     "bindings": {
       "f5": ["task::Spawn", { "task_name": "cart: run" }],
-      "f7": ["task::Spawn", { "task_name": "cart: tokens" }]
+      "f7": ["task::Spawn", { "task_name": "cart: tokens" }],
+      "ctrl-alt-n": ["task::Spawn", { "task_name": "cart: new" }]
     }
   }
 ]

@@ -115,11 +115,12 @@ class Carts(unittest.TestCase):
         self.bin = self.root / 'bin'
         self.bin.mkdir()
         self.log = self.root / 'log'
-        for name in ('pico8', 'picotron', 'wtype', 'notify-send'):
+        for name in ('pico8', 'picotron', 'wtype', 'notify-send', 'zeditor', 'fuzzel'):
             self.stub(name, f'echo "{name} $*" >>"{self.log}"')
         self.stub('hyprctl', 'case $1 in clients) echo "${CLIENTS:-[]}" ;; '
                              f'*) echo "hyprctl $*" >>"{self.log}" ;; esac')
         self.stub('sleep', ':')
+        self.stub('wl-copy', f'echo "wl-copy $(cat)" >>"{self.log}"')
         self.stub('setsid', '[ "$1" = -f ] && shift; "$@"')
         self.env = dict(os.environ, HOME=str(self.root),
                         PATH=f"{self.bin}:{os.environ['PATH']}")
@@ -173,6 +174,127 @@ class Carts(unittest.TestCase):
         out = self.cart_run(str(code / 'main.lua'))
         self.assertIn('address:0xdef', out)
         self.assertIn('wtype', out)
+
+    def fake_pico8(self, *args):
+        """A process whose command line looks like a PICO-8 started with args."""
+        p = subprocess.Popen(['python3', '-c', 'import time; time.sleep(30)', *args])
+        self.addCleanup(p.kill)
+        return p.pid
+
+    def test_f5_picks_the_pico8_that_has_this_cart(self):
+        other = self.fake_pico8('-run', str(self.game / 'other.p8'))
+        mine = self.fake_pico8('-run', str(self.game / 'game.p8'))
+        self.env['CLIENTS'] = (f'[{{"class": "pico8", "address": "0x1", "pid": {other}}},'
+                               f' {{"class": "pico8", "address": "0x2", "pid": {mine}}}]')
+        out = self.cart_run(str(self.game / 'game.p8'))
+        self.assertIn('address:0x2', out)
+        self.assertNotIn('pico8 -run', out)
+
+    def test_f5_opens_another_cart_in_its_own_pico8(self):
+        other = self.fake_pico8('-run', str(self.game / 'other.p8'))
+        self.env['CLIENTS'] = f'[{{"class": "pico8", "address": "0x1", "pid": {other}}}]'
+        out = self.cart_run(str(self.game / 'game.p8'))
+        self.assertIn(f'pico8 -run {self.game}/game.p8', out)
+        self.assertNotIn('wtype', out)
+
+    def test_a_launcher_pico8_belongs_to_the_first_cart_f5_runs_in_it(self):
+        blank = self.fake_pico8()
+        self.env['CLIENTS'] = f'[{{"class": "pico8", "address": "0x1", "pid": {blank}}}]'
+        self.assertIn('address:0x1', self.cart_run(str(self.game / 'game.p8')))
+        self.log.unlink()
+        self.assertIn('address:0x1', self.cart_run(str(self.game / 'game.p8')))
+        self.log.unlink()
+        out = self.cart_run(str(self.game / 'other.p8'))
+        self.assertIn(f'pico8 -run {self.game}/other.p8', out)
+
+    def test_f5_saves_pico8s_art_and_runs_zeds_code(self):
+        cart = self.game / 'game.p8'
+        cart.write_text('pico-8 cartridge\n__lua__\nx=2\n__gfx__\n0000\n')  # Zed's save
+        stale = 'pico-8 cartridge\n__lua__\nx=1\n__gfx__\n1111\n'           # PICO-8's ctrl+s
+        self.stub('wtype', f'echo "wtype $*" >>"{self.log}"; '
+                           f'[ "$3" = s ] && printf {stale!r} >"{cart}" || true')
+        self.env['PATH'] = f"{self.bin}:{REPO / '.local/bin'}:{os.environ['PATH']}"
+        self.env['XDG_CACHE_HOME'] = str(self.root / 'cache')
+        self.env['CLIENTS'] = '[{"class": "pico8", "address": "0xabc"}]'
+        out = self.cart_run(str(cart))
+        self.assertEqual(cart.read_text(), 'pico-8 cartridge\n__lua__\nx=2\n__gfx__\n1111\n')
+        self.assertLess(out.index('wtype -M ctrl s'), out.index('wtype -M ctrl r'))
+        self.assertEqual(len(list((self.root / 'cache/pico8/overwritten').iterdir())), 1)
+
+    def cart_new(self, *args):
+        self.stub('cart-run', f'echo "cart-run $*" >>"{self.log}"')
+        subprocess.run(['bash', str(REPO / '.local/bin/cart-new'), *args], env=self.env,
+                       text=True, capture_output=True, timeout=10, check=True)
+        return self.log.read_text()
+
+    def test_new_cart_next_to_the_file_you_are_in(self):
+        ex = self.root / 'code/pico8/quick-exercises'
+        ex.mkdir(parents=True)
+        out = self.cart_new('E8 Bounce', '--in', str(ex))
+        cart = ex / 'e8-bounce.p8'
+        self.assertEqual(cart.read_text().splitlines(), [
+            'pico-8 cartridge // http://www.pico-8.com', 'version 43', '__lua__', ''])
+        self.assertIn(f'cart-run {cart}', out)
+        self.assertIn(f'zeditor {self.root}/code/pico8 {cart}:4', out)
+
+    def test_new_cart_at_the_top_gets_a_folder(self):
+        self.cart_new('dash', '--in', str(self.root / 'code/pico8'))
+        self.assertTrue((self.root / 'code/pico8/dash/dash.p8').exists())
+
+    def test_new_cart_never_overwrites(self):
+        self.cart_new('game', '--in', str(self.game))
+        self.assertEqual((self.game / 'game.p8').read_text(), CART)
+
+    def test_new_picotron_cart(self):
+        top = self.root / 'code/picotron'
+        top.mkdir(parents=True)
+        out = self.cart_new('cave', '--in', str(top))
+        self.assertTrue((top / 'cave/main.lua').exists())
+        self.assertIn('wl-copy cd("/code/cave")', out)
+        self.assertIn('picotron', out)
+
+
+GUARD = runpy.run_path(str(REPO / '.local/bin/p8guard'))
+
+
+class Guard(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='p8guard-test-')
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.cart = self.root / 'a.p8'
+        GUARD['main'].__globals__['CACHE'] = self.root / 'cache'
+        GUARD['main'].__globals__['notify'] = lambda *a: None
+        self.pico8_focused = True
+        self.guard = GUARD['Guard'](self.root, lambda: self.pico8_focused)
+
+    def save(self, code, gfx='0000'):
+        self.cart.write_text(f'pico-8 cartridge\nversion 43\n__lua__\n{code}__gfx__\n{gfx}\n')
+        st = self.cart.stat()
+        os.utime(self.cart, ns=(st.st_atime_ns, st.st_mtime_ns + 10**9 * (len(self.guard.seen) + 1)))
+        self.guard.seen.clear()
+        self.guard.scan()
+        return self.cart.read_text()
+
+    def test_pico8_saving_old_code_keeps_zeds_code_and_its_art(self):
+        self.save('x=1\n')                 # PICO-8 loads this
+        self.save('x=2\n')                 # Zed changes the code
+        text = self.save('x=1\n', '1111')  # PICO-8 saves new art with its old code
+        self.assertIn('__lua__\nx=2\n__gfx__\n1111', text)
+        backups = list((self.root / 'cache/overwritten').iterdir())
+        self.assertEqual(len(backups), 1)
+        self.assertIn('x=1', backups[0].read_text())
+
+    def test_code_written_in_pico8_is_kept(self):
+        self.save('x=1\n')
+        self.save('x=2\n')
+        self.assertIn('x=3', self.save('x=3\n', '1111'))
+
+    def test_going_back_in_zed_is_kept(self):
+        self.save('x=1\n')
+        self.save('x=2\n')
+        self.pico8_focused = False
+        self.assertIn('__lua__\nx=1\n', self.save('x=1\n'))
 
 
 if __name__ == '__main__':
