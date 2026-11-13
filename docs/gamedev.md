@@ -40,14 +40,15 @@ Now `F5` in Zed jumps to Picotron and presses `ctrl+r`, which runs the cart and 
 
 ### What Zed knows
 
-The first start of `pico8` / `picotron` writes a `.luarc.json` into `~/code/pico8` / `~/code/picotron`. Commit it. It tells the Lua language server which console it's looking at:
+Starting `pico8` / `picotron` writes a `.luarc.json` into `~/code/pico8` / `~/code/picotron`. Commit it. It tells the Lua language server which console it's looking at:
 
 - every API function with its arguments and a short description on hover (PICO-8's come from the pico8-ls project, Picotron's are hand-written in `~/.local/share/fantasy-lua/picotron/picotron.lua`, so add one there if Zed calls a real function undefined)
-- `+=`, `-=`, `!=` and the rest, `//` comments in PICO-8, and the button glyphs, so `btn(❎)` works
+- whole `.p8` carts: the header, `#include` lines and the `__gfx__` / `__map__` / `__sfx__` data read as comments, so a cart with its code inside opens without errors
+- PICO-8's own syntax: `+=`, `!=`, `//` comments, `if (a) b()` and `while (a) b()` on one line, `?"hi"`, `a\b`, `^^`, `@addr`, and the button glyphs, so `btn(❎)` works
 - no `string.`, `table.` or `math.` in PICO-8, because the console doesn't have them either
 - a warning for every name that isn't defined anywhere, which is how typos show up
 
-Three PICO-8 shorthands look like errors in Zed, so write them the long way in `.lua` files: `if (a) b()` becomes `if a then b() end`, `?"hi"` becomes `print("hi")`, and `a\b` becomes `flr(a/b)`. The `if` costs the same tokens, the other two cost one or two more.
+The PICO-8 part is a language server plugin, `~/.local/share/fantasy-lua/pico8-plugin.lua`. It changes what the server reads, never your files. The first time Zed opens a cart after it's in place, the server asks whether to trust the plugin: say yes once. `pico8` rewrites `.luarc.json` when the dotfiles change it, so commit that file when git shows it changed.
 
 Keys: `F5` runs the cart, `F7` counts PICO-8 tokens (`p8tokens`, the limit is 8192). The count follows the includes and is within a few tokens of PICO-8's own. Near the limit, trust the number in PICO-8's code editor. Snippets: `p8` (the three callbacks), `pt` (Picotron's dev `main.lua`), `fn`, `lfn`, `fori`, `forall`, `forp`, `forxy`.
 

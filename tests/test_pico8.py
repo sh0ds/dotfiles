@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 import runpy
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -42,6 +43,63 @@ class Tokens(unittest.TestCase):
 
     def test_strings_count_once(self):
         self.assertEqual(count('s="a b -- c" .. [[d\ne]]'), 5)
+
+
+PLUGIN = REPO / '.local/share/fantasy-lua/pico8-plugin.lua'
+DIFFS = """
+local env = setmetatable({}, { __index = _ENV })
+loadfile(arg[1], 't', env)()
+local f = io.open(arg[2]); local text = f:read('a'); f:close()
+for _, d in ipairs(env.OnSetText(arg[2], text)) do
+  io.write(d.start, '\\t', d.finish, '\\t', (d.text:gsub('\\n', '\\\\n')), '\\n')
+end
+"""
+
+
+@unittest.skipUnless(shutil.which('lua'), 'needs lua')
+class LanguageServerPlugin(unittest.TestCase):
+    """What the language server reads instead of the cart (pico8-plugin.lua)."""
+
+    def seen(self, text, name='cart.p8'):
+        with tempfile.TemporaryDirectory(prefix='pico8-plugin-') as tmp:
+            src = Path(tmp) / name
+            src.write_text(text)
+            diffs = subprocess.run(['lua', '-', str(PLUGIN), str(src)], input=DIFFS,
+                                   text=True, capture_output=True, check=True).stdout
+        data = text.encode()
+        edits = []
+        for line in diffs.splitlines():
+            start, finish, new = line.split('\t')
+            edits.append((int(start), int(finish), new.replace('\\n', '\n').encode()))
+        out, cur = b'', 1
+        for start, finish, new in sorted(edits):
+            out += data[cur - 1:start - 1] + new
+            cur = finish + 1
+        return (out + data[cur - 1:]).decode()
+
+    def test_cart_sections_become_comments(self):
+        seen = self.seen(CART)
+        self.assertEqual(seen.splitlines()[:4], [
+            '-- pico-8 cartridge // http://www.pico-8.com', '-- version 42', '-- __lua__',
+            '-- #include src/main.lua'])
+        self.assertIn('x=1\n-- __gfx__\n-- 00000000', seen)
+
+    def test_shorthands(self):
+        code = ('if (btn(❎)) x+=1 -- go\n'
+                'while (y>0) y-=1\n'
+                '?"hi",8,8\n'
+                'a=b\\2 c=d^^1 e=@0x5f00 // done\n'
+                's="if (a) b \\\\ // ?"\n')
+        self.assertEqual(self.seen(code, 'main.lua'), (
+            'if (btn(❎)) then x+=1 end -- go\n'
+            'while (y>0) do y-=1 end\n'
+            'print("hi",8,8)\n'
+            'a=b//2 c=d~ 1 e= 0x5f00 -- done\n'
+            's="if (a) b \\\\ // ?"\n'))
+
+    def test_long_if_is_left_alone(self):
+        code = 'if (a) then\n b()\nend\n'
+        self.assertEqual(self.seen(code, 'main.lua'), code)
 
 
 class Carts(unittest.TestCase):

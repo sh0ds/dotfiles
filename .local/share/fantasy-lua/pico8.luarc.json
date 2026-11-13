@@ -1,7 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
-  "runtime.version": "Lua 5.2",
-  "runtime.nonstandardSymbol": ["+=", "-=", "*=", "/=", "%=", "^=", "|=", "&=", "<<=", ">>=", "!=", "//"],
+  "runtime.version": "Lua 5.4",
+  "runtime.nonstandardSymbol": ["+=", "-=", "*=", "/=", "%=", "^=", "|=", "&=", "<<=", ">>=", "//=", "!="],
+  "runtime.plugin": "@HOME@/.local/share/fantasy-lua/pico8-plugin.lua",
   "runtime.unicodeName": true,
   "runtime.builtin": {
     "basic": "disable", "bit": "disable", "bit32": "disable", "coroutine": "disable",
@@ -9,6 +10,7 @@
     "math": "disable", "os": "disable", "package": "disable", "string": "disable",
     "table": "disable", "utf8": "disable"
   },
+  "files.associations": { "*.p8": "lua" },
   "workspace.library": ["@HOME@/.local/share/fantasy-lua/pico8"],
   "workspace.checkThirdParty": false,
   "diagnostics.disable": ["lowercase-global"]

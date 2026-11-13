@@ -14,10 +14,12 @@ if [ -z "$bin" ]; then
   exit 1
 fi
 mkdir -p ~/code/pico8 ~/Pictures/pico-8
-# Lua language server settings for Zed (PICO-8's API, +=, !=, // comments),
-# written once so they can be committed with the carts. See docs/gamedev.md.
+# Lua language server settings for Zed (PICO-8's API and syntax, whole .p8
+# carts), kept in step with the dotfiles on every start; commit it with the
+# carts when it changes. See docs/gamedev.md.
 luarc=$HOME/code/pico8/.luarc.json
-[ -e "$luarc" ] || sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/pico8.luarc.json >"$luarc"
+sed "s|@HOME@|$HOME|" ~/.local/share/fantasy-lua/pico8.luarc.json >"$luarc.new"
+if cmp -s "$luarc.new" "$luarc"; then rm "$luarc.new"; else mv "$luarc.new" "$luarc"; fi
 # Windowed so Hyprland tiles it; pixel_perfect keeps whole-number scaling,
 # so the 128x128 screen stays sharp and the rest is Afterhours black.
 exec app '(?i)^(pico-?8.*)$' "$bin" -windowed 1 -pixel_perfect 1 \
