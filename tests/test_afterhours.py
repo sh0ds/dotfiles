@@ -18,7 +18,13 @@ class Afterhours(unittest.TestCase):
         self.bin.mkdir()
         self.calls = self.root / 'calls'
         self.env = dict(os.environ, HOME=str(self.root), PATH=f'{self.bin}:{os.environ["PATH"]}',
-                        CALLS=str(self.calls), XDG_SESSION_ID='isolated-test')
+                        CALLS=str(self.calls), XDG_SESSION_ID='isolated-test',
+                        XDG_RUNTIME_DIR=str(self.root))
+        # Never start a real swaybg or hyprlock on the desktop running the tests.
+        self.stub('swaybg', 'true')
+        self.stub('hyprlock', 'touch "$HOME/hyprlock-ran"')
+        self.stub('pidof', 'exit 1')
+        self.stub('loginctl', 'printf "%s\\n" "${LOGIN_SERVICE:-sddm}"')
 
     def stub(self, command, body='printf "%s\\n" "$@" > "$CALLS"'):
         path = self.bin / command
@@ -45,6 +51,22 @@ class Afterhours(unittest.TestCase):
             with self.subTest(args=args):
                 self.calls.unlink(missing_ok=True)
                 env = dict(self.env, AFTERHOURS_ARRIVE='1')  # as inherited from a shell the rail started
+                subprocess.run(['bash', str(REPO / '.local/bin/afterhours'), *args],
+                               env=env, text=True, capture_output=True, timeout=10)
+                for _ in range(50):
+                    if self.calls.exists() and self.calls.read_text().endswith('\n'):
+                        break
+                    time.sleep(0.05)
+                self.assertEqual(self.calls.read_text().split()[-1], want)
+
+    def test_only_an_autologin_session_starts_locked(self):
+        self.stub('quickshell', 'printf "%s\\n" "${AFTERHOURS_LOGIN:-unset}" > "$CALLS"')
+        for service, args, want in (('sddm-autologin', ('start', '--arrive'), '1'),
+                                    ('sddm', ('start', '--arrive'), 'unset'),
+                                    ('sddm-autologin', ('restart',), 'unset')):
+            with self.subTest(service=service, args=args):
+                self.calls.unlink(missing_ok=True)
+                env = dict(self.env, LOGIN_SERVICE=service, AFTERHOURS_LOGIN='1')
                 subprocess.run(['bash', str(REPO / '.local/bin/afterhours'), *args],
                                env=env, text=True, capture_output=True, timeout=10)
                 for _ in range(50):

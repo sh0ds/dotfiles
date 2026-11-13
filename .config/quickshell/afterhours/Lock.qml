@@ -12,6 +12,11 @@ import Quickshell.Services.Mpris
 // isn't running. If the shell ever dies while locked, Hyprland keeps the
 // screen locked; misc.allow_session_lock_restore lets hyprlock take over
 // (see docs/desktop-rebuild.md).
+// It is also the login: SDDM logs in by itself, and `afterhours start
+// --arrive` sets AFTERHOURS_LOGIN for such a session. Then the shell locks
+// the moment it starts, the lock opens from the Afterhours mark like the
+// splash ends (same pixels), and the right password unlocks the keyring
+// too (pam/password.conf).
 Scope {
     id: lockRoot
     property alias locked: session.locked
@@ -22,6 +27,12 @@ Scope {
     property bool leaving: false
     property int shakes: 0
     readonly property var player: Mpris.players.values.find(p => p.isPlaying) ?? null
+    readonly property bool login: Quickshell.env("AFTERHOURS_LOGIN") === "1"
+    readonly property string runDir: Quickshell.env("XDG_RUNTIME_DIR") || "/tmp"
+    // While true the login lock shows only the mark over charcoal.
+    property bool intro: login
+    Component.onCompleted: if (login) lock()
+    Timer { id: introEnd; interval: 200; onTriggered: lockRoot.intro = false }
 
     function lock() {
         if (session.locked) return;
@@ -39,7 +50,17 @@ Scope {
         Quickshell.execDetached(["busctl", "call", "org.freedesktop.login1", "/org/freedesktop/login1/session/auto",
                                  "org.freedesktop.login1.Session", "SetLockedHint", "b", on ? "true" : "false"]);
     }
-    onSecureChanged: if (secure) hint(true)
+    onSecureChanged: {
+        if (!secure) return;
+        hint(true);
+        if (login) {
+            // The fallback in `afterhours start` stands down; the mark
+            // swaybg held is covered now.
+            Quickshell.execDetached(["touch", runDir + "/afterhours-locked"]);
+            Quickshell.execDetached(["pkill", "-x", "swaybg"]);
+            introEnd.start();
+        }
+    }
 
     PamContext {
         id: pam
@@ -88,8 +109,10 @@ Scope {
                 anchors.fill: parent
                 opacity: lockRoot.leaving ? 0 : 1
                 Behavior on opacity { NumberAnimation { duration: Theme.glide; easing.type: Easing.OutCubic } }
-                // Comes up from slightly below each time the screen locks.
-                Component.onCompleted: rise.start()
+                // Comes up from slightly below each time the screen locks;
+                // at login once the mark has let go.
+                Component.onCompleted: if (!lockRoot.intro) rise.start()
+                Connections { target: lockRoot; function onIntroChanged() { if (!lockRoot.intro) rise.restart(); } }
                 transform: Translate { id: lift }
                 NumberAnimation { id: rise; target: lift; property: "y"; from: 24; to: 0; duration: 600; easing.type: Easing.OutCubic }
 
@@ -199,6 +222,23 @@ Scope {
                     anchors.top: parent.top; anchors.topMargin: 40
                     text: "AFTERHOURS  ·  " + (Quickshell.env("USER") ?? "")
                     color: Theme.muted; opacity: 0.7; font.family: Theme.font; font.pixelSize: 11; font.letterSpacing: 4
+                }
+            }
+            // The login's opening, the way the old login screen did it: the
+            // mark over charcoal on the splash's pixels (bottom edge 24 px
+            // above the middle), then the haze comes up, the mark lets go
+            // and the clock and the field rise.
+            Rectangle {
+                anchors.fill: parent
+                color: Theme.background
+                opacity: lockRoot.intro ? 1 : 0
+                visible: opacity > 0
+                Behavior on opacity { NumberAnimation { duration: 800; easing.type: Easing.OutCubic } }
+                Image {
+                    source: "mark.png"
+                    x: Math.round((parent.width - width) / 2)
+                    y: Math.round(parent.height / 2 - height - 24)
+                    smooth: false
                 }
             }
         }

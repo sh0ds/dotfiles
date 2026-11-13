@@ -7,7 +7,8 @@ import Quickshell.Wayland
 // over everything, then lets go and the desktop is there. Only shown when
 // Hyprland starts the shell (`afterhours start --arrive`), never on a
 // restart. Clicks pass through it.
-// It lets go once the wallpaper is drawn on every screen (`ready`), never
+// It lets go once the wallpaper is drawn on every screen (`ready`; at login
+// once the lock holds, which covers it anyway), never
 // sooner than 300 ms and never later than 2.5 s, so a slow first start
 // doesn't show a half-built desktop and a fast one doesn't wait for nothing.
 // The swaybg that held the mark until the shell was up goes first.

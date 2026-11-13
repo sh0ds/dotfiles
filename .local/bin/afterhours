@@ -7,7 +7,7 @@ if ! command -v quickshell >/dev/null; then
 fi
 # Only `start --arrive` may set this; a terminal opened from the rail would
 # otherwise hand it on to every shell start after it.
-unset AFTERHOURS_ARRIVE
+unset AFTERHOURS_ARRIVE AFTERHOURS_LOGIN
 case ${1:-start} in
   # From a terminal the shell is detached, so closing the terminal doesn't
   # take the rail with it; Hyprland's start hook runs it the same way.
@@ -23,6 +23,17 @@ case ${1:-start} in
       export AFTERHOURS_ARRIVE=1
       command -v swaybg >/dev/null &&
         setsid -f swaybg -c 0d0c10 -m center -i ~/.local/share/backgrounds/afterhours-arrive.png >/dev/null 2>&1
+      # Logged in by SDDM's autologin (logind names the PAM service): no
+      # password was asked yet, so the lock screen is the login. Lock.qml
+      # locks before anything else draws and leaves a flag once it holds;
+      # if that hasn't happened 6 s in (the shell failed to start),
+      # hyprlock locks instead.
+      if [ "$(loginctl show-session "${XDG_SESSION_ID:-auto}" -p Service --value 2>/dev/null)" = sddm-autologin ]; then
+        export AFTERHOURS_LOGIN=1
+        flag=${XDG_RUNTIME_DIR:-/tmp}/afterhours-locked
+        rm -f "$flag"
+        setsid -f sh -c 'sleep 6; [ -e "$1" ] || pidof hyprlock >/dev/null || exec hyprlock' _ "$flag" >/dev/null 2>&1
+      fi
     fi
     exec setsid -f quickshell -c afterhours --no-duplicate >/dev/null 2>&1 ;;
   # Stop the running shell and start a fresh one (after a config change).

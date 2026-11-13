@@ -703,7 +703,7 @@ ShellRoot {
     Overview { id: overviewWindow }
     Lock { id: lockScreen }
     // The first second after login (Arrive.qml); the start script sets the flag.
-    Variants { model: Quickshell.env("AFTERHOURS_ARRIVE") === "1" ? Quickshell.screens : []; Arrive { ready: root.wallsReady >= Quickshell.screens.length } }
+    Variants { model: Quickshell.env("AFTERHOURS_ARRIVE") === "1" ? Quickshell.screens : []; Arrive { ready: lockScreen.login ? lockScreen.secure : root.wallsReady >= Quickshell.screens.length } }
     function lockNow() { panel = ""; overviewWindow.open = false; lockScreen.lock(); }
     // One keyboard-driven overlay on the chosen output. Escape and outside click dismiss it.
     PanelWindow {

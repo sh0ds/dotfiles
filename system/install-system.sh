@@ -46,6 +46,20 @@ CursorTheme=Posy_Cursor_Black
 CursorSize=32
 CONF
 echo "SDDM: afterhours theme installed"
+# Autologin: SDDM starts Hyprland straight away, without its own screen in
+# between, so the splash hands over to the desktop with no second
+# compositor (that handover was the last dark moment). The password is asked
+# by the shell's lock screen, which comes up locked for such a session (see
+# Lock.qml) and unlocks the keyring. The themed login above still shows
+# after logging out. Undo: sudo rm /etc/sddm.conf.d/20-afterhours-autologin.conf
+if [ -f /usr/share/wayland-sessions/hyprland.desktop ]; then
+  printf '%s\n' '# Written by dotfiles/system/install-system.sh: the lock screen is the login' \
+    '[Autologin]' "User=$(id -un)" 'Session=hyprland.desktop' 'Relogin=false' |
+    sudo tee /etc/sddm.conf.d/20-afterhours-autologin.conf >/dev/null
+  echo "SDDM: logs $(id -un) into Hyprland by itself, the lock screen asks the password"
+else
+  echo "SDDM: no hyprland.desktop session found, autologin skipped"
+fi
 
 # weston's kiosk shell puts the greeter on whichever screen it finds first,
 # so switch every connected screen but the main one off while it runs. The
